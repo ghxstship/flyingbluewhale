@@ -199,6 +199,10 @@ export type InteractiveTableProps = {
   totalCount?: number;
   /** Fixed virtualization row height in px. Falls back to density-based if omitted. */
   rowHeight?: number;
+  /** Extra className(s) appended to the `<table>`'s canonical `ps-table`
+   *  vocabulary — for the kit table variants (e.g. `ps-table--zebra`).
+   *  The base `ps-table w-full` always applies. */
+  tableClassName?: string;
   /** Optional import handler. When provided, an "Import" button surfaces in
    *  the toolbar; clicking opens a file picker that hands the chosen file
    *  back to the caller for parsing/upload. */
@@ -258,6 +262,7 @@ export function DataTableInteractive({
   tableId,
   totalCount,
   rowHeight,
+  tableClassName,
   onImport,
   onRefresh,
   onCellEdit,
@@ -1089,7 +1094,7 @@ export function DataTableInteractive({
         {/* Native table semantics — no role="grid": there is no cell-level
             focus management here, so the grid role would promise arrow-key
             navigation that doesn't exist (AX-9). */}
-        <table className="ps-table w-full">
+        <table className={["ps-table w-full", tableClassName].filter(Boolean).join(" ")}>
           {/* Sticky header bg switched from --p-surface to --p-bg so
               the sticky thead matches the underlying page paint now that
               there's no surface card behind the table. */}

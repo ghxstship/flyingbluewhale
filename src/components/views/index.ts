@@ -73,9 +73,22 @@ export { DataViewSwitcher } from "./DataViewSwitcher";
 export { resolveDataView } from "./resolveDataView";
 export type { DataViewKind } from "./DataViewKind";
 
-// Phase 3.8 — DataView (the ONE canonical collection wrapper). Composes the
-// view toggle + DataTableInteractive (table) + KanbanBoard/GalleryView +
-// a right-Sheet row-peek drawer. New list pages mount this instead of
-// hand-wiring search/filter/bulk/peek per page.
+// Phase 3.8 / B0 (Option B, 2026-07-22) — DataView, the ONE canonical
+// collection wrapper. Composes the view toggle + DataTableInteractive
+// (table) + KanbanBoard/GalleryView/card grid + a right-Sheet row-peek
+// drawer. New list pages mount this instead of hand-wiring search/filter/
+// bulk/peek per page. Client pages pass DataTable-shaped rich columns
+// directly; SERVER pages import the async wrapper from
+// `@/components/views/DataViewServer` (not barreled — it pulls
+// `next/headers`, which must never ride a client bundle).
 export { DataView } from "./DataView";
 export type { DataViewProps, DataViewPeek, DataViewBoard, DataViewGallery } from "./DataView";
+export type { DataViewColumn, SpotlightRule } from "./data-view-model";
+export {
+  DATA_FACE_CLASS,
+  MONO_CELL_CLASS,
+  TABULAR_CELL_CLASS,
+  NUMERIC_CELL_CLASS,
+  toInteractiveColumns,
+  toInteractiveRow,
+} from "./data-view-model";

@@ -82,4 +82,84 @@ describe("DataView — canonical collection wrapper", () => {
       ),
     ).not.toThrow();
   });
+
+  // ── B0 · DataTable-parity hardening (Option B, 2026-07-22) ───────────────
+
+  it("rich (DataTable-shaped) columns render without toRow, with the DATA mono face", () => {
+    const { container } = render(
+      <DataView<Row>
+        tableId="t4"
+        rows={rows}
+        columns={[
+          { key: "name", header: "Name", render: (r) => <span>{r.name}</span> },
+          { key: "state", header: "State", mono: true, render: (r) => r.state, accessor: (r) => r.state },
+          { key: "count", header: "Count", numeric: true, render: () => "1", accessor: () => 1 },
+        ]}
+        rowHref={(r) => `/studio/test/${r.id}`}
+        pageSize={50}
+      />,
+    );
+    expect(screen.getByText("Alpha")).toBeTruthy();
+    // W2 root-cause built right: mono CELLS ride --p-mono-data, never the
+    // Tailwind font-mono shortcut (Space Mono).
+    const monoCell = Array.from(container.querySelectorAll("td")).find((td) => td.textContent === "open");
+    expect(monoCell?.className).toContain("--p-mono-data");
+    expect(monoCell?.className).not.toMatch(/\bfont-mono\b/);
+    // numeric columns ride the .ps-table `num` kit variant.
+    expect(container.querySelector("td.num, th.num")).toBeTruthy();
+  });
+
+  it("rich mode + empty rows renders the structure-preserving empty state", () => {
+    const { container } = render(
+      <DataView<Row>
+        tableId="t5"
+        rows={[]}
+        columns={[{ key: "name", header: "Name", render: (r) => r.name }]}
+        emptyLabel="No Test Rows Yet"
+        emptyDescription="Add one to get going."
+        pageSize={50}
+      />,
+    );
+    // Headers stay visible (ghost table) + the message renders.
+    expect(container.querySelector("table.ps-table")).toBeTruthy();
+    expect(screen.getAllByText("No Test Rows Yet").length).toBeGreaterThan(0);
+  });
+
+  it("loading renders the table skeleton", () => {
+    const { container } = render(
+      <DataView<Row>
+        tableId="t6"
+        rows={rows}
+        columns={[{ key: "name", header: "Name", render: (r) => r.name }]}
+        loading
+        pageSize={50}
+      />,
+    );
+    expect(container.querySelector("[aria-busy='true']")).toBeTruthy();
+    expect(container.querySelector(".ps-skel")).toBeTruthy();
+  });
+
+  it("accepts serialized (by-row) board/gallery/peek adapters — the DataViewServer contract", () => {
+    expect(() =>
+      render(
+        <DataView<Row>
+          tableId="t7"
+          rows={rows}
+          columns={[{ key: "name", header: "Name", render: (r) => r.name }]}
+          pageSize={50}
+          board={{
+            lanes: [
+              { id: "open", title: "Open" },
+              { id: "done", title: "Done" },
+            ],
+            laneIdByRow: { "1": "open", "2": "done" },
+            cardByRow: { "1": <span>Alpha card</span>, "2": <span>Beta card</span> },
+            onMove: vi.fn(),
+          }}
+          gallery={{ cardByRow: { "1": <span>Alpha tile</span>, "2": <span>Beta tile</span> }, columns: 3 }}
+          peek={{ byRow: { "1": { body: <div>peek Alpha</div>, href: "/studio/test/1" }, "2": { body: <div>peek Beta</div> } } }}
+        />,
+      ),
+    ).not.toThrow();
+  });
 });

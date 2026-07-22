@@ -97,8 +97,9 @@ export { LoyaltyTier } from "./LoyaltyTier";
 export type { LoyaltyTierTone } from "./LoyaltyTier";
 export { ActivityTimeline } from "./ActivityTimeline";
 export type { ActivityItem } from "./ActivityTimeline";
-export { DataView } from "./DataView";
-export type { DataViewColumn } from "./DataView";
+// DataView moved: the canonical collection surface is `@/components/views/DataView`
+// (Option B, 2026-07-22). The old ui/DataView table⇄grid toggle was absorbed
+// by its gallery `renderCard` card-grid mode.
 
 // ── v8.1 inventory-completeness primitives ───────────────────────────────────
 export { Divider } from "./Divider";

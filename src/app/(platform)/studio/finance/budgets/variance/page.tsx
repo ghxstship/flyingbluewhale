@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Button } from "@/components/ui/Button";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -97,7 +97,7 @@ export default async function Page() {
             value={fmt.number(over)}
           />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={[...rows].sort((a, b) => varianceOf(a) - varianceOf(b))}
           rowHref={(r) => `/studio/finance/budgets/${r.id}`}
           emptyLabel={t("console.budgetVariance.emptyLabel", undefined, "No budget lines yet")}
@@ -138,21 +138,21 @@ export default async function Page() {
               key: "plan",
               header: t("console.budgetVariance.column.plan", undefined, "Planned"),
               render: (r) => (r.amount_cents != null ? fmt.money(r.amount_cents) : "—"),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.amount_cents,
             },
             {
               key: "committed",
               header: t("console.budgetVariance.column.committed", undefined, "Committed"),
               render: (r) => (r.committed_cents != null ? fmt.money(r.committed_cents) : "—"),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.committed_cents,
             },
             {
               key: "actual",
               header: t("console.budgetVariance.column.actual", undefined, "Actual"),
               render: (r) => fmt.money(actualOf(r)),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => actualOf(r),
             },
             {
@@ -163,7 +163,7 @@ export default async function Page() {
                   {fmt.money(varianceOf(r))}
                 </span>
               ),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => varianceOf(r),
             },
           ]}

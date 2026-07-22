@@ -4,7 +4,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { RouteTabs } from "@/components/ui/RouteTabs";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -30,7 +30,7 @@ export const dynamic = "force-dynamic";
  * row shows up on the assignee's portal (/p/[slug]/crew/advances) and
  * field (/m/advances) surfaces.
  *
- * PF-6 + FE-2: renders through DataTable (client search / sort /
+ * PF-6 + FE-2: renders through the canonical DataView (client search / sort /
  * virtualization), kind surfaces as a filterable + groupable column
  * instead of N stacked per-kind tables, the 500-row read cap is surfaced
  * honestly via `totalCount`, and bulk fulfillment transitions ride the
@@ -216,7 +216,7 @@ export default async function Page({
             }))}
           />
         ) : (
-          <DataTable<Row>
+          <DataView<Row>
           tableId="projects.advancing.assignments"
           rows={tableRows}
           totalCount={totalCount}

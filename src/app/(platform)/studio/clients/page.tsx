@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { listOrgScopedWithCount } from "@/lib/db/resource";
 import { listViewConfigs } from "@/lib/db/view-configs";
@@ -55,7 +55,7 @@ export default async function ClientsPage() {
         }
       />
       <div className="page-content">
-        <DataTable<Client>
+        <DataView<Client>
           rows={rows}
           totalCount={totalCount}
           tableId={CLIENTS_TABLE_ID}

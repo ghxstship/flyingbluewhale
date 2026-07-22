@@ -18,8 +18,10 @@
 // correct-by-default. DataTable itself is frozen and dies at B-final.
 
 import type { ReactNode } from "react";
-import type { InteractiveColumn, InteractiveRow } from "@/components/DataTableInteractive";
+import type { InteractiveColumn, InteractiveRow, TotalFormatSpec } from "@/components/DataTableInteractive";
 import type { RowActionItem } from "@/components/ui/RowActions";
+
+export type { TotalFormatSpec };
 
 /* ── Sanctioned cell-face classes (W2 root-cause, built right) ─────────────
  * The DATA face is IBM Plex Mono via the theme token `--p-mono-data`
@@ -77,10 +79,11 @@ export type DataViewColumn<T> = {
   accessor?: (row: T) => string | number | null | undefined | unknown;
   /** Footer aggregate over the (filtered) rows. */
   total?: "sum" | "avg" | "min" | "max" | "count";
-  /** Formatter for the footer cell. Server call sites must pass a
-   *  client-safe callable (server-action ref) — plain closures cannot cross
-   *  the RSC boundary. */
-  totalFormat?: (n: number) => string;
+  /** Formatter for the footer cell. Server call sites MUST use the
+   *  serializable `TotalFormatSpec` form (e.g. `{ style: "money" }`) —
+   *  plain closures cannot cross the RSC boundary. Client components may
+   *  pass a function. */
+  totalFormat?: ((n: number) => string) | TotalFormatSpec;
   /** Double-click-to-edit (requires `accessor` + the table's `onCellEdit`). */
   editable?: boolean;
 };

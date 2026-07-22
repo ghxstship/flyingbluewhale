@@ -35,7 +35,7 @@ Usage counts = files among the 268 importers that reference the prop (grep, 2026
 | `column.numeric` (NEW) | n/a | ✗ | ✓ `.ps-table .num` kit variant: right-aligned tabular figures in the data face, header right-aligns too |
 | `column.sortable` (default true) / sort UX | 33 explicit | ✓ (engine) but caller had to map | ✓ same default-on semantics as DataTable |
 | `column.filterable` / `groupable` / `defaultHidden` | 199 / 170 / 1 | ✗ (manual mapping) | ✓ mapped |
-| `column.total` / `totalFormat` (footer aggregates) | ~50 / 3 | ✗ (manual) | ✓ mapped (same serialization caveat as DataTable — see Hazards) |
+| `column.total` / `totalFormat` (footer aggregates) | ~50 / 3 | ✗ (manual) | ✓ mapped; B1 added the serializable `TotalFormatSpec` form (`{ style: "money", currency?, dashWhenNotPositive? }`) so server pages never pass a closure — see Hazards + §B1 harvest |
 | `column.editable` + `onCellEdit` | 2 | ✗ | ✓ threaded |
 | `column.headerClassName` | 10 | ✗ | ✓ carried on the type; honored by the empty state (same partial support DataTable had — see Hazards) |
 | `rowHref` | 190 | ✗ (folded into `toRow`) | ✓ first-class prop (rich mode) |
@@ -90,6 +90,14 @@ Usage counts = files among the 268 importers that reference the prop (grep, 2026
   client-safe callables) are legal. 3 sites use `totalFormat` with plain closures
   (`kits/[kitId]`, `rfqs/[rfqId]/responses`, `procurement/scorecards`) — B1 must verify these
   at migration time (they are equally suspect under DataTable today).
+  **B1 resolution:** the engine now accepts a serializable `TotalFormatSpec`
+  (`InteractiveColumn.totalFormat: ((n) => string) | { style: "money"; currency?; dashWhenNotPositive? }`,
+  resolved client-side via `formatMoney`; aggregate treated as minor units/cents). The
+  `procurement/scorecards` site migrated onto `{ style: "money" }` in the B1 pilot; the two
+  remaining closure sites (`kits/[kitId]` → `{ style: "money" }` for its `formatCents` sum,
+  `rfqs/[rfqId]/responses` → `{ style: "money", dashWhenNotPositive: true }` for its
+  `n > 0 ? formatMoney(n) : "—"` min) map 1:1 and are B2 work. Guarded by a new case in
+  `DataTable.totals.test.tsx`.
 - **`headerClassName` is only honored by the empty state** — same partial support DataTable
   had (its live mapping dropped it). If B1 hits a site that needs a real header-only class,
   add `headerClassName` to `InteractiveColumn` then (additive engine change).
@@ -133,9 +141,54 @@ Per call site (server component page, the normal case):
   `DataTable.inline-edit`, `component-maturity`, `design-system`, `ia-lint`,
   `list-honesty-canon` — all green.
 
+## §B1 harvest (pilot findings, 2026-07-22)
+
+13-site pilot migrated (finance ×4, projects ×4, people/workforce ×3, saved-views ×1,
+totalFormat-hazard ×1 — full list in the B1 report). The recipe held mechanically on all 13:
+**zero sites had to be replaced**, no `InteractiveColumn.headerClassName` engine support was
+needed (the one `headerClassName: "text-right"` encountered was a money column that upgraded
+to `numeric: true`, which right-aligns the header via the composed `num` class). Findings for
+B2:
+
+1. **`TotalFormatSpec` added (engine, additive).** See §Hazards — server pages express footer
+   formatting as data (`totalFormat: { style: "money" }`), never a closure. B2 must migrate
+   the two remaining closure sites (`kits/[kitId]`, `procurement/rfqs/[rfqId]/responses`) onto
+   the spec — the mapping is listed in §Hazards. When B2 hits a non-money formatter, extend the
+   spec union (additive) rather than passing a function from a server page.
+2. **Zero client-component importers exist.** Every one of the 268 `@/components/DataTable`
+   importers is a server component (verified by grep over `"use client"`), so the recipe's
+   client-entry branch (§Recipe step 1, parenthetical) has an empty population in `src/app`.
+   The client entry's rich-column path is already exercised by
+   `legend/community/members/MembersDirectory.tsx` (migrated in B0) and by
+   `DataView.smoke.test.tsx`. B2 fan-out can treat every site as the server-entry case.
+3. **Hand-rolled board/view toggles are an OPTIONAL consolidation, not part of the mechanical
+   pass.** `projects/[projectId]/advancing/assignments` carries its own List⇄Board toggle +
+   `AssignmentsKanban` (client) whose `onMove` wraps a server action client-side and preserves
+   the action's returned error message for the board's rollback announcement. Folding it into
+   `DataView board={{ … }}` requires `onMove` to be a bare server-action ref that must THROW to
+   trigger rollback — and thrown server-action messages are masked in production, so the
+   operator would lose the "illegal transition" detail. Consolidating these pages needs a
+   result-based (serializable) `onMove` error contract on the board adapter first — engine
+   change, decide in B2. The pilot migrated the table branch only (recipe-pure) and left the
+   board untouched.
+4. **Face-cleanup rule applied, one judgment call documented.** `className: "font-mono text-xs"`
+   → `mono: true` was applied mechanically, including on email/phone columns
+   (`people/crew`) even though the `DataViewColumn.mono` doc says mono is not for
+   emails/phones — the pilot preserves the page's existing visual intent (face corrected to
+   IBM Plex, no layout change). Whether those columns should drop mono entirely is a design
+   ruling for the B2 sweep, not a per-site improvisation.
+5. **Multi-table pages are safe.** Pages with 2-3 tables (`projects/[projectId]/finance` ×3,
+   `people/invites` ×2) migrate cleanly: explicit `tableId`s carry over, and the auto-derived
+   id remains distinct per table because it fingerprints column keys alongside the pathname.
+6. **`?view=` co-existence.** A migrated table on a page that ALSO hand-rolls a `?view=` param
+   (assignments List⇄Board) does not conflict: when the foreign value (`board`) is active the
+   page doesn't render DataView, and DataView ignores `?view=` values outside its allowed set.
+   B2 sites that keep hand-rolled toggles must preserve that same either/or structure.
+
 ## Deliberately deferred to B1+
 
-- Migrating ANY of the 268 DataTable call sites (B1 pilot slice: finance + projects + people).
+- ~~Migrating ANY of the 268 DataTable call sites~~ — B1 pilot migrated 13 (finance + projects
+  + people + saved-views + the scorecards totalFormat site); 255 remain for B2.
 - The DataTable.tsx:305 mono fix itself (W2 owns DataTable).
 - `InteractiveColumn.headerClassName` engine support (add on first real need).
 - Import-guard forbidding new `@/components/DataTable` imports (B-final ratchet).

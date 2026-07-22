@@ -262,4 +262,4 @@ export async function DataView<T extends { id: string }>({
   );
 }
 
-export type { DataViewColumn, SpotlightRule } from "./data-view-model";
+export type { DataViewColumn, SpotlightRule, TotalFormatSpec } from "./data-view-model";

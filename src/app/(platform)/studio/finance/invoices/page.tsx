@@ -1,7 +1,7 @@
 import { Suspense, cache } from "react";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { INVOICE_SOURCE_LABELS, type InvoiceSource } from "@/lib/subcontractor";
@@ -108,7 +108,7 @@ async function InvoiceSummary({ orgId }: { orgId: string }) {
 async function InvoiceTable({ orgId }: { orgId: string }) {
   const [{ t }, rows, totalCount] = await Promise.all([getRequestT(), getInvoices(orgId), getInvoiceCount(orgId)]);
   return (
-    <DataTable<Invoice>
+    <DataView<Invoice>
       rows={rows}
       totalCount={totalCount}
       rowHref={(r) => `/studio/finance/invoices/${r.id}`}
@@ -135,7 +135,8 @@ async function InvoiceTable({ orgId }: { orgId: string }) {
         {
           key: "number",
           header: t("console.finance.invoices.columns.number", undefined, "Number"),
-          render: (r) => <span className="font-mono text-xs">{r.number}</span>,
+          render: (r) => r.number,
+          mono: true,
           accessor: (r) => r.number ?? null,
         },
         {
@@ -162,7 +163,7 @@ async function InvoiceTable({ orgId }: { orgId: string }) {
           key: "amount",
           header: t("console.finance.invoices.columns.amount", undefined, "Amount"),
           render: (r) => formatMoney(r.amount_cents, r.currency),
-          className: "font-mono text-xs",
+          mono: true,
           accessor: (r) => r.amount_cents ?? null,
         },
         {
@@ -177,14 +178,14 @@ async function InvoiceTable({ orgId }: { orgId: string }) {
           key: "due",
           header: t("console.finance.invoices.columns.due", undefined, "Due"),
           render: (r) => r.due_at ?? "—",
-          className: "font-mono text-xs",
+          mono: true,
           accessor: (r) => r.due_at ?? null,
         },
         {
           key: "created",
           header: t("console.finance.invoices.columns.created", undefined, "Created"),
           render: (r) => timeAgo(r.created_at),
-          className: "font-mono text-xs",
+          mono: true,
           accessor: (r) => r.created_at,
         },
       ]}

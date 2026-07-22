@@ -1,6 +1,6 @@
 import { Suspense, cache } from "react";
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { requireSession } from "@/lib/auth";
@@ -100,7 +100,7 @@ async function ProjectsBody({ orgId }: { orgId: string }) {
               budgetCents: p.budget_cents ?? 0,
             }))}
           />
-          <DataTable
+          <DataView
             rows={projects}
             totalCount={count}
             rowHref={(p) => `/studio/projects/${p.id}`}

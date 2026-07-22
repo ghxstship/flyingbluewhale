@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { MetricCard } from "@/components/ui/MetricCard";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -225,7 +225,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               {t("console.projects.finance.invoices.allLink", undefined, "All invoices →")}
             </Link>
           </header>
-          <DataTable<InvoiceRow>
+          <DataView<InvoiceRow>
             rows={invList}
             rowHref={(r) => `/studio/finance/invoices/${r.id}`}
             emptyLabel={t("console.projects.finance.invoices.emptyLabel", undefined, "No invoices yet")}
@@ -238,7 +238,8 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               {
                 key: "number",
                 header: t("console.projects.finance.columns.number", undefined, "Number"),
-                render: (r) => <span className="font-mono text-xs">{r.number}</span>,
+                render: (r) => r.number,
+                mono: true,
                 accessor: (r) => r.number ?? null,
               },
               {
@@ -251,7 +252,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 key: "amount",
                 header: t("console.projects.finance.columns.amount", undefined, "Amount"),
                 render: (r) => formatMoney(r.amount_cents, currency),
-                className: "font-mono text-xs",
+                mono: true,
                 accessor: (r) => Number(r.amount_cents ?? 0),
               },
               {
@@ -272,7 +273,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 key: "due",
                 header: t("console.projects.finance.columns.due", undefined, "Due"),
                 render: (r) => r.due_at ?? "—",
-                className: "font-mono text-xs",
+                mono: true,
                 accessor: (r) => r.due_at ?? null,
               },
             ]}
@@ -291,7 +292,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               {t("console.projects.finance.purchaseOrders.allLink", undefined, "All POs →")}
             </Link>
           </header>
-          <DataTable<POrow>
+          <DataView<POrow>
             rows={poList}
             rowHref={(r) => `/studio/procurement/purchase-orders/${r.id}`}
             emptyLabel={t("console.projects.finance.purchaseOrders.emptyLabel", undefined, "No purchase orders")}
@@ -304,7 +305,8 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               {
                 key: "number",
                 header: t("console.projects.finance.columns.number", undefined, "Number"),
-                render: (r) => <span className="font-mono text-xs">{r.number}</span>,
+                render: (r) => r.number,
+                mono: true,
                 accessor: (r) => r.number ?? null,
               },
               {
@@ -317,7 +319,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 key: "amount",
                 header: t("console.projects.finance.columns.amount", undefined, "Amount"),
                 render: (r) => formatMoney(r.amount_cents, currency),
-                className: "font-mono text-xs",
+                mono: true,
                 accessor: (r) => Number(r.amount_cents ?? 0),
               },
               {
@@ -341,7 +343,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
               {t("console.projects.finance.expenses.allLink", undefined, "All expenses →")}
             </Link>
           </header>
-          <DataTable<ExpenseRow>
+          <DataView<ExpenseRow>
             rows={expList}
             rowHref={(r) => `/studio/finance/expenses/${r.id}`}
             emptyLabel={t("console.projects.finance.expenses.emptyLabel", undefined, "No expenses logged")}
@@ -361,7 +363,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 key: "category",
                 header: t("console.projects.finance.columns.category", undefined, "Category"),
                 render: (r) => r.category ?? "—",
-                className: "font-mono text-xs",
+                mono: true,
                 accessor: (r) => r.category ?? null,
                 filterable: true,
                 groupable: true,
@@ -370,7 +372,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 key: "amount",
                 header: t("console.projects.finance.columns.amount", undefined, "Amount"),
                 render: (r) => formatMoney(r.amount_cents, currency),
-                className: "font-mono text-xs",
+                mono: true,
                 accessor: (r) => Number(r.amount_cents ?? 0),
               },
               {
@@ -385,7 +387,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                 key: "spent_at",
                 header: t("console.projects.finance.columns.date", undefined, "Date"),
                 render: (r) => r.spent_at,
-                className: "font-mono text-xs",
+                mono: true,
                 accessor: (r) => r.spent_at,
               },
             ]}

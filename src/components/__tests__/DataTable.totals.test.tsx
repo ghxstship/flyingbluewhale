@@ -102,6 +102,27 @@ describe("computeTotals", () => {
     expect(totals.amount?.raw).toBeCloseTo(49.75);
   });
 
+  it("resolves the serializable TotalFormatSpec (RSC-safe money spec, B1)", () => {
+    const specCols: InteractiveColumn[] = [
+      // Aggregates are minor units (cents) per the repo money convention.
+      { key: "spend", header: "Spend", total: "sum", totalFormat: { style: "money" } },
+      { key: "low", header: "Low", total: "min", totalFormat: { style: "money", dashWhenNotPositive: true } },
+    ];
+    const sIdx = new Map<string, number>([
+      ["spend", 0],
+      ["low", 1],
+    ]);
+    const sRows: InteractiveRow[] = [
+      { id: "1", cells: [], values: [125_00, 0] },
+      { id: "2", cells: [], values: [75_50, 0] },
+    ];
+    const totals = computeTotals(specCols, sRows, sIdx);
+    expect(totals.spend?.value).toBe("$200.50");
+    expect(totals.spend?.raw).toBe(20050);
+    // min over all-zero values → dashWhenNotPositive renders the em dash.
+    expect(totals.low?.value).toBe("—");
+  });
+
   it("min/max iterate the numeric set", () => {
     const mmCols: InteractiveColumn[] = [
       { key: "v", header: "v", total: "min" },

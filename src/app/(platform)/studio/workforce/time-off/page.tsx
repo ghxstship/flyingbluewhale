@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -175,7 +175,7 @@ export default async function TimeOffAdminPage({ searchParams }: { searchParams:
             </span>
           )}
         </form>
-        <DataTable<Row>
+        <DataView<Row>
           tableId="workforce.time_off"
           rows={rows}
           totalCount={allCount ?? rows.length}
@@ -219,14 +219,14 @@ export default async function TimeOffAdminPage({ searchParams }: { searchParams:
               header: t("console.workforce.timeOff.column.window", undefined, "Window"),
               render: (r) => `${fmt.date(r.starts_on)} → ${fmt.date(r.ends_on)}`,
               accessor: (r) => r.starts_on,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "hours",
               header: t("console.workforce.timeOff.column.hours", undefined, "Hours"),
               render: (r) => fmt.number(r.hours_requested),
               accessor: (r) => r.hours_requested,
-              className: "font-mono text-xs tabular-nums",
+              tabular: true,
               total: "sum",
             },
             {

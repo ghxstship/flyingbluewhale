@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { listOrgScopedWithCount } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
@@ -46,7 +46,7 @@ export default async function CrewPage() {
         }
       />
       <div className="page-content">
-        <DataTable<CrewMember>
+        <DataView<CrewMember>
           rows={rows}
           totalCount={totalCount}
           rowHref={(r) => `/studio/people/crew/${r.id}`}
@@ -61,7 +61,7 @@ export default async function CrewPage() {
               key: "role",
               header: t("console.people.crew.col.role", undefined, "Role"),
               render: (r) => r.role ?? "—",
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.role ?? null,
               filterable: true,
               groupable: true,
@@ -70,21 +70,21 @@ export default async function CrewPage() {
               key: "email",
               header: t("console.people.crew.col.email", undefined, "Email"),
               render: (r) => r.email ?? "—",
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.email ?? null,
             },
             {
               key: "phone",
               header: t("console.people.crew.col.phone", undefined, "Phone"),
               render: (r) => r.phone ?? "—",
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.phone ?? null,
             },
             {
               key: "rate",
               header: t("console.people.crew.col.dayRate", undefined, "Day Rate"),
               render: (r) => formatMoney(r.day_rate_cents),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => Number(r.day_rate_cents ?? 0),
             },
           ]}

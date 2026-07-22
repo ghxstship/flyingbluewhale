@@ -1,7 +1,7 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DownloadLink } from "@/components/DownloadLink";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -131,7 +131,7 @@ export default async function Page() {
             "Davis-Bacon (WH-347), CA DIR, NY PWA, WA L&I supported via agency_report_type. Certified-payroll PDF + state-filing XML export per run (right-hand Export column).",
           )}
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           emptyLabel={t("console.finance.payroll.emptyLabel", undefined, "No payroll runs yet")}
           emptyDescription={t(
@@ -151,7 +151,7 @@ export default async function Page() {
               render: (r) =>
                 fmt.dateParts(r.week_ending + "T00:00:00", { month: "short", day: "numeric", year: "2-digit" }),
               accessor: (r) => r.week_ending,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "project",
@@ -177,21 +177,21 @@ export default async function Page() {
               accessor: (r) => r.state_code,
               filterable: true,
               groupable: true,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "hours",
               header: t("console.finance.payroll.columns.hours", undefined, "Hours"),
               render: (r) => Number(r.total_hours).toFixed(1),
               accessor: (r) => Number(r.total_hours),
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "gross",
               header: t("console.finance.payroll.columns.gross", undefined, "Gross"),
               render: (r) => fmtMoney(Number(r.total_gross)),
               accessor: (r) => Number(r.total_gross),
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "run_state",

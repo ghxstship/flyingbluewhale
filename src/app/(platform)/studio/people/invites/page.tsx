@@ -2,7 +2,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { urlFor } from "@/lib/urls";
 import { Alert } from "@/components/ui/Alert";
 import { Badge } from "@/components/ui/Badge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { isAdmin as sessionIsAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { toTitle } from "@/lib/format";
@@ -107,7 +107,7 @@ export default async function InvitesPage({ searchParams }: { searchParams: Prom
             {t("console.people.invites.pendingHeading", { count: pending.length }, `Pending (${pending.length})`)}
           </h3>
           <div className="mt-3">
-            <DataTable<InviteRow>
+            <DataView<InviteRow>
               rows={pending}
               tableId="console:people:invites:pending"
               emptyLabel={t("console.people.invites.empty.title", undefined, "No Pending Invites")}
@@ -187,7 +187,7 @@ export default async function InvitesPage({ searchParams }: { searchParams: Prom
           <section className="surface p-5">
             <h3 className="text-sm font-semibold">{t("console.people.invites.history", undefined, "History")}</h3>
             <div className="mt-3">
-              <DataTable<InviteRow>
+              <DataView<InviteRow>
                 rows={history}
                 tableId="console:people:invites:history"
                 columns={[

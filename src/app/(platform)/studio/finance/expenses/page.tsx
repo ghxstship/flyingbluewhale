@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { FilterBar } from "@/components/ui/FilterBar";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
@@ -98,7 +98,7 @@ export default async function ExpensesPage({
           ]}
           resultCount={count}
         />
-        <DataTable<Expense>
+        <DataView<Expense>
           rows={rows}
           totalCount={count}
           rowHref={(r) => `/studio/finance/expenses/${r.id}`}
@@ -141,7 +141,7 @@ export default async function ExpensesPage({
               key: "department",
               header: t("console.finance.expenses.columns.department", undefined, "Department"),
               render: (r) => (r as unknown as { department?: string | null }).department ?? "—",
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => (r as unknown as { department?: string | null }).department ?? null,
               filterable: true,
               groupable: true,
@@ -150,7 +150,7 @@ export default async function ExpensesPage({
               key: "amount",
               header: t("console.finance.expenses.columns.amount", undefined, "Amount"),
               render: (r) => formatMoney(r.amount_cents, r.currency),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.amount_cents ?? null,
             },
             {
@@ -165,7 +165,7 @@ export default async function ExpensesPage({
               key: "date",
               header: t("console.finance.expenses.columns.date", undefined, "Date"),
               render: (r) => r.spent_at,
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.spent_at,
             },
           ]}

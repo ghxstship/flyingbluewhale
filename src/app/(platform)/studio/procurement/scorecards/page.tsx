@@ -3,7 +3,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -156,7 +156,7 @@ export default async function Page() {
           />
         </div>
 
-        <DataTable<ScorecardRow>
+        <DataView<ScorecardRow>
           rows={scorecardRows}
           tableId="console:procurement:scorecards"
           totalCount={ranked.length}
@@ -194,7 +194,9 @@ export default async function Page() {
               accessor: (v) => v.spend,
               tabular: true,
               total: "sum",
-              totalFormat: (n) => formatMoney(n),
+              // Serializable spec — a closure here cannot cross the RSC
+              // boundary (B0_PARITY.md §Hazards, fixed in B1).
+              totalFormat: { style: "money" },
             },
             {
               key: "fulfilled",

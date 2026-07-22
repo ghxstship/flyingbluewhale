@@ -65,7 +65,7 @@ import type { SavedView, ViewConfigRow, ViewScope, ViewType } from "@/lib/views/
 import { SavedViewSelector } from "@/components/views/SavedViewSelector";
 import type { SaveViewSubmit } from "@/components/views/SaveViewDialog";
 import { useT } from "@/lib/i18n/LocaleProvider";
-import { formatNumber } from "@/lib/i18n/format";
+import { formatMoney, formatNumber } from "@/lib/i18n/format";
 
 // ── Keyboard-traversal instance arbitration (F-04) ───────────────────────────
 // Module scope so pages that mount several DataTableInteractive instances
@@ -114,6 +114,39 @@ function ToolbarDivider() {
  *     user_preferences.table_views[tableId]
  */
 
+/**
+ * TotalFormatSpec — the serializable (data-only) footer-format contract.
+ * Server pages cannot pass a `totalFormat` closure across the RSC boundary
+ * (Next.js rejects function props into client components), so column totals
+ * that need formatting declare it as data and the engine resolves it here on
+ * the client. Added in B1 (dataview migration pilot); the three legacy
+ * closure sites in B0_PARITY.md §Hazards migrate onto this.
+ */
+export type TotalFormatSpec = {
+  /** `money` treats the aggregate as minor units (cents) — the repo-wide
+   *  money convention — and renders via the locale-aware `formatMoney`. */
+  style: "money";
+  /** ISO currency code. Defaults to the app default currency. */
+  currency?: string;
+  /** Render "—" instead of a formatted zero/negative aggregate (used by
+   *  min-style totals where 0 means "no data"). */
+  dashWhenNotPositive?: boolean;
+};
+
+function applyTotalFormat(
+  format: ((n: number) => string) | TotalFormatSpec | undefined,
+  n: number,
+  agg: "sum" | "avg" | "min" | "max" | "count",
+): string {
+  if (!format) return defaultFormat(n, agg);
+  if (typeof format === "function") return format(n);
+  if (format.style === "money") {
+    if (format.dashWhenNotPositive && n <= 0) return "—";
+    return formatMoney(n, format.currency);
+  }
+  return defaultFormat(n, agg);
+}
+
 export type InteractiveColumn = {
   key: string;
   header: string;
@@ -130,8 +163,11 @@ export type InteractiveColumn = {
   /** When set, render an aggregate footer cell over the (filtered) rows.
    *  Per SmartSuite Column Totals. */
   total?: "sum" | "avg" | "min" | "max" | "count";
-  /** Optional formatter for the footer cell. */
-  totalFormat?: (n: number) => string;
+  /** Optional formatter for the footer cell. Server pages MUST use the
+   *  serializable `TotalFormatSpec` form — a plain closure cannot cross the
+   *  RSC boundary (B0_PARITY.md §Hazards; fixed in B1). Client callers may
+   *  still pass a function. */
+  totalFormat?: ((n: number) => string) | TotalFormatSpec;
   /** When true, double-click a cell to edit it inline (v7.7 engine depth). The
    *  editor seeds from `row.values[i]`, so editable columns MUST set an accessor.
    *  Requires the table's `onCellEdit` callback to persist the change. */
@@ -1686,7 +1722,7 @@ export function computeTotals(
         const v = row.values?.[idx];
         if (v != null && String(v).length > 0) count++;
       }
-      const formatted = c.totalFormat ? c.totalFormat(count) : defaultFormat(count, "count");
+      const formatted = applyTotalFormat(c.totalFormat, count, "count");
       out[c.key] = { value: formatted, raw: count };
       continue;
     }
@@ -1712,7 +1748,7 @@ export function computeTotals(
     else if (agg === "avg") raw = sum / count;
     else if (agg === "min") raw = min;
     else raw = max;
-    const formatted = c.totalFormat ? c.totalFormat(raw) : defaultFormat(raw, agg);
+    const formatted = applyTotalFormat(c.totalFormat, raw, agg);
     out[c.key] = { value: formatted, raw };
   }
   return out;

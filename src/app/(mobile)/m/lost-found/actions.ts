@@ -5,6 +5,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { filesFrom, fixesFrom, uploadFieldPhotos } from "@/lib/mobile/photo-upload";
+import { transitionIncident } from "@/lib/db/incident-fsm";
 
 export type State = { error?: string; warning?: string; fieldErrors?: Record<string, string> } | null;
 
@@ -79,5 +80,29 @@ export async function fileLostFound(_prev: State, fd: FormData): Promise<State> 
 
   revalidatePath("/m/lost-found");
   if (upload.error) return { warning: `Report filed. ${upload.error}` };
+  return null;
+}
+
+/**
+ * Hand a held item back to its owner.
+ *
+ * Lost & Found was file-only: an item could be logged as found and then never
+ * marked returned, so the desk's list only ever grew and "Claimed" was a state
+ * nothing could reach. A claim is not a bespoke write — these rows ARE
+ * incidents (`report_kind = 'lost_property'`), and "Claimed" is the shared
+ * incident FSM's terminal `closed`. Routing through `transitionIncident` keeps
+ * the legal moves, the append-only journal and the authorization policy
+ * identical to every other incident, rather than forking a second lifecycle.
+ */
+export async function claimLostItem(_prev: State, fd: FormData): Promise<State> {
+  const session = await requireSession();
+  const parsed = z.object({ id: z.string().uuid() }).safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return { error: "Invalid request." };
+
+  const supabase = await createClient();
+  const result = await transitionIncident(supabase, session, parsed.data.id, "closed");
+  if (!result.ok) return { error: result.error };
+
+  revalidatePath("/m/lost-found");
   return null;
 }

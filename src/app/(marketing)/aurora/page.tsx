@@ -192,7 +192,7 @@ export default async function AuroraPage() {
           body: t(
             `${K}.products.atlvs.recaps.body`,
             undefined,
-            "A transcript in, a tight recap and concrete action items out, saved on the meeting note. Field agents keep a derived column fresh from a record's own values whenever the record changes, against a whitelist of tables you control.",
+            "A transcript in, a tight recap and concrete action items out, saved on the meeting note. Field agents keep a derived column fresh from a record's own values whenever the record changes, against an allowlist of tables you control.",
           ),
           status: "coming",
           statusProduct: "ATLVS",

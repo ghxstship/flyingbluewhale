@@ -63,6 +63,38 @@ maps poorly to a single NormalizedList, low value.
   action on non-own listings opens/reuses the DM and navigates to
   `/m/inbox/[roomId]`; the buyer writes the first message, so nothing is fabricated.
 
+## ✅ P0 — RBAC verification + create-only CRUD (2026-07-22)
+
+**RBAC: zero holes.** Four write actions had neither a role check nor an
+ownership reference in the action body. All four cleared on inspection — the
+guards live below the action, which a mechanical scan can't see:
+- `submitTimesheet` → the `submit_timesheet` SECURITY DEFINER RPC explicitly
+  checks `parties.auth_user_id = auth.uid()`, locks the row, and gates on
+  submittable states. Correct.
+- `moveAssetCustody` → `isManagerPlus(session) || can(session, "asset:custody")`.
+- `redeemTicket` → `redeem_event_ticket` RPC.
+- `moveIncident` → **no app-level gate BY DESIGN**, mirroring the console
+  exactly (RLS grants crew alongside managers). The open question — "may the
+  crew member who filed it also close it?" — is flagged in `incident-fsm.ts`.
+  A policy decision, not a hole; tighten it there and both shells follow.
+
+**CRUD: the six create-only records, resolved.**
+
+| Record | Was | Now |
+|---|---|---|
+| **mileage** | insert only | edit + delete, owner-pinned (`user_id`), shared distance sanity so a fix can't become a typo the create refuses |
+| **expenses** | insert only | correct (amount + date) + withdraw, owner (`submitter_id`) AND settle-state (`pending\|rejected`) guarded. Edit is deliberately narrow: `description` is stored composed and `category_code` is a finance-owned ref code — neither is safe to round-trip |
+| **requisitions** | insert only | withdraw, owner + `draft\|submitted\|rejected`. No edit: a requisition is a structured document — correcting it is withdraw-and-re-raise |
+| **snags / punch** | *(not actually a gap)* | worked via a cross-shell import of the console action; FSM extracted to `src/lib/db/punch-transition.ts`, both shells now thin wrappers |
+| **lost-found** | insert only | Mark Claimed via the SHARED incident FSM (`transitionIncident(..., "closed")`) — not a bespoke write |
+| **handover** | insert only | **unchanged, by design** — a shift handover is a point-in-time record; editing it after the fact undermines the trail |
+
+Every one of these also gained the RecordDetail it lacked, so the detail gaps
+for mileage / expenses / requisitions / lost-found closed with the same work.
+Each write reads the row back, so an RLS- or state-refused write surfaces an
+honest message instead of a silent success, and settled records hide their
+actions rather than offering-then-refusing them.
+
 ## Notes
 
 - No `alert()`, `onClick={() => {}}`, "not implemented", or fabricated-data

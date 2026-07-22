@@ -4104,6 +4104,762 @@
           "runSubtitle": "Gratis para equipos pequeños. Precio por organización a partir de ahí."
         },
         "otherRoles": "Otros roles."
+      },
+      "crew-freelancer": {
+        "blurb": "La gente que construye el show. Horarios de llamada, credenciales, horas y cobrar sin perseguir a nadie.",
+        "faqs": {
+          "0": {
+            "a": "De dos formas. Si una producción te contrata, te mandan una invitación o un código de organización y aterrizas en COMPVSS en tu teléfono. Si estás armando tu propia operación, las organizaciones se crean en LEG3ND en la web, y luego invitas a tu crew.",
+            "q": "¿Cómo me uno?"
+          },
+          "1": {
+            "a": "No. COMPVSS está construido primero para el teléfono y funciona sin conexión. Las marcas, fotos y reportes se encolan en el dispositivo y sincronizan cuando recuperas cobertura.",
+            "q": "¿Necesito una laptop?"
+          },
+          "2": {
+            "a": "Tú ves tus propios registros; tus documentos personales siguen siendo tuyos. Las hojas de horas son visibles para ti y para los gerentes que las aprueban. El acceso se aplica en la capa de base de datos por rol, así que un compañero del crew no puede hojear tu expediente.",
+            "q": "¿Quién puede ver mis horas y documentos?"
+          },
+          "3": {
+            "a": "Sí. Un solo login, varios espacios de trabajo. Los datos de cada producción se quedan dentro de su propia organización; cambiar de show toma dos toques.",
+            "q": "¿Puedo trabajar para más de una empresa?"
+          }
+        },
+        "hero": {
+          "body": "Antes: el horario de llamada en un mensaje, el estacionamiento en otro, tu W-9 en un correo de marzo. Después: COMPVSS en tu teléfono tiene el turno, la puerta, tu credencial y tus horas. Y sigue funcionando sin señal.",
+          "eyebrow": "Para crew y freelancers",
+          "title": "Llega sabiendo el plan."
+        },
+        "pain-points": {
+          "0": "El horario de llamada cambia y te enteras en la puerta",
+          "1": "Horas disputadas tres semanas después sin ningún registro",
+          "2": "Recibos en el bolsillo de una chamarra hasta que ya no se leen",
+          "3": "Cada nuevo trabajo significa una nueva app, un nuevo login, un nuevo W-9"
+        },
+        "role": "Crew y freelancers",
+        "workflows": {
+          "0": {
+            "body": "Marca entrada desde el teléfono con geoverificación contra la zona del sitio. Tus horas son tuyas, en el registro, desde la primera marca.",
+            "title": "Clock-in verificado"
+          },
+          "1": {
+            "body": "Ve tus turnos, pide un intercambio, recibe la respuesta en la app. Sin arqueología de chat grupal para saber si trabajas el sábado.",
+            "title": "Tu horario + intercambios"
+          },
+          "2": {
+            "body": "Credencial, radio, comida, boleto, uniforme. Todo lo que te asignaron para el show, listado con su estado, para que la conversación en la puerta sea corta.",
+            "title": "Tus asignaciones"
+          },
+          "3": {
+            "body": "Las hojas de horas se arman desde tus marcas. Los recibos se fotografían directo a un gasto. El kilometraje se registra desde el teléfono. La matemática del día de pago deja de ser tu problema.",
+            "title": "Horas, gastos, kilometraje"
+          },
+          "4": {
+            "body": "Pídelo en la app, mira cómo se enruta, recibe una decisión. La aprobación vive en el registro y no en la memoria de alguien.",
+            "title": "Tiempo libre que responde"
+          },
+          "5": {
+            "body": "Los trabajos y las convocatorias abiertas se publican en el marketplace público. Tu perfil y tu calendario de disponibilidad hacen el pitch mientras tú estás en un show.",
+            "title": "El siguiente trabajo"
+          }
+        }
+      },
+      "festival-directors": {
+        "blurb": "Operaciones de varios días, varios escenarios y más de 15k invitados desde una consola.",
+        "faqs": {
+          "0": {
+            "a": "Probado en puertas únicas de 15,000 invitados con escaneo concurrente, menos de 100 ms, con cola sin conexión. El cuello de botella es tu red, no nosotros.",
+            "q": "¿Cuántos invitados aguanta la plataforma?"
+          },
+          "1": {
+            "a": "Sí. Portal con marca por proyecto, acotado por RLS. Cada patrocinador ve solo su activación, sus assets y su reporte.",
+            "q": "¿Los patrocinadores pueden tener un portal con su marca?"
+          }
+        },
+        "hero": {
+          "body": "Un festival corre sobre seis operaciones simultáneas: ticketing + puerta, advancing + ROS, proveedores + compras, seguridad + médicos, F&B + hospitalidad, marketing + patrocinios. ATLVS es una sola plataforma para las seis.",
+          "eyebrow": "Para directores de festival",
+          "title": "Corre el festival. No la hoja de cálculo."
+        },
+        "pain-points": {
+          "0": "Ticketing en una plataforma, puerta en otra, sin conciliación",
+          "1": "COIs de proveedores en una carpeta con seis meses de atraso",
+          "2": "El reporte a patrocinadores armado a mano la semana después del cierre"
+        },
+        "role": "Directores de festival",
+        "workflows": {
+          "0": {
+            "body": "Escaneo en menos de 100 ms con cola sin conexión. Varias puertas concurrentes. Cero duplicados bajo carga.",
+            "title": "Puerta de 15k+"
+          },
+          "1": {
+            "body": "Libro de cues por escenario con ventanas de cambio. Horarios de artistas, corridas de hospitalidad, pruebas de sonido.",
+            "title": "ROS multiescenario"
+          },
+          "2": {
+            "body": "Invitado, crew, artista, proveedor, patrocinador: cada uno ve su versión. Una fuente, renders acotados.",
+            "title": "KBYG por persona"
+          },
+          "3": {
+            "body": "COIs, W-9s, pagos vía Stripe Connect. Las POs se bloquean sin un COI vigente. Listo para auditoría.",
+            "title": "Cumplimiento de proveedores"
+          },
+          "4": {
+            "body": "Portal de patrocinadores con especificaciones de activación, biblioteca de assets, contraprestaciones y reporte de entrega.",
+            "title": "Activaciones de patrocinio"
+          },
+          "5": {
+            "body": "Fotos, P&L, incidentes registrables, flujo de puerta. Un PDF la noche de la liquidación.",
+            "title": "Recap de cierre"
+          }
+        }
+      },
+      "finance-controller": {
+        "blurb": "Quien cierra el mes. Captura en el origen, aprobaciones con dientes, términos que se cobran solos.",
+        "faqs": {
+          "0": {
+            "a": "Disponible hoy: captura en campo de gastos, kilometraje y hojas de horas, aprobaciones por rol desde el teléfono, propuestas con términos de depósito que se firman y cobran en línea, y pagos a proveedores por Stripe Connect. En construcción: el libro contable completo de la consola con presupuestos, cuentas por pagar y cobrar, y vistas de liquidación.",
+            "q": "¿Qué está disponible hoy y qué falta?"
+          },
+          "1": {
+            "a": "Los proveedores dan de alta una cuenta de Stripe Connect por su portal. Los pagos salen al aprobarse por ACH, tarjeta o transferencia, y cada pago queda ligado a su PO.",
+            "q": "¿Cómo funcionan los pagos a proveedores?"
+          },
+          "2": {
+            "a": "No. Las superficies de finanzas están restringidas por rol en la capa de base de datos. El crew ve sus propios gastos, horas y reembolsos; el presupuesto y el margen se quedan con los roles que tú otorgues.",
+            "q": "¿El crew puede ver los números del presupuesto?"
+          }
+        },
+        "hero": {
+          "body": "Hoy el mes cierra sobre recibos fotografiados en cuatro apps distintas. En ATLVS el campo captura su propio papeleo: gastos, kilometraje y horas llegan codificados desde los teléfonos del crew, y tú apruebas desde el tuyo. El libro contable completo de la consola viene en camino; la capa de captura funciona ya.",
+          "eyebrow": "Para controllers financieros",
+          "title": "Cierra el mes sin la caja de zapatos."
+        },
+        "pain-points": {
+          "0": "La semana de cierre es arqueología de recibos",
+          "1": "Los reales de labor llegan dos ciclos de nómina tarde",
+          "2": "POs aprobadas de palabra, disputadas por escrito",
+          "3": "Términos de depósito renegociados por accidente en un correo"
+        },
+        "role": "Controllers financieros",
+        "workflows": {
+          "0": {
+            "body": "El crew fotografía el recibo a un gasto codificado el mismo día en que gasta. Dejas de reconstruir un show desde una pila de papeles al cierre.",
+            "title": "Gastos en el origen"
+          },
+          "1": {
+            "body": "El kilometraje se reporta desde el teléfono contra el proyecto. La matemática de tarifas está hecha, y la bitácora sobrevive una auditoría.",
+            "title": "Kilometraje registrado"
+          },
+          "2": {
+            "body": "Las hojas de horas se arman desde marcas de reloj geoverificadas, así el número de labor que asientas es la labor que ocurrió en el sitio.",
+            "title": "Labor desde las marcas"
+          },
+          "3": {
+            "body": "Una requisición levantada en campo no gasta nada hasta que firma el rango de controller. Las cadenas de aprobación están restringidas por rol, y la decisión vive en el registro.",
+            "title": "Aprobaciones con dientes"
+          },
+          "4": {
+            "body": "Las propuestas llevan una división de depósito 50/50 por defecto; las contrataciones de talento corren 60/40 con el saldo al load-in. Firmadas en línea, los depósitos se cobran por Stripe al aceptar.",
+            "title": "Términos que cobran"
+          },
+          "5": {
+            "body": "Presupuestos, cuentas por pagar y cobrar, y liquidación en la consola del operador están en construcción. Preferimos decírtelo a venderte una captura de pantalla.",
+            "title": "El libro de la consola (en camino)"
+          }
+        }
+      },
+      "hse-leads": {
+        "blurb": "Propiedad de seguridad + médicos + crisis: incidentes, OSHA, briefings diarios.",
+        "faqs": {
+          "0": {
+            "a": "Sí. La captura en campo funciona con o sin nombre adjunto. Los reportes anónimos llegan a EHS por la misma vía, con fotos y ubicación intactas. Recibes el reporte del que de otro modo nunca te enterarías.",
+            "q": "¿El crew puede reportar incidentes de forma anónima?"
+          },
+          "1": {
+            "a": "Reportar está abierto a todos en el sitio. Cerrar es una firma del rango de gerencia, aplicada por rol. Quien reportó un peligro no puede ser quien lo marque resuelto en silencio.",
+            "q": "¿Quién puede cerrar un incidente?"
+          },
+          "2": {
+            "a": "Los registrables fluyen desde el registro del incidente conforme se clasifican, así el log 300 se construye durante la temporada. El resumen 300A se exporta en un clic cuando llega la carta de auditoría.",
+            "q": "¿Cómo se mantiene al día el log de OSHA?"
+          }
+        },
+        "hero": {
+          "body": "Los líderes de EHS son dueños de incidentes, logs de OSHA, triaje médico, briefings diarios, comunicación de crisis, BC/DR, salvaguarda, ambiental. ATLVS hace de cada uno un registro de primera clase sobre la misma base de datos en la que corre el show.",
+          "eyebrow": "Para líderes de EHS",
+          "title": "La seguridad no es una carpeta. Es un sistema."
+        },
+        "pain-points": {
+          "0": "Incidentes en un portapapeles, transcritos el lunes por la mañana",
+          "1": "El OSHA 300A armado desde correos tres semanas antes de la auditoría",
+          "2": "Comunicados de crisis redactados en tiempo real a las 2 a.m."
+        },
+        "role": "Líderes de EHS / seguridad",
+        "workflows": {
+          "0": {
+            "body": "Desde el teléfono, con opción anónima. Fotos, ubicación, testigos. Llega a EHS al instante.",
+            "title": "Captura de incidentes en campo"
+          },
+          "1": {
+            "body": "Los registrables fluyen desde los incidentes. Resumen 300A en un clic antes de la auditoría.",
+            "title": "Log OSHA 300"
+          },
+          "2": {
+            "body": "Briefing por día con peligros, clima, EPP, comunicaciones, punto de reunión de emergencia. Firma de asistencia del roster capturada.",
+            "title": "Briefing diario de seguridad"
+          },
+          "3": {
+            "body": "Diez plantillas integradas con la puerta de show-ready.",
+            "title": "Inspecciones"
+          },
+          "4": {
+            "body": "Plantillas preaprobadas que se publican en un toque.",
+            "title": "Comunicación de crisis"
+          },
+          "5": {
+            "body": "Registros con alcance separado, acceso más estricto y auditoría.",
+            "title": "Médicos + salvaguarda"
+          }
+        }
+      },
+      "marketing-content-lead": {
+        "blurb": "La voz del show. Guías, páginas de boletos, entrega a patrocinadores y una actualización que aterriza en todas partes.",
+        "faqs": {
+          "0": {
+            "a": "No. La guía del invitado y las superficies de boletos abren desde un enlace en cualquier navegador. COMPVSS, la app instalable, es para tu crew.",
+            "q": "¿Los invitados necesitan instalar algo?"
+          },
+          "1": {
+            "a": "Publicar es un permiso del rango de gerencia. Cualquiera con acceso puede redactar; la actualización sale en vivo cuando un publicador la empuja. Los borradores nunca se filtran a invitados ni a patrocinadores.",
+            "q": "¿Quién puede publicar y quién solo redactar?"
+          },
+          "2": {
+            "a": "Sí, en Enterprise: marca personalizada y dominios personalizados en el portal. La mayoría de los promotores pone su marca al lado del invitado y deja el lado del operador de fábrica.",
+            "q": "¿Las superficies de cara al invitado pueden llevar nuestra marca?"
+          }
+        },
+        "hero": {
+          "body": "La semana del show estás pegando la misma actualización en un correo, un documento y tres chats. En ATLVS publicas una vez y cada audiencia lee su propia versión: la guía del invitado, el feed del crew, el portal del patrocinador, la página de boletos. El mismo registro debajo.",
+          "eyebrow": "Para líderes de marketing y contenido",
+          "title": "Publica una vez. Cada pantalla sigue."
+        },
+        "pain-points": {
+          "0": "Cinco versiones de la información del evento, cuatro desactualizadas",
+          "1": "El recap del patrocinador armado a mano la semana después del cierre",
+          "2": "Las buenas fotos viven en el teléfono de alguien",
+          "3": "Preguntas de invitados respondidas un DM a la vez"
+        },
+        "role": "Líderes de marketing y contenido",
+        "workflows": {
+          "0": {
+            "body": "Una guía, acotada por persona. Los invitados ven estacionamiento y horarios de puertas; el crew ve canales de radio y EPP; los artistas ven su horario. Dieciséis tipos de sección, una fuente.",
+            "title": "Know Before You Go"
+          },
+          "1": {
+            "body": "Niveles, transferencias y capacidad se leen de los mismos registros contra los que escanea la puerta, así la tienda nunca anuncia un nivel que se agotó ayer.",
+            "title": "La página de boletos"
+          },
+          "2": {
+            "body": "El portal de cada patrocinador lleva sus especificaciones de activación, biblioteca de assets y contraprestaciones, más el reporte de lo que de verdad se entregó. Las conversaciones de renovación empiezan desde la evidencia.",
+            "title": "Entrega a patrocinadores"
+          },
+          "3": {
+            "body": "Publica en el feed y llega a cada teléfono del crew, con conteos de lectura. La era del 'nadie me avisó' termina en silencio.",
+            "title": "Anuncios al crew"
+          },
+          "4": {
+            "body": "Las fotos del sitio se juntan por proyecto con fechas y ubicaciones intactas. El deck de recap se arma desde la galería y no desde una súplica en el chat grupal.",
+            "title": "El registro fotográfico"
+          },
+          "5": {
+            "body": "Herramientas más profundas de campañas y contenido en la consola del operador están en construcción. Lo de arriba se entrega hoy.",
+            "title": "Consola de campañas (en camino)"
+          }
+        }
+      },
+      "production-coordinator": {
+        "blurb": "El tejido conectivo de la oficina de producción. Tareas, llamadas, viajes, papeleo y la respuesta a cada '¿quién tiene eso?'",
+        "faqs": {
+          "0": {
+            "a": "Las tareas viven sobre registros de producción. Una tarea adjunta a un load-in, una requisición o un advance de artista carga su contexto consigo, así cerrarla actualiza la cosa de la que realmente se trataba.",
+            "q": "¿En qué se diferencia de una app de tareas genérica?"
+          },
+          "1": {
+            "a": "Depende de tu rol. Los coordinadores normalmente levantan solicitudes y las enrutan; las aprobaciones quedan con el rango de gerencia. Esa división se aplica con permisos, lo que significa que una aprobación en el registro es una aprobación real.",
+            "q": "¿Puedo aprobar cosas o solo levantarlas?"
+          },
+          "2": {
+            "a": "Sí. Viajes y hospedaje son registros de asignación por persona por proyecto. Cada viajero ve sus propios tramos y su habitación en la app de campo; tú ves la grilla completa.",
+            "q": "¿Los viajes de verdad viven aquí también?"
+          }
+        },
+        "hero": {
+          "body": "Ahora mismo el lunes son cuarenta hilos sin leer preguntando cómo van las cosas. En ATLVS la lista de tareas, el cronograma y la grilla de viajes son el mismo registro que todos los demás están leyendo, así la respuesta a '¿dónde vive eso?' se vuelve un solo enlace.",
+          "eyebrow": "Para coordinadores de producción",
+          "title": "Tu semana, sin las persecuciones."
+        },
+        "pain-points": {
+          "0": "El itinerario vive en tu bandeja y todos lo saben",
+          "1": "Las aprobaciones se estancan porque nadie sabe en qué escritorio están",
+          "2": "El mismo horario de llamada se manda por mensaje, correo y publicación, y luego cambia",
+          "3": "Cada show empieza reconstruyendo el papeleo del show anterior"
+        },
+        "role": "Coordinadores de producción",
+        "workflows": {
+          "0": {
+            "body": "Una columna personal: tus tareas abiertas, aprobaciones pendientes, solicitudes que levantaste. Todo lo que lleva tu nombre, en una lista en tu teléfono.",
+            "title": "Mi trabajo"
+          },
+          "1": {
+            "body": "Asignar, fechar, listo. Las tareas viven en el registro del proyecto, así '¿eso pasó?' tiene respuesta sin una junta de estatus.",
+            "title": "Tareas que cierran"
+          },
+          "2": {
+            "body": "Las llamadas fluyen del cronograma al portal y al calendario de cada persona. Cuando la llamada se mueve, la notificación sale; no vuelves a mandar mensajes a treinta personas.",
+            "title": "Cronograma + llamadas"
+          },
+          "3": {
+            "body": "Vuelos, transporte terrestre, bloques de hotel, parejas de habitación. Cada persona ve su propio itinerario en COMPVSS en lugar de pedirte el número de confirmación otra vez.",
+            "title": "Viajes + hospedaje"
+          },
+          "4": {
+            "body": "Equipo, requisiciones de compra, tiempo libre, TI, reportes. Cinco capturas estructuradas reemplazan los mensajes de 'oye, un favor rápido'. Tú lo levantas; la aprobación se enruta sola.",
+            "title": "Solicitudes enrutadas"
+          },
+          "5": {
+            "body": "El paquete que armaste el show pasado se vuelve la plantilla del siguiente. Los formularios de campo y los documentos viven donde el crew los llena.",
+            "title": "Documentos + plantillas"
+          }
+        }
+      },
+      "production-managers": {
+        "blurb": "El dueño del montaje: RFIs, submittals, bitácoras diarias, punch, inspecciones, show-ready.",
+        "faqs": {
+          "0": {
+            "a": "Las mismas primitivas a velocidad de producción. Las herramientas de construcción están hechas para proyectos de 18 meses con BIM profundo. La producción de eventos corre en ciclos de 4 a 12 semanas; quitamos la licitación pesada de compras y apretamos el ciclo en lo que importa.",
+            "q": "¿Cómo encaja esto con los tiempos de producción?"
+          },
+          "1": {
+            "a": "Sí. El plan Production es usuarios ilimitados y proyectos ilimitados. La vista de 21 días cruza proyectos.",
+            "q": "¿Podemos correr varios montajes a la vez?"
+          }
+        },
+        "hero": {
+          "body": "El stack del PM toma prestado de la construcción (RFIs con responsable en turno, submittals, bitácoras diarias, punch lists, órdenes de cambio) a velocidad de día de show, construido para el calendario de producción.",
+          "eyebrow": "Para gerentes de producción",
+          "title": "Corre el montaje como una obra. Solo más rápido."
+        },
+        "pain-points": {
+          "0": "RFIs perdidos en hilos de correo",
+          "1": "Bitácoras diarias en un cuaderno que nadie lee después del cierre",
+          "2": "La punch list regada entre apps de notas del teléfono",
+          "3": "La autoridad pide evidencia de inspección la mañana del show"
+        },
+        "role": "Gerentes de producción",
+        "workflows": {
+          "0": {
+            "body": "Pregunta, destinatario, respuesta oficial, fecha límite. Los RFIs abiertos aparecen en cada tablero de proyecto. Cierres que en construcción toman 14 días aquí cierran en 24 horas.",
+            "title": "RFIs con reloj"
+          },
+          "1": {
+            "body": "El clima llega del pronóstico, la mano de obra de las entradas de tiempo, las fotos de la galería. Un registro por día. El recap se escribe solo.",
+            "title": "Bitácoras diarias"
+          },
+          "2": {
+            "body": "Item, ubicación, oficio, foto, fecha límite. La puerta de show-ready lo exige. Las puertas no abren hasta que el punch cierra.",
+            "title": "Punch list"
+          },
+          "3": {
+            "body": "Diez plantillas integradas (rigging, eléctrica, protección contra incendios, estructural, ADA, servicio de alimentos, FOH, BOH, camerinos, broadcast). Salida en PDF que la autoridad acepta.",
+            "title": "Inspecciones"
+          },
+          "4": {
+            "body": "Cuantificadas, cotizadas, aprobadas antes de que el trabajo suceda. Se escriben al presupuesto al aceptarse.",
+            "title": "Órdenes de cambio"
+          },
+          "5": {
+            "body": "Portal de proveedores con COIs, W-9s, POs, pagos vía Stripe Connect. El cumplimiento bloquea las POs automáticamente.",
+            "title": "Coordinación de proveedores"
+          }
+        }
+      },
+      "site-managers": {
+        "blurb": "Propiedad del sitio de montaje: load-in, inspecciones, bitácoras diarias, desmontaje.",
+        "faqs": {
+          "0": {
+            "a": "Sí. COMPVSS es offline-first. Las marcas, fotos y entradas de bitácora se encolan en el teléfono y sincronizan cuando vuelve la cobertura. Un campo de generadores sin señal igual queda documentado.",
+            "q": "¿Funciona cuando el sitio no tiene señal?"
+          },
+          "1": {
+            "a": "Cualquiera en el sitio puede levantar uno desde el teléfono, de forma anónima si quiere. Cerrarlo es una firma de gerencia. Esa división se aplica por rol, así nada desaparece en silencio entre el campo y el expediente.",
+            "q": "¿Quién puede cerrar un reporte de incidente?"
+          },
+          "2": {
+            "a": "Las plantillas se renderizan a un PDF firmado con aprobado/reprobado por item, evidencia fotográfica y la marca de tiempo de la firma del inspector. Ese es el formato que piden los bomberos y los inspectores de obra.",
+            "q": "¿La autoridad aceptará la salida de las inspecciones?"
+          }
+        },
+        "hero": {
+          "body": "Los gerentes de sitio son dueños del sitio de montaje del load-in al desmontaje. ATLVS captura el día (clima, mano de obra, inspecciones, fotos, punch, órdenes de cambio) y lo convierte en el cierre posproducción automáticamente.",
+          "eyebrow": "Para gerentes de sitio",
+          "title": "El sitio de montaje, documentado."
+        },
+        "pain-points": {
+          "0": "Bitácoras diarias en un portapapeles, transcritas al cierre",
+          "1": "Fotos en tres teléfonos distintos, nunca recolectadas",
+          "2": "Firmas de inspección perdidas entre la carpeta y la hoja de cálculo"
+        },
+        "role": "Gerentes de sitio",
+        "workflows": {
+          "0": {
+            "body": "Clima, mano de obra, equipo en sitio, trabajo realizado, fotos. Se llena automáticamente desde las entradas de tiempo.",
+            "title": "Bitácora diaria del sitio"
+          },
+          "1": {
+            "body": "Recorre la inspección en el teléfono. Aprobado/reprobado por item, evidencia fotográfica, firma. Salida en PDF para la autoridad.",
+            "title": "Recorrido de inspección"
+          },
+          "2": {
+            "body": "Galería por proyecto, EXIF preservado, geoetiquetada. Las bitácoras diarias empaquetan solas las fotos del día.",
+            "title": "Galería de fotos"
+          },
+          "3": {
+            "body": "Item, ubicación, foto, fecha límite. La puerta de show-ready exige la resolución antes de abrir.",
+            "title": "Punch + show-ready"
+          },
+          "4": {
+            "body": "Orden inverso de montaje, fecha dura de salida, disparadores de horas extra rastreados.",
+            "title": "Coordinación del desmontaje"
+          },
+          "5": {
+            "body": "Captura de incidentes desde el teléfono, primero en campo. EHS avisado según el umbral de severidad.",
+            "title": "Captura de incidentes"
+          }
+        }
+      },
+      "stage-managers": {
+        "blurb": "Quien llama el show: ROS, comunicaciones, libros de cues, dirección en tiempo real.",
+        "faqs": {
+          "0": {
+            "a": "Para el libro de llamado en sí, normalmente sí. Para el intercom de comunicaciones, no: no reemplazamos el hardware de intercom dedicado. Somos la capa canónica de cronograma y notas que vive encima del hardware de comunicaciones.",
+            "q": "¿Reemplaza nuestro software de llamado de cues?"
+          }
+        },
+        "hero": {
+          "body": "El SM vive en el ROS. ATLVS te da números de cue, departamentos, notas departamentales: la forma del libro de cues, con todo lo demás de la producción colgando de él.",
+          "eyebrow": "Para stage managers",
+          "title": "Run of show, al minuto."
+        },
+        "pain-points": {
+          "0": "El ROS en un Google Doc compartido que dos personas editan a la vez",
+          "1": "La llamada del crew mandada por mensaje esa mañana y nunca conciliada con el presupuesto",
+          "2": "Las notas del show capturadas en un cuaderno que vive en la mochila de alguien"
+        },
+        "role": "Stage managers",
+        "workflows": {
+          "0": {
+            "body": "Número de cue, hora, duración, departamento, notas. Se publica a los portales: el artista ve su horario, el crew ve su llamada, el proveedor ve su ventana de entrega.",
+            "title": "ROS al minuto"
+          },
+          "1": {
+            "body": "Se lee como un libro de cues. Filtrable por departamento. Canales de comunicación por cue cuando aplica.",
+            "title": "Forma de libro de cues"
+          },
+          "2": {
+            "body": "El call sheet fluye del cronograma al portal y al ICS. Horarios de llamada por crew según la dependencia del ROS.",
+            "title": "Llamadas del crew"
+          },
+          "3": {
+            "body": "Crew, equipo o venues con doble reserva aparecen antes de que te cuesten.",
+            "title": "Detección de conflictos"
+          },
+          "4": {
+            "body": "Notas de show capturadas en vivo; el debrief posfunción se escribe solo desde la bitácora con marcas de tiempo.",
+            "title": "Dirección en tiempo real"
+          },
+          "5": {
+            "body": "Los artistas ven su horario en el portal. Los cambios notifican automáticamente; nadie manda mensajes preguntando si las puertas siguen a las 8.",
+            "title": "Comunicación de horarios"
+          }
+        }
+      },
+      "talent-buyers": {
+        "blurb": "Pipeline de lead a contratación: ofertas, contratos, traspaso al advancing.",
+        "faqs": {
+          "0": {
+            "a": "Las ofertas traen por defecto un depósito del 60% con el saldo al load-in. Puedes cambiarlo por oferta, pero el default coincide con cómo se cierran de verdad la mayoría de los tratos de talento.",
+            "q": "¿Cuáles son los términos de depósito por defecto en una contratación?"
+          },
+          "1": {
+            "a": "No. La carta oferta abre desde un enlace y se firma ahí mismo. IP y marca de tiempo se capturan en la firma, y el depósito puede cobrarse al aceptar por Stripe.",
+            "q": "¿El agente o manager necesita una cuenta para firmar?"
+          },
+          "2": {
+            "a": "La oferta confirmada se convierte en un proyecto con sus entregables de advancing creados automáticamente. Producción retoma el registro que ya construiste en lugar de un correo reenviado.",
+            "q": "¿Qué pasa después de que una oferta se confirma?"
+          }
+        },
+        "hero": {
+          "body": "La compra de talento vive entre el pipeline de ventas y la producción. ATLVS mantiene ofertas, contratos y el traspaso al advancing en un solo registro, así el equipo del artista nunca pregunta quién lo lleva.",
+          "eyebrow": "Para compradores de talento",
+          "title": "De la oferta al advancing. Un registro."
+        },
+        "pain-points": {
+          "0": "Ofertas en DocuSign, advancing en correo, contratos en una carpeta",
+          "1": "Recapturar los mismos datos de artista + venue tres veces",
+          "2": "El traspaso a producción es un mensaje de Slack"
+        },
+        "role": "Compradores de talento",
+        "workflows": {
+          "0": {
+            "body": "Lead → oferta → contrato → confirmado → advancing. Tasa de cierre y tiempo de cierre por show.",
+            "title": "Pipeline"
+          },
+          "1": {
+            "body": "23 tipos de bloque firmados ahí mismo. IP + marca de tiempo capturadas. Depósito por Stripe Connect al aceptar.",
+            "title": "Cartas oferta"
+          },
+          "2": {
+            "body": "Acuerdos con plantilla con honorarios variables, riders, opciones.",
+            "title": "Biblioteca de contratos"
+          },
+          "3": {
+            "body": "Los artistas ven su oferta, rider, hospitalidad, horario. Un enlace.",
+            "title": "Portal del artista"
+          },
+          "4": {
+            "body": "La oferta confirmada se vuelve un proyecto con los entregables de advancing creados automáticamente.",
+            "title": "Traspaso al advancing"
+          },
+          "5": {
+            "body": "Honorarios finales, back-end, deducciones. Liquidado en el venue con datos en vivo.",
+            "title": "Liquidación"
+          }
+        }
+      },
+      "technical-directors": {
+        "blurb": "Propiedad técnica de audio, iluminación, video y escenografía, de las especificaciones al día del show.",
+        "faqs": {
+          "0": {
+            "a": "Sí. Un cabezal móvil con número de serie y una caja de 200 grilletes viven en el mismo registro. Los activos serializados se rastrean uno a uno; los activos por lote llevan cantidad y se descuentan al entregarse.",
+            "q": "¿El registro maneja unidades serializadas y stock a granel?"
+          },
+          "1": {
+            "a": "El crew escanea la custodia de entrada y salida desde sus propios teléfonos. Cambiar la disposición de un activo, darlo de baja o facturar un daño queda con el rango de gerencia. El escaneo es abierto; el libro está restringido.",
+            "q": "¿El crew puede sacar equipo por su cuenta?"
+          },
+          "2": {
+            "a": "La fecha de devolución vive en el registro de la renta con su PO. Las devoluciones vencidas se marcan en compras en lugar de aparecer tres semanas después del cierre en un hilo de mensajes.",
+            "q": "¿Qué pasa cuando una subrenta vuelve tarde?"
+          }
+        },
+        "hero": {
+          "body": "Los TDs son dueños de la columna técnica: diseño de sistema, lista de equipo, energía, rigging, flujo de señal. ATLVS captura las especificaciones como registros tipados que sobreviven a la temporada, al siguiente show y al post-mortem.",
+          "eyebrow": "Para directores técnicos",
+          "title": "Las especificaciones técnicas viven en el registro."
+        },
+        "pain-points": {
+          "0": "La lista de equipo vive en tres hojas de cálculo",
+          "1": "Devoluciones de subrentas perseguidas por mensaje 3 semanas después del cierre",
+          "2": "Bajas por daño nunca conciliadas con el cliente"
+        },
+        "role": "Directores técnicos",
+        "workflows": {
+          "0": {
+            "body": "Cada activo etiquetado con su estado a lo largo de su ciclo de vida. Vista de disponibilidad entre temporadas.",
+            "title": "Registro de equipo"
+          },
+          "1": {
+            "body": "Origen, fecha de devolución, PO asociada. Las devoluciones tardías se marcan en compras.",
+            "title": "Subrentas"
+          },
+          "2": {
+            "body": "Cargas puntuales, cargas dinámicas, cálculos de motores documentados por show.",
+            "title": "Inspecciones de rigging"
+          },
+          "3": {
+            "body": "Asignación circuito por circuito con margen. Aparece durante la inspección.",
+            "title": "Distribución de energía"
+          },
+          "4": {
+            "body": "Trabajo de taller con costo, cronograma, fotos de entrega. Varianza contra presupuesto rastreada.",
+            "title": "Órdenes de fabricación"
+          },
+          "5": {
+            "body": "Reportes de daño con fotos y estimaciones de costo. Se facturan automáticamente al sub o al cliente.",
+            "title": "Daños + facturación al sub"
+          }
+        }
+      },
+      "tour-managers": {
+        "blurb": "El único responsable de toda una gira: advancing, finanzas, logística, crew, liquidación.",
+        "faqs": {
+          "0": {
+            "a": "Sí, para organizaciones de gira modernas. Llevamos advancing, day sheets y varianza por parada, y sumamos multiusuario nativo en la nube, portales reales, móvil sin conexión, Aurora AI y precio por organización. Las herramientas viejas ganan en memoria muscular; nosotros ganamos en cada especificación.",
+            "q": "¿Esto reemplaza nuestro stack de gira de escritorio?"
+          },
+          "1": {
+            "a": "Sí. La vista de 21 días cruza proyectos, así ves qué carga esta semana y qué crew queda disponible la próxima.",
+            "q": "¿Podemos correr varias giras a la vez?"
+          },
+          "2": {
+            "a": "Los datos de boletería caen en finanzas durante el show; la noche de liquidación concilias contra garantías, deducciones y back-end. Un PDF firmado se exporta para el venue o el promotor.",
+            "q": "¿Cómo funciona la liquidación?"
+          }
+        },
+        "hero": {
+          "body": "El stack del TM no ha cambiado en veinte años. Una app de escritorio y una carpeta. ATLVS reafina las mismas primitivas para nube nativa, portales reales, móvil sin conexión, asistencia de Aurora AI, precio por organización.",
+          "eyebrow": "Para tour managers",
+          "title": "Gestión de gira, sobre rieles modernos."
+        },
+        "pain-points": {
+          "0": "Day sheets enviados como PDF y desactualizados de inmediato",
+          "1": "La matemática de viáticos rehecha cada lunes por la mañana",
+          "2": "La hoja de liquidación construida desde cero en cada show",
+          "3": "Las corridas de choferes rastreadas en un hilo de chat hasta que dejan de estarlo"
+        },
+        "role": "Tour managers",
+        "workflows": {
+          "0": {
+            "body": "Dieciséis entregables tipados por parada. Riders, hospitalidad, stage plots, bloques de hotel, transporte terrestre. Portales para venues, proveedores, choferes.",
+            "title": "Advancing por parada"
+          },
+          "1": {
+            "body": "Crew + talento ven su day sheet en el portal. Se acabaron las cadenas de PDF por correo. Las actualizaciones se publican; nadie pregunta si esta es la última versión.",
+            "title": "Day sheets al portal"
+          },
+          "2": {
+            "body": "Ciudad × día × tarifa → finanzas. La conciliación del día de pago corre desde el mismo registro. Los viáticos fluyen a nómina automáticamente.",
+            "title": "Matemática de viáticos"
+          },
+          "3": {
+            "body": "Boletería, costo del venue, garantías, back-end. Liquidado en el venue con una hoja firmada, sobre datos en vivo.",
+            "title": "Liquidación"
+          },
+          "4": {
+            "body": "Corridas de vehículos con chofer, vehículo, manifest, comprobante de entrega. Los choferes ven sus corridas en un portal sin app que instalar.",
+            "title": "Transporte terrestre"
+          },
+          "5": {
+            "body": "Pausa por clima, incidente de seguridad, evacuación: plantillas preaprobadas se publican en un toque desde la carretera.",
+            "title": "Comunicación de crisis"
+          }
+        }
+      },
+      "vendor-subcontractor": {
+        "blurb": "El taller externo del que depende el show. POs por escrito, cumplimiento en un solo lugar, pagos sin llamadas telefónicas.",
+        "faqs": {
+          "0": {
+            "a": "Nada. La organización de tu cliente corre la plataforma; a ti te invitan. Recibes el registro de la PO, la bóveda de cumplimiento, la mensajería y el estado de tus pagos sin comprar una licencia.",
+            "q": "¿Cuánto me cuesta el portal?"
+          },
+          "1": {
+            "a": "Por Stripe Connect. Das de alta una cuenta de pago una vez, y las POs aprobadas se pagan directo por ACH, tarjeta o transferencia. Sin el paso de facturar al vacío.",
+            "q": "¿Cómo me pagan?"
+          },
+          "2": {
+            "a": "No. Cada portal está acotado a los proyectos de esa organización, aplicado en la capa de base de datos. El cliente A no puede ver que el cliente B existe, y ninguno ve nada tuyo más allá de lo que les entregas.",
+            "q": "¿Mi cliente puede ver mi otro trabajo?"
+          },
+          "3": {
+            "a": "El portal marca el vencimiento con anticipación, y las POs nuevas se bloquean hasta que haya un COI vigente en el expediente. Molesto por diseño; también significa que nunca pierdes un trabajo por papeleo que no sabías que estaba vencido.",
+            "q": "¿Qué pasa si mi seguro vence?"
+          }
+        },
+        "hero": {
+          "body": "Ya has perseguido un cheque a 60 días con tres llamadas. El portal de proveedor que te manda tu cliente muestra la PO, los documentos de cumplimiento que necesita y en qué va tu pago, en un solo login. Sin licencia por usuario, sin software que comprar.",
+          "eyebrow": "Para proveedores y subcontratistas",
+          "title": "Recibe la PO. Haz el trabajo. Cobra."
+        },
+        "pain-points": {
+          "0": "Alcance acordado en una llamada, disputado en la factura",
+          "1": "El COI vence a mitad del show y nadie lo vio",
+          "2": "El estado del pago es una llamada semanal",
+          "3": "Cinco clientes, cinco hojas de cálculo de tu propio papeleo"
+        },
+        "role": "Proveedores y subcontratistas",
+        "workflows": {
+          "0": {
+            "body": "El COI y el W-9 se suben directo al portal, con vencimiento rastreado. Un certificado vigente es la llave que desbloquea las POs, así la conversación del papeleo pasa una sola vez.",
+            "title": "Alta una sola vez"
+          },
+          "1": {
+            "body": "La orden, sus líneas y sus términos viven en tu portal. Los cambios de alcance de palabra dejan de ser tu problema que probar.",
+            "title": "POs por escrito"
+          },
+          "2": {
+            "body": "Los productores publican RFQs al marketplace público. Respondes por el portal con tus calificaciones adjuntas, contra requisitos declarados y no un juego de adivinanzas.",
+            "title": "Cotiza RFQs abiertos"
+          },
+          "3": {
+            "body": "Da de alta una cuenta de Stripe Connect y los pagos caen al cumplirse la PO por ACH, tarjeta o transferencia. Cada pago se liga a su PO, así la conciliación de tu lado es una consulta.",
+            "title": "Pagos directos"
+          },
+          "4": {
+            "body": "Tu portal lleva un hilo de mensajes con tu gerente de cuenta del lado de la producción. Las preguntas llegan a la persona que puede responderlas.",
+            "title": "Una persona, no un vacío"
+          },
+          "5": {
+            "body": "Cada productor con el que trabajas manda su propio portal; tu login se conserva entre todos. Sus mundos quedan separados, tu bandeja queda sana.",
+            "title": "Cada cliente, un login"
+          }
+        }
+      },
+      "warehouse-asset-manager": {
+        "blurb": "El dueño del taller y de todo lo que hay en él. El registro, los escaneos, la cadena de custodia, el camión que sale a las 6 a.m.",
+        "faqs": {
+          "0": {
+            "a": "Ninguno para empezar. Los QR y códigos de barras se escanean con la cámara del teléfono en COMPVSS. Si usas RFID, los escáneres de cuña que emulan un teclado funcionan con la misma captura.",
+            "q": "¿Qué hardware de escaneo necesito?"
+          },
+          "1": {
+            "a": "Sí, y ese es el punto: el crew escanea la custodia en la caja. Cambiar una disposición, dar de baja un activo o facturar un daño queda con el rango de gerencia, aplicado por rol. Escaneo abierto, libro restringido.",
+            "q": "¿El crew puede sacar equipo por su cuenta?"
+          },
+          "2": {
+            "a": "Los activos por lote llevan cantidad y se descuentan al entregarse; los serializados se rastrean uno por uno. Ambos se consolidan en la misma vista de inventario, así el conteo de grilletes y el número de serie de la consola viven en una sola pantalla.",
+            "q": "¿Cómo funcionan las cantidades para el stock a granel?"
+          }
+        },
+        "hero": {
+          "body": "El camión sale a las 6 y a las 8 te enteras de qué no subió. En ATLVS una caja que sale del taller es un escaneo, y el escaneo es custodia. Qué está afuera, quién lo tiene y cuándo debe volver dejan de ser preguntas.",
+          "eyebrow": "Para gerentes de almacén y activos",
+          "title": "Cada caja, contabilizada."
+        },
+        "pain-points": {
+          "0": "El conteo está bien hasta que carga el primer camión",
+          "1": "La custodia es una memoria, así que las pérdidas son un misterio",
+          "2": "Las devoluciones de subrentas rastreadas en un hilo de mensajes",
+          "3": "Las bajas descubiertas al cierre del año, no al cierre del show"
+        },
+        "role": "Gerentes de almacén y activos",
+        "workflows": {
+          "0": {
+            "body": "Equipo, flota y stock por lote en un solo almacén con clase, cantidad y disposición. La hoja de cálculo con el nombre 'FINAL_v3' se jubila.",
+            "title": "Un registro de activos"
+          },
+          "1": {
+            "body": "Los escaneos de QR y código de barras desde cualquier teléfono mueven la custodia de entrada y salida. La cadena de quién tocó qué sobrevive el load-out, el show y la recarga de las 2 a.m.",
+            "title": "Custodia por escaneo"
+          },
+          "2": {
+            "body": "Cada SKU que tu organización entrega, de radios a pulseras, en un solo catálogo. Las asignaciones se descuentan de él, así los conteos se concilian en lugar de derivar.",
+            "title": "Catálogo maestro"
+          },
+          "3": {
+            "body": "Radios, herramientas y uniformes se entregan por persona por show y regresan por el mismo ciclo de vida. Entregado, transferido, devuelto. Sin equipo huérfano.",
+            "title": "Entrega de kits"
+          },
+          "4": {
+            "body": "Corridas de vehículos con chofer, manifest y comprobante de entrega. La app de campo le muestra al chofer su corrida; tú ves el tablero.",
+            "title": "Corridas + logística"
+          },
+          "5": {
+            "body": "Los reportes de daño llevan fotos y una estimación de costo, y se facturan al sub o al cliente en lugar de morir en un correo de la semana de cierre.",
+            "title": "Daños facturados"
+          }
+        }
       }
     },
     "glossary": {
@@ -4422,6 +5178,1469 @@
         "name": "Nombre (opcional)"
       },
       "successTitle": "Ya estás en la lista."
+    },
+    "glossaryContent": {
+      "advance-packet": {
+        "aka": {
+          "0": "advance pack",
+          "1": "paquete de advance de producción"
+        },
+        "long": "Un advance packet es la unidad de intercambio en un advance de producción: un paquete de información acotado que sale hacia una contraparte (el equipo de un artista, un proveedor, una delegación) y una entrega estructurada que se espera de vuelta antes de una fecha límite. Un paquete lleva solo las secciones que esa contraparte necesita, como requisitos técnicos, viajes, credenciales o seguridad, y el retorno vuelve como filas estructuradas que la producción puede agregar. En el ecosistema ATLVS, los advance packets se componen por proyecto, se envían por destinatario con un embudo de entrega rastreado desde encolado hasta enviado, y se persiguen automáticamente conforme se acercan las fechas límite.",
+        "short": "Un paquete de información acotado que se envía a una contraparte durante el advancing, con un retorno estructurado esperado contra una fecha límite.",
+        "term": "Advance Packet"
+      },
+      "advance": {
+        "aka": {
+          "0": "float",
+          "1": "fondo de caja"
+        },
+        "long": "Un adelanto de efectivo, en el contexto de finanzas de producción, es dinero pagado antes de un show para cubrir gastos anticipados: viáticos, efectivo para runners, depósitos a proveedores, compras sobre la marcha. Los adelantos de efectivo se concilian contra recibos y el efectivo restante la noche de la liquidación. Nota: 'advancing' (el flujo previo al evento) y 'adelanto de efectivo' (el instrumento financiero) son conceptos distintos que comparten nombre; el contexto los distingue.",
+        "short": "Un pago en efectivo hecho antes de una producción para cubrir gastos anticipados.",
+        "term": "Adelanto (adelanto de efectivo)"
+      },
+      "advancing": {
+        "aka": {
+          "0": "show advancing",
+          "1": "tour advancing",
+          "2": "advancing de artistas"
+        },
+        "long": "El advancing es el proceso de producción de confirmar cada detalle operativo con cada stakeholder (artistas, proveedores, venues, crew) antes del load-in. Cubre riders técnicos, riders de hospitalidad, stage plots, input lists, transporte terrestre, bloques de hotel, certificados de seguro, credenciales y cualquier variante por parada. Un advancing fuerte reduce las sorpresas del día del show; un advancing débil crea incendios de último minuto que cuestan dinero real. En los stacks modernos, el advancing se rastrea como entregables tipados con estado, responsable, fecha límite e historial, no como cadenas de PDF en el correo.",
+        "short": "El flujo previo al evento de finalizar cada detalle operativo con cada stakeholder.",
+        "term": "Advancing"
+      },
+      "all-access": {
+        "aka": {
+          "0": "AAA",
+          "1": "pase all access"
+        },
+        "long": "All-Access, a menudo abreviado AAA, es el nivel de credencial más alto emitido en una producción: otorga acceso a todas las zonas, incluidos los camerinos del talento, las oficinas de producción y las áreas de rigging. Las credenciales AAA se controlan estrictamente; la lista AAA es pequeña y pasa por la dirección senior de producción. El gestor de credenciales trata el AAA como el nivel de credencial más sensible para auditoría.",
+        "short": "El nivel de credencial más alto, con acceso a todas las zonas.",
+        "term": "All-Access (AAA)"
+      },
+      "boh": {
+        "aka": {
+          "0": "back-of-house",
+          "1": "backstage"
+        },
+        "long": "Back of House, BOH, cubre todo lo que el público no ve: camerinos, oficinas de producción, andenes de carga, green rooms, catering, montacargas. El acceso a BOH está credencializado: solo entran working passes, pases de talento y credenciales de nivel superior. La línea entre FOH y BOH es la división operativa de un venue.",
+        "short": "El lado no público del venue: camerinos, oficinas de producción, carga.",
+        "term": "Back of House (BOH)"
+      },
+      "call-sheet": {
+        "aka": {
+          "0": "hoja de crew",
+          "1": "day sheet"
+        },
+        "long": "Un call sheet es el roster diario publicado a cada miembro del crew: su horario de llamada (cuándo llegar), departamento, rol, ubicación y cualquier instrucción específica. Nacido en la producción de cine, el call sheet hoy es estándar en eventos y giras. Los call sheets modernos se publican a un portal de stakeholders o una app móvil en lugar de adjuntos PDF, con detección automática de conflictos contra crew con doble reserva.",
+        "short": "Un documento por día que le dice a cada miembro del crew cuándo y dónde presentarse.",
+        "term": "Call Sheet"
+      },
+      "categories": {
+        "advancing": "Advancing",
+        "broadcast": "Broadcast",
+        "credentials": "Credenciales",
+        "finance": "Finanzas",
+        "logistics": "Logística",
+        "production": "Producción",
+        "rigging": "Rigging",
+        "safety": "Seguridad + HSE",
+        "scheduling": "Cronogramas + ROS",
+        "standard": "El Estándar (XPMS)",
+        "tickets": "Boletos + Puertas"
+      },
+      "category-tokens": {
+        "advancing": "advancing",
+        "broadcast": "broadcast",
+        "credentials": "credenciales",
+        "finance": "finanzas",
+        "logistics": "logística",
+        "production": "producción",
+        "rigging": "rigging",
+        "safety": "seguridad",
+        "scheduling": "cronogramas",
+        "standard": "estándar",
+        "tickets": "boletos"
+      },
+      "chain-of-custody": {
+        "aka": {
+          "0": "rastro de custodia",
+          "1": "custodia de activos"
+        },
+        "long": "La cadena de custodia es el rastro documentado de posesión de un activo: quién lo sacó, cuándo se movió, quién firmó en cada transferencia y cuándo volvió. La práctica viene del manejo de evidencia y aplica dondequiera que el equipo sea valioso, regulado o compartido: radios, escáneres, vehículos, herramientas, kits médicos. Una cadena rota es como desaparece un radio de dos mil dólares sin nadie responsable. En el ecosistema ATLVS, los eventos de custodia se registran por activo como escaneos y firmas, así cada transferencia escribe una fila en la bitácora y el poseedor actual se responde con una consulta.",
+        "short": "El rastro documentado e ininterrumpido de quién tuvo un activo, de la salida a la devolución.",
+        "term": "Cadena de custodia"
+      },
+      "change-order": {
+        "aka": {
+          "0": "cambio de alcance",
+          "1": "CO"
+        },
+        "long": "Una orden de cambio es el mecanismo formal para modificar un contrato firmado: cambios de alcance, extensiones de calendario, ajustes de precio. Las órdenes de cambio cuantifican el trabajo en cuestión, lo cotizan y requieren aprobación antes de ejecutarse. En eventos y fabricación, las órdenes de cambio previenen el patrón tan común de 'el productor lo pidió, lo hicimos, y ahora nadie quiere pagarlo'. Cada orden de cambio se escribe al presupuesto del proyecto al aprobarse.",
+        "short": "Una modificación formal de alcance, calendario o precio después de firmado el contrato.",
+        "term": "Orden de cambio"
+      },
+      "coi": {
+        "aka": {
+          "0": "certificado de seguro",
+          "1": "certificado de responsabilidad"
+        },
+        "long": "Un Certificate of Insurance, o COI, es el documento que un proveedor entrega para demostrar que cuenta con responsabilidad civil general, responsabilidad vehicular, compensación laboral y cobertura paraguas en los límites que un venue o productor exige. Los COIs nombran al productor o al venue como asegurado adicional y listan las fechas de vigencia y vencimiento de la póliza. Los equipos de producción bloquean las órdenes de compra detrás de un COI vigente: si el certificado está vencido, la PO se detiene.",
+        "short": "La prueba de un proveedor de su cobertura de responsabilidad civil y riesgos relacionados.",
+        "term": "Certificate of Insurance (COI)"
+      },
+      "comms": {
+        "aka": {
+          "0": "intercom",
+          "1": "comunicaciones por diadema"
+        },
+        "long": "Comms, abreviatura de comunicaciones, es la infraestructura de intercom que permite que quien llama el show, los stage managers, iluminación, audio, video y seguridad hablen entre sí en tiempo real durante el load-in, el show y el load-out. Los canales de comms se separan por departamento; quien llama el show normalmente ocupa un canal maestro que entra al canal de cada departamento según haga falta. Los comms cableados (Clear-Com) y los inalámbricos (Riedel Bolero) coexisten en la mayoría de las producciones grandes.",
+        "short": "El sistema de intercom cableado o inalámbrico que conecta a los departamentos durante un show.",
+        "term": "Comms"
+      },
+      "coordinate-matrix": {
+        "aka": {
+          "0": "matriz fase-departamento",
+          "1": "90 coordenadas"
+        },
+        "long": "La matriz de coordenadas es la lente de planeación de XPMS que se forma al cruzar las 9 fases con puerta del estándar con sus 10 clases de departamento, dando 90 coordenadas. Cualquier unidad de trabajo de producción cae exactamente en una coordenada (trabajo de Tecnología durante Install, trabajo Ejecutivo durante Discover), lo que hace visibles los huecos y las sobrecargas de un vistazo: una coordenada vacía es alcance sin planear, una sobrecargada es un riesgo de dotación. El ecosistema ATLVS usa la matriz de coordenadas como lente de tareas y pronóstico, consolidando tareas y horas por fase y clase de departamento para que los productores vean dónde está realmente el trabajo.",
+        "short": "La lente de XPMS que cruza 9 fases con 10 clases de departamento, dando a cada tarea una de 90 coordenadas.",
+        "term": "Matriz de coordenadas"
+      },
+      "credentials": {
+        "aka": {
+          "0": "pases",
+          "1": "credencialización",
+          "2": "gafetes de acceso"
+        },
+        "long": "Las credenciales, también llamadas pases, son los tokens físicos (laminado, pulsera) o digitales (QR, NFC) que otorgan acceso a áreas restringidas del evento. Las credenciales por niveles (AAA all-access, working pass, pase de talento, pase de crew, pase de proveedor, pase de invitado) llevan distintos niveles de acceso: front-of-house, backstage, camerinos, oficinas de producción, zonas de rigging. Las credenciales se emiten desde un manifest, se escanean en las puertas de zona y se revocan cuando alguien deja su rol.",
+        "short": "Pases físicos o digitales que otorgan acceso a áreas restringidas del evento.",
+        "term": "Credenciales"
+      },
+      "daily-log": {
+        "aka": {
+          "0": "diario de obra",
+          "1": "reporte diario"
+        },
+        "long": "Una bitácora diaria es el registro corrido por día de un sitio de montaje o evento: personal por oficio, trabajo realizado, entregas recibidas, clima, retrasos, visitantes y cualquier incidente. Las obras de construcción llevan bitácoras diarias desde hace décadas porque resuelven disputas; cuando una discusión de calendario o de pago aparece meses después, la bitácora es la evidencia contemporánea. Los montajes de eventos en vivo toman la práctica para load-in, días de show y desmontaje. En el ecosistema ATLVS, las bitácoras diarias se levantan desde el campo en el móvil y se consolidan en el registro del proyecto junto a tareas y reportes de incidentes.",
+        "short": "El registro por día de lo que pasó en el sitio: conteos de crew, trabajo realizado, entregas, clima e incidentes.",
+        "term": "Bitácora diaria"
+      },
+      "department-class": {
+        "aka": {
+          "0": "clases de departamento",
+          "1": "10 departamentos"
+        },
+        "long": "Las clases de departamento son las 10 divisiones de nivel superior del trabajo de producción en XPMS, numeradas en millares desde 0000 Ejecutivo hasta 9000 Tecnología. Cada disciplina, work atom y línea de presupuesto se consolida exactamente en una clase, lo que permite que una matriz de coordenadas fase por departamento, una estructura de códigos contables y un organigrama compartan la misma columna vertebral. La numeración funciona también como esquema de centros de costo, así finanzas y operaciones ordenan igual sin una tabla de mapeo. El ecosistema ATLVS siembra los centros de costo de cada organización desde las 10 clases de departamento de XPMS y mapea las bibliotecas de posiciones y las lentes de pronóstico sobre ellas.",
+        "short": "Una de las 10 divisiones de nivel superior del trabajo de producción en XPMS, numeradas de 0000 Ejecutivo a 9000 Tecnología.",
+        "term": "Clase de departamento"
+      },
+      "deskless-workforce": {
+        "aka": {
+          "0": "fuerza laboral de campo",
+          "1": "trabajadores de primera línea"
+        },
+        "long": "La fuerza laboral sin escritorio es la gran mayoría de la fuerza laboral global que no trabaja en un escritorio; en eventos en vivo, eso significa stagehands, riggers, seguridad, médicos, choferes, caterers y stewards. Los trabajadores sin escritorio rara vez cargan una laptop de la empresa o viven en el correo, así que las herramientas hechas para oficinistas les fallan en el campo; lo que funciona es software móvil primero, tolerante a estar sin conexión, con horarios, reloj de tiempo, tareas y comunicaciones en un solo lugar. La app de campo COMPVSS del ecosistema ATLVS está construida exactamente para esta población: una PWA offline-first donde el crew marca entrada, ve turnos, reporta incidentes y lee su guía del evento desde un teléfono.",
+        "short": "Quienes trabajan lejos de un escritorio: stagehands, riggers, seguridad, médicos, choferes y stewards.",
+        "term": "Fuerza laboral sin escritorio"
+      },
+      "doors": {
+        "aka": {
+          "0": "apertura de sala",
+          "1": "apertura del venue"
+        },
+        "long": "Doors es el momento en que la entrada al público del venue se abre. Todo dentro del venue debe estar show-ready antes de doors: prueba de sonido completa, seguridad en posición, hospitalidad surtida, puertas y escáneres en línea. Doors es una de las puertas duras del show: nada se le escapa. El ROS cuenta hacia adelante desde doors hasta los horarios y hacia atrás desde doors hasta los hitos del load-in.",
+        "short": "La hora en que el venue abre al público.",
+        "term": "Doors"
+      },
+      "dynamic-load": {
+        "aka": {
+          "0": "carga cinética"
+        },
+        "long": "La carga dinámica es la fuerza pico aplicada a un punto de rigging durante el movimiento (una subida, una liberación, una parada súbita) y puede exceder sustancialmente la carga estática. Los ingenieros de rigging calculan las cargas dinámicas con factores de seguridad (típicamente 7:1 sobre el pico dinámico) para asegurar la integridad estructural. La matemática de la carga dinámica es la razón por la que un motor con capacidad estática de 1,000 lb no está subiendo 1,000 lb de equipo; sube una fracción con el factor dinámico preservado.",
+        "short": "La carga pico aplicada durante el movimiento o un cambio súbito; excede la carga estática.",
+        "term": "Carga dinámica"
+      },
+      "foh": {
+        "aka": {
+          "0": "front-of-house",
+          "1": "lado del público"
+        },
+        "long": "Front of House, FOH, se refiere al lado del venue que da al público y a la posición de mezcla de audio ubicada ahí. El ingeniero de FOH mezcla lo que el público escucha por el sistema principal. En FOH también suele sentarse la consola de iluminación, dándole al diseñador de iluminación línea de vista al escenario. En el uso más amplio de producción, FOH se refiere a cualquier cosa visible para el público (señalización, acomodadores, escáneres de boletos).",
+        "short": "El lado del venue que da al público, donde vive la consola de mezcla.",
+        "term": "Front of House (FOH)"
+      },
+      "gate-scan": {
+        "aka": {
+          "0": "check-in",
+          "1": "scan-in"
+        },
+        "long": "El escaneo en puerta es la operación más sensible al tiempo de un evento en vivo: una credencial o boleto se presenta en la puerta, se escanea contra el manifest y se resuelve como aceptado, denegado, anulado o usado en menos de cien milisegundos. Los escáneres de puerta modernos corren como apps móviles offline-first para seguir funcionando cuando la señal celular del venue se cae; los escaneos se encolan localmente y se reproducen en orden cuando vuelve la señal. Las condiciones de carrera (el mismo boleto presentándose en dos puertas) se resuelven atómicamente: cada boleto se escanea exactamente una vez.",
+        "short": "El acto de escanear una credencial o boleto para verificar el derecho de entrada.",
+        "term": "Escaneo en puerta"
+      },
+      "gated-phases": {
+        "aka": {
+          "0": "fases de producción",
+          "1": "puertas de fase",
+          "2": "nueve fases"
+        },
+        "long": "Las fases con puerta son el arco macro secuencial de una producción bajo XPMS: Discover, Design, Advance, Procure, Build, Install, Operate, Amplify, Close. Cada fase termina en una puerta, un punto de control donde criterios definidos deben cumplirse antes de que avance el trabajo posterior, lo que evita que compras rebase al diseño y que la liquidación empiece antes de que cierre la operación. Amplify es la adición de XPMS 2.5 en la puerta 8: captura de contenido, medios y prensa, broadcast y campañas posevento tratados como trabajo de producción de primera clase con su propia puerta. En el ecosistema ATLVS cada proyecto lleva su fase XPMS, y la consola renderiza el ciclo de vida como un checklist vivo de la venta a la liquidación.",
+        "short": "Las nueve fases secuenciales de producción de XPMS, cada una cerrada por una puerta: Discover, Design, Advance, Procure, Build, Install, Operate, Amplify, Close.",
+        "term": "Fases con puerta"
+      },
+      "hospitality-rider": {
+        "aka": {
+          "0": "contrato de hospitalidad",
+          "1": "rider de confort"
+        },
+        "long": "Un rider de hospitalidad lista las necesidades no productivas de la comitiva del artista: preferencias de catering, surtido del camerino (bebidas, botanas, toallas), requisitos de transporte terrestre, preferencias de hotel, presupuestos para runners. Los riders de hospitalidad incluyen tanto obligaciones contractuales (catering a X hora) como preferencias (marcas específicas, restricciones dietéticas). Los equipos de producción tratan los riders de hospitalidad como vinculantes incluso cuando son informales.",
+        "short": "Las necesidades no productivas de un artista: comida, bebida, camerino, transporte.",
+        "term": "Rider de hospitalidad"
+      },
+      "incident-report": {
+        "aka": {
+          "0": "reporte de seguridad",
+          "1": "reporte de casi accidente"
+        },
+        "long": "Un reporte de incidente es el registro documentado de cualquier evento de seguridad, protección o médico durante una producción: una lesión, un casi accidente, una intervención de seguridad, una respuesta médica, una liberación ambiental. Los reportes de incidentes capturan la hora, la ubicación, los testigos, las fotos y la resolución. Los incidentes registrables ante OSHA fluyen al log anual 300. Los canales de reporte anónimo, donde quien reporta elige qué revela, son cada vez más estándar para salvaguarda y denuncias de acoso.",
+        "short": "El registro documentado de un evento de seguridad, protección o médico durante una producción.",
+        "term": "Reporte de incidente"
+      },
+      "input-list": {
+        "aka": {
+          "0": "lista de canales",
+          "1": "patch list"
+        },
+        "long": "Un input list es la referencia del equipo de audio: cada canal de la consola, qué está conectado a él (modelo de micrófono, caja DI, línea) y cómo está etiquetado. Los input lists se empaquetan con el rider técnico, se entregan a los ingenieros de front-of-house y monitores por adelantado y se usan para pre-parchear la consola antes de la prueba de sonido. Un input list limpio ahorra horas en el load-in.",
+        "short": "Un mapa canal por canal de micrófonos, cajas DI y puntos de patch.",
+        "term": "Input List"
+      },
+      "kbyg": {
+        "aka": {
+          "0": "boarding pass",
+          "1": "guía del evento",
+          "2": "know-before-you-go"
+        },
+        "long": "KBYG, Know Before You Go, es un documento de cara a los stakeholders que reúne todo lo que alguien necesita para llegar preparado a un evento: cronograma, horarios, credenciales, estacionamiento, ubicación del camerino, canales de comunicación, requisitos de EPP, plan de evacuación, código de conducta. Las mejores implementaciones de KBYG se acotan por rol: un invitado ve estacionamiento y cronograma, un miembro del crew ve canales de radio y call sheet, un artista ve rider y hospitalidad. El mismo contenido canónico; vistas distintas.",
+        "short": "Un documento de briefing previo al evento acotado al rol de cada stakeholder.",
+        "term": "KBYG (Know Before You Go)"
+      },
+      "last-entry": {
+        "aka": {
+          "0": "última admisión"
+        },
+        "long": "Last entry es la hora después de la cual la puerta deja de admitir invitados. La mayoría de los eventos publica una hora de última entrada en el KBYG para que los asistentes sepan llegar antes. Las entradas tardías a veces se acomodan para VIPs o invitados del talento por canales separados, pero rara vez para el público general. El escáner de puerta aplica el last entry: los escaneos después del corte se resuelven como denegados.",
+        "short": "El límite después del cual la puerta deja de admitir nuevos asistentes.",
+        "term": "Last Entry"
+      },
+      "load-in": {
+        "aka": {
+          "0": "bump-in",
+          "1": "montaje"
+        },
+        "long": "El load-in es el periodo (de unas horas a varios días) durante el cual los camiones descargan, el crew monta el show, audio e iluminación arman sus configuraciones, los elementos escénicos se ensamblan y el evento toma forma física en el venue. Las ventanas de load-in se negocian con el venue y restringen todo lo que sigue: horarios de acceso al rigging, turnos del montacargas, estacionamiento, autorizaciones de seguridad. Los gerentes de producción rastrean el load-in contra un cronograma por departamento y contra las restricciones duras del venue.",
+        "short": "El proceso de meter equipo y crew a un venue y construir el show.",
+        "term": "Load-In"
+      },
+      "load-out": {
+        "aka": {
+          "0": "desmontaje",
+          "1": "bump-out",
+          "2": "tear-down"
+        },
+        "long": "El load-out es el inverso del load-in: el show termina, el público sale y el crew desmonta audio, iluminación, escenografía y rigging en orden inverso al montaje para cargar los camiones. Los venues imponen fechas duras de salida (a menudo ligadas al load-in del evento del día siguiente), y la velocidad del load-out suele determinar si se disparan las horas extra. Una planeación ajustada del load-out ahorra dinero y trabajo.",
+        "short": "El proceso de desmontar el show y desalojar el venue.",
+        "term": "Load-Out"
+      },
+      "manifest": {
+        "aka": {
+          "0": "roster",
+          "1": "manifest de credenciales"
+        },
+        "long": "Un manifest es la lista canónica: del crew credencializado, de los invitados con boleto, de los residentes de un bloque de hospedaje, de los pasajeros de un vehículo. Los manifests se concilian contra el escáner de puerta: cada credencial o boleto en el manifest se escanea como aceptado; todo lo demás se escanea como denegado. Un manifest limpio es la diferencia entre una puerta fluida y una fila de 30 minutos.",
+        "short": "El roster canónico de quién está credencializado, con boleto u hospedado.",
+        "term": "Manifest"
+      },
+      "near-miss": {
+        "aka": {
+          "0": "casi accidente"
+        },
+        "long": "Un near-miss es un evento con potencial de daño (un objeto que cayó sin golpear a nadie, un cable suelto que casi tropieza a un miembro del crew, una falla eléctrica detectada antes del contacto) que no resultó en lesión ni daño material. Las culturas de seguridad robustas capturan near-misses a tasas más altas que los incidentes registrables porque son el indicador adelantado. Cada near-miss es una oportunidad de corregir un riesgo estructural antes de que le cueste a alguien.",
+        "short": "Un incidente con potencial de daño que no resultó en lesión ni daño material.",
+        "term": "Near-Miss"
+      },
+      "osha-300": {
+        "aka": {
+          "0": "log de OSHA",
+          "1": "Formulario 300"
+        },
+        "long": "El Formulario 300 de OSHA es el log de lesiones y enfermedades laborales que los empleadores de EE. UU. con más de diez empleados mantienen anualmente. Cada entrada registra el caso, el empleado, la fecha, el diagnóstico y el desenlace (días fuera, trabajo restringido, transferencia). El resumen anual 300A se publica de febrero a abril cada año. Los equipos de producción con exposición a lesiones en campo corren esto contra el 300 y el 300A como parte de su cadencia de cumplimiento de fin de año.",
+        "short": "El log de lesiones y enfermedades laborales de EE. UU. exigido por las regulaciones federales de OSHA.",
+        "term": "Log OSHA 300"
+      },
+      "per-diem": {
+        "aka": {
+          "0": "PD"
+        },
+        "long": "Los viáticos son la asignación diaria en efectivo que se paga al crew o al talento para comidas e imprevistos mientras viajan por una producción. Las tarifas de viáticos varían por ciudad y país (la GSA publica las tarifas federales de EE. UU.) y pueden diferir entre crew, crew con tarifa sindical y talento. Los viáticos normalmente se liquidan en efectivo por show o se acumulan en el recibo de nómina. Los tour managers rastrean los viáticos contra la matriz de ciudad × día × tarifa.",
+        "short": "Una asignación diaria pagada al crew o al talento para comidas e imprevistos en viaje.",
+        "term": "Per Diem (viáticos)"
+      },
+      "point-load": {
+        "aka": {
+          "0": "carga estática"
+        },
+        "long": "Una carga puntual es el peso estático aplicado en un solo punto de suspensión de la estructura de rigging de un venue: una sola abrazadera de viga, un solo punto de motor. Los venues publican capacidades nominales por punto (p. ej., 1,000 lb por viga), y los riggers deben asegurar que ningún punto exceda la capacidad nominal. La matemática de cargas puntuales está en cada plano de rigging; las herramientas modernas de producción la rastrean por punto de suspensión con márgenes.",
+        "short": "El peso aplicado en un solo punto de suspensión de la estructura del venue.",
+        "term": "Carga puntual"
+      },
+      "punch-list": {
+        "aka": {
+          "0": "snag list",
+          "1": "punch",
+          "2": "lista de cierre"
+        },
+        "long": "Una punch list, también llamada snag list, es el registro corrido de items que necesitan atención antes de que un montaje o instalación se considere completo: retoques de pintura, arreglo de cableado, correcciones de acabado, etiquetas faltantes, problemas de alineación. Cada item tiene una ubicación, un oficio responsable, una foto y una fecha límite. La punch list se cierra con un recorrido final donde cada item se firma.",
+        "short": "La lista de items pendientes por corregir antes de dar un montaje por completo.",
+        "term": "Punch List"
+      },
+      "rfi": {
+        "aka": {
+          "0": "solicitud de información"
+        },
+        "long": "Un Request for Information, RFI, es una pregunta formal y rastreada levantada durante la producción: un contratista le pide a un productor una aclaración de alcance, un proveedor pide la confirmación de una especificación, un productor le pide a un venue un detalle de acceso. Cada RFI tiene un destinatario (responsable en turno), un reloj (fecha límite) y una respuesta oficial que pasa a formar parte del registro del proyecto. Los proyectos de construcción fueron pioneros del patrón RFI; la producción de eventos en vivo lo toma prestado para fabricación, escenografía y montajes mayores.",
+        "short": "Una pregunta formal levantada durante la producción con una respuesta oficial y enrutada.",
+        "term": "Request for Information (RFI)"
+      },
+      "rigging": {
+        "aka": {
+          "0": "rig",
+          "1": "crew de rigging"
+        },
+        "long": "El rigging es la disciplina de suspender equipo pesado de producción (trusses de iluminación, line arrays, pantallas de video, escenografía) de forma segura desde los puntos estructurales de un venue. Los crews de rigging trabajan con el plano de rig del venue para identificar puntos de carga, calcular cargas puntuales y distribuidas, y montar motores, cadenas y trusses. El rigging está entre las disciplinas con más lesiones de una producción; los talleres serios usan inspecciones de rigging de terceros antes de doors.",
+        "short": "El arte de suspender iluminación, audio, video y escenografía de la estructura del venue.",
+        "term": "Rigging"
+      },
+      "ros": {
+        "aka": {
+          "0": "run of show",
+          "1": "show flow",
+          "2": "hoja de cues"
+        },
+        "long": "El Run-of-Show, o ROS, es el cronograma canónico minuto a minuto de un evento desde doors hasta el desmontaje. Cada fila lleva un número de cue, una hora, una duración, un departamento (audio, iluminación, video, escenografía, seguridad, hospitalidad) y una nota. Quienes llaman el show y los gerentes de producción corren desde el ROS en tiempo real. El ROS se publica a los portales para que los artistas vean sus horarios, el crew vea sus llamadas y los proveedores vean sus ventanas de entrega, todo desde un registro canónico. Un ROS débil vive en un documento compartido en el que nadie confía después de la segunda revisión.",
+        "short": "El cronograma minuto a minuto de un evento: cues, transiciones, departamentos.",
+        "term": "Run-of-Show (ROS)"
+      },
+      "set-time": {
+        "aka": {
+          "0": "horario de escenario",
+          "1": "slot de presentación"
+        },
+        "long": "El set time es el momento en que un artista sube al escenario. Los set times se negocian entre booking y producción, se fijan en el ROS y se publican a los artistas por su portal de advancing. Los festivales suelen tener ventanas duras de set time con periodos de cambio estrictos; los conciertos tienen ventanas más suaves ligadas a la presentación de los teloneros. Los conflictos entre set times (escenarios traslapados con crew compartido) aparecen automáticamente en las herramientas modernas de cronograma.",
+        "short": "La hora programada de inicio de la presentación de un artista.",
+        "term": "Set Time"
+      },
+      "settlement": {
+        "aka": {
+          "0": "liquidación del show"
+        },
+        "long": "La liquidación es el cierre financiero posterior al show: conciliar los números de boletería, deducir los costos del venue, pagar garantías de artistas y porcentajes de back-end, liquidar viáticos y producir una hoja de liquidación firmada por el representante del artista. Las liquidaciones pasan en el venue, a menudo la misma noche del show, y dependen de datos de boletería precisos y en tiempo real. Los stacks de producción maduros corren la liquidación sobre datos en vivo, no sobre hojas de cálculo del día siguiente.",
+        "short": "La conciliación financiera posterior al show entre artista, promotor y venue.",
+        "term": "Settlement (liquidación)"
+      },
+      "shift-handover": {
+        "aka": {
+          "0": "cambio de turno",
+          "1": "reporte de relevo"
+        },
+        "long": "Un relevo de turno es el momento controlado en que un turno pasa la responsabilidad al siguiente: items abiertos, trabajo en curso, riesgos activos, canales de radio y todo lo que el líder entrante debe saber antes de que el saliente se vaya. Las operaciones de 24 horas (montajes de festival, load-ins continuos, puestos de seguridad) viven y mueren por la calidad del relevo, porque la mayoría de las fallas entre turnos se rastrea a algo que el turno anterior sabía y nunca escribió. Los buenos relevos son estructurados y quedan registrados. En el ecosistema ATLVS, los relevos de turno se capturan como registros de campo estructurados ligados al turno, visibles para el crew entrante antes de marcar entrada.",
+        "short": "La transferencia estructurada de items abiertos, riesgos y estado del sitio de un turno saliente al entrante.",
+        "term": "Relevo de turno"
+      },
+      "show-call": {
+        "aka": {
+          "0": "llamar el show"
+        },
+        "long": "El show call es el acto en vivo de llamar los cues (cues de iluminación, de audio, de video, de automatización, entradas de talento, giros de seguridad) durante el show. Quien llama el show trabaja desde el ROS, comunicándose por comms con cada departamento. El rol de quien llama el show es la posición de coordinación más importante de un evento en vivo. Un show call limpio es invisible; uno roto es la diferencia entre un gran show y uno apenas recuperable.",
+        "short": "El acto de llamar los cues durante el evento en vivo.",
+        "term": "Show Call"
+      },
+      "show-ready": {
+        "aka": {
+          "0": "listo para puertas",
+          "1": "estatus go"
+        },
+        "long": "Show-ready es la puerta que debe cumplirse antes de abrir doors: cada inspección firmada, cada punch item resuelto, cada credencial impresa, cada canal de comms verificado. Las herramientas modernas de producción aplican el show-ready como puerta dura: la facturación, la apertura o el pago final no avanzan sin él. El show-ready es el equivalente del productor a la terminación sustancial de la construcción.",
+        "short": "Un estatus con puerta que indica que un proyecto está completo y autorizado para abrir puertas.",
+        "term": "Show-Ready"
+      },
+      "site-ops": {
+        "aka": {
+          "0": "operaciones de sitio",
+          "1": "operaciones de venue"
+        },
+        "long": "Site ops, abreviatura de operaciones de sitio, es la disciplina de correr el sitio físico del evento día a día: puertas y perímetro, energía y generadores, agua y residuos, tráfico y estacionamiento, monitoreo del clima, radios y las docenas de sistemas pequeños de los que depende un sitio. Site ops empieza antes del load-in y termina después del desmontaje, y en eventos de varios días corre las 24 horas. Donde producción construye el show, site ops mantiene funcionando el suelo debajo. En el ecosistema ATLVS, site ops corre por la app de campo COMPVSS: libros operativos, cobertura de turnos y captura de incidentes desde cualquier punto del sitio.",
+        "short": "La operación diaria del sitio de un evento: puertas, energía, agua, residuos, tráfico y todo lo que mantiene el suelo funcionando.",
+        "term": "Site Ops"
+      },
+      "stage-plot": {
+        "aka": {
+          "0": "layout de escenario",
+          "1": "diagrama de escenario"
+        },
+        "long": "Un stage plot es el diagrama a vista de pájaro de la configuración del artista en el escenario: dónde va la batería, hacia dónde apuntan los monitores, dónde se levantan los atriles de micrófono, dónde se anclan los amplificadores. Los stage plots informan al ingeniero de audio, al de monitores, al diseñador de iluminación y al equipo de staging. Se entregan como adjuntos PDF en el advancing y cada vez más se almacenan como artefactos tipados con historial de revisiones.",
+        "short": "Un diagrama con la ubicación del equipo, el talento y los monitores en el escenario.",
+        "term": "Stage Plot"
+      },
+      "strike": {
+        "aka": {
+          "0": "tear-down",
+          "1": "load-out"
+        },
+        "long": "El strike es la fase final de un evento: cada pieza de equipo, elemento escénico, señalización, tendido de cable y consumible se retira y el venue vuelve a su estado previo al evento. El strike suele ser el periodo con más lesiones de un show: el crew está cansado, los plazos aprietan y el equipo pesado se mueve rápido. Eso hace especialmente importantes los briefings de seguridad, el cumplimiento de EPP y la programación del load-out.",
+        "short": "El desmontaje y retiro completo de toda la producción del evento de un venue.",
+        "term": "Strike"
+      },
+      "submittal": {
+        "aka": {
+          "0": "submittal de especificación"
+        },
+        "long": "Un submittal es la propuesta formal que un contratista o proveedor envía para revisión y aprobación antes de instalar o fabricar: un color de pintura, un modelo de luminaria, una pieza a medida, un material de acabado. Los submittals pasan por un revisor, quedan aprobados con notas, rechazados o aprobados con revisiones, y se vuelven parte del registro del proyecto. Un buen flujo de submittals evita giros costosos a mitad del montaje.",
+        "short": "Una entrega formal de producto o especificación para aprobación antes de instalar.",
+        "term": "Submittal"
+      },
+      "technical-rider": {
+        "aka": {
+          "0": "tech rider",
+          "1": "rider de producción"
+        },
+        "long": "Un rider técnico es el documento que el equipo del artista envía antes de una presentación especificando el montaje exacto de producción requerido: entradas y salidas de audio, configuración de monitores, necesidades de iluminación, reproducción de video, dimensiones del escenario, ubicación de tarimas, requisitos de energía. Los riders van de una sola página (actos chicos de gira) a docenas de páginas (headliners de festival). Los sistemas modernos de advancing rastrean los riders como entregables tipados, versionados, con estado y con acuse por escrito.",
+        "short": "El documento de especificaciones de producción de un artista: audio, iluminación, video, escenario y energía.",
+        "term": "Rider técnico"
+      },
+      "urid": {
+        "aka": {
+          "0": "gramática URID",
+          "1": "identificador de recurso"
+        },
+        "long": "Un URID es un identificador que sigue la gramática de XPMS DEPT.DISCIPLINE.CATEGORY: la clase de departamento, la disciplina dentro de ella y la categoría del trabajo. La gramática le da a cada tipo de trabajo de producción una dirección estable y ordenable, así una línea de presupuesto, una tarea en un plan y un item en un catálogo pueden apuntar al mismo identificador y conciliar limpiamente. XPMS 2.5 abarca 10 clases de departamento y 79 disciplinas bajo esta gramática. En el ecosistema ATLVS, los URIDs indexan el catálogo y las superficies de conocimiento, ligando los atoms con precio y las plantillas de vuelta al estándar.",
+        "short": "La gramática de identificadores de XPMS DEPT.DISCIPLINE.CATEGORY: una dirección estable y ordenable para cada tipo de trabajo de producción.",
+        "term": "URID"
+      },
+      "w9": {
+        "aka": {
+          "0": "W9",
+          "1": "Formulario W-9"
+        },
+        "long": "El Formulario W-9 es el documento del IRS que un proveedor de EE. UU. completa para darle al productor su número de identificación fiscal y su clasificación de negocio, habilitando la emisión del 1099-NEC de fin de año por compensación a no empleados. Los equipos de producción recolectan los W-9 durante el alta de proveedores y bloquean los pagos hasta tener un W-9 vigente en el expediente. Los proveedores extranjeros completan los formularios de la serie W-8 en su lugar.",
+        "short": "Un formulario fiscal de EE. UU. que los proveedores completan para habilitar el reporte 1099.",
+        "term": "W-9"
+      },
+      "white-label": {
+        "aka": {
+          "0": "white labeling",
+          "1": "portal con marca propia"
+        },
+        "long": "White-label es la práctica de entregar las superficies de cara a los stakeholders (portales, documentos, guías, páginas de reserva) bajo la marca de la organización productora o del evento. Artistas, proveedores y clientes ven el nombre y el diseño del promotor, lo que se lee como una sola operación profesional y mantiene la confianza donde vive la relación. El white-labeling importa más en los artefactos que salen del edificio: propuestas, hojas de liquidación, advance packets y guías de invitados. En el ecosistema ATLVS, los documentos y reportes llevan modos de marca para white-label de la organización o del cliente, y las superficies del portal se renderizan bajo la marca del evento.",
+        "short": "Presentar las superficies de cara a los stakeholders bajo la marca de la organización o del evento y no la del proveedor de software.",
+        "term": "White-Label"
+      },
+      "work-atom": {
+        "aka": {
+          "0": "atom canónico",
+          "1": "atom de producción"
+        },
+        "long": "Un work atom es la unidad canónica más pequeña de trabajo de producción definida por XPMS: una pieza de trabajo discreta y repetible con identidad estable y especificación completa. Cada atom lleva 44 campos en la Biblia SSOT del estándar, cubriendo identidad, coordenadas de fase y departamento, dependencias y requisitos de crew y cumplimiento, así el mismo atom puede programarse, cotizarse y auditarse igual en cada proyecto. XPMS 2.5 define 406 atoms canónicos. El ecosistema ATLVS siembra a las organizaciones nuevas con el catálogo de atoms como su vocabulario inicial de tareas y activos, y liga tareas y líneas de presupuesto de vuelta a los atoms.",
+        "short": "La unidad canónica de trabajo de producción en XPMS, especificada por completo para programarse, cotizarse y auditarse de forma consistente.",
+        "term": "Work Atom"
+      },
+      "working-pass": {
+        "aka": {
+          "0": "credencial de trabajo"
+        },
+        "long": "Un working pass es la credencial que identifica a una persona como crew o proveedor trabajando activamente un evento. Los working passes normalmente dan acceso a backstage, oficinas de producción y cualquier zona necesaria para su rol, pero excluyen áreas de alta restricción como los camerinos de artistas salvo que el rol lo requiera. Los portadores de working pass se verifican al recoger la credencial y pueden firmar acuses en el check-in.",
+        "short": "Una credencial que identifica al crew o a los proveedores trabajando activamente el evento.",
+        "term": "Working Pass"
+      },
+      "xpms": {
+        "aka": {
+          "0": "estándar de gestión de producción experiencial",
+          "1": "XPMS 2.5"
+        },
+        "long": "XPMS es el Experiential Production Management Standard, una taxonomía estructurada que le da a la producción de eventos en vivo y experiencial un lenguaje común para planear, ejecutar y auditar el trabajo. La versión 2.5, la vigente, define 9 fases con puerta, 10 clases de departamento, 79 disciplinas y 406 work atoms canónicos, cada atom con 44 campos en la Biblia SSOT del estándar. Como las tareas, las líneas de presupuesto, los catálogos y los chequeos de cumplimiento se anclan a la misma taxonomía, los equipos y las herramientas interoperan sin renegociar el vocabulario en cada proyecto. El ecosistema ATLVS entrega XPMS 2.5 como su kit base por defecto: una organización nueva llega presembrada con las fases, clases de departamento y catálogo de atoms del estándar, y monta sus propias personalizaciones encima.",
+        "short": "Un estándar compartido para el trabajo de producción experiencial: fases, departamentos, disciplinas y work atoms canónicos.",
+        "term": "XPMS (Experiential Production Management Standard)"
+      }
+    },
+    "industriesContent": {
+      "brand-activations": {
+        "description": "Las activaciones de marca convierten el presupuesto de marketing en momentos memorables. Nosotros llevamos la operación (propuestas de agencia a cliente, COIs de proveedores, flujo de RSVP, captura en sitio, analítica posevento) para que el equipo creativo siga creando.",
+        "faqs": {
+          "0": {
+            "a": "Sí. Cada cliente es su propia organización con sus datos aislados. El equipo de la agencia trabaja en todas; los clientes solo ven su propio espacio.",
+            "q": "¿Las agencias pueden compartir un espacio con varios clientes?"
+          },
+          "1": {
+            "a": "Sí. Cada escaneo en la puerta puede capturar datos de leads con opt-in (correo, teléfono, campos con consentimiento). Los datos llegan al CRM de la marca.",
+            "q": "¿La plataforma captura leads en la activación?"
+          },
+          "2": {
+            "a": "Sí. Las propuestas adoptan el kit de marca del cliente (logo, tipografías, colores) automáticamente una vez que la agencia lo configura en los ajustes.",
+            "q": "¿Hay una plantilla de propuesta con marca?"
+          }
+        },
+        "hero": {
+          "body": "Las activaciones viven o mueren por la velocidad del traspaso: de agencia a cliente, de creativo a producción, de producción a proveedores. ATLVS Technologies reduce cada traspaso a cero.",
+          "eyebrow": "Activaciones de marca",
+          "title": "Del RFP al recap. La misma plataforma."
+        },
+        "modules": {
+          "0": {
+            "body": "Veintitrés tipos de bloque, navegación scroll-spy, firma electrónica en el documento, enlaces para compartir, historial de versiones.",
+            "name": "Propuestas"
+          },
+          "1": {
+            "body": "Propuestas, entregables, facturas, archivos compartidos, mensajes directos.",
+            "name": "Portal del cliente"
+          },
+          "2": {
+            "body": "RSVP por correo con ticketing. El escaneo en sitio captura datos de leads al CRM.",
+            "name": "RSVP + Captura"
+          },
+          "3": {
+            "body": "Facturación con tarjeta o ACH, división de depósito y saldo, P&L en vivo por activación.",
+            "name": "Finanzas"
+          }
+        },
+        "name": "Activaciones de marca",
+        "outcomes": {
+          "0": "Las propuestas firmadas se convierten en proyectos vivos con la firma",
+          "1": "Portal del cliente abierto 24/7 para propuestas, entregables, facturas, archivos y mensajes",
+          "2": "Seguimiento de COI y W-9 de proveedores con alertas de vencimiento",
+          "3": "Flujo de RSVP y check-in con captura de leads en el ingreso",
+          "4": "Pagos de facturas con tarjeta o ACH con división de depósito y saldo",
+          "5": "El deck de recap posevento se redacta solo desde los datos de la activación"
+        },
+        "stats": {
+          "0": {
+            "label": "propuesta → proyecto firmado"
+          },
+          "1": {
+            "label": "COIs de proveedores rastreados"
+          },
+          "2": {
+            "label": "conciliación más rápida"
+          },
+          "3": {
+            "label": "acceso al portal del cliente"
+          }
+        },
+        "tagline": "Pop-ups, lanzamientos de producto, marketing experiencial"
+      },
+      "broadcast-tv-film": {
+        "description": "Broadcast, TV y cine: transmisiones multicámara de estudio, producciones remotas, rodajes en locación, series episódicas. Call sheets, logística del día, gestión de proveedores, registro de horas conforme a sindicatos y reportes financieros por producción.",
+        "faqs": {
+          "0": {
+            "a": "Sí. Cada producción configura su conjunto de reglas sindicales por departamento. Las tarjetas de tiempo se validan contra las reglas al enviarse. Las penalidades de comida y las horas extra se aplican automáticamente.",
+            "q": "¿La plataforma maneja reglas sindicales específicas (DGA, IATSE, SAG, AEA)?"
+          },
+          "1": {
+            "a": "Cada locación tiene un registro de autorización con el contacto del titular de derechos, la ventana otorgada y el acuerdo vinculado. El sistema avisa cuando una fecha de rodaje cae fuera de una ventana autorizada.",
+            "q": "¿Cómo funciona la autorización de locaciones?"
+          },
+          "2": {
+            "a": "Sí. Las tarjetas de tiempo se exportan en los formatos estándar que esos proveedores consumen. La sincronización bidireccional es de Enterprise. La exportación está disponible en todos los planes.",
+            "q": "¿Podemos integrar con nuestro proveedor de nómina (Cast & Crew, Entertainment Partners)?"
+          }
+        },
+        "hero": {
+          "body": "La producción de cine y televisión mueve más piezas que cualquier otro formato en vivo. Llevamos call sheets, logística del día, COIs de proveedores, nómina sindical y P&L por producción en un solo registro, para que el line producer se quede en el set y no detrás de un escritorio.",
+          "eyebrow": "Broadcast, TV y cine",
+          "title": "De la preparación al cierre. Una plataforma."
+        },
+        "modules": {
+          "0": {
+            "body": "Call sheets diarios redactados automáticamente desde el cronograma y el pool de crew. Entregados por correo y portal.",
+            "name": "Call sheets"
+          },
+          "1": {
+            "body": "Reloj conforme a sindicatos con lógica de penalidad de comida. Reglas DGA, IATSE y SAG configurables.",
+            "name": "Registro de horas"
+          },
+          "2": {
+            "body": "Biblioteca de locaciones con acuerdos, ventanas de derechos y directorio de contactos.",
+            "name": "Locaciones"
+          },
+          "3": {
+            "body": "Órdenes de compra con recepción. COI y W-9 en cada proveedor. Caja chica por departamento.",
+            "name": "Compras"
+          }
+        },
+        "name": "Broadcast, TV y cine",
+        "outcomes": {
+          "0": "Call sheets redactados automáticamente y entregados a elenco y crew antes de las 6 a.m.",
+          "1": "Registro de horas conforme a sindicatos con aplicación de penalidades de comida",
+          "2": "Seguimiento de COI y W-9 de proveedores con alertas antes de que venzan",
+          "3": "P&L por producción, sobres de caja chica y presupuestos por departamento",
+          "4": "Acuerdos y autorizaciones de locación rastreados con ventanas de derechos",
+          "5": "Las tarjetas de tiempo sin conexión funcionan cuando la locación no tiene señal"
+        },
+        "stats": {
+          "0": {
+            "label": "crew por día de rodaje"
+          },
+          "1": {
+            "label": "entrega del call sheet"
+          },
+          "2": {
+            "label": "seguimiento de COI"
+          },
+          "3": {
+            "label": "penalidades de comida perdidas"
+          }
+        },
+        "tagline": "Producción en estudio, remota y en locación"
+      },
+      "concerts": {
+        "description": "Hecho a la medida de los conciertos, desde shows de una noche hasta giras de estadio. Rider canónico, variantes por venue, pool de crew compartido, advancing de venues, métricas de boletería en tiempo real y una app de campo que el personal de la casa sí quiere usar.",
+        "faqs": {
+          "0": {
+            "a": "Sí. Cada artista tiene su propio proyecto bajo la gira madre. Advancing, cronograma, viajes y rider quedan acotados por artista; la información compartida del venue vive en el proyecto madre.",
+            "q": "¿El rider canónico maneja carteles con varios artistas?"
+          },
+          "1": {
+            "a": "Sí. Los adelantos de efectivo van directo a la cuenta vinculada del miembro del crew. De la aprobación al pago suelen pasar menos de dos minutos.",
+            "q": "¿Los adelantos se pagan directo?"
+          },
+          "2": {
+            "a": "Sí. Importaciones masivas por CSV, webhook desde los principales sistemas de ticketing o carga manual. El escáner móvil funciona sin conexión y sincroniza al reconectarse.",
+            "q": "¿Puedo traer los datos del manifest desde mi proveedor de ticketing?"
+          }
+        },
+        "hero": {
+          "body": "La operación de una gira de conciertos vive en cuarenta hojas de cálculo. Nosotros mantenemos el rider canónico en un solo lugar y montamos las variantes por venue encima. Sin copiar y pegar, sin revisiones perdidas.",
+          "eyebrow": "Conciertos",
+          "title": "Un rider. Todos los venues."
+        },
+        "modules": {
+          "0": {
+            "body": "Canónico más variantes por show. Entregables rastreados a lo largo de la gira.",
+            "name": "Advancing"
+          },
+          "1": {
+            "body": "Roster compartido, programación por show, tarifas diarias, alertas de vencimiento de credenciales.",
+            "name": "Pool de crew"
+          },
+          "2": {
+            "body": "Solicitudes de viáticos y emergencias con un flujo de estados limpio y pago directo.",
+            "name": "Adelantos"
+          },
+          "3": {
+            "body": "Tableros de capacidad en tiempo real, deltas del mapa de asientos, señales VIP.",
+            "name": "Boletería"
+          }
+        },
+        "name": "Conciertos",
+        "outcomes": {
+          "0": "Rider canónico con variantes por venue, y las ediciones se propagan correctamente",
+          "1": "Pool de crew compartido con programación por show y tarifas diarias",
+          "2": "Viáticos y adelantos de emergencia pagados al aprobarse",
+          "3": "Métricas de boletería y deltas del mapa de asientos en tiempo real",
+          "4": "Credenciales (DOT, seguros, certificaciones) rastreadas con alertas de vencimiento",
+          "5": "Liquidación diaria en menos de 48 horas después del show"
+        },
+        "stats": {
+          "0": {
+            "label": "edición del rider"
+          },
+          "1": {
+            "label": "venues / gira"
+          },
+          "2": {
+            "label": "viáticos: aprobación → pago"
+          },
+          "3": {
+            "label": "disponibilidad del escaneo"
+          }
+        },
+        "tagline": "Shows de una noche, anfiteatros, arenas"
+      },
+      "conferences": {
+        "description": "Para los equipos de producción detrás de conferencias multipista: cambios de sala con punch lists, crews de AV programados por bloque de sesión, escaneo de check-in en el registro y en las puertas de cada sesión, y briefings que llegan a cada teléfono del crew antes del primer keynote.",
+        "faqs": {
+          "0": {
+            "a": "Eventos corporativos cubre el programa del lado del cliente: propuestas, portales de stakeholders, cumplimiento. Conferencias es el piso de producción en sí: cambios de sala, crews de AV, escaneos en puerta, briefings. Muchos equipos usan ambos ángulos en el mismo proyecto.",
+            "q": "¿En qué se diferencia de su cobertura de eventos corporativos?"
+          },
+          "1": {
+            "a": "Sí. Las locaciones y salas se modelan por venue, los crews se programan por edificio y la vista de cronograma muestra los tiempos de traslado entre propiedades, así un crew nunca queda asignado a dos hoteles a la vez.",
+            "q": "¿Podemos manejar un campus repartido en tres hoteles?"
+          },
+          "2": {
+            "a": "Actualiza el bloque de sesión una vez y el cambio llega a cada teléfono del crew afectado. La hora vieja desaparece de su agenda, aparece la nueva y la punch list del cambio de sala se mueve con ella.",
+            "q": "¿Qué pasa cuando el programa cambia a las 11 a.m.?"
+          }
+        },
+        "hero": {
+          "body": "Una conferencia es una producción que se reinicia cada noventa minutos. COMPVSS lleva el cronograma de cambios, las punch lists de montaje de sala y los escaneos en puerta desde los teléfonos que tu crew ya trae, para que el breakout de las 2 p.m. se vea tan afilado como el keynote de apertura.",
+          "eyebrow": "Conferencias",
+          "title": "Cuarenta sesiones al día. Cada cambio de sala registrado."
+        },
+        "modules": {
+          "0": {
+            "body": "Punch list por cambio: montaje, chequeo de AV, señalización, reinicio. Evidencia fotográfica y seguimiento de cierre por sala.",
+            "name": "Cambios de sala"
+          },
+          "1": {
+            "body": "Crews de AV, rigging y piso programados por bloque de sesión. Los cambios llegan a los teléfonos correctos al instante.",
+            "name": "Programación de crew"
+          },
+          "2": {
+            "body": "Escaneo en el registro y en las puertas de sesión desde cualquier teléfono, con cola sin conexión para pasillos de salón llenos.",
+            "name": "Escaneo de check-in"
+          },
+          "3": {
+            "body": "Guías del día por persona: el crew ve notas de operación y escalamientos, el staff ve el guion de cara al asistente.",
+            "name": "Briefings y guías"
+          }
+        },
+        "name": "Conferencias",
+        "outcomes": {
+          "0": "Programa crews de AV y de sala por bloque de sesión en todas las pistas",
+          "1": "Punch lists de montaje por cambio de sala, con fotos, cerradas antes de abrir puertas",
+          "2": "Escanea check-ins de asistentes en el registro y en las puertas de sesión",
+          "3": "Briefings de sesión y guías del día entregados a cada teléfono del crew",
+          "4": "Los cambios de agenda a media jornada llegan al instante a los crews afectados",
+          "5": "Los incidentes reportados desde cualquier sala van directo al gerente de piso"
+        },
+        "stats": {
+          "0": {
+            "label": "punch de sala cerrado"
+          },
+          "1": {
+            "label": "escaneo de gafete en puertas"
+          },
+          "2": {
+            "label": "clock-in verificado del crew"
+          },
+          "3": {
+            "label": "hojas de operación impresas"
+          }
+        },
+        "tagline": "Cumbres, programas multipista, sesiones generales"
+      },
+      "corporate-events": {
+        "description": "ATLVS Technologies para eventos corporativos: conferencias, juntas de accionistas, cumbres ejecutivas, kickoffs internos. Propuestas de cara al cliente, seguimiento de COIs de proveedores, portales de stakeholders y experiencias de invitado de nivel ejecutivo.",
+        "faqs": {
+          "0": {
+            "a": "Los controles que atestigua SOC 2 (control de acceso, gestión de cambios, registro de auditoría, cifrado, monitoreo) ya están en producción. SOC 2 Type II está en proceso para clientes Enterprise. Contacta a ventas para el estado actual.",
+            "q": "¿La plataforma soporta cumplimiento SOC 2 o ISO?"
+          },
+          "1": {
+            "a": "Sí. Crea un enlace de revisión interna separado del enlace del cliente. Anota y revisa. Envía la versión final cuando estés listo. El historial de versiones registra cada edición.",
+            "q": "¿Podemos pasar las propuestas por el área legal?"
+          }
+        },
+        "hero": {
+          "body": "Los equipos corporativos quieren propuestas que puedan revisar y firmar. Los ejecutivos quieren KBYG. Los proveedores necesitan COIs gestionados. Cumplimiento quiere un registro de auditoría. Hacemos las cuatro cosas, afinadas al ritmo corporativo.",
+          "eyebrow": "Eventos corporativos",
+          "title": "Nivel ejecutivo. Listo para el campo."
+        },
+        "modules": {
+          "0": {
+            "body": "Veintitrés tipos de bloque, navegación scroll-spy, firma electrónica en el documento, enlaces para compartir, historial de versiones.",
+            "name": "Propuestas"
+          },
+          "1": {
+            "body": "Propuestas, entregables, facturas, archivos compartidos, mensajes directos.",
+            "name": "Portal del cliente"
+          },
+          "2": {
+            "body": "Seguimiento de COI de proveedores, almacenamiento de W-9, registro de auditoría inmutable, controles SOC 2.",
+            "name": "Cumplimiento"
+          },
+          "3": {
+            "body": "Facturación con tarjeta o ACH, división de depósito y saldo, P&L en vivo.",
+            "name": "Finanzas"
+          }
+        },
+        "name": "Eventos corporativos",
+        "outcomes": {
+          "0": "Las propuestas firmadas se convierten en un proyecto vivo con la firma",
+          "1": "Portal del cliente abierto 24/7 para propuestas, entregables, facturas, archivos y mensajes",
+          "2": "Seguimiento de COI y W-9 de proveedores con alertas de vencimiento",
+          "3": "KBYG por persona para ejecutivos, VIPs, staff y crew",
+          "4": "Facturación con tarjeta o ACH con división de depósito y saldo",
+          "5": "Registro de auditoría inmutable en cada cambio, para cumplimiento y legal"
+        },
+        "stats": {
+          "0": {
+            "label": "días hasta facturar"
+          },
+          "1": {
+            "label": "COIs de proveedores rastreados"
+          },
+          "2": {
+            "label": "propuesta → proyecto"
+          },
+          "3": {
+            "label": "controles en producción"
+          }
+        },
+        "tagline": "Conferencias, juntas anuales, cumbres, eventos internos"
+      },
+      "education-campus": {
+        "description": "Para oficinas de eventos de campus y crews de producción estudiantiles: graduación, semana de orientación, apoyo a deportes, artes escénicas. COMPVSS programa a los trabajadores estudiantes alrededor de sus bloques de clase, verifica los clock-ins en venues por todo el campus y convierte la guía del día en un entrenamiento que alguien primerizo puede seguir.",
+        "faqs": {
+          "0": {
+            "a": "Un estudiante entra por invitación, ve sus turnos y lee la guía de su rol en el teléfono. La mayoría de los crews trabajan su primer evento esa misma semana. La guía carga con el entrenamiento que antes daba un veterano.",
+            "q": "La mitad de nuestro crew es nuevo cada semestre. ¿Qué tan rápido pueden empezar?"
+          },
+          "1": {
+            "a": "Sí. Cada evento es su propio proyecto con su propio cronograma y bitácora. Una vista de oficina consolida la cobertura en todos los venues, del teatro black box al field house.",
+            "q": "¿Podemos correr muchos eventos pequeños a la vez por el campus?"
+          },
+          "2": {
+            "a": "Las marcas están geoverificadas por venue, los supervisores aprueban las hojas de horas en la app y las horas aprobadas se exportan en formatos que los sistemas de nómina del campus aceptan. Sin tarjetas de papel que perseguir a fin de mes.",
+            "q": "¿Cómo llegan las horas de los estudiantes a nómina?"
+          }
+        },
+        "hero": {
+          "body": "Una oficina de eventos de campus reconstruye su fuerza laboral cada semestre. COMPVSS le da a los crews estudiantiles un horario en el teléfono, una guía que enseña el trabajo y un clock-in que demuestra que llegaron, para que el conocimiento institucional deje de irse en cada graduación.",
+          "eyebrow": "Educación y campus",
+          "title": "Tu crew se gradúa cada cuatro años."
+        },
+        "modules": {
+          "0": {
+            "body": "Turnos que respetan los horarios de clase. Los intercambios y confirmaciones pasan en la app.",
+            "name": "Programación de crew estudiantil"
+          },
+          "1": {
+            "body": "Marcas geoverificadas en cada venue del campus. Las hojas de horas se exportan para la nómina estudiantil.",
+            "name": "Tiempo y asistencia"
+          },
+          "2": {
+            "body": "Cámaras, radios y equipo de AV asignados por estudiante. El fin de semestre muestra qué sigue afuera.",
+            "name": "Préstamo de activos"
+          },
+          "3": {
+            "body": "Guías del día por rol escritas una vez, reutilizadas cada semestre. El entrenamiento va en el bolsillo.",
+            "name": "Guías"
+          }
+        },
+        "name": "Educación y campus",
+        "outcomes": {
+          "0": "Programa crews estudiantiles alrededor de los bloques de clase, con intercambios resueltos en la app",
+          "1": "Clock-in geoverificado en venues por todo el campus",
+          "2": "Las guías del día funcionan también como entrenamiento para crew primerizo",
+          "3": "Los reportes de incidentes llegan a seguridad del campus con la ubicación adjunta",
+          "4": "Préstamo de equipo del inventario del campus, rastreado por estudiante",
+          "5": "Punch lists de cambio de sala para los espacios que albergan cuatro eventos al día"
+        },
+        "stats": {
+          "0": {
+            "label": "clock-in verificado en todo el campus"
+          },
+          "1": {
+            "label": "incidente a seguridad del campus"
+          },
+          "2": {
+            "label": "funciona en el field house"
+          },
+          "3": {
+            "label": "hojas de horas en papel"
+          }
+        },
+        "tagline": "Eventos universitarios, producciones de campus, crews estudiantiles"
+      },
+      "festivals-tours": {
+        "description": "Los festivales y las giras son la forma más difícil de la producción en vivo: decenas de artistas, múltiples escenarios, ventanas de varios días, crew itinerante y un calendario que parece un mapa de metro. Construido para esa escala desde el día uno.",
+        "faqs": {
+          "0": {
+            "a": "Sí. Integramos con los principales proveedores de RFID (Intellitix, ID&C, Plus ID). Las pulseras pueden preasignarse o vincularse en la entrega; los niveles de acceso se aplican al escanear.",
+            "q": "¿La plataforma maneja pulseras RFID?"
+          },
+          "1": {
+            "a": "Sí. Cada producción es su propio proyecto, y la plataforma es multiproyecto desde el día uno. El mismo equipo trabaja en todos sin cerrar sesión.",
+            "q": "¿Puedo correr un festival de varios días y una gira de ciudades en la misma cuenta?"
+          },
+          "2": {
+            "a": "La app de campo es offline-first. Los escaneos se encolan en el dispositivo y se reconcilian limpiamente cuando el teléfono se reconecta. Sin entradas perdidas.",
+            "q": "¿Qué pasa cuando el Wi-Fi del venue se muere?"
+          }
+        },
+        "hero": {
+          "body": "Los festivales de varios días y las giras de ciudad en ciudad se caen cuando cualquiera de cincuenta piezas móviles se rompe. Pon el advancing de artistas, los pagos a proveedores, la programación del crew, las credenciales y el KBYG en una plataforma que no se rompe.",
+          "eyebrow": "Festivales y giras",
+          "title": "Corre el festival. No la hoja de cálculo."
+        },
+        "modules": {
+          "0": {
+            "body": "Rider por artista y grilla de horarios por escenario con detección de conflictos.",
+            "name": "Grilla de advancing"
+          },
+          "1": {
+            "body": "Manifest de pulseras y gafetes con niveles de acceso, conteos y vínculo RFID.",
+            "name": "Credenciales"
+          },
+          "2": {
+            "body": "De la requisición a la orden de compra a la recepción. COI y W-9 de proveedores rastreados con vencimiento.",
+            "name": "Compras"
+          },
+          "3": {
+            "body": "Escaneo de boletos sin conexión, clock-in del crew, reportes de incidentes desde cualquier escenario.",
+            "name": "App de campo COMPVSS"
+          },
+          "4": {
+            "body": "Un clic clona el proyecto. Cambia solo lo que difiere.",
+            "name": "Clon por ciudad"
+          }
+        },
+        "name": "Festivales y giras",
+        "outcomes": {
+          "0": "Advancing por artista con grilla de horarios y asignación de escenarios",
+          "1": "Clonación de proyecto por ciudad donde editas solo lo que cambia",
+          "2": "Manifest de credenciales con integración de pulseras RFID y NFC",
+          "3": "Pagos directos a proveedores al aprobarse",
+          "4": "Tablero de decisiones al pie del escenario visible para el promotor y operaciones de sitio",
+          "5": "Liquidación por artista en días, no semanas"
+        },
+        "stats": {
+          "0": {
+            "label": "artistas / festival"
+          },
+          "1": {
+            "label": "escenarios gestionados"
+          },
+          "2": {
+            "label": "ciudades / gira"
+          },
+          "3": {
+            "label": "escaneos / día"
+          }
+        },
+        "tagline": "Varios días, varios escenarios, varias ciudades"
+      },
+      "government-municipal": {
+        "description": "Para oficinas municipales de eventos, departamentos de parques y las agencias detrás de festivales públicos. COMPVSS programa staff y voluntarios por zona, rastrea permisos contra el registro del evento, archiva incidentes con hora y ubicación para el informe posterior y pone los procedimientos de emergencia en el teléfono de cada trabajador.",
+        "faqs": {
+          "0": {
+            "a": "Sí. Los voluntarios entran al evento con acceso acotado: su turno, su zona, su check-in y la guía de emergencia. Nunca tocan la programación del staff ni los registros internos.",
+            "q": "¿Pueden usar la app voluntarios que no son empleados municipales?"
+          },
+          "1": {
+            "a": "El registro operativo está construido exactamente para eso. Los reportes de incidentes llevan marca de tiempo, GPS, foto y reportante. Cada cambio queda en un registro de auditoría inmutable, y las bitácoras se exportan limpiamente.",
+            "q": "¿Los registros satisfacen una revisión posterior o una solicitud de información pública?"
+          },
+          "2": {
+            "a": "Sí. La mayoría de las agencias empieza con un festival o una temporada. Un piloto de un solo evento ejercita el sistema completo, y los datos se conservan si expanden. Contáctanos por el papeleo de compras públicas; ya lo hemos hecho antes.",
+            "q": "¿Podemos pilotear esto en un solo evento antes de una compra más amplia?"
+          }
+        },
+        "hero": {
+          "body": "Un festival callejero responde a más agencias que cualquier show privado: permisos, seguridad pública, revisión posterior. COMPVSS documenta la operación mientras sucede, del check-in de voluntarios al último reporte de incidente, para que el expediente se escriba solo.",
+          "eyebrow": "Gobierno y municipios",
+          "title": "Un evento público es un registro público."
+        },
+        "modules": {
+          "0": {
+            "body": "Turnos por zona para empleados y voluntarios por igual, con confirmaciones y vista de cobertura.",
+            "name": "Programación de staff y voluntarios"
+          },
+          "1": {
+            "body": "Registro de permisos ligado al evento: emisor, ventana, condiciones y vencimiento visibles para cada líder.",
+            "name": "Permisos"
+          },
+          "2": {
+            "body": "Reportes de campo con captura automática de hora, ubicación y foto. Enrutamiento por severidad y zona.",
+            "name": "Incidentes"
+          },
+          "3": {
+            "body": "Rutas de evacuación, árboles de contacto y procedimientos entregados por rol. Se actualizan una vez, quedan al día en todas partes.",
+            "name": "Guías de emergencia"
+          }
+        },
+        "name": "Gobierno y municipios",
+        "outcomes": {
+          "0": "Programa staff y voluntarios por zona con check-in en el perímetro",
+          "1": "Registros de permisos rastreados contra el evento, visibles para cada líder",
+          "2": "Los reportes de incidentes llevan marca de tiempo, GPS, foto y reportante para el expediente posterior",
+          "3": "Procedimientos de emergencia publicados en el teléfono de cada trabajador antes de abrir puertas",
+          "4": "Bitácoras diarias que se sostienen como el registro operativo",
+          "5": "Cada cambio queda en un registro de auditoría inmutable, exportable para solicitudes de información"
+        },
+        "stats": {
+          "0": {
+            "label": "incidente documentado"
+          },
+          "1": {
+            "label": "en cada reporte de campo"
+          },
+          "2": {
+            "label": "funciona en la ruta del desfile"
+          },
+          "3": {
+            "label": "de los cambios en el registro de auditoría"
+          }
+        },
+        "tagline": "Eventos cívicos, festivales públicos, coordinación de emergencias"
+      },
+      "immersive-experiences": {
+        "description": "Las experiencias inmersivas exigen un software de operaciones que respete el ritmo narrativo: entradas por horario, dotación por zona, techos de capacidad, guías por rol y un sistema de advancing que trata cada acto como su propia disciplina.",
+        "faqs": {
+          "0": {
+            "a": "Sí. Cada zona tiene un aforo máximo. El escáner rechaza los ingresos que lo excederían, manda al invitado a la lista de espera y lo promueve cuando alguien sale.",
+            "q": "¿Podemos imponer capacidad dura por zona?"
+          },
+          "1": {
+            "a": "Sí. Las guías KBYG son por persona. El elenco ve blocking, notas de cue y simulacros de seguridad. Front-of-house ve flujo de invitados, FAQ y procedimientos de emergencia.",
+            "q": "¿Podemos publicar una guía separada para elenco y para front-of-house?"
+          },
+          "2": {
+            "a": "Un toque desde el campo. GPS, foto y reportante capturados automáticamente. El reporte llega al líder de seguridad, y el registro de auditoría preserva la cadena de custodia para el seguro.",
+            "q": "¿Cómo se manejan los incidentes?"
+          }
+        },
+        "hero": {
+          "body": "Las experiencias inmersivas viven o mueren por segundos. Nosotros llevamos la operación (entradas por horario, capacidad por zona, programación de elenco y crew) para que tu equipo se quede en la experiencia, no en la hoja de cálculo.",
+          "eyebrow": "Experiencias inmersivas",
+          "title": "El show te corre a ti. Nosotros corremos el show."
+        },
+        "modules": {
+          "0": {
+            "body": "Ventanas de quince minutos con capacidad dura. Lista de espera con promoción automática.",
+            "name": "Entrada por horario"
+          },
+          "1": {
+            "body": "Mapa de zonas, cobertura de roles, programación de descansos, enrutamiento de escalamientos.",
+            "name": "Zonas y roles"
+          },
+          "2": {
+            "body": "Registro de incidentes de un toque desde el campo, enrutado al líder de seguridad con cadena de custodia.",
+            "name": "Incidentes"
+          },
+          "3": {
+            "body": "Biblia de personajes, notas de blocking, protocolos de seguridad, call sheet por función.",
+            "name": "Portal del elenco"
+          }
+        },
+        "name": "Experiencias inmersivas",
+        "outcomes": {
+          "0": "Programación de entradas por horario con techos de capacidad aplicados",
+          "1": "Grilla de dotación por zona con rol, turno y seguimiento de descansos",
+          "2": "Programación de elenco y crew separada de front-of-house",
+          "3": "Escaneo por boleto con descuento inmediato de capacidad",
+          "4": "Reportes de incidentes con cadena de custodia para cumplimiento",
+          "5": "KBYG por actor con protocolos de seguridad y biblia de personajes"
+        },
+        "stats": {
+          "0": {
+            "label": "deriva entre entradas"
+          },
+          "1": {
+            "label": "zonas dotadas"
+          },
+          "2": {
+            "label": "niveles de capacidad"
+          },
+          "3": {
+            "label": "cues perdidos por operaciones"
+          }
+        },
+        "tagline": "Instalaciones, recorridos, pop-ups"
+      },
+      "live-events": {
+        "description": "ATLVS Technologies es la plataforma de producción para eventos en vivo: residencias de club, noches de marca, fiestas de lanzamiento de álbum, pop-ups de azotea. Ticketing con escaneo en sitio, advancing de artistas, pagos directos a proveedores y guías Know Before You Go por rol, todo conectado desde el día uno.",
+        "faqs": {
+          "0": {
+            "a": "Hemos escaneado más de 15,000 invitados por evento sin un parpadeo. Cada boleto se escanea exactamente una vez bajo carga concurrente. El cuello de botella es tu red, no nosotros.",
+            "q": "¿Cuántos invitados aguanta la plataforma?"
+          },
+          "1": {
+            "a": "Sí. Importa lotes de boletos por CSV o webhook. La mayoría de los equipos cambia al ticketing nativo en cuanto ve el escáner sin conexión y la analítica.",
+            "q": "¿Puedo usar mi proveedor de ticketing actual?"
+          },
+          "2": {
+            "a": "Sí, en Enterprise. Marca personalizada y dominios personalizados. La mayoría de los clubes y promotores pone su marca al portal de cara al invitado.",
+            "q": "¿Puedo poner la marca de un venue o promotor?"
+          }
+        },
+        "hero": {
+          "body": "Reemplaza el stack que la mayoría de los equipos de venue corre: apps de tareas, herramientas de firma electrónica, software contable, hojas de cálculo para el advancing. ATLVS Technologies corre todo en un solo lugar.",
+          "eyebrow": "Eventos en vivo",
+          "title": "Del pitch al cierre. Una plataforma."
+        },
+        "modules": {
+          "0": {
+            "body": "Escaneo en menos de 100 ms. Cero duplicados. Cola sin conexión. Boletos por nivel, transferencias, cabañas VIP.",
+            "name": "Ticketing"
+          },
+          "1": {
+            "body": "Riders, input lists, stage plots, catering, viajes, cronograma: todo por el portal.",
+            "name": "Advancing de artistas"
+          },
+          "2": {
+            "body": "Los proveedores dan de alta una cuenta de pago. Pago directo al cumplirse la orden de compra por ACH, tarjeta o transferencia.",
+            "name": "Pagos a proveedores"
+          },
+          "3": {
+            "body": "Una fuente, vistas por rol. Dieciséis tipos de sección renderizados a portal y móvil.",
+            "name": "Guías KBYG"
+          },
+          "4": {
+            "body": "P&L por evento, división de depósito y saldo, facturación por proveedor.",
+            "name": "Finanzas"
+          },
+          "5": {
+            "body": "Seguimiento de COI de proveedores con alertas de vencimiento, almacenamiento de W-9, registro de auditoría inmutable.",
+            "name": "Cumplimiento"
+          }
+        },
+        "name": "Eventos en vivo",
+        "outcomes": {
+          "0": "Escanea boletos en cualquier teléfono, sin kits de escáner rentados",
+          "1": "Entrega el advancing de artistas por el portal, no en cadenas de PDF",
+          "2": "Envía pagos a proveedores directo al aprobarse",
+          "3": "Publica un KBYG y el invitado, el crew y el artista ven cada uno su versión",
+          "4": "Las propuestas firmadas se vuelven proyectos vivos con la firma",
+          "5": "El crew marca entrada por COMPVSS con geoverificación"
+        },
+        "stats": {
+          "0": {
+            "label": "invitados / noche"
+          },
+          "1": {
+            "label": "latencia de escaneo"
+          },
+          "2": {
+            "label": "portales por persona"
+          },
+          "3": {
+            "label": "menos errores de facturación"
+          }
+        },
+        "tagline": "Residencias de venue, noches de club, eventos únicos"
+      },
+      "sports-events": {
+        "description": "El día de juego corre sobre COMPVSS, la app de campo que tu staff de eventos ya trae. Programación de crew por puerta y sección, escaneo de credenciales en cada punto de control, reportes de incidentes de un toque que llegan al comando en segundos y una bitácora diaria que se sostiene en el debrief posjuego.",
+        "faqs": {
+          "0": {
+            "a": "Sí. COMPVSS es offline-first. Los escaneos, reportes de incidentes y marcas de reloj se encolan en el dispositivo y sincronizan cuando el teléfono recupera señal. Nada se pierde en una zona muerta.",
+            "q": "¿La app funciona dentro de un bowl de estadio de concreto?"
+          },
+          "1": {
+            "a": "Sí. Los crews externos entran al proyecto con su propio acceso acotado. Ven sus turnos y puntos de check-in, y sus escaneos y marcas de tiempo caen en el mismo registro que tu staff de casa.",
+            "q": "¿Las agencias de staffing y los proveedores externos pueden trabajar con el mismo cronograma?"
+          },
+          "2": {
+            "a": "Sí. Arma la plantilla del día de evento una vez, luego clónala por juego y cambia solo lo que difiere. Cronogramas, puntos de control y enrutamiento de incidentes se conservan.",
+            "q": "¿Podemos reutilizar una configuración en toda una temporada de local?"
+          }
+        },
+        "hero": {
+          "body": "Un día de evento en un estadio son cientos de trabajadores en decenas de posiciones con un kickoff que no va a esperar. COMPVSS pone el cronograma, los escaneos de puerta y el canal de incidentes en el teléfono de cada trabajador, y sigue funcionando cuando el concourse mata la señal.",
+          "eyebrow": "Eventos deportivos",
+          "title": "El día de juego vive en la app de campo."
+        },
+        "modules": {
+          "0": {
+            "body": "Turnos por posición, puerta y sección. La vista de cobertura muestra los huecos antes de abrir puertas.",
+            "name": "Programación de crew"
+          },
+          "1": {
+            "body": "Las credenciales del staff se escanean en cualquier teléfono. La cola sin conexión se reconcilia al reconectar el dispositivo.",
+            "name": "Escaneo de puerta y credenciales"
+          },
+          "2": {
+            "body": "Reporte de un toque desde cualquier punto del bowl. Los reportes llegan al comando con ubicación y foto.",
+            "name": "Incidentes"
+          },
+          "3": {
+            "body": "Radios, escáneres y llaves asignados por trabajador. El reporte de cierre muestra qué sigue afuera.",
+            "name": "Custodia de activos"
+          }
+        },
+        "name": "Eventos deportivos",
+        "outcomes": {
+          "0": "Publica el cronograma del día de juego por posición y puerta; los crews confirman desde el teléfono",
+          "1": "Escanea credenciales del staff en cada punto de control, incluso sin conexión",
+          "2": "Reporta incidentes desde las gradas con foto y GPS adjuntos automáticamente",
+          "3": "Marca entrada con geoverificación en la puerta de empleados",
+          "4": "Asigna radios y escáneres a los trabajadores y recíbelos de vuelta al cierre",
+          "5": "Los reportes de boletería y liquidación llegan con la consola ATLVS (próximamente)"
+        },
+        "stats": {
+          "0": {
+            "label": "escaneo de credencial"
+          },
+          "1": {
+            "label": "incidente reportado"
+          },
+          "2": {
+            "label": "clock-in verificado"
+          },
+          "3": {
+            "label": "hojas de firma en papel"
+          }
+        },
+        "tagline": "Días de juego, torneos, fines de semana de campeonato"
+      },
+      "theatrical-performances": {
+        "description": "Producciones teatrales: temporadas de Broadway, funciones limitadas off-Broadway, residencias regionales, producciones de gala. Programación de elenco y crew, notas de cue, seguimiento de suplentes, advancing por teatro y trazas de auditoría listas para cumplimiento.",
+        "faqs": {
+          "0": {
+            "a": "Sí. Las reglas de descanso, las limitaciones 10-de-12 y los umbrales de horas extra se configuran por producción. El programador rechaza asignaciones que violarían las reglas.",
+            "q": "¿La plataforma soporta programación conforme a Equity?"
+          },
+          "1": {
+            "a": "Sí. Cada rol tiene un titular y una cadena de suplentes. Los conflictos de disponibilidad aparecen mientras se arma el calendario. La cobertura histórica se preserva para nómina.",
+            "q": "¿Puedo rastrear la cobertura de suplentes?"
+          },
+          "2": {
+            "a": "Cada edición del rundown queda versionada: quién, cuándo, antes, después. El stage manager puede revertir una mala revisión en un clic, y el registro de auditoría satisface la revisión legal.",
+            "q": "¿Cómo se maneja el historial de revisiones de las notas de cue?"
+          }
+        },
+        "hero": {
+          "body": "Las producciones de larga duración viven o mueren por la consistencia. Cambios de elenco, suplentes, ajustes al rider, particularidades de cada teatro: mantenemos la producción canónica en un solo lugar y registramos cada desviación.",
+          "eyebrow": "Producciones teatrales",
+          "title": "Ocho funciones por semana. Cero deriva."
+        },
+        "modules": {
+          "0": {
+            "body": "Lista de cues por función, revisiones de blocking, asignaciones de suplentes, historial de versiones.",
+            "name": "Rundown"
+          },
+          "1": {
+            "body": "Grilla de disponibilidad, detección de conflictos, programación conforme a sindicatos, tarifas diarias.",
+            "name": "Pool de elenco"
+          },
+          "2": {
+            "body": "Alcance canónico de la producción. Variantes por teatro para giras.",
+            "name": "Advancing"
+          },
+          "3": {
+            "body": "Registro de auditoría en cada cambio. Aplicación de descansos sindicales. Reporte de incidentes de seguridad.",
+            "name": "Cumplimiento"
+          }
+        },
+        "name": "Producciones teatrales",
+        "outcomes": {
+          "0": "Rundown por función con notas de cue, revisiones de blocking y seguimiento de suplentes",
+          "1": "Pool de elenco con disponibilidad y detección de conflictos entre funciones",
+          "2": "Rider canónico con variantes por teatro para producciones en gira",
+          "3": "Programación conforme a Equity y sindicatos con aplicación de descansos",
+          "4": "Guías de front-of-house y back-of-house por persona",
+          "5": "Traza de auditoría completa (quién cambió qué y cuándo) para legal y cumplimiento"
+        },
+        "stats": {
+          "0": {
+            "label": "funciones / semana"
+          },
+          "1": {
+            "label": "registros de cues perdidos"
+          },
+          "2": {
+            "label": "edición del rider"
+          },
+          "3": {
+            "label": "cobertura de suplentes"
+          }
+        },
+        "tagline": "Residencias, producciones en gira, galas"
+      },
+      "trade-shows-exhibitions": {
+        "description": "Del move-in al move-out en una sola app de campo. COMPVSS programa las llamadas de labor por pabellón, lleva las punch lists de stand a cero antes de la apertura, escanea al crew en el andén y rastrea cada carro y elevador prestado en el piso.",
+        "faqs": {
+          "0": {
+            "a": "Sí. Cada subcontratista entra al proyecto con acceso acotado. Ven sus propias llamadas, punches y ventanas de andén. Tú ves todo el piso consolidado por pabellón y por empresa.",
+            "q": "Somos contratista general con subs de seis empresas. ¿Pueden trabajar todos en un sistema?"
+          },
+          "1": {
+            "a": "Sí. COMPVSS es offline-first. Los punches, escaneos y marcas de tiempo se encolan en el dispositivo y sincronizan cuando vuelve la señal, lo que importa cuando diez mil expositores comparten un punto de acceso.",
+            "q": "¿La app funciona en medio de un centro de convenciones?"
+          },
+          "2": {
+            "a": "Sí. Las llamadas se programan por crew con horarios, posiciones y confirmaciones. Las marcas de tiempo están geoverificadas y se exportan para nómina, y la bitácora diaria preserva quién trabajó en qué pabellón.",
+            "q": "¿Podemos manejar llamadas de labor sindical por la plataforma?"
+          }
+        },
+        "hero": {
+          "body": "El montaje de un pabellón de exposiciones son decenas de crews de distintas empresas trabajando el mismo piso contra la misma fecha límite. COMPVSS le da a cada crew su horario de llamada, su punch list y su acceso al andén desde un teléfono, y te da a ti todo el piso en una vista.",
+          "eyebrow": "Ferias y exposiciones",
+          "title": "Del move-in al move-out, en el piso."
+        },
+        "modules": {
+          "0": {
+            "body": "Llamadas por pabellón, por día, por crew. Confirmaciones y ausencias visibles antes de que empiece el turno.",
+            "name": "Programación de labor"
+          },
+          "1": {
+            "body": "Punches por stand con evidencia fotográfica. Filtra por pabellón, pasillo o contratista y llévalo a cero.",
+            "name": "Punch lists"
+          },
+          "2": {
+            "body": "Escaneo de credenciales en el andén y las puertas del pabellón. Cola sin conexión para las bahías de carga.",
+            "name": "Acceso a andén y piso"
+          },
+          "3": {
+            "body": "Cada elevador, carro y herramienta prestado por crew. El move-out muestra qué no ha vuelto.",
+            "name": "Custodia de activos"
+          }
+        },
+        "name": "Ferias y exposiciones",
+        "outcomes": {
+          "0": "Programa llamadas de labor por pabellón y por bloque de stands; los crews confirman desde el teléfono",
+          "1": "Punch lists de stand con fotos, asignadas y cerradas antes de la apertura",
+          "2": "Escanea credenciales del crew en el andén y la entrada del piso",
+          "3": "Rastrea carros, elevadores y herramientas prestados a cada crew",
+          "4": "Bitácora diaria por pabellón para el expediente del contratista general",
+          "5": "La facturación a expositores llega con la consola ATLVS (próximamente)"
+        },
+        "stats": {
+          "0": {
+            "label": "punch de stand reportado"
+          },
+          "1": {
+            "label": "escaneo de credencial en andén"
+          },
+          "2": {
+            "label": "en el pabellón, por diseño"
+          },
+          "3": {
+            "label": "recorridos con portapapeles"
+          }
+        },
+        "tagline": "Pabellones de exposición, montaje de stands, operación de piso"
+      },
+      "venues-arenas": {
+        "description": "Hecho para el equipo de casa que voltea el edificio noche tras noche. COMPVSS lleva el horario del crew a lo largo de un calendario pesado, punch lists de cambio de montaje, inspecciones recurrentes y una bitácora de incidentes acotada por evento, todo desde los teléfonos que tu personal ya trae.",
+        "faqs": {
+          "0": {
+            "a": "Sí. Cada evento es su propio proyecto con su propio cronograma, checklists y bitácora de incidentes. El crew de casa trabaja en todos desde una sola app, y los reportes quedan separados por evento.",
+            "q": "¿Podemos correr varios eventos en el edificio el mismo día?"
+          },
+          "1": {
+            "a": "Solo lo que compartas. Los representantes de gira y del promotor pueden invitarse a un solo evento con acceso acotado. Nunca ven el resto de tu calendario ni el evento de otro promotor.",
+            "q": "¿Una producción en gira puede ver nuestro calendario de casa?"
+          },
+          "2": {
+            "a": "El líder saliente registra una nota de relevo contra el turno, con los punch items abiertos adjuntos. El crew entrante abre la app y ve exactamente qué está sin resolver. No hace falta pizarrón.",
+            "q": "¿Cómo funciona el relevo de turno?"
+          }
+        },
+        "hero": {
+          "body": "Un edificio ocupado alberga un concierto, un partido y un evento corporativo la misma semana. COMPVSS mantiene al crew de casa programado en todo eso y registra cada cambio de montaje, inspección e incidente contra el evento correcto.",
+          "eyebrow": "Venues y arenas",
+          "title": "Doscientos días de evento. Un sistema de casa."
+        },
+        "modules": {
+          "0": {
+            "body": "Programación de crew en todo el calendario con vista de cobertura por día de evento. Intercambios y confirmaciones desde el teléfono.",
+            "name": "Programación y cobertura"
+          },
+          "1": {
+            "body": "Punches de cambio de montaje y mantenimiento con evidencia fotográfica, asignación y seguimiento de cierre.",
+            "name": "Punch lists"
+          },
+          "2": {
+            "body": "Checklists recurrentes por espacio. Cada inspección completada queda con marca de tiempo y atribuible.",
+            "name": "Inspecciones"
+          },
+          "3": {
+            "body": "Una bitácora para el edificio, filtrada por evento. Objetos perdidos rastreados del ingreso a la devolución.",
+            "name": "Incidentes y objetos perdidos"
+          }
+        },
+        "name": "Venues y arenas",
+        "outcomes": {
+          "0": "Programa al crew de casa en todo el calendario de eventos con los huecos de cobertura visibles",
+          "1": "Lleva punch lists de cambio de montaje con fotos; los items se cierran antes de abrir puertas",
+          "2": "Inspecciones recurrentes por sala y por sistema, con registro de cada pasada",
+          "3": "Bitácoras de incidentes y objetos perdidos acotadas al evento donde ocurrieron",
+          "4": "Notas de relevo de turno para que el crew nocturno sepa qué dejó abierto el diurno",
+          "5": "Custodia del inventario de casa: quién tiene la llave del elevador, y desde cuándo"
+        },
+        "stats": {
+          "0": {
+            "label": "cobertura del edificio"
+          },
+          "1": {
+            "label": "punch item registrado"
+          },
+          "2": {
+            "label": "back-of-house listo"
+          },
+          "3": {
+            "label": "checklists en papel"
+          }
+        },
+        "tagline": "Equipos de casa que corren cientos de shows al año"
+      },
+      "weddings-private-events": {
+        "description": "Para productoras de eventos privados que montan fincas con carpas y fines de semana destino. COMPVSS programa al crew de montaje día por día, registra a los proveedores en la puerta, recorre la punch list antes del walk-through con el cliente y lleva una bitácora diaria de cada día de montaje.",
+        "faqs": {
+          "0": {
+            "a": "Solo las personas que invites, con el nivel de acceso que les des. Cada evento está aislado, los proveedores externos ven solo su propio alcance y el registro de auditoría anota cada vista y cada cambio.",
+            "q": "Nuestros clientes esperan discreción. ¿Quién puede ver los datos del evento?"
+          },
+          "1": {
+            "a": "Sí. COMPVSS es offline-first. Los check-ins, punches y marcas de tiempo se encolan en el dispositivo y sincronizan cuando los crews recuperan cobertura. El montaje no se detiene por la señal.",
+            "q": "¿Funciona en una finca remota sin cobertura celular?"
+          },
+          "2": {
+            "a": "Sí. La mayoría de las productoras de eventos privados opera en corto y contrata por montaje. El equipo central vive en la app, y el crew y los proveedores por evento entran con acceso acotado solo a ese proyecto.",
+            "q": "Somos una empresa de doce personas. ¿Esto está hecho para equipos de nuestro tamaño?"
+          }
+        },
+        "hero": {
+          "body": "Un montaje privado de alta gama es una semana de load-ins en un sitio sin andén de carga y un walk-through con el cliente que no puede correrse. COMPVSS lleva el cronograma de montaje, las llegadas de proveedores y el punch final desde los teléfonos de tu crew, incluso donde la finca no tiene señal.",
+          "eyebrow": "Bodas y eventos privados",
+          "title": "El cliente ve el salón. Tú ves la punch list."
+        },
+        "modules": {
+          "0": {
+            "body": "Llamadas de crew por día de montaje y zona. La vista semanal muestra la ventana de cada oficio en el sitio.",
+            "name": "Cronograma de montaje"
+          },
+          "1": {
+            "body": "Cada llegada escaneada en la puerta. Las entregas tardías se ven en cuanto pasa la ventana.",
+            "name": "Check-in de proveedores"
+          },
+          "2": {
+            "body": "Punches con foto por zona, asignados a un crew, cerrados antes de que el cliente recorra el salón.",
+            "name": "Punch lists"
+          },
+          "3": {
+            "body": "Una bitácora por día de montaje: clima, llegadas, avance, problemas. El registro que tu equipo desearía haber llevado.",
+            "name": "Bitácoras diarias"
+          }
+        },
+        "name": "Bodas y eventos privados",
+        "outcomes": {
+          "0": "Horarios del crew de la semana de montaje por día y por zona, confirmados desde el teléfono",
+          "1": "Check-in de llegadas de proveedores en la puerta, con marca de tiempo contra la ventana de entrega",
+          "2": "Recorrido de punch list con fotos antes de cada walk-through con el cliente",
+          "3": "Custodia de rentas: qué llegó, quién lo tiene, qué regresa en cuál camión",
+          "4": "Bitácora diaria por día de montaje, del primer camión al último ajuste de luces",
+          "5": "Las propuestas al cliente y la facturación llegan con la consola ATLVS (próximamente)"
+        },
+        "stats": {
+          "0": {
+            "label": "punch item reportado"
+          },
+          "1": {
+            "label": "clock-in verificado del crew"
+          },
+          "2": {
+            "label": "funciona en fincas remotas"
+          },
+          "3": {
+            "label": "hojas de operación en carpeta"
+          }
+        },
+        "tagline": "Producciones privadas de alta gama, fincas, montajes destino"
+      }
     }
   },
   "auth": {

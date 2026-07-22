@@ -445,12 +445,17 @@ export default async function Home() {
               <p className="mt-4 text-sm leading-relaxed text-[var(--p-text-2)]">
                 {w(
                   "comingSoon.atlvs.body",
-                  "The operator console. Projects, advancing, budgets, procurement, and the paperwork drafted for you, in one place. We are building it in the open, and you can see where it is headed.",
+                  "The operator console. Projects, advancing, budgets, and procurement in one place, with Aurora AI on hand to help draft the paperwork. We are building it in the open, and you can see where it is headed.",
                 )}
               </p>
-              <Link href="/atlvs" className="mt-5 inline-block text-sm font-semibold text-[var(--p-accent-text)] hover:underline">
-                {w("comingSoon.atlvs.cta", "Preview ATLVS →")}
-              </Link>
+              <div className="mt-5 flex flex-wrap gap-4">
+                <Link href="/atlvs" className="text-sm font-semibold text-[var(--p-accent-text)] hover:underline">
+                  {w("comingSoon.atlvs.cta", "Preview ATLVS →")}
+                </Link>
+                <Link href="/aurora" className="text-sm font-semibold text-[var(--p-accent-text)] hover:underline">
+                  {w("comingSoon.atlvs.ctaAurora", "Meet Aurora →")}
+                </Link>
+              </div>
             </article>
             <article
               data-platform="gvteway"

@@ -1,9 +1,11 @@
 /**
- * Production-AI use cases. Each entry powers an /ai/[slug] page.
+ * Aurora AI use cases. Each entry powers an /ai/[slug] page.
  *
- * Voice rule: every claim grounded in workspace data, not the public
- * internet. Anthropic Claude under the hood; we never train on customer
- * data. The hub at /ai is the GEO surface that picks up "AI for
+ * Brand rule: the product identity is "Aurora AI, powered by Brio". First
+ * mention in each entry's hero reads "Aurora AI"; later mentions may say
+ * "Aurora". Voice rule: every claim grounded in workspace data, not the
+ * public internet. Anthropic Claude under the hood; we never train on
+ * customer data. The hub at /ai is the GEO surface that picks up "AI for
  * advancing / for tour managers / for production teams" intent.
  */
 
@@ -28,7 +30,7 @@ export const AI_USES: AiUseCase[] = [
     slug: "advancing",
     title: "AI For Advancing",
     short: "Drafts riders, hospitality, stage plots, and per-stop variances from your workspace.",
-    hero: "Advancing is the largest pre-event paper trail in live production. The AI assistant reads your project metadata, talent profile, venue specs, and prior-tour history, then drafts the typed deliverables your advancing flow expects — technical rider, hospitality rider, stage plot description, input list, ground transport, hotel block. You edit, you ship. The clock back goes down by days.",
+    hero: "Advancing is the largest pre-event paper trail in live production. Aurora AI reads your project metadata, talent profile, venue specs, and prior-tour history, then drafts the typed deliverables your advancing flow expects — technical rider, hospitality rider, stage plot description, input list, ground transport, hotel block. You edit, you ship. The clock back goes down by days.",
     reads: [
       "Talent profile (preferred backline, monitor config, hospitality preferences)",
       "Venue specs (rigging points, power, dressing room count, freight elevator)",
@@ -43,15 +45,15 @@ export const AI_USES: AiUseCase[] = [
       "Per-stop variance notes flagging changes from the canonical rider",
     ],
     surfaces: [
-      "ATLVS advancing module — drafts inline on the deliverable",
+      "ATLVS advancing module — draft with Aurora, grounded in the deliverable",
       "GVTEWAY artist portal — artists review and counter-edit",
       "COMPVSS field — daily call sheets carry the advancing references",
     ],
     modules: ["advancing", "ai", "portals"],
     faqs: [
       {
-        q: "Does the AI see other tours?",
-        a: "No. The AI's scope is your organization. It can reference your prior tours but never another org's data — RLS-enforced at the database, not just in the app layer.",
+        q: "Does Aurora see other tours?",
+        a: "No. Aurora's scope is your organization. It can reference your prior tours but never another org's data — RLS-enforced at the database, not just in the app layer.",
       },
       {
         q: "Will it invent specs the artist didn't ask for?",
@@ -63,7 +65,7 @@ export const AI_USES: AiUseCase[] = [
     slug: "incidents",
     title: "AI For Incident Reports",
     short: "Turns a phone-typed account into an OSHA-shaped incident record with evidence and corrective action.",
-    hero: "Incident reporting at 2am from a field crew member rarely produces an audit-ready record. The AI takes whatever you type — three sentences, voice-to-text, a partial fragment — and structures it into the fields OSHA, your insurance carrier, and your EHS lead need: who, what, when, where, witnesses, severity classification, recordable status, recommended corrective action.",
+    hero: "Incident reporting at 2am from a field crew member rarely produces an audit-ready record. Aurora AI takes whatever you type — three sentences, voice-to-text, a partial fragment — and structures it into the fields OSHA, your insurance carrier, and your EHS lead need: who, what, when, where, witnesses, severity classification, recordable status, recommended corrective action.",
     reads: [
       "Field-typed incident draft (text, voice transcript, photo metadata)",
       "OSHA 300/300A classification rules",
@@ -77,19 +79,19 @@ export const AI_USES: AiUseCase[] = [
       "Crisis-comms template drafted if the incident exceeds severity threshold",
     ],
     surfaces: [
-      "COMPVSS field — file from the phone, AI structures on submit",
-      "ATLVS safety module — review queue with AI-suggested corrective actions",
+      "COMPVSS field — file from the phone, structure it with Aurora before it ships",
+      "ATLVS safety module — review queue with Aurora-suggested corrective actions",
       "ATLVS compliance — OSHA 300 log auto-rolls up classified incidents",
     ],
     modules: ["safety", "ai", "mobile", "compliance"],
     faqs: [
       {
-        q: "Is the AI medically advising?",
-        a: "No. It structures the report and suggests OSHA classification per published rules. Medical decisions stay with credentialed personnel; the AI never makes care recommendations.",
+        q: "Is Aurora medically advising?",
+        a: "No. It structures the report and suggests OSHA classification per published rules. Medical decisions stay with credentialed personnel; Aurora never makes care recommendations.",
       },
       {
         q: "Does it route to legal automatically?",
-        a: "Configurable per org. By default, severe-classification incidents notify the EHS lead and route to a review queue. Legal routing is an opt-in workflow.",
+        a: "No. Severe-classification incidents notify the EHS lead and land in a review queue. Whether anything goes to legal stays a human decision.",
       },
     ],
   },
@@ -97,7 +99,7 @@ export const AI_USES: AiUseCase[] = [
     slug: "scheduling",
     title: "AI For Crew Scheduling",
     short: "Drafts call sheets and resolves conflicts against live availability and credentials.",
-    hero: "Crew scheduling is constraint satisfaction at human-scale: who's qualified, who's available, who's credentialed for that zone, who's already at hour-cap for the week. The AI reads your roster, schedule, credentials matrix, and prior assignments, then drafts call sheets and surfaces the conflicts before they cost you. Show callers see resolved schedules; PMs see what almost slipped.",
+    hero: "Crew scheduling is constraint satisfaction at human-scale: who's qualified, who's available, who's credentialed for that zone, who's already at hour-cap for the week. Aurora AI reads your roster, schedule, credentials matrix, and prior assignments, then drafts call sheets and surfaces the conflicts before they cost you. Show callers see resolved schedules; PMs see what almost slipped.",
     reads: [
       "Crew roster with role, credentials, certifications",
       "Run-of-show with per-cue department needs",
@@ -111,7 +113,7 @@ export const AI_USES: AiUseCase[] = [
       "Departure manifest with ground transport pairings",
     ],
     surfaces: [
-      "ATLVS schedule module — call-sheet authoring with AI-suggested rows",
+      "ATLVS schedule module — call-sheet authoring with Aurora-suggested rows",
       "GVTEWAY crew portal — crew see their call with context",
       "COMPVSS field — call sheet in the pocket, offline-cached",
     ],
@@ -119,7 +121,7 @@ export const AI_USES: AiUseCase[] = [
     faqs: [
       {
         q: "Does it auto-publish call sheets?",
-        a: "No. The AI drafts; the PM publishes. Auto-publish is configurable per org but defaults to manual review on the first season.",
+        a: "No. Aurora drafts; the PM publishes. Every call sheet ships on a human's say-so.",
       },
     ],
   },
@@ -127,7 +129,7 @@ export const AI_USES: AiUseCase[] = [
     slug: "proposals",
     title: "AI For Proposals",
     short: "Drafts interactive proposals from a brief, scoped to your service catalog and prior wins.",
-    hero: "Proposals win shows when they feel bespoke and arrive fast. The AI takes a discovery brief (client, scope, dates, budget range) and drafts an interactive proposal — scroll storytelling, live pricing, accept-in-place — anchored to your service catalog and the proposals that closed before. You polish, you send, you scope a deposit on accept.",
+    hero: "Proposals win shows when they feel bespoke and arrive fast. Aurora AI takes a discovery brief (client, scope, dates, budget range) and drafts an interactive proposal — scroll storytelling, live pricing, accept-in-place — anchored to your service catalog and the proposals that closed before. You polish, you send, you scope a deposit on accept.",
     reads: [
       "Discovery notes from the lead",
       "Your service catalog with current pricing",
@@ -148,7 +150,7 @@ export const AI_USES: AiUseCase[] = [
     modules: ["proposals", "ai", "finance", "portals"],
     faqs: [
       {
-        q: "Can clients tell it was AI-drafted?",
+        q: "Can clients tell Aurora drafted it?",
         a: "If you ship it unedited — yes. The output is a draft, not a deliverable. Most teams use it to skip the boilerplate and spend their time on the differentiator.",
       },
     ],
@@ -157,7 +159,7 @@ export const AI_USES: AiUseCase[] = [
     slug: "recaps",
     title: "AI For Post-Show Recaps",
     short: "Bundles photos, finance, incidents, and KPIs into a wrap recap on settlement day.",
-    hero: "Wrap recaps land days late because someone has to walk the gallery, the budget, the incident log, and the box office. The AI bundles them: a per-show recap PDF with the day's photo highlights, final P&L vs. budget, recordable incidents, gate scan throughput, and the named action items for the next show. Settle clean, recap clean.",
+    hero: "Wrap recaps land days late because someone has to walk the gallery, the budget, the incident log, and the box office. Aurora AI bundles them for you: a per-show recap draft with the day's photo highlights, final P&L vs. budget, recordable incidents, gate scan throughput, and the named action items for the next show. Settle clean, recap clean.",
     reads: [
       "Project gallery with photo timestamps + geo",
       "Final budget vs. actual vs. forecast (EAC)",
@@ -171,7 +173,10 @@ export const AI_USES: AiUseCase[] = [
       "PDF + ZIP bundle with curated photos",
       "Named action items rolling forward to the next show",
     ],
-    surfaces: ["ATLVS finance — recap fires on settlement close", "GVTEWAY client portal — branded recap auto-share"],
+    surfaces: [
+      "ATLVS finance — draft the recap when the settlement closes",
+      "GVTEWAY client portal — share the branded recap with the client",
+    ],
     modules: ["ai", "finance", "photos", "safety"],
     faqs: [],
   },
@@ -179,9 +184,9 @@ export const AI_USES: AiUseCase[] = [
     slug: "safety",
     title: "AI For Safety Briefings",
     short: "Drafts the daily safety brief from the day's hazards, weather, and corrective actions.",
-    hero: "Daily safety briefings rotate the same content with subtle adjustments — weather, today's site hazards, the previous day's near-miss, the open corrective actions. The AI drafts the briefing each morning from your inspection records, weather feed, and incident log, so the EHS lead opens a tablet with the right content, signs the roster, and runs the briefing in under five minutes.",
+    hero: "Daily safety briefings rotate the same content with subtle adjustments — weather, today's site hazards, the previous day's near-miss, the open corrective actions. Aurora AI drafts the morning briefing from your inspection records and incident log, so the EHS lead opens a tablet with the right content, signs the roster, and runs the briefing in under five minutes.",
     reads: [
-      "Today's weather forecast (heat / cold / wind / storm protocol triggers)",
+      "The day's weather call as your team logs it (heat / cold / wind / storm protocol triggers)",
       "Open corrective actions from prior incidents + inspections",
       "Today's load-in tasks with associated hazard categories",
       "PPE compliance status by zone",

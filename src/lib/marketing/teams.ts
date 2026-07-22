@@ -32,7 +32,7 @@ export const TEAMS: TeamRole[] = [
     hero: {
       eyebrow: "For Tour Managers",
       title: "Tour Management, On Modern Rails.",
-      body: "The TM stack hasn't changed in twenty years. A desktop app and a binder. ATLVS retunes the same primitives for cloud-native, real portals, offline mobile, AI assistance, per-org pricing.",
+      body: "The TM stack hasn't changed in twenty years. A desktop app and a binder. ATLVS retunes the same primitives for cloud-native, real portals, offline mobile, Aurora AI assistance, per-org pricing.",
     },
     workflows: [
       {
@@ -71,7 +71,7 @@ export const TEAMS: TeamRole[] = [
     faqs: [
       {
         q: "Will this replace our desktop touring stack?",
-        a: "Yes, for modern touring orgs. We carry advancing, day sheets, and per-stop variance, and add cloud-native multi-user, real portals, offline mobile, AI, and per-org pricing. The old tools win on muscle memory; we win on every spec.",
+        a: "Yes, for modern touring orgs. We carry advancing, day sheets, and per-stop variance, and add cloud-native multi-user, real portals, offline mobile, Aurora AI, and per-org pricing. The old tools win on muscle memory; we win on every spec.",
       },
       {
         q: "Can we run multiple tours simultaneously?",

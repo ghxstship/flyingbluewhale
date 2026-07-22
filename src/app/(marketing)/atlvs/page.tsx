@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { JsonLd } from "@/components/marketing/JsonLd";
 import { CTASection } from "@/components/marketing/CTASection";
 import { FAQSection } from "@/components/marketing/FAQ";
@@ -135,6 +136,16 @@ export default async function AtlvsTeaserPage() {
             </div>
           ))}
         </MarketingGrid>
+        <p className="mt-6 max-w-2xl text-sm text-[var(--p-text-2)]">
+          {t(
+            "marketing.pages.atlvsTeaser.pillarsSection.auroraNote",
+            undefined,
+            "Aurora AI, powered by Brio, rides along in the console: an assistant grounded in your own projects, crew, and budgets, never in another org's data.",
+          )}{" "}
+          <Link href="/aurora" className="font-semibold text-[var(--p-accent-text)] hover:underline">
+            {t("marketing.pages.atlvsTeaser.pillarsSection.auroraCta", undefined, "Meet Aurora →")}
+          </Link>
+        </p>
       </MarketingSection>
 
       <MarketingSection

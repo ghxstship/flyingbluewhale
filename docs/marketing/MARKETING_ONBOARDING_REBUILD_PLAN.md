@@ -91,6 +91,23 @@ executive/org tier IS the hub); the P4 dim_department reconciliation should
 carry an `app` ownership annotation alongside the Bible labels; marketing
 copy may tell the split story (each app owns its classes' workflows).
 
+## 2b · Aurora AI + accent canon + extensions (owner directives, 2026-07-22)
+
+- **Aurora AI (powered by Brio)** is the AI product identity: every AI feature
+  across the ecosystem is branded Aurora AI. Marketing page at `/aurora`; the
+  first mention per page reads "Aurora AI" (once per page with the "powered by
+  Brio" attribution). Existing claims rebrand; no new capability claims.
+- **Accent canon validated:** ATLVS red `#E23414` · COMPVSS yellow `#FFC400` ·
+  GVTEWAY blue `#2563EB` · LEG3ND orange `#ED6A1E` (all confirmed in
+  tokens.json). **Aurora = vibrant green as a northern-lights gradient** —
+  marketing-scoped treatment for now (page-local CSS); product-token
+  integration is a later theme pass.
+- **Extensions hidden:** OPVS, CVRGO, Vault, MVNIFEST, GVLLEY, Social, Email
+  are toggled off everywhere (`EXTENSIONS_VISIBLE = false` in entitlements.ts
+  filters the App Rail; marketing copy carries no extension references).
+  Their registry entries + theme tokens stay (infrastructure). Future pass,
+  much later.
+
 ## 3 · New marketing IA (route map)
 
 Kept routes are marked (keep); everything else is new or rebuilt content on an

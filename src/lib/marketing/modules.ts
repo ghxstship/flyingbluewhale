@@ -34,14 +34,14 @@ export const MODULES: Record<string, ModuleConfig> = {
     eyebrow: "ATLVS · Office console",
     title: "The production console your team actually uses.",
     blurb:
-      "Projects, finance, procurement, production, people, AI — every internal module in one sidebar, scoped by role.",
+      "Projects, finance, procurement, production, people, Aurora AI — every internal module in one sidebar, scoped by role.",
     heroTitle: "One console. Every module. Role-aware access.",
     heroBody:
-      "ATLVS is where your office team works. Nine modules covering projects, finance, procurement, production, people, advancing, CMS, AI, and compliance — all reading from the same backbone, all scoped to your organization.",
+      "ATLVS is where your office team works. Nine modules covering projects, finance, procurement, production, people, advancing, CMS, Aurora AI, and compliance — all reading from the same backbone, all scoped to your organization.",
     highlights: [
       {
         title: "Nine modules",
-        body: "Overview, Projects, Advancing, Finance, Procurement, Production, People, CMS, AI, Compliance.",
+        body: "Overview, Projects, Advancing, Finance, Procurement, Production, People, CMS, Aurora, Compliance.",
       },
       {
         title: "Role-aware nav",
@@ -53,7 +53,7 @@ export const MODULES: Record<string, ModuleConfig> = {
       },
       { title: "Immutable audit log", body: "Who, when, what changed, what it was before. Every action. Exportable." },
       {
-        title: "AI built in",
+        title: "Aurora built in",
         body: "An assistant that reads your projects, crew, and budgets — and drafts from them.",
       },
       { title: "Signed DPA, 99.9% uptime", body: "Signed DPA and 99.9% uptime SLA on the Enterprise tier." },
@@ -75,7 +75,7 @@ export const MODULES: Record<string, ModuleConfig> = {
     related: [
       { slug: "portals", label: "GVTEWAY stakeholder portals" },
       { slug: "mobile", label: "COMPVSS field app" },
-      { slug: "ai", label: "AI assistant" },
+      { slug: "ai", label: "Aurora AI assistant" },
     ],
     keywords: ["production management console", "ATLVS", "internal operations software", "event production software"],
   },
@@ -186,14 +186,14 @@ export const MODULES: Record<string, ModuleConfig> = {
   },
   ai: {
     slug: "ai",
-    name: "AI assistant",
-    eyebrow: "ATLVS · AI",
+    name: "Aurora AI",
+    eyebrow: "ATLVS · Aurora AI",
     title: "An assistant that actually knows your org.",
     blurb:
-      "An AI that reads your projects, crew, and budgets — not the public internet. Drafts riders, RFPs, call sheets, and recaps on demand.",
-    heroTitle: "Claude, wired into your production.",
+      "Aurora AI reads your projects, crew, and budgets — not the public internet. Drafts riders, RFPs, call sheets, and recaps on demand.",
+    heroTitle: "Aurora AI, wired into your production.",
     heroBody:
-      "The assistant drafts from your actual data — your projects, your crew, your budgets, your schedule. Ask for a hospitality rider in the venue's voice. Ask for an RFP for lighting. Ask for a recap. Every conversation is scoped to your workspace and logged.",
+      "Aurora AI, powered by Brio, drafts from your actual data — your projects, your crew, your budgets, your schedule. Ask for a hospitality rider in the venue's voice. Ask for an RFP for lighting. Ask for a recap. Every conversation is scoped to your workspace and logged.",
     highlights: [
       { title: "Streams responses", body: "Answers stream as they generate — no waiting for the wall of text." },
       {
@@ -213,7 +213,7 @@ export const MODULES: Record<string, ModuleConfig> = {
     ],
     faqs: [
       {
-        q: "Does the AI see other orgs' data?",
+        q: "Does Aurora see other orgs' data?",
         a: "No. Every tool the assistant can call is scoped to your organization. It can't reach into anyone else's data — by design.",
       },
       {
@@ -230,7 +230,7 @@ export const MODULES: Record<string, ModuleConfig> = {
       { slug: "proposals", label: "Proposals" },
       { slug: "advancing", label: "Advancing" },
     ],
-    keywords: ["AI assistant", "AI for event production", "production AI"],
+    keywords: ["Aurora AI", "AI assistant", "AI for event production", "production AI"],
   },
   finance: {
     slug: "finance",
@@ -375,7 +375,7 @@ export const MODULES: Record<string, ModuleConfig> = {
     ],
     related: [
       { slug: "console", label: "ATLVS console" },
-      { slug: "ai", label: "AI assistant" },
+      { slug: "ai", label: "Aurora AI assistant" },
     ],
     keywords: ["SOC 2 production software", "multi-tenant security", "audit log", "event production compliance"],
   },
@@ -412,7 +412,7 @@ export const MODULES: Record<string, ModuleConfig> = {
     ],
     related: [
       { slug: "portals", label: "Client Portal" },
-      { slug: "ai", label: "AI drafting" },
+      { slug: "ai", label: "Aurora AI drafting" },
       { slug: "finance", label: "Finance" },
     ],
     keywords: ["interactive proposal software", "event proposal generator", "production proposals"],

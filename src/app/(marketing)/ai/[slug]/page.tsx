@@ -56,7 +56,7 @@ export default async function AiUsePage({ params }: { params: Promise<{ slug: st
         data={[
           breadcrumbSchema(crumbs),
           softwareApplicationSchema({
-            name: `ATLVS — ${u.title}`,
+            name: `Aurora AI · ${u.title}`,
             description: u.short,
             url: `${SITE.baseUrl}/ai/${u.slug}`,
           }),

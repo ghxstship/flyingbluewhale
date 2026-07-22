@@ -57,7 +57,7 @@ export const DEMO_PERSONAS: DemoPersona[] = [
     faqs: [
       {
         q: "How does this fit a modern touring stack?",
-        a: "Cloud-native, real portals, offline mobile, AI assistant, per-org pricing. The legacy desktop tools have real muscle memory; if you're picking fresh, picking modern matters.",
+        a: "Cloud-native, real portals, offline mobile, Aurora AI, per-org pricing. The legacy desktop tools have real muscle memory; if you're picking fresh, picking modern matters.",
       },
       {
         q: "Can our drivers use it?",

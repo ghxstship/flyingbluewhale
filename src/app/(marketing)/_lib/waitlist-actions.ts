@@ -10,14 +10,14 @@ import { BRAND } from "@/lib/brand";
 import { log } from "@/lib/log";
 
 /**
- * Coming-soon waitlist intake for the ATLVS and GVTEWAY teaser pages.
+ * Coming-soon waitlist intake for the ATLVS, GVTEWAY, and Aurora AI pages.
  * Deliberately mirrors the marketing contact intake (`contact/actions.ts`):
  * same house-org resolution, same `leads` column shape (org_id / name /
  * email / source / notes), same log-warn fallback. The only difference is
  * the `source` value, which tags which product the signup is for.
  */
 
-export type WaitlistProduct = "atlvs" | "gvteway";
+export type WaitlistProduct = "atlvs" | "gvteway" | "aurora";
 
 export type WaitlistState = { ok?: true; error?: string } | null;
 
@@ -52,7 +52,7 @@ export async function joinWaitlist(
 ): Promise<WaitlistState> {
   // The product arg arrives via .bind() from the client form; never trust it
   // as-is on a server boundary.
-  if (product !== "atlvs" && product !== "gvteway") {
+  if (product !== "atlvs" && product !== "gvteway" && product !== "aurora") {
     return { error: "Unknown product." };
   }
   const parsed = WaitlistSchema.safeParse(Object.fromEntries(fd));
@@ -70,7 +70,7 @@ export async function joinWaitlist(
     return { error: "Too many submissions. Wait a minute and try again." };
   }
 
-  const productName = product === "atlvs" ? "ATLVS" : "GVTEWAY";
+  const productName = product === "atlvs" ? "ATLVS" : product === "gvteway" ? "GVTEWAY" : "Aurora AI";
   const detailLines = [
     `Waitlist: ${productName}`,
     d.company && `Company: ${d.company}`,

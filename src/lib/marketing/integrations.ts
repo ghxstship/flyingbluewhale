@@ -53,8 +53,8 @@ export const INTEGRATIONS: Integration[] = [
     slug: "anthropic",
     name: "Anthropic Claude",
     category: "ai",
-    short: "Claude Sonnet 4.6 + Opus 4.7 power the production-AI assistant grounded in your workspace.",
-    long: "The AI assistant runs on Anthropic Claude — Sonnet 4.6 for day-to-day, Opus 4.7 for deeper reasoning. We don't train models. Conversations log in your tenant, scoped to your organization at the database, and never cross-organization. Anthropic's API receives only the context we explicitly assemble per turn.",
+    short: "Claude Sonnet 4.6 + Opus 4.7 power Aurora AI, the assistant grounded in your workspace.",
+    long: "Aurora AI runs on Anthropic Claude — Sonnet 4.6 for day-to-day, Opus 4.7 for deeper reasoning. We don't train models. Conversations log in your tenant, scoped to your organization at the database, and never cross-organization. Anthropic's API receives only the context we explicitly assemble per turn.",
     capabilities: [
       "Streaming chat with conversation persistence",
       "Tool calling scoped to your workspace data",

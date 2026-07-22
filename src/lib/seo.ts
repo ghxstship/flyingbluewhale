@@ -95,7 +95,7 @@ export const SITE = {
     atlvs: {
       name: "ATLVS",
       tagline:
-        "Develop and build the world: projects, advancing, finance, procurement, and an AI that drafts the paperwork. The producer's command center.",
+        "Develop and build the world: projects, advancing, finance, procurement, and Aurora AI drafting the paperwork. The producer's command center.",
       color: PRODUCT_ACCENTS.atlvs,
     },
     compvss: {

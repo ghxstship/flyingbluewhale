@@ -133,9 +133,9 @@
      "label": "LEG3ND",
      "description": "Knowledge, LMS & compliance"
     },
-    "ai": {
-     "label": "AI",
-     "description": "Drafts the paperwork, scoped to your tenant"
+    "aurora": {
+     "label": "Aurora AI",
+     "description": "Every AI feature in the ecosystem, powered by Brio"
     },
     "integrations": {
      "label": "Integrations",
@@ -156,10 +156,10 @@
      "description": "Long-form for producers"
     },
     "developers": {
-      "label": "Developers",
-      "description": "Build on the record store: the API, scopes, and partner program."
-     },
-     "docs": {
+     "label": "Developers",
+     "description": "Build on the record store: the API, scopes, and partner program."
+    },
+    "docs": {
      "label": "Docs",
      "description": "Ecosystem reference + API"
     },
@@ -259,15 +259,15 @@
    },
    "ai-slug": {
     "meta": {
-     "fallbackTitle": "AI",
-     "ogEyebrow": "AI"
+     "fallbackTitle": "Aurora AI",
+     "ogEyebrow": "Aurora AI"
     },
     "breadcrumbs": {
      "home": "Home",
-     "ai": "AI"
+     "ai": "Aurora AI"
     },
     "hero": {
-     "eyebrowPrefix": "AI"
+     "eyebrowPrefix": "Aurora AI"
     },
     "sections": {
      "reads": {
@@ -286,42 +286,42 @@
       "suffix": "FAQ"
      },
      "siblings": {
-      "title": "Other AI Use Cases."
+      "title": "Other Aurora AI Use Cases."
      }
     },
     "cta": {
      "title": "ATLVS Is Open.",
-     "subtitle": "Free for small teams. AI included on Crew and up."
+     "subtitle": "Free for small teams. Aurora AI included on Crew and up."
     }
    },
    "ai": {
     "meta": {
-     "title": "AI For Production: Drafts From Your Workspace, Never The Open Internet",
-     "description": "An assistant that drafts riders, incident reports, call sheets, proposals, recaps, and safety briefs from your live workspace data. Anthropic Claude under the hood; per-org scope; never trained on your data.",
-     "ogImageEyebrow": "AI",
+     "title": "Aurora AI For Production: Drafts From Your Workspace, Never The Open Internet",
+     "description": "Aurora AI, powered by Brio, drafts riders, incident reports, call sheets, proposals, recaps, and safety briefs from your live workspace data. Anthropic Claude under the hood; per-org scope; never trained on your data.",
+     "ogImageEyebrow": "Aurora AI",
      "ogImageTitle": "Drafts From Your Workspace."
     },
     "jsonLd": {
-     "description": "Production AI grounded in your workspace, powered by Anthropic Claude."
+     "description": "Aurora AI grounded in your workspace, powered by Brio on Anthropic Claude."
     },
     "breadcrumbs": {
      "home": "Home",
      "ai": "AI"
     },
     "hero": {
-     "eyebrow": "AI",
+     "eyebrow": "Aurora AI",
      "titleLine1": "Drafts From Your Workspace.",
      "titleLine2": "Never The Open Internet.",
-     "subtitle": "An assistant that reads your projects, talent, vendors, run-of-show, and budgets, then drafts what production teams write every day. Riders, incident reports, call sheets, proposals, recaps, safety briefs. Anthropic Claude under the hood, scoped to your tenant, never trained on your data."
+     "subtitle": "Aurora AI, powered by Brio, reads your projects, talent, vendors, run-of-show, and budgets, then drafts what production teams write every day. Riders, incident reports, call sheets, proposals, recaps, safety briefs. Anthropic Claude under the hood, scoped to your tenant, never trained on your data."
     },
     "drafts": {
      "title": "What It Drafts.",
-     "subtitle": "Six production workflows where the assistant takes a draft the first 80% and you ship the last 20%.",
+     "subtitle": "Six production workflows where Aurora takes a draft the first 80% and you ship the last 20%.",
      "cardCta": "See how it works"
     },
     "rules": {
      "eyebrow": "The Rules",
-     "title": "What The AI Does, And Won't Do.",
+     "title": "What Aurora Does, And Won't Do.",
      "subtitle": "Production teams asked us where the lines are. Here's the canon.",
      "items": {
       "0": "Reads only your org's data. RLS at the database, not the app.",
@@ -333,31 +333,31 @@
      }
     },
     "faq": {
-     "title": "AI · FAQ",
+     "title": "Aurora AI · FAQ",
      "otherOrgs": {
-      "q": "Does the AI see other organizations' data?",
-      "a": "No. Every tool the assistant can call is scoped to your organization. RLS at the database means your tenant is walled off in Postgres, not in the app layer. The AI cannot reach into anyone else's data, by design."
+      "q": "Does Aurora see other organizations' data?",
+      "a": "No. Every tool Aurora can call is scoped to your organization. RLS at the database means your tenant is walled off in Postgres, not in the app layer. Aurora cannot reach into anyone else's data, by design."
      },
      "training": {
       "q": "Do you train on our data?",
       "a": "No. We don't train models. We're a production ecosystem that runs Anthropic Claude under the hood. Your conversations stay in your tenant, your records stay yours."
      },
      "model": {
-      "q": "Which model does it use?",
+      "q": "Which model does Aurora use?",
       "a": "Claude Sonnet 4.6 by default for day-to-day work, Claude Opus 4.7 available per conversation when you need deeper reasoning. Switch in the conversation menu; cost is metered per-org with configurable monthly caps."
      },
      "wrong": {
-      "q": "What if the AI gets something wrong?",
-      "a": "Every output is a draft. The PM, EHS lead, or tour manager publishes. Auto-publish workflows are configurable but opt-in. The assistant also flags when it's inferring versus when it's working from explicit data."
+      "q": "What if Aurora gets something wrong?",
+      "a": "Every output is a draft. The PM, EHS lead, or tour manager publishes. Aurora also flags when it's inferring versus when it's working from explicit data."
      },
      "freeTier": {
       "q": "Is there a free tier?",
-      "a": "Yes. The Free tier includes light AI assistance. Crew and Production tiers include the streaming assistant with conversation history. Festival tier adds custom system prompts and dedicated model selection."
+      "a": "Yes. The Free tier includes light Aurora assistance. Crew and Production tiers include the streaming assistant with conversation history. Festival tier adds custom system prompts and dedicated model selection."
      }
     },
     "cta": {
      "title": "ATLVS Is Open.",
-     "subtitle": "Free for small teams. AI included on Crew and up."
+     "subtitle": "Free for small teams. Aurora AI included on Crew and up."
     }
    },
    "alternatives": {
@@ -1161,7 +1161,7 @@
        "desc": "One project, six personas, 17 section types: schedule, SOPs, PPE, radio, evac."
       },
       "ai": {
-       "title": "AI assistant",
+       "title": "Aurora AI assistant",
        "desc": "Drafts riders, RFPs, call sheets, recaps. Grounded in your workspace, never the public web."
       },
       "knowledge": {
@@ -1767,7 +1767,7 @@
      "atlvs": {
       "audience": "For producers · internal teams",
       "tag": "Create the World",
-      "body": "Develop and build the world: projects, advancing, finance, procurement, and an AI that drafts the paperwork. The producer's command center."
+      "body": "Develop and build the world: projects, advancing, finance, procurement, and Aurora AI drafting the paperwork. The producer's command center."
      },
      "compvss": {
       "audience": "For crew · vendors · talent",
@@ -1959,7 +1959,7 @@
        "a": "Row-level security at the database means your tenant is walled off in Postgres, not in the app layer. Every change writes to an immutable audit log (actor, IP, user agent, before/after). Signed webhooks (HMAC-SHA256). File shares self-expire. SOC-2 attestation plus custom DPA on Festival tier."
       },
       "aiAssistant": {
-       "q": "Is the AI assistant useful or marketing?",
+       "q": "Is Aurora AI useful or marketing?",
        "a": "Useful. It reads your workspace data, never the public internet, and drafts riders, RFPs, call sheets, recaps, safety briefs, and incident reports. Streaming, conversation-persisted in your tenant. Anthropic Claude under the hood."
       },
       "exportData": {
@@ -2146,7 +2146,7 @@
       "features": {
        "everythingInCrew": "Everything in Crew",
        "fullProcurement": "Full procurement + Stripe Connect payouts",
-       "aiAssistant": "AI assistant grounded in your workspace",
+       "aiAssistant": "Aurora AI assistant grounded in your workspace",
        "proposalsSigned": "Proposals signed in place",
        "kbygGuides": "KBYG event guides",
        "unlimitedUsers": "Unlimited users",
@@ -2190,7 +2190,7 @@
       "atlvs": "ATLVS",
       "gvteway": "GVTEWAY",
       "compvss": "COMPVSS",
-      "ai": "AI",
+      "ai": "Aurora AI",
       "payments": "Payments",
       "security": "Security & Compliance",
       "support": "Support"
@@ -2228,10 +2228,10 @@
       "fieldIntake": "Field intake: incidents, medical, safeguarding"
      },
      "ai": {
-      "assistantGrounded": "Assistant grounded in your workspace",
+      "assistantGrounded": "Aurora AI assistant grounded in your workspace",
       "deepReasoning": "Deep-reasoning model",
       "draftingTemplates": "Drafting templates (riders, RFPs, recaps)",
-      "monthlyBudget": "Monthly AI budget"
+      "monthlyBudget": "Monthly Aurora AI budget"
      },
      "payments": {
       "cardAch": "Card + ACH invoice payments",
@@ -2479,7 +2479,7 @@
        "body": "Incidents, OSHA, medical, crisis comms, BC/DR, cyber-IR, safeguarding, environmental, playbooks."
       },
       "ai": {
-       "title": "AI assistant",
+       "title": "Aurora AI assistant",
        "body": "Drafts riders, RFPs, recaps, call sheets from your workspace. Never the public web."
       }
      },
@@ -2782,7 +2782,7 @@
       "body": "Forty-seven modules in one sidebar. Pitch through wrap. Proposals to payouts, RFIs to inspections, advancing to AI.",
       "bullets": {
        "0": "47 modules across 9 domains",
-       "1": "AI assistant grounded in your workspace",
+       "1": "Aurora AI assistant grounded in your workspace",
        "2": "Immutable audit log: actor, IP, before, after",
        "3": "Role-aware on every action, enforced server-side"
       }
@@ -3079,7 +3079,8 @@
      "gvteway": "GVTEWAY",
      "compvss": "COMPVSS",
      "features": "Features",
-     "ai": "AI",
+     "aurora": "Aurora AI",
+     "ai": "Aurora AI guides",
      "integrations": "Integrations",
      "pricing": "Pricing",
      "changelog": "Changelog",

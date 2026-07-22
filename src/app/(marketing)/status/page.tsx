@@ -105,7 +105,7 @@ export default async function StatusPage() {
       detail: db.detail,
     },
     {
-      name: t("marketing.pages.status.probes.integrations.name", undefined, "Payments, webhooks & AI"),
+      name: t("marketing.pages.status.probes.integrations.name", undefined, "Payments, webhooks & Aurora AI"),
       description: t(
         "marketing.pages.status.probes.integrations.description",
         undefined,

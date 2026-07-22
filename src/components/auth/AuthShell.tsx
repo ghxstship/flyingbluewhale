@@ -18,7 +18,7 @@ export type AuthRailContent = {
 const DEFAULT_HIGHLIGHTS = [
   { icon: ShieldCheck, label: "RLS-backed multi-tenant security" },
   { icon: Zap, label: "Sub-100ms ticket scans, online and offline" },
-  { icon: Globe, label: "Streaming AI grounded in your workspace" },
+  { icon: Globe, label: "Aurora AI grounded in your workspace" },
   { icon: Sparkles, label: "One ecosystem · ATLVS · COMPVSS · GVTEWAY · LEG3ND" },
 ];
 

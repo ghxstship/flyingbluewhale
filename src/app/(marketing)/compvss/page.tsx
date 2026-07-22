@@ -3,6 +3,7 @@
 export const revalidate = 300;
 
 import type { Metadata } from "next";
+import Link from "next/link";
 import {
   AlertTriangle,
   BadgeCheck,
@@ -195,6 +196,18 @@ export default async function CompvssHomePage() {
             ]}
           />
         </div>
+        {/* Aurora note — kept OUT of the live-today grid above on purpose:
+            the tab ships in the app, the assistant itself is still in build. */}
+        <p className="mt-8 max-w-2xl text-sm text-[var(--p-text-2)]">
+          {t(
+            `${K}.features.auroraNote`,
+            undefined,
+            "One more tab is already in the bar: Aurora AI, powered by Brio, the assistant we are building into the whole ecosystem. The seat is there today; the assistant is still in build, and we will say so until it is not.",
+          )}{" "}
+          <Link href="/aurora" className="font-semibold text-[var(--p-accent-text)] hover:underline">
+            {t(`${K}.features.auroraCta`, undefined, "Meet Aurora →")}
+          </Link>
+        </p>
       </section>
 
       {/* Offline-first architecture */}

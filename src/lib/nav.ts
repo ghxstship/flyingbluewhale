@@ -2124,9 +2124,9 @@ export const marketingHeaderGroups: [MarketingNavGroup, MarketingNavGroup, Marke
         descriptionKey: "marketing.header.product.legend.description",
       },
       {
-        labelKey: "marketing.header.product.ai.label",
-        href: "/ai",
-        descriptionKey: "marketing.header.product.ai.description",
+        labelKey: "marketing.header.product.aurora.label",
+        href: "/aurora",
+        descriptionKey: "marketing.header.product.aurora.description",
       },
       {
         labelKey: "marketing.header.product.integrations.label",
@@ -2209,6 +2209,7 @@ export const marketingFooterGroups: MarketingNavGroup[] = [
       { labelKey: "marketing.layout.footer.product.compvss", href: "/compvss" },
       { labelKey: "marketing.layout.footer.product.legend", href: "/legend" },
       { labelKey: "marketing.layout.footer.product.features", href: "/features" },
+      { labelKey: "marketing.layout.footer.product.aurora", href: "/aurora" },
       { labelKey: "marketing.layout.footer.product.ai", href: "/ai" },
       { labelKey: "marketing.layout.footer.product.integrations", href: "/integrations" },
       { labelKey: "marketing.layout.footer.product.pricing", href: "/pricing" },

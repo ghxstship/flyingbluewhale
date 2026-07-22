@@ -16,6 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description: t("marketing.pages.ai.meta.description"),
     path: "/ai",
     keywords: [
+      "Aurora AI",
       "AI for event production",
       "production AI assistant",
       "AI for advancing",
@@ -64,7 +65,7 @@ export default async function AiHub() {
         data={[
           breadcrumbSchema(crumbs),
           softwareApplicationSchema({
-            name: "ATLVS AI Assistant",
+            name: "Aurora AI",
             description: t("marketing.pages.ai.jsonLd.description"),
             url: `${SITE.baseUrl}/ai`,
             price: "0",
@@ -136,6 +137,29 @@ export default async function AiHub() {
               ))}
             </ul>
           </div>
+        </div>
+      </section>
+
+      {/* Cross-link to the Aurora AI product page — /ai stays the GEO/use-case
+          hub; /aurora is the product story (identity, status, waitlist). */}
+      <section className="mx-auto max-w-6xl px-6 py-12">
+        <div className="surface flex flex-col items-start gap-6 p-10 md:flex-row md:items-center md:justify-between">
+          <div>
+            <div className="eyebrow eyebrow-brand">
+              {t("marketing.pages.ai.auroraLink.eyebrow", undefined, "Aurora AI · Powered by Brio")}
+            </div>
+            <h2 className="hed-lg mt-3">
+              {t("marketing.pages.ai.auroraLink.title", undefined, "The assistant behind every draft has a name.")}
+            </h2>
+            <p className="mt-3 max-w-xl text-sm text-[var(--p-text-2)]">
+              {t(
+                "marketing.pages.ai.auroraLink.body",
+                undefined,
+                "Every use case on this page runs on Aurora, the one assistant across the whole ecosystem. See where it works today, what is in preview, and what ships next.",
+              )}
+            </p>
+          </div>
+          <Button href="/aurora">{t("marketing.pages.ai.auroraLink.cta", undefined, "Meet Aurora AI")}</Button>
         </div>
       </section>
 

@@ -41,7 +41,7 @@ export function OnsiteARLauncher() {
     return (
       <div className="surface flex items-center gap-2 rounded-[var(--p-r-md)] p-4 text-sm text-[var(--p-text-2)]">
         <XCircle size={16} className="shrink-0 text-[var(--p-text-3)]" aria-hidden="true" />
-        AR isn’t available on this device — the live schedule, map, and wayfinding above have you covered.
+        AR isn’t available on this device. The live schedule, map, and wayfinding above have you covered.
       </div>
     );
   }

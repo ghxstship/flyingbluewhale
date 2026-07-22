@@ -108,7 +108,7 @@ export function WorldClocks() {
             <div className="min-w-0">
               <div className="truncate text-sm font-semibold">{c.city}</div>
               <div className="font-mono text-lg tabular-nums" suppressHydrationWarning>
-                {p?.text ?? "—:—"}
+                {p?.text ?? "--:--"}
               </div>
               <div className="eyebrow truncate">{c.label}</div>
             </div>

@@ -83,12 +83,12 @@ export function DocToolbar({
         note={
           bound ? (
             <>
-              Bound to a live record — <b>{template.title}</b>. Empty fields fall back to sample
+              Bound to a live record: <b>{template.title}</b>. Empty fields fall back to sample
               copy. Print / PDF renders the same file as the print artifact.
             </>
           ) : (
             <>
-              Sample preview — <b>{template.title}</b>. Toggle brand mode and merge-field highlighting
+              Sample preview: <b>{template.title}</b>. Toggle brand mode and merge-field highlighting
               above; Print / PDF renders the same file as the print artifact.
             </>
           )

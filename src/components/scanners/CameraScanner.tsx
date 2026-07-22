@@ -284,7 +284,7 @@ export function CameraScanner({
         // but keep the stream alive — the user can tap to retry by remounting.
         if (!cancelled) {
           setState("error");
-          setErrorMsg("Could not start preview — tap to retry");
+          setErrorMsg("Could not start preview. Tap to retry");
         }
         return;
       }

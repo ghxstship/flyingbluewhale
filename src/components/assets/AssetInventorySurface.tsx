@@ -134,7 +134,7 @@ export async function AssetInventorySurface({
           emptyDescription={t(
             "console.assets.emptyDescription",
             undefined,
-            "Track every physical thing — gear, heavy fleet, and warehouse lots — in one registry with lifecycle, quantity, and disposition.",
+            "Track every physical thing (gear, heavy fleet, and warehouse lots) in one registry with lifecycle, quantity, and disposition.",
           )}
           emptyAction={
             <Button href="/studio/assets/new" size="sm">

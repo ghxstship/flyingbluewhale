@@ -114,7 +114,7 @@ export function ConditionEditor({ value, onChange }: ConditionEditorProps) {
     <div className="flex flex-col gap-2.5">
       {rules.length === 0 ? (
         <p className="text-[11px] text-[var(--p-text-2)]">
-          No condition — this step always runs. Add a rule to gate it.
+          No condition: this step always runs. Add a rule to gate it.
         </p>
       ) : (
         <>

@@ -162,7 +162,7 @@ export function FileViewer({
               ▦
             </span>
             <span style={{ color: "var(--p-text-2)", fontWeight: 600 }}>{name ?? "Document"}</span>
-            <span style={{ fontSize: 13 }}>Preview unavailable — download to open.</span>
+            <span style={{ fontSize: 13 }}>Preview unavailable. Download to open.</span>
           </div>
         )}
       </div>

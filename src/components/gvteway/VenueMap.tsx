@@ -42,8 +42,8 @@ export function VenueMap({
         title={sharing ? "No friends checked in yet" : "Find your friends onsite"}
         description={
           sharing
-            ? "When people you follow share their zone, they’ll show up here — never a precise location, just which area they’re in."
-            : "Share your zone to see where your people are. It’s coarse and opt-in — only people you follow, only the area, never the exact spot."
+            ? "When people you follow share their zone, they’ll show up here: never a precise location, just which area they’re in."
+            : "Share your zone to see where your people are. It’s coarse and opt-in: only people you follow, only the area, never the exact spot."
         }
       />
     );

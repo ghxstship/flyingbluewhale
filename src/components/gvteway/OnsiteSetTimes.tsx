@@ -163,7 +163,7 @@ export function OnsiteSetTimes({
           className="flex items-center gap-2 rounded-[var(--p-r-md)] border border-[var(--p-warning-border,var(--p-border-2))] bg-[var(--p-warning-bg,var(--p-surface-2))] px-3 py-2 text-xs text-[var(--p-warning-text,var(--p-text-1))]"
         >
           <AlertTriangle size={13} aria-hidden="true" />
-          {clashCount} set{clashCount > 1 ? "s" : ""} in your night clash{clashCount > 1 ? "" : "es"} — pick your priority.
+          {clashCount} set{clashCount > 1 ? "s" : ""} in your night clash{clashCount > 1 ? "" : "es"}. Pick your priority.
         </div>
       )}
       {live.length > 0 && (

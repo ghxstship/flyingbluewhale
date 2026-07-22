@@ -224,7 +224,7 @@ const DEMO_OFFER: AssignmentOffer = {
   org: "GHXSTSHIP",
   venue: "Wynwood Main",
   role: "Gate & Access · Lead",
-  dates: "Jun 18 – 22, 2026",
+  dates: "Jun 18 to 22, 2026",
   rate: "$32/hr · W-9",
   firstCall: "Thu Jun 18 · 15:30",
   reportsTo: "Mara Voss · Ops Manager",
@@ -663,7 +663,7 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
             <Steps n={3} of={5} />
             <h1 className="h1">{t("m.onboarding.profile.title", undefined, "Set Up Profile")}</h1>
             <p className="sub" style={{ marginBottom: 18 }}>
-              {t("m.onboarding.profile.sub", undefined, "This is your portable crew identity across every project. Start with the basics — you can complete the rest anytime.")}
+              {t("m.onboarding.profile.sub", undefined, "This is your portable crew identity across every project. Start with the basics. You can complete the rest anytime.")}
             </p>
             <div className="avatar-pick">
               {initials}
@@ -955,7 +955,7 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
           <div className="scr">
             <h1 className="h1">{t("m.onboarding.pass.title", undefined, "The COMPVSS Rose")}</h1>
             <p className="sub" style={{ marginBottom: 16 }}>
-              {t("m.onboarding.pass.sub", undefined, "Presenting your COMPVSS Rose — the single, enduring credential that opens the entire ATLVS Ecosystem. It is issued once and carries with you for life, evolving only as your access does. Welcome to the membership.")}
+              {t("m.onboarding.pass.sub", undefined, "Presenting your COMPVSS Rose, the single enduring credential that opens the entire ATLVS Ecosystem. It is issued once and carries with you for life, evolving only as your access does. Welcome to the membership.")}
             </p>
             <div
               style={{
@@ -1068,7 +1068,7 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
               {(
                 [
                   ["Scan", t("m.onboarding.pass.use1", undefined, "Tap or scan to enter job sites, access amenities, track assets & dispatch services")],
-                  ["RefreshCw", t("m.onboarding.pass.use2", undefined, "Access updates remotely — granted, revoked or upgraded in real time")],
+                  ["RefreshCw", t("m.onboarding.pass.use2", undefined, "Access updates remotely: granted, revoked or upgraded in real time")],
                   ["Infinity", t("m.onboarding.pass.use3", undefined, "Issued once, carried for life. Only your access ever changes")],
                 ] as Array<[string, string]>
               ).map(([ic, text]) => (
@@ -1093,7 +1093,7 @@ export default function CompvssOnboarding({ offer, memberName }: CompvssOnboardi
             <p className="sub" style={{ marginBottom: 14 }}>
               {offer
                 ? t("m.onboarding.assignment.sub", undefined, "You've been offered a role on this project. Review the offer and accept, or explore the app as a free agent.")
-                : t("m.onboarding.assignment.subNone", undefined, "You have no assignment yet. Here's what one looks like — your first real booking will land in your inbox, and you'll be notified.")}
+                : t("m.onboarding.assignment.subNone", undefined, "You have no assignment yet. Here's what one looks like. Your first real booking will land in your inbox, and you'll be notified.")}
             </p>
             <div className="card" style={{ marginBottom: 14, padding: 0, overflow: "hidden" }}>
               <div style={{ background: "#0c0e12", color: "#fff", padding: "14px 16px", display: "flex", alignItems: "center", gap: 11 }}>

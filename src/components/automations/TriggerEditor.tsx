@@ -40,7 +40,7 @@ function kindDescriptions(t: Translator): Record<TriggerKind, string> {
     event: t(
       "components.triggerEditor.desc.event",
       undefined,
-      "Runs when a record event matches — created or updated.",
+      "Runs when a record event matches, such as created or updated. Backend lands in Phase 4.5.",
     ),
   };
 }
@@ -145,11 +145,11 @@ function WebhookConfig({
         </code>
       </div>
       <Input
-        label={t("components.triggerEditor.secretLabel", undefined, "Shared Secret — HMAC")}
+        label={t("components.triggerEditor.secretLabel", undefined, "Shared Secret (HMAC)")}
         placeholder={t(
           "components.triggerEditor.secretPlaceholder",
           undefined,
-          "Optional — falls back to per-automation secret",
+          "Optional. Falls back to per-automation secret",
         )}
         value={secret}
         onChange={(e) => onChange({ ...config, secret: e.target.value })}

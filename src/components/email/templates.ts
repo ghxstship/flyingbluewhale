@@ -50,7 +50,7 @@ export function welcomeEmail({
     emailEyebrow("Welcome aboard"),
     emailHeading(`You're in, ${name}.`, 1),
     emailText(
-      "You didn't just sign up for software — you got the keys to a world. ATLVS runs the whole production: the deals, the people, the build, the show. Everything in one place, everyone on the same page.",
+      "You didn't just sign up for software. You got the keys to a world. ATLVS runs the whole production: the deals, the people, the build, the show. Everything in one place, everyone on the same page.",
     ),
     emailText("Let's stand up your first project."),
     emailSpacer(8),
@@ -61,7 +61,7 @@ export function welcomeEmail({
   return {
     subject: `Welcome to ATLVS, ${name}`,
     html: emailLayout({
-      preheader: "Your console is ready — let's build something.",
+      preheader: "Your console is ready. Let's build something.",
       body,
     }),
   };

@@ -161,7 +161,7 @@ export function SaveViewDialog({
 
             <Input
               label={t("savedViews.descriptionLabel", undefined, "Description")}
-              hint={t("savedViews.descriptionHint", undefined, "Optional — explain when this view is useful.")}
+              hint={t("savedViews.descriptionHint", undefined, "Optional. Explain when this view is useful.")}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder={t("savedViews.descriptionPlaceholder", undefined, "Add context for teammates")}

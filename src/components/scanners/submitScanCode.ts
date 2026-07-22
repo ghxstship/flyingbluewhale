@@ -59,7 +59,7 @@ export const RESULT_FEEDBACK: Record<ResolvedScan["result"], "success" | "warnin
 };
 
 /** Copy for a code that failed its own check digit. */
-export const MISREAD_MESSAGE = "Misread barcode — scan again";
+export const MISREAD_MESSAGE = "Misread barcode. Scan again";
 
 /**
  * Submit one code and fire its feedback. Never throws.

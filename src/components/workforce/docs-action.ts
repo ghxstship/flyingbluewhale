@@ -43,13 +43,13 @@ export type State = {
 export async function uploadPersonalDoc(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   if (!isServiceClientAvailable()) {
-    return actionFail("Uploads are unavailable right now — try again later.", fd);
+    return actionFail("Uploads are unavailable right now. Try again later.", fd);
   }
 
   const file = fd.get("file");
   if (!(file instanceof File) || file.size === 0) return actionFail("Choose a file to upload.", fd);
   const f = file as File;
-  if (f.size > MAX_SIZE_BYTES) return actionFail("That file is too large — the limit is 20 MB.", fd);
+  if (f.size > MAX_SIZE_BYTES) return actionFail("That file is too large. The limit is 20 MB.", fd);
 
   const parsed = Schema.safeParse({
     label: fd.get("label"),
@@ -74,7 +74,7 @@ export async function uploadPersonalDoc(_prev: State, fd: FormData): Promise<Sta
     cacheControl: "private, max-age=0",
     upsert: false,
   });
-  if (uploadErr) return actionFail("Upload failed — check your connection and try again.", fd);
+  if (uploadErr) return actionFail("Upload failed. Check your connection and try again.", fd);
 
   const supabase = await createClient();
   const { error } = await supabase.from("personal_documents").insert({

@@ -120,7 +120,7 @@ export async function ChatSurface({ variant, roomHref, eyebrowLabel, titleLabel 
   return (
     <div className={containerClass}>
       <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">{eyebrow}</div>
-      <h1 className="mt-1 text-2xl font-semibold">{title}</h1>
+      <h1 className="mt-1 text-[length:var(--p-fs-h2)]">{title}</h1>
       <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {t("m.inbox.count", { n: list.length }, `${list.length} conversations`)}
       </p>

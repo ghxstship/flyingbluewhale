@@ -78,7 +78,7 @@ export async function IncidentPhotos({ photos }: { photos: unknown }) {
                     certainty it doesn't have. Say so rather than let a
                     reviewer treat a cell-tower estimate as a pin. */}
                 {fix && !fix.precise && (
-                  <div className="text-[var(--p-warning)]">Approximate — device reported low accuracy</div>
+                  <div className="text-[var(--p-warning)]">Approximate: device reported low accuracy</div>
                 )}
               </div>
             </li>

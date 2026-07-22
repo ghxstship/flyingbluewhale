@@ -104,7 +104,7 @@ export function KIcon({ name, size = 20, stroke = 2, style, className, onClick }
   const Cmp = ICONS[name];
   if (!Cmp) {
     if (process.env.NODE_ENV !== "production") {
-      console.warn(`[KIcon] no registry entry for "${name}" — add it to src/components/mobile/kit/icon.tsx`);
+      console.warn(`[KIcon] no registry entry for "${name}". Add it to src/components/mobile/kit/icon.tsx`);
     }
     return <HelpCircle size={size} strokeWidth={stroke} style={style} className={className} onClick={onClick} aria-hidden={hidden} />;
   }

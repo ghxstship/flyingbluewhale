@@ -41,7 +41,7 @@ export function AuthCard({
   return (
     <div className={`mx-auto w-full max-w-sm ${className}`}>
       {brand && <div className="mb-6">{brand}</div>}
-      {title && <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>}
+      {title && <h1 className="text-[length:var(--p-fs-h2)]">{title}</h1>}
       {subtitle && <p className="mt-2 text-sm text-[var(--p-text-2)]">{subtitle}</p>}
 
       {providers && providers.length > 0 && (

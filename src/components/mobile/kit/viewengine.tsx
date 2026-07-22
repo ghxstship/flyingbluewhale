@@ -402,7 +402,7 @@ export function SortReorder<T>({ fields, rules, setRules }: { fields: FieldDef<T
   };
   return (
     <div>
-      {(!rules || !rules.length) && <div className="hint" style={{ marginBottom: 10 }}>No sort applied — records show in default order.</div>}
+      {(!rules || !rules.length) && <div className="hint" style={{ marginBottom: 10 }}>No sort applied. Records show in default order.</div>}
       {(rules || []).map((r, i) => (
         <div key={i} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
@@ -455,7 +455,7 @@ export function GroupBuilder<T>({ fields, levels, setLevels }: { fields: FieldDe
   };
   return (
     <div>
-      {!lv.length && <div className="hint" style={{ marginBottom: 10 }}>No grouping — flat list. Group by a field to see collapsible sections.</div>}
+      {!lv.length && <div className="hint" style={{ marginBottom: 10 }}>No grouping: flat list. Group by a field to see collapsible sections.</div>}
       {lv.map((id, i) => (
         <div key={i} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
           <span style={{ fontSize: 11, color: "var(--p-text-3)", width: 60 }}>{i === 0 ? "Group by" : "then by"}</span>
@@ -465,7 +465,7 @@ export function GroupBuilder<T>({ fields, levels, setLevels }: { fields: FieldDe
                 {x.label}
               </option>
             ))}
-            <option value="none">— Remove</option>
+            <option value="none">Remove</option>
           </select>
         </div>
       ))}

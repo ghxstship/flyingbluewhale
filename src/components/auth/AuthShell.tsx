@@ -44,7 +44,7 @@ export function AuthShell({
   const tagline = rail?.tagline ?? "The engine behind new worlds.";
   const description =
     rail?.description ??
-    "Develop, build, operate, and experience live productions on one platform. One record store, four connected apps — ATLVS, COMPVSS, GVTEWAY, LEG3ND. Built by the people who ship the shows.";
+    "Develop, build, operate, and experience live productions on one platform. One record store, four connected apps: ATLVS, COMPVSS, GVTEWAY, LEG3ND. Built by the people who ship the shows.";
   const highlights = rail?.highlights ?? DEFAULT_HIGHLIGHTS;
   const copyright = rail?.copyright ?? `© ${new Date().getFullYear()} ATLVS Technologies`;
   return (
@@ -101,7 +101,7 @@ export function AuthShell({
             <span className="font-semibold text-[var(--p-accent-text)]">{tagline}</span>{" "}
             {highlights[0]?.label}
           </p>
-          <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
+          <h1 className="text-[length:var(--p-fs-h2)]">{title}</h1>
           {subtitle && <p className="mt-2 text-sm text-[var(--p-text-2)]">{subtitle}</p>}
           <div className="mt-8">{children}</div>
           {footer && <div className="mt-6 text-center text-xs text-[var(--p-text-2)]">{footer}</div>}

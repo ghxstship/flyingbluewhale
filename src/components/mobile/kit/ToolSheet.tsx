@@ -119,7 +119,7 @@ function OpsCalc({ id, back }: { id: string; back: () => void }) {
   if (id === "staffing") {
     result = isNaN(n1) ? "—" : fmt.number(Math.ceil(n1 / ratio));
     unit = "staff needed";
-    hint = "Round up · add 10–15% relief for breaks.";
+    hint = "Round up · add 10 to 15% relief for breaks.";
     body = (
       <>
         <div className="fld"><label htmlFor="st-att">Expected Attendance</label><input id="st-att" type="number" value={a} onChange={(e) => setA(e.target.value)} /></div>

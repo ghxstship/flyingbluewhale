@@ -86,7 +86,7 @@ export async function signUpAction(input: {
   });
   if (error) {
     if (error.message.toLowerCase().includes("already")) {
-      return { error: "An account with this email exists — try signing in." };
+      return { error: "An account with this email exists. Try signing in." };
     }
     return { error: error.message };
   }
@@ -106,7 +106,7 @@ export async function verifyOtpAction(input: { email: string; token: string }): 
     token: parsed.data.token,
     type: "email",
   });
-  if (error) return { error: "That code didn't match — try again or resend." };
+  if (error) return { error: "That code didn't match. Try again or resend." };
   return {};
 }
 

@@ -37,7 +37,7 @@ export function MSADocument({
       <header className="flex items-start justify-between border-b border-[var(--p-border)] pb-6">
         <div>
           <div className="font-mono text-xs tracking-widest text-[var(--p-text-2)] uppercase">{orgName}</div>
-          <h1 className="mt-2 text-2xl leading-tight font-semibold">
+          <h1 className="mt-2 text-[length:var(--p-fs-h2)] leading-tight">
             {t("legal.msaDocument.title", undefined, "Independent Contractor Master Services Agreement")}
           </h1>
           <div className="mt-1 text-sm text-[var(--p-text-2)]">
@@ -74,8 +74,8 @@ export function MSADocument({
           such engagements, until revoked or superseded.
         </p>
         <p className="text-xs leading-relaxed text-[var(--p-text-2)]">
-          This Agreement is drafted to satisfy NRS 608.0155(1) — the five-criteria conclusive presumption for Nevada
-          wage-and-hour purposes — and NRS 608.0155(2) where applicable to Chapter 624 trade scopes; it is aligned with
+          This Agreement is drafted to satisfy NRS 608.0155(1) (the five-criteria conclusive presumption for Nevada
+          wage-and-hour purposes) and NRS 608.0155(2) where applicable to Chapter 624 trade scopes; it is aligned with
           the NRS 612.085 ABC test.
         </p>
       </section>
@@ -104,7 +104,7 @@ export function MSADocument({
             <strong>1.2 Place of Performance and Course of Business.</strong>{" "}
             <strong>
               All services performed under any engagement letter that references this Agreement shall be performed at
-              Contractor&rsquo;s own premises and at the applicable Activation Site — a third-party venue and licensed
+              Contractor&rsquo;s own premises and at the applicable Activation Site, a third-party venue and licensed
               event site that does not constitute a place of business of Company. Company maintains no offices,
               facilities, or places of business at any Activation Site.
             </strong>{" "}
@@ -166,7 +166,7 @@ export function MSADocument({
 
       <section className="break-inside-avoid space-y-3 border-t border-[var(--p-border)] pt-6">
         <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
-          {t("legal.msaDocument.exhibitBHeading", undefined, "Exhibit B — Other Clients")}
+          {t("legal.msaDocument.exhibitBHeading", undefined, "Exhibit B: Other Clients")}
         </h2>
         <p className="text-xs text-[var(--p-text-2)]">
           {t(
@@ -188,7 +188,7 @@ export function MSADocument({
 
       <section className="break-inside-avoid space-y-3">
         <h2 className="text-sm font-semibold tracking-wider text-[var(--p-text-2)] uppercase">
-          {t("legal.msaDocument.exhibitCHeading", undefined, "Exhibit C — Capital Investment Itemization")}
+          {t("legal.msaDocument.exhibitCHeading", undefined, "Exhibit C: Capital Investment Itemization")}
         </h2>
         <p className="text-xs text-[var(--p-text-2)]">
           {t(

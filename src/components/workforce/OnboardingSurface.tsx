@@ -95,7 +95,9 @@ export async function OnboardingSurface({
 
   return (
     <div className={containerClass}>
-      <h1 className="text-xl font-semibold">
+      {/* W2 ramp: 20px is on no --p-fs-* step; snapped to the h2 step (24px)
+          to match the sibling workforce surface titles. */}
+      <h1 className="text-[length:var(--p-fs-h2)]">
         {(flow as { name: string } | null)?.name ?? t("m.onboarding.title", undefined, "Onboarding")}
       </h1>
       {(flow as { description: string | null } | null)?.description && (

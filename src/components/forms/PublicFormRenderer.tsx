@@ -115,7 +115,7 @@ export function PublicFormRenderer({
     }
     const title =
       schema.submit?.thankYouTitle ??
-      t("components.publicFormRenderer.thankYouTitle", undefined, "Thanks — we received it.");
+      t("components.publicFormRenderer.thankYouTitle", undefined, "Thanks, we received it.");
     const body =
       schema.submit?.thankYouBody ??
       t("components.publicFormRenderer.thankYouBody", undefined, "Your response was recorded. You can close this tab.");
@@ -124,7 +124,7 @@ export function PublicFormRenderer({
         <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
           {t("components.publicFormRenderer.submitted", undefined, "Submitted")}
         </div>
-        <h2 className="mt-2 text-2xl font-semibold">{title}</h2>
+        <h2 className="mt-2">{title}</h2>
         <p className="mt-2 text-sm text-[var(--p-text-2)]">{body}</p>
       </div>
     );

@@ -124,7 +124,7 @@ export function WorkspaceSwitcher({ collapsed, initialName }: { collapsed: boole
         toast.error(json?.error?.message ?? "Couldn't load workspaces");
       }
     } catch {
-      toast.error("Couldn't load workspaces — check your connection");
+      toast.error("Couldn't load workspaces. Check your connection");
     } finally {
       setLoaded(true);
     }
@@ -155,7 +155,7 @@ export function WorkspaceSwitcher({ collapsed, initialName }: { collapsed: boole
         toast.error(json?.error?.message ?? "Couldn't switch workspace");
       }
     } catch {
-      toast.error("Couldn't switch workspace — check your connection");
+      toast.error("Couldn't switch workspace. Check your connection");
     } finally {
       setSwitching(null);
     }

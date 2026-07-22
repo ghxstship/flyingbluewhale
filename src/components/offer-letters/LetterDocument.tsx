@@ -49,7 +49,7 @@ export function LetterDocument({
           <div className="font-mono text-xs tracking-widest text-[var(--p-text-2)] uppercase">
             {EMPLOYER_LABEL[letter.employer]}
           </div>
-          <h1 className="mt-2 text-2xl leading-tight font-semibold">
+          <h1 className="mt-2 text-[length:var(--p-fs-h2)] leading-tight">
             {t("legal.letterDocument.title", undefined, "Engagement Letter")}
           </h1>
           <div className="mt-1 text-sm text-[var(--p-text-2)]">{letter.project_name}</div>
@@ -85,7 +85,7 @@ export function LetterDocument({
           {t(
             "legal.letterDocument.introTail",
             undefined,
-            "Full engagement details are outlined below — please give it a read, then counter-sign at the bottom to make it official.",
+            "Full engagement details are outlined below. Please give it a read, then counter-sign at the bottom to make it official.",
           )}
         </p>
         {letter.signing_authority_name && letter.signing_authority_email && (
@@ -321,7 +321,7 @@ export function LetterDocument({
                   {t(
                     "legal.letterDocument.msaOneTimeNote",
                     undefined,
-                    "One-time. Signs apply to every engagement we book you on — you won't see this step again.",
+                    "One-time. Signs apply to every engagement we book you on, and you won't see this step again.",
                   )}
                 </span>
               </span>
@@ -472,7 +472,7 @@ export function LetterDocument({
             {t(
               "legal.letterDocument.footerMsaPendingPrefix",
               undefined,
-              "This engagement is subject to our Independent Contractor Master Services Agreement —",
+              "This engagement is subject to our Independent Contractor Master Services Agreement:",
             )}{" "}
             <a className="text-[var(--p-accent)] hover:underline" href={msaSignerUrl} target="_blank" rel="noreferrer">
               {t("legal.letterDocument.readAndSignLink", undefined, "read & sign your copy ↗")}
@@ -488,7 +488,7 @@ export function LetterDocument({
             {t(
               "legal.letterDocument.footerMsaSeparateEmail",
               undefined,
-              "This engagement is subject to our Independent Contractor Master Services Agreement — your personal copy will arrive in a separate email and is required before your first service day.",
+              "This engagement is subject to our Independent Contractor Master Services Agreement. Your personal copy will arrive in a separate email and is required before your first service day.",
             )}
           </p>
         )}

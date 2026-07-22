@@ -289,7 +289,7 @@ export const FORMS: Forms = {
     // + the add-to-roster switch. Maps onto job_postings.publish_scope /
     // openings / shift_starts_at / shift_ends_at (see postJob).
     title: "Post A Job", icon: "Briefcase", submit: "Publish",
-    intro: "Same fields as the roster job-assignment flow — publish once, share anywhere. Also adds the opening to the project roster.",
+    intro: "Same fields as the roster job-assignment flow: publish once, share anywhere. Also adds the opening to the project roster.",
     fields: [
       { id: "role", label: "Role", type: "text", placeholder: "e.g. Stagehand · Load-Out", required: true },
       { id: "type", label: "Engagement Type", type: "seg", options: ["Shift", "Supervisor", "Contract"], default: "Shift", required: true },
@@ -317,14 +317,14 @@ export const FORMS: Forms = {
     title: "Purchase Order Request", icon: "FileBox", submit: "Submit PO",
     intro: "Request a purchase against the project budget. A product link auto-imports item, price & vendor; coding lands in the budget on approval (managed in ATLVS).",
     fields: [
-      { id: "link", label: "Product Link", type: "text", placeholder: "https:// — auto-imports item, price & vendor", hint: "Paste a product URL to auto-fill the fields below." },
+      { id: "link", label: "Product Link", type: "text", placeholder: "https:// (auto-imports item, price & vendor)", hint: "Paste a product URL to auto-fill the fields below." },
       { id: "item", label: "Item", type: "text", placeholder: "What are you buying?", required: true },
       { id: "vendor", label: "Vendor / Merchant", type: "text", placeholder: "e.g. Harbor Supply Co.", required: true },
       { id: "qty", label: "Quantity", type: "number", default: "1", half: true, required: true },
       { id: "amount", label: "Est. Total (USD)", type: "text", placeholder: "0.00", half: true, required: true },
       { id: "needed", label: "Needed By", type: "date", required: true },
       { id: "coding", label: "Budget Coding", type: "seg", options: ["Auto-Code", "Manual"], default: "Auto-Code", required: true },
-      { id: "code", label: "Cost Code", type: "select", options: [], requiredFor: ["Manual"], hint: "Required when coding manually — otherwise finance auto-codes on approval." },
+      { id: "code", label: "Cost Code", type: "select", options: [], requiredFor: ["Manual"], hint: "Required when coding manually. Otherwise finance auto-codes on approval." },
       { id: "purpose", label: "Operational Purpose", type: "textarea", placeholder: "Why is this needed?", required: true },
       { id: "quote", label: "Quote / Screenshot", type: "photo" },
     ],
@@ -334,7 +334,7 @@ export const FORMS: Forms = {
     // runtime/forms.jsx. `area` options are seed data in the kit; the
     // scheduler passes a def override with the org's real venues/zones.
     title: "New Shift", icon: "CalendarCog", submit: "Add Shift",
-    intro: "Adds an open shift to the scheduler — assign crew or publish it to the roster.",
+    intro: "Adds an open shift to the scheduler. Assign crew or publish it to the roster.",
     fields: [
       { id: "role", label: "Role", type: "text", placeholder: "e.g. Gate Lead", required: true },
       { id: "area", label: "Area / Zone", type: "select", required: true, options: [] },
@@ -350,7 +350,7 @@ export const FORMS: Forms = {
     // Kit 31 (live-test resolution #15) — the Templates library New Template
     // form, verbatim from runtime/forms.jsx.
     title: "New Template", icon: "LayoutTemplate", submit: "Save Template",
-    intro: "Save anything repeatable — roster, advance, checklist, contract, schedule — as a reusable template at the org or project level.",
+    intro: "Save anything repeatable (roster, advance, checklist, contract, schedule) as a reusable template at the org or project level.",
     fields: [
       { id: "name", label: "Template Name", type: "text", placeholder: "e.g. Festival Gate Crew · Roster", required: true },
       { id: "cat", label: "Category", type: "select", required: true, options: ["Roster", "Advance", "Checklist", "Contract", "Task List", "Schedule", "Onboarding", "Budget"] },

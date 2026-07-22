@@ -326,7 +326,7 @@ export function RangeDatePicker({
     value.from && value.to
       ? `${formatDate(value.from)} – ${formatDate(value.to)}`
       : value.from
-        ? `${formatDate(value.from)} – …`
+        ? `${formatDate(value.from)} – ${"…"}`
         : placeholder;
 
   function onSelect(d: Date) {

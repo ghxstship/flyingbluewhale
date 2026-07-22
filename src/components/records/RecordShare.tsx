@@ -72,7 +72,7 @@ export function RecordShare({ path, title, fields, compact = false, className = 
     } catch {
       // Clipboard blocked (insecure context / permission) — surface the URL
       // so the operator can copy it by hand rather than failing silently.
-      toast.error(t("share.copyFailed", undefined, "Couldn't copy — here's the link"), {
+      toast.error(t("share.copyFailed", undefined, "Couldn't copy. Here's the link"), {
         description: url,
         duration: 10000,
       });

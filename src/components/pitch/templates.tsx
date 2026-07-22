@@ -23,7 +23,7 @@ export function atlvsPitchDeck(): React.ReactNode[] {
       key="cover"
       eyebrow="ATLVS Technologies"
       title="You build worlds for a living."
-      subtitle="A festival, a stadium tour, a film set, a gala — temporary worlds thousands of people live inside, then strike by morning. This is the platform that runs the whole thing with you."
+      subtitle="A festival, a stadium tour, a film set, a gala: temporary worlds thousands of people live inside, then strike by morning. This is the platform that runs the whole thing with you."
       wordmark="ATLVS"
       footer="The pitch"
     />,
@@ -48,7 +48,7 @@ export function atlvsPitchDeck(): React.ReactNode[] {
       key="problem"
       eyebrow="Moving off the patchwork"
       title="The work is one story. The tools aren't."
-      body="A show moves through the same arc every time — pitch, build, the night itself, the wrap. But the pitch lives in one tool, the crew call in another, the tickets somewhere else. Every handoff is a re-key, and every re-key is where things drop."
+      body="A show moves through the same arc every time: pitch, build, the night itself, the wrap. But the pitch lives in one tool, the crew call in another, the tickets somewhere else. Every handoff is a re-key, and every re-key is where things drop."
       bullets={[
         "Advancing details scattered across email threads",
         "Crew, vendors, and guests in tools that never talk",
@@ -60,7 +60,7 @@ export function atlvsPitchDeck(): React.ReactNode[] {
       key="stat-arc"
       eyebrow="The lifecycle, end to end"
       stat="8"
-      caption="gates from Discovery to Close — one production lifecycle the whole platform tracks, so nothing falls between phases."
+      caption="gates from Discovery to Close: one production lifecycle the whole platform tracks, so nothing falls between phases."
       source="XPMS production lifecycle: Discovery → Design → Advance → Procurement → Build → Install → Operate → Close."
     />,
 
@@ -69,13 +69,13 @@ export function atlvsPitchDeck(): React.ReactNode[] {
       key="sec-eco"
       index="02"
       title="One platform"
-      subtitle="Four apps over one record. We don't hand you a list and call it project management — we plot the work and ride along while you build it."
+      subtitle="Four apps over one record. We don't hand you a list and call it project management. We plot the work and ride along while you build it."
     />,
 
     <TwoColSlide
       key="eco"
       eyebrow="The ecosystem"
-      title="The pitch, the build, the show, the wrap — where you can see it."
+      title="The pitch, the build, the show, the wrap: where you can see it."
       body="ATLVS is the superset operator console. COMPVSS is the field. GVTEWAY is the public face. LEG3ND is the knowledge. They share one data spine, so a guest list, a crew call, and a settlement number are the same record everywhere."
       bullets={[
         "One record from sales lead to final cost report",
@@ -105,7 +105,7 @@ export function atlvsPitchDeck(): React.ReactNode[] {
       key="gvteway"
       eyebrow="GVTEWAY · Public Interface & Marketplace"
       title="The public face."
-      body="Every surface a fan, vendor, or applicant touches: tickets, stores, directory, jobs, peer-to-peer, RFPs — plus the host and commerce console behind them."
+      body="Every surface a fan, vendor, or applicant touches: tickets, stores, directory, jobs, peer-to-peer, RFPs, plus the host and commerce console behind them."
       bullets={["Ticketing, storefronts, marketplace", "Vendor payouts and a public discovery layer", "The portal where externals self-serve"]}
     />,
 
@@ -113,7 +113,7 @@ export function atlvsPitchDeck(): React.ReactNode[] {
       key="legend"
       eyebrow="LEG3ND · Knowledge · LMS · Resources"
       title="The knowledge layer."
-      body="The standard, courses and certifications, a resources hub, a priced catalog, and the AIGA signage library — the institutional memory a production usually loses the morning after."
+      body="The standard, courses and certifications, a resources hub, a priced catalog, and the AIGA signage library: the institutional memory a production usually loses the morning after."
       bullets={["Knowledge base, LMS, certifications", "Compliance and safety built in", "The signage and resource canon, reusable"]}
     />,
 
@@ -122,7 +122,7 @@ export function atlvsPitchDeck(): React.ReactNode[] {
 
     <StatSlide key="stat-years" eyebrow="Track record" stat="14+" caption="years building experiential productions before any of this was software." />,
 
-    <StatSlide key="stat-prod" eyebrow="Track record" stat="250+" caption="productions shipped — the patterns in this platform are paid for in real load-ins." />,
+    <StatSlide key="stat-prod" eyebrow="Track record" stat="250+" caption="productions shipped. The patterns in this platform are paid for in real load-ins." />,
 
     <StatSlide
       key="stat-guests"

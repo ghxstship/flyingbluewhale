@@ -71,7 +71,7 @@ export function OnboardingStepper({
         })}
       </ol>
 
-      {title && <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>}
+      {title && <h1 className="text-[length:var(--p-fs-h2)]">{title}</h1>}
       {steps[current]?.hint && <p className="mt-2 text-sm text-[var(--p-text-2)]">{steps[current]!.hint}</p>}
 
       <div className="mt-6">{children}</div>

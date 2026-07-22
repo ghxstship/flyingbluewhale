@@ -34,7 +34,7 @@ export function ConsoleTour() {
         body: t(
           "tour.nav.body",
           undefined,
-          "Every module lives in this rail. Pin the ones you use, switch role lenses, or search it — nothing is more than a click away.",
+          "Every module lives in this rail. Pin the ones you use, switch role lenses, or search it. Nothing is more than a click away.",
         ),
       },
       {
@@ -44,7 +44,7 @@ export function ConsoleTour() {
         body: t(
           "tour.create.body",
           undefined,
-          "Create any record or file a request — gear, time off, an incident — from this one button. It's the only intake you have to learn.",
+          "Create any record or file a request (gear, time off, an incident) from this one button. It's the only intake you have to learn.",
         ),
       },
       {
@@ -74,7 +74,7 @@ export function ConsoleTour() {
         body: t(
           "tour.help.body",
           undefined,
-          "Reach the Knowledge Base, What's New, and system status here — and replay this tour anytime with “Take the tour”.",
+          "Reach the Knowledge Base, What's New, and system status here, and replay this tour anytime with “Take the tour”.",
         ),
       },
     ],

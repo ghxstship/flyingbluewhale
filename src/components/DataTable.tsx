@@ -11,6 +11,7 @@ import type { RowActionItem } from "./ui/RowActions";
 import { EmptyState } from "./ui/EmptyState";
 import type { ViewConfigRow, ViewScope } from "@/lib/views/types";
 import type { SaveViewSubmit } from "./views/SaveViewDialog";
+import { MONO_CELL_CLASS, TABULAR_CELL_CLASS } from "./views/data-view-model";
 
 /**
  * DataTable — server-side wrapper around DataTableInteractive.
@@ -47,14 +48,14 @@ export type Column<T> = {
   defaultHidden?: boolean;
   /** Surface this column as a Group-by option. */
   groupable?: boolean;
-  /** When true, render cells in the theme's mono font — for genuinely
-   *  code-like data (hashes, IDs, file paths). Don't enable for emails,
-   *  phones, names, free text — body font reads better. Replaces the
-   *  prior pattern of stringly-typed `className: "font-mono text-xs"`
-   *  that scattered mono everywhere. */
+  /** When true, render cells in the DATA mono face (IBM Plex Mono via
+   *  `--p-mono-data`) — for genuinely code-like data (hashes, IDs, file
+   *  paths). Don't enable for emails, phones, names, free text — body font
+   *  reads better. Replaces the prior pattern of stringly-typed
+   *  `className: "font-mono text-xs"` that scattered mono everywhere. */
   mono?: boolean;
-  /** When true, render cells with `tabular-nums` so numeric columns align
-   *  vertically. Use for money / counts / percentages. */
+  /** When true, render cells in the DATA face with `tabular-nums` so
+   *  numeric columns align vertically. Use for money / counts / percentages. */
   tabular?: boolean;
   /** Returns the underlying scalar value for sort / filter / CSV export.
    *  Returning `unknown` is allowed so pages with loosely-typed rows can pass
@@ -302,8 +303,11 @@ export async function DataTable<T extends { id: string }>({
   // className stays as an escape hatch.
   const composeClassName = (c: Column<T>): string | undefined => {
     const parts = [c.className].filter(Boolean) as string[];
-    if (c.mono) parts.push("font-mono text-xs");
-    if (c.tabular) parts.push("tabular-nums");
+    // W2 root-cause fix (lane-F): the DATA face is IBM Plex Mono via
+    // `--p-mono-data`, never Tailwind `font-mono` (= Space Mono, the
+    // eyebrow/ID voice). Same composition as views/data-view-model.ts.
+    if (c.mono) parts.push(MONO_CELL_CLASS);
+    if (c.tabular) parts.push(TABULAR_CELL_CLASS);
     return parts.length ? parts.join(" ") : undefined;
   };
   const interactiveCols: InteractiveColumn[] = columns.map((c) => ({
@@ -420,7 +424,7 @@ function DataTableEmpty({
           region (AX-9). The ghost table is purely decorative. */}
       <p role="status" className="sr-only">
         {title}
-        {description ? ` — ${description}` : null}
+        {description ? `. ${description}` : null}
       </p>
       <table className="ps-table" aria-hidden="true">
         <thead>

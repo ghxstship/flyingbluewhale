@@ -130,7 +130,7 @@ export async function ScheduleSurface(props: ScheduleProps) {
   return (
     <div className={containerClass}>
       <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">{eyebrow}</div>
-      <h1 className="mt-1 text-2xl font-semibold">{title}</h1>
+      <h1 className="mt-1 text-[length:var(--p-fs-h2)]">{title}</h1>
       <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {wfm
           ? t("m.shift.greeting", { name: wfm.full_name }, `Hello, ${wfm.full_name}.`)
@@ -245,7 +245,7 @@ export async function ScheduleSurface(props: ScheduleProps) {
           <div className="surface-inset mt-8 p-4">
             <h2 className="text-sm font-semibold">Clocking in</h2>
             <p className="mt-1 text-xs text-[var(--p-text-2)]">
-              Punches happen in COMPVSS on your phone — it records where you are and still works when the signal
+              Punches happen in COMPVSS on your phone. It records where you are and still works when the signal
               doesn&rsquo;t. Everything else on this page you can do right here.
             </p>
             <Link href={COMPVSS_CLOCK_HREF} className="ps-btn ps-btn--tertiary ps-btn--sm mt-3">

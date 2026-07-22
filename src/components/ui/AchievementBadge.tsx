@@ -43,7 +43,7 @@ export function AchievementBadge({
     <div
       className="surface flex items-center gap-3 p-3"
       style={{ opacity: earned ? 1 : 0.55 }}
-      title={earned ? `Earned — ${name}` : `Locked — ${name}`}
+      title={earned ? `Earned: ${name}` : `Locked: ${name}`}
     >
       <span
         className="flex shrink-0 items-center justify-center rounded-full"

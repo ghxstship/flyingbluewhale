@@ -68,7 +68,7 @@ export async function LdpStateTimeline({
   orgId,
   limit = 50,
   heading = "Lifecycle Timeline",
-  subhead = "Append-only ledger — every state transition with actor + timestamp.",
+  subhead = "Append-only ledger: every state transition with actor + timestamp.",
 }: LdpStateTimelineProps) {
   const fmt = await getRequestFormatters();
   const supabase = await createClient();
@@ -142,7 +142,7 @@ export async function LdpStateTimeline({
                     </>
                   )}
                   <span className="text-[var(--p-text-2)]">by {who}</span>
-                  {r.reason && <span className="text-[var(--p-text-2)]">— {r.reason}</span>}
+                  {r.reason && <span className="text-[var(--p-text-2)]">· {r.reason}</span>}
                 </span>
                 <span className="font-mono text-[var(--p-text-2)]">{fmt.dateTime(new Date(r.transitioned_at))}</span>
               </li>

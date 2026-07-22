@@ -1067,7 +1067,7 @@ export function DataTableInteractive({
           </Hint>
           {onImport && (
             <>
-              <Hint label={t("dataTable.importFile", undefined, "Import rows from a file — CSV / TSV / JSON / XLSX")}>
+              <Hint label={t("dataTable.importFile", undefined, "Import rows from a file (CSV / TSV / JSON / XLSX)")}>
                 <button
                   type="button"
                   onClick={handleImportClick}

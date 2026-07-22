@@ -24,7 +24,7 @@ export function ProductPreview({
       viewBox="0 0 400 280"
       className={className}
       role="img"
-      aria-label={`${label} — interface preview`}
+      aria-label={`${label}, interface preview`}
       style={{ width: "100%", height: "auto", display: "block" }}
     >
       {/* Window frame */}

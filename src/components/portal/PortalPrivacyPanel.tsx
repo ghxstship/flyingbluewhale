@@ -159,7 +159,7 @@ export async function PortalPrivacyPanel({
               {t("components.portalPrivacyPanel.downloadData", undefined, "Download my data · JSON")}
             </Link>
             <Link
-              href={`mailto:privacy@atlvs.pro?subject=DSAR%20—%20${persona}%20${slug}`}
+              href={`mailto:privacy@atlvs.pro?subject=DSAR%3A%20${persona}%20${slug}`}
               className="ps-btn ps-btn--ghost ps-btn--sm w-full justify-center"
             >
               {t("components.portalPrivacyPanel.emailDsar", undefined, "Email a DSAR")}
@@ -251,7 +251,7 @@ export async function PortalPrivacyPanel({
           {t(
             "components.portalPrivacyPanel.roleNoteAfter",
             undefined,
-            "you may have records in: accreditations, credentials, advancing rider, contracts, payments, scans, and signed disclosures. Requesting erasure may impact your active engagement — we'll confirm before processing.",
+            "you may have records in: accreditations, credentials, advancing rider, contracts, payments, scans, and signed disclosures. Requesting erasure may impact your active engagement. We'll confirm before processing.",
           )}
         </p>
       </div>

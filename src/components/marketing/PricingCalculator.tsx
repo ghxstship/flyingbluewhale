@@ -70,7 +70,7 @@ export function PricingCalculator() {
             {t(
               "marketing.pricingCalculator.intro",
               undefined,
-              "Plug in shows per year, crew at peak, and what you spend monthly on the fragmented stack. We’ll show you annual spend and per-show cost on both sides. Math is conservative — no integration tax, no per-seat overruns counted.",
+              "Drop in shows per year, crew at peak, and what the scattered stack costs you monthly. We’ll show annual spend and per-show cost on both sides. The math runs conservative: no integration tax, no per-seat overruns in the count.",
             )}
           </p>
 
@@ -102,7 +102,7 @@ export function PricingCalculator() {
               }
             />
             <Field
-              label={t("marketing.pricingCalculator.stackMonthly", undefined, "Current stack — monthly")}
+              label={t("marketing.pricingCalculator.stackMonthly", undefined, "Current stack, monthly")}
               value={stackMonthly}
               onChange={setStackMonthly}
               min={0}
@@ -132,12 +132,12 @@ export function PricingCalculator() {
 
           <dl className="mt-4 space-y-3">
             <Row
-              label={t("marketing.pricingCalculator.stackAnnual", undefined, "Current stack — annual")}
+              label={t("marketing.pricingCalculator.stackAnnual", undefined, "Current stack, annual")}
               value={formatUsd(numbers.stackAnnual)}
               tone="dim"
             />
             <Row
-              label={t("marketing.pricingCalculator.atlvsAnnual", undefined, "ATLVS Production — annual")}
+              label={t("marketing.pricingCalculator.atlvsAnnual", undefined, "ATLVS Production, annual")}
               value={formatUsd(numbers.atlvsAnnual)}
               tone="accent"
             />

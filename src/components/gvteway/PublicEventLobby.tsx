@@ -95,7 +95,7 @@ export function PublicEventLobby({
           <Ticket size={14} aria-hidden="true" /> Tickets
         </h2>
         <p className="max-w-xl text-sm text-[var(--p-text-3)]">
-          GVTEWAY never sells you a ticket directly — when this event connects a provider (DICE · RA · AXS ·
+          GVTEWAY never sells you a ticket directly. When this event connects a provider (DICE · RA · AXS ·
           Ticketmaster · Eventbrite), the live availability and a <span className="font-medium">via &lt;provider&gt;</span>{" "}
           handoff appear here.
         </p>

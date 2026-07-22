@@ -91,7 +91,7 @@ export function SyncBanner() {
 
   const queueLabel = online
     ? t("ui.sync.syncing", { count: total }, `Syncing ${total} change${total === 1 ? "" : "s"}…`)
-    : t("ui.sync.queued", { count: total }, `${total} change${total === 1 ? "" : "s"} queued — will sync when back online`);
+    : t("ui.sync.queued", { count: total }, `${total} change${total === 1 ? "" : "s"} queued. They sync when back online`);
 
   return (
     <div

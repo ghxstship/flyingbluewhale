@@ -54,7 +54,7 @@ export function AtomPicker({
         </Link>
       </div>
       <select name={name} defaultValue={defaultValue ?? ""} required={required} className="ps-input mt-1.5 w-full">
-        {!required && <option value="">— Unpinned —</option>}
+        {!required && <option value="">Unpinned</option>}
         {sorted.map((a) => (
           <option key={a.id} value={a.id}>
             {a.project_name ? `${a.project_name} · ` : ""}

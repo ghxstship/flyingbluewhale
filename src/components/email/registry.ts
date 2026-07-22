@@ -54,7 +54,7 @@ export type EmailTemplateEntry = {
 export const EMAIL_TEMPLATES: Record<EmailTemplateId, EmailTemplateEntry> = {
   welcome: {
     label: "Welcome",
-    description: "Sent after signup — sets the tone, points to first run.",
+    description: "Sent after signup: sets the tone, points to first run.",
     render: (p) => welcomeEmail({ name: p.name ?? "", ctaUrl: p.ctaUrl ?? "" }),
     sample: { name: "Riley", ctaUrl: urlFor("platform") },
   },
@@ -95,7 +95,7 @@ export const EMAIL_TEMPLATES: Record<EmailTemplateId, EmailTemplateEntry> = {
       }),
     sample: {
       title: "Reports & Analytics is live",
-      body: "Forty-three reports, computed from your real data. No setup, no spreadsheets — just open the hub and read your show.",
+      body: "Forty-three reports, computed from your real data. No setup, no spreadsheets. Just open the hub and read your show.",
       ctaLabel: "See the reports",
       ctaUrl: urlFor("platform", "/reports"),
     },
@@ -196,7 +196,7 @@ export const EMAIL_TEMPLATES: Record<EmailTemplateId, EmailTemplateEntry> = {
   },
   advance_reminder: {
     label: "Advance reminder",
-    description: "T-5 / T-2 chase — outstanding sections only.",
+    description: "T-5 / T-2 chase, outstanding sections only.",
     render: (p) =>
       advanceReminderEmail({
         variant: p.variant === "t2" ? "t2" : "t5",
@@ -224,7 +224,7 @@ export const EMAIL_TEMPLATES: Record<EmailTemplateId, EmailTemplateEntry> = {
   },
   advance_lapse: {
     label: "Advance lapse",
-    description: "Deadline passed — owner alert plus recipient late flag.",
+    description: "Deadline passed: owner alert plus recipient late flag.",
     render: (p) =>
       advanceLapseEmail({
         audience: p.audience === "owner" ? "owner" : "recipient",

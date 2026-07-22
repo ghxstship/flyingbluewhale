@@ -108,7 +108,7 @@ export async function FeedSurface({
         filter={projectId ? `project_id=eq.${projectId}` : `org_id=eq.${session.orgId}`}
       />
       <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">{eyebrow}</div>
-      <h1 className="mt-1 text-2xl font-semibold">{title}</h1>
+      <h1 className="mt-1 text-[length:var(--p-fs-h2)]">{title}</h1>
       <p className="mt-1 text-xs text-[var(--p-text-2)]">
         {rows.length === 0
           ? t("m.feed.noUpdatesYet", undefined, "No updates yet.")

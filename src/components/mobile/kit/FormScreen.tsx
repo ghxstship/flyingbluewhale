@@ -116,7 +116,7 @@ function ComboField({
                 </button>
               ))
             ) : (
-              <div style={{ padding: "11px 14px", fontSize: 13, color: "var(--p-text-3)" }}>No matches — “{q}” will be used as typed.</div>
+              <div style={{ padding: "11px 14px", fontSize: 13, color: "var(--p-text-3)" }}>No matches. “{q}” will be used as typed.</div>
             )}
           </div>
         </>
@@ -482,7 +482,7 @@ function FileField({
               ? "Location attached"
               : located
                 ? `Location attached to ${located} of ${files.length}`
-                : "No location — your device didn't provide one"}
+                : "No location. Your device didn't provide one"}
           </span>
         </div>
       )}

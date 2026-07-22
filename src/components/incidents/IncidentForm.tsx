@@ -176,7 +176,7 @@ export function IncidentForm({
             {t("components.incidentForm.projectLabel", undefined, "Project")}
           </label>
           <select value={projectId} onChange={(e) => setProjectId(e.target.value)} className="ps-input mt-1 w-full">
-            <option value="">{t("components.incidentForm.projectNone", undefined, "— None —")}</option>
+            <option value="">{t("components.incidentForm.projectNone", undefined, "None")}</option>
             {projects.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.name}
@@ -294,7 +294,7 @@ export function IncidentForm({
           {t(
             "components.incidentForm.emergencyNotice",
             undefined,
-            "In emergencies, call local services first — then log here.",
+            "In emergencies, call local services first, then log here.",
           )}
         </div>
         <Button type="submit" variant="danger" disabled={submitting || uploading}>

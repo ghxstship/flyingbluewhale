@@ -48,7 +48,7 @@ export function BaseDashboard({ classCode, title, subtitle, branding, sections, 
             <div className="font-mono text-[11px] font-semibold tracking-[0.18em]" style={{ color: accent }}>
               {String(classCode).padStart(1, "0")} · {xpmsClass.name}
             </div>
-            <h1 className="mt-1 truncate text-2xl font-semibold text-[var(--p-text-1)]">{title}</h1>
+            <h1 className="mt-1 truncate text-[length:var(--p-fs-h2)] text-[var(--p-text-1)]">{title}</h1>
             {subtitle ? <p className="mt-1 truncate text-sm text-[var(--p-text-2)]">{subtitle}</p> : null}
           </div>
         </div>

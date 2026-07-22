@@ -40,7 +40,7 @@ export function SceneDetailTabs({
         {events ?? (
           <EmptyState
             title="No events yet"
-            description="Events this scene is into will appear here — each one hands off to its ticketing provider."
+            description="Events this scene is into will appear here. Each one hands off to its ticketing provider."
           />
         )}
       </TabsContent>
@@ -48,7 +48,7 @@ export function SceneDetailTabs({
         {members ?? (
           <EmptyState
             title="No members yet"
-            description="Be the first to join — follow the scene to get its feed in Community."
+            description="Be the first to join. Follow the scene to get its feed in Community."
           />
         )}
       </TabsContent>

@@ -67,7 +67,12 @@ export function ModuleHeader({
               eyebrow per the Title Case rule's letter-spaced-label
               exception. */}
           {eyebrow && <div className="eyebrow eyebrow-accent">{eyebrow}</div>}
-          <h1 className="mt-1 flex items-center gap-2 text-2xl font-bold tracking-[-0.01em] text-[var(--p-text-1)]">
+          {/* W2 ramp conformance: size rides the --p-fs-h2 ramp step (24px —
+              the header's ratified visual size; a bare h1 would jump to the
+              26→32px h1 step). Weight + tracking come from the base-layer
+              heading rule (--p-heading-weight / --p-heading-ls) — Bebas ships
+              a single 400 weight, so the old `font-bold` only synthesized. */}
+          <h1 className="mt-1 flex items-center gap-2 text-[length:var(--p-fs-h2)] text-[var(--p-text-1)]">
             {title}
             {info ? (
               <Hint label={info} side="right">

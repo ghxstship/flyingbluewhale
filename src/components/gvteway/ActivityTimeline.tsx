@@ -50,7 +50,7 @@ function relativeTime(iso: string): string {
 export function ActivityTimeline({
   items,
   emptyTitle = "No activity yet",
-  emptyDescription = "Follow friends and scenes — their saves, RSVPs, and posts land here.",
+  emptyDescription = "Follow friends and scenes. Their saves, RSVPs, and posts land here.",
 }: {
   items: ActivityRow[];
   emptyTitle?: string;

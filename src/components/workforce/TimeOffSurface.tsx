@@ -87,7 +87,7 @@ export async function TimeOffSurface({ variant, newRequestHref, eyebrowLabel, ti
   return (
     <div className={containerClass}>
       <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">{eyebrow}</div>
-      <h1 className="mt-1 text-2xl font-semibold">{title}</h1>
+      <h1 className="mt-1 text-[length:var(--p-fs-h2)]">{title}</h1>
 
       <section className="mt-5">
         <h2 className="text-sm font-semibold">{t("m.timeOff.balancesHeading", { year }, `Balances (${year})`)}</h2>

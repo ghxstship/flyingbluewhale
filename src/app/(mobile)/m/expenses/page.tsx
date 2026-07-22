@@ -38,6 +38,7 @@ export default async function ExpensesPage({ searchParams }: { searchParams: Pro
       id: string;
       description: string;
       amount_cents: number;
+      currency: string | null;
       expense_state: string;
       spent_at: string;
       receipt_path: string | null;
@@ -45,7 +46,10 @@ export default async function ExpensesPage({ searchParams }: { searchParams: Pro
   ).map((e) => ({
     id: e.id,
     description: e.description,
-    amount: fmt.money(e.amount_cents),
+    // The row's own currency, not the viewer's default: `currency` was selected
+    // and never passed, so a non-USD org saw its expenses rendered in the wrong
+    // one. `fmt.money` takes the override — it was simply never given.
+    amount: fmt.money(e.amount_cents, e.currency ?? undefined),
     // Raw values so the owner's edit form can prefill losslessly (the
     // formatted `amount`/`spent` above are display-only).
     amountInput: (e.amount_cents / 100).toFixed(2),

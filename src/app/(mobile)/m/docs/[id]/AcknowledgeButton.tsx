@@ -6,8 +6,22 @@ import { KIcon } from "@/components/mobile/kit";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { acknowledgeSop } from "../actions";
 
-/** The must-read acknowledgement CTA. Acknowledged state renders as fact. */
-export function AcknowledgeButton({ sopId, acked }: { sopId: string; acked: boolean }) {
+/**
+ * The must-read acknowledgement CTA. Acknowledged state renders as fact —
+ * including WHEN, which is the part that makes it evidence: the timestamp was
+ * queried (`sop_acknowledgements.acknowledged_at`) and then reduced to a
+ * boolean, so "I read the lock-out procedure on the 3rd" couldn't be shown.
+ */
+export function AcknowledgeButton({
+  sopId,
+  acked,
+  ackedOn,
+}: {
+  sopId: string;
+  acked: boolean;
+  /** Preformatted acknowledgement date, when the viewer has acknowledged. */
+  ackedOn?: string | null;
+}) {
   const t = useT();
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -17,7 +31,12 @@ export function AcknowledgeButton({ sopId, acked }: { sopId: string; acked: bool
     return (
       <div className="item" style={{ marginTop: 8 }}>
         <KIcon name="Check" size={18} style={{ color: "var(--p-success)", flex: "none" }} />
-        <div className="t">{t("m.docs.ackDone", undefined, "You've Acknowledged This Article")}</div>
+        <div style={{ minWidth: 0 }}>
+          <div className="t">{t("m.docs.ackDone", undefined, "You've Acknowledged This Article")}</div>
+          {ackedOn ? (
+            <div className="s">{t("m.docs.ackedOn", { when: ackedOn }, `On ${ackedOn}`)}</div>
+          ) : null}
+        </div>
       </div>
     );
   }

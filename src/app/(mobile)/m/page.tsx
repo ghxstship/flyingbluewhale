@@ -65,6 +65,10 @@ export default async function MobileHome() {
       .from("events")
       .select("id, name, starts_at, event_state")
       .eq("org_id", session.orgId)
+      // `event_state` was fetched and never used, so the hero could announce a
+      // CANCELLED or still-DRAFT event as your next one. Only a committed event
+      // counts as upcoming.
+      .in("event_state", ["scheduled", "live"])
       .gte("starts_at", nowIso)
       .order("starts_at", { ascending: true })
       .limit(1)

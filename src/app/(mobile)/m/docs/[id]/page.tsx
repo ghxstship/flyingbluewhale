@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
-import { getRequestT } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { KIcon } from "@/components/mobile/kit";
 import { AcknowledgeButton } from "./AcknowledgeButton";
 import { DocShareButton } from "./DocShareButton";
@@ -60,6 +60,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
   };
   const steps: Step[] = Array.isArray(row.steps) ? (row.steps as Step[]) : [];
   const acked = Boolean(ack);
+  // The acknowledgement TIMESTAMP was queried and then thrown away by
+  // Boolean(ack) — on a must-read SOP, when you acknowledged it is the
+  // evidence, not just that you did.
+  const ackedAt = (ack as { acknowledged_at: string | null } | null)?.acknowledged_at ?? null;
+  const fmt = await getRequestFormatters();
+  const ackedOn = ackedAt ? fmt.date(ackedAt) : null;
 
   return (
     <div className="screen screen-anim">
@@ -140,7 +146,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
         </>
       )}
 
-      {row.must_read && <AcknowledgeButton sopId={row.id} acked={acked} />}
+      {row.must_read && <AcknowledgeButton sopId={row.id} acked={acked} ackedOn={ackedOn} />}
     </div>
   );
 }

@@ -9,6 +9,8 @@ export type Vendor = {
   trade: string;
   trades: string[];
   logo: string;
+  /** Vendor's own mark, when they have one. Falls back to `logo` initials. */
+  logoUrl: string | null;
   scope: string;
   phone: string;
   email: string;
@@ -60,7 +62,17 @@ export function CompaniesView({ vendors, labels }: { vendors: Vendor[]; labels: 
       ]}
     >
       <div className="item tap" style={{ margin: 0, cursor: "pointer" }}>
-        <span className="logo-tile">{v.logo}</span>
+        {v.logoUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            className="logo-tile"
+            src={v.logoUrl}
+            alt=""
+            style={{ objectFit: "cover" }}
+          />
+        ) : (
+          <span className="logo-tile">{v.logo}</span>
+        )}
         <div style={{ minWidth: 0, flex: 1 }}>
           <div className="t">{v.name}</div>
           <div className="s">{v.scope || v.trade}</div>

@@ -52,6 +52,9 @@ export default async function CompaniesPage() {
         t("m.companies.general", undefined, "General"),
       trades,
       logo: initials((v.name as string) ?? "?"),
+      // The real mark when the vendor has one; the initials tile above is the
+      // fallback. `logo_url` was fetched on every load and never rendered.
+      logoUrl: typeof v.logo_url === "string" && /^https?:\/\//i.test(v.logo_url) ? v.logo_url : null,
       scope: (v.tagline as string) || (v.bio as string) || "",
       phone: (v.contact_phone as string) ?? "",
       email: (v.contact_email as string) ?? "",

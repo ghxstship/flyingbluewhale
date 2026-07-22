@@ -51,7 +51,7 @@ export default async function IncidentDetailPage({ params }: { params: Promise<{
   const { data: row } = await supabase
     .from("incidents")
     .select(
-      "id, summary, description, severity, incident_state, location, occurred_at, photos, injury_type, report_kind, closed_at, reporter_id",
+      "id, summary, description, severity, incident_state, location, occurred_at, photos, injury_type, report_kind, closed_at, closed_by, reporter_id",
     )
     .eq("org_id", session.orgId)
     .eq("id", incidentId)
@@ -62,6 +62,25 @@ export default async function IncidentDetailPage({ params }: { params: Promise<{
 
   const state = row.incident_state as IncidentState;
   const photos = Array.isArray(row.photos) ? (row.photos as string[]) : [];
+
+  // Attribution. `reporter_id` and `closed_at` were both selected and shown
+  // nowhere — on a safety record, WHO filed it and WHO signed it off is the
+  // part an investigator or insurer actually asks for. `closed_by` is written
+  // by the shared FSM (20260722140000_incident_close_signoff).
+  const reporterId = row.reporter_id as string | null;
+  const closedById = row.closed_by as string | null;
+  const partyIds = [...new Set([reporterId, closedById].filter(Boolean) as string[])];
+  const nameById = new Map<string, string>();
+  if (partyIds.length > 0) {
+    // soft-delete-exempt: resolving actor names by id for an audit line — a
+    // since-offboarded reporter must still be named on the record.
+    const { data: people } = await supabase.from("users").select("id, name, email").in("id", partyIds);
+    for (const u of (people ?? []) as { id: string; name: string | null; email: string | null }[]) {
+      nameById.set(u.id, u.name || u.email || t("m.incident.someone", undefined, "A member"));
+    }
+  }
+  const reporterName = reporterId ? (nameById.get(reporterId) ?? null) : null;
+  const closedByName = closedById ? (nameById.get(closedById) ?? null) : null;
 
   // Kit 32 A2 — the status chain is REAL: the filing moment plus every
   // FSM transition and follow-up the audit ledger recorded for this row
@@ -164,6 +183,31 @@ export default async function IncidentDetailPage({ params }: { params: Promise<{
             {row.description as string}
           </p>
         ) : null}
+
+        {/* Who filed it, and who signed it off — the audit line a safety record
+            is judged on. Both were fetched and displayed nowhere. */}
+        {(reporterName || row.closed_at) && (
+          <div className="hint" style={{ marginTop: 8, display: "grid", gap: 2 }}>
+            {reporterName && (
+              <span>{t("m.incident.reportedBy", { name: reporterName }, `Reported by ${reporterName}`)}</span>
+            )}
+            {row.closed_at && (
+              <span>
+                {closedByName
+                  ? t(
+                      "m.incident.closedByOn",
+                      { name: closedByName, when: fmt.date(row.closed_at as string) },
+                      `Closed by ${closedByName} · ${fmt.date(row.closed_at as string)}`,
+                    )
+                  : t(
+                      "m.incident.closedOn",
+                      { when: fmt.date(row.closed_at as string) },
+                      `Closed ${fmt.date(row.closed_at as string)}`,
+                    )}
+              </span>
+            )}
+          </div>
+        )}
       </div>
 
       {photos.length > 0 && (

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -110,7 +110,7 @@ export default async function Page() {
           <MetricCard label={t("console.ops.toc.problems.metric.p1", undefined, "P1")} value={fmtIntl.number(p1)} />
         </div>
 
-        <DataTable<ProblemRow>
+        <DataView<ProblemRow>
           rows={rows}
           rowHref={(r) => `/studio/ops/toc/problems/${r.id}`}
           emptyLabel={t("console.ops.toc.problems.emptyLabel", undefined, "No problems registered")}
@@ -128,8 +128,9 @@ export default async function Page() {
             {
               key: "code",
               header: t("console.ops.toc.problems.col.code", undefined, "Code"),
-              render: (r) => <span className="font-mono text-xs">{r.code}</span>,
+              render: (r) => r.code,
               accessor: (r) => r.code ?? null,
+              mono: true,
             },
             {
               key: "title",
@@ -149,7 +150,7 @@ export default async function Page() {
               key: "detected",
               header: t("console.ops.toc.problems.col.detected", undefined, "Detected"),
               render: (r) => fmt(r.detected_at),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.detected_at ?? null,
             },
             {

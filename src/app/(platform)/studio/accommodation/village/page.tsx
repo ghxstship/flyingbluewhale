@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
@@ -61,7 +61,7 @@ export default async function Page({
         }
       />
       <div className="page-content space-y-3">
-        <DataTable
+        <DataView
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           totalCount={total}
           rowHref={(r) => `/studio/venues/${r.id}`}
@@ -92,10 +92,9 @@ export default async function Page({
             {
               key: "capacity",
               header: t("console.accommodation.village.col.beds", undefined, "Beds"),
-              render: (r) => (
-                <span className="font-mono text-xs">{r.capacity != null ? fmt.number(r.capacity as number) : "—"}</span>
-              ),
+              render: (r) => (r.capacity != null ? fmt.number(r.capacity as number) : "—"),
               accessor: (r) => r.capacity ?? null,
+              mono: true,
             },
             {
               key: "handover",

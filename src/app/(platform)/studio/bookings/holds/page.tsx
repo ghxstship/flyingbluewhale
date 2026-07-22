@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -78,7 +78,7 @@ export default async function Page() {
         }
       />
       <div className="page-content space-y-5">
-        <DataTable<HoldRow>
+        <DataView<HoldRow>
           rows={rows}
           emptyLabel={t("console.bookings.holds.emptyLabel", undefined, "No holds")}
           emptyDescription={t(
@@ -110,27 +110,28 @@ export default async function Page() {
               header: t("console.bookings.holds.col.starts", undefined, "Starts"),
               render: (r) => fmt.dateTime(new Date(r.starts_at)),
               accessor: (r) => r.starts_at,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "ends",
               header: t("console.bookings.holds.col.ends", undefined, "Ends"),
               render: (r) => fmt.dateTime(new Date(r.ends_at)),
               accessor: (r) => r.ends_at,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "auto",
               header: t("console.bookings.holds.col.autoRelease", undefined, "Auto-release"),
               render: (r) => (r.auto_release_on ? fmt.date(new Date(r.auto_release_on)) : "—"),
               accessor: (r) => r.auto_release_on,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "venue",
               header: t("console.bookings.holds.col.venue", undefined, "Venue"),
-              render: (r) => (r.venue_id ? <span className="font-mono text-xs">{r.venue_id.slice(0, 8)}</span> : "—"),
+              render: (r) => (r.venue_id ? r.venue_id.slice(0, 8) : "—"),
               accessor: (r) => r.venue_id ?? null,
+              mono: true,
             },
           ]}
         />

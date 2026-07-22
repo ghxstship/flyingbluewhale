@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -119,7 +119,7 @@ export default async function Page() {
           />
         </div>
 
-        <DataTable<ChangeRow>
+        <DataView<ChangeRow>
           rows={rows}
           rowHref={(r) => `/studio/ops/toc/changes/${r.id}`}
           emptyLabel={t("console.ops.toc.changes.empty.label", undefined, "No change records")}
@@ -137,8 +137,9 @@ export default async function Page() {
             {
               key: "code",
               header: t("console.ops.toc.changes.col.code", undefined, "Code"),
-              render: (r) => <span className="font-mono text-xs">{r.code}</span>,
+              render: (r) => r.code,
               accessor: (r) => r.code ?? null,
+              mono: true,
             },
             {
               key: "title",
@@ -164,7 +165,7 @@ export default async function Page() {
               key: "window",
               header: t("console.ops.toc.changes.col.window", undefined, "Window"),
               render: (r) => `${fmt(r.planned_start)} → ${fmt(r.planned_end)}`,
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.planned_start ?? null,
             },
             {

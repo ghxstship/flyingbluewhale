@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
 import { listOrgScopedPage } from "@/lib/db/resource";
@@ -58,7 +58,7 @@ export default async function Page({
         }
       />
       <div className="page-content space-y-3">
-        <DataTable
+        <DataView
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           totalCount={total}
           rowHref={(r) => `/studio/participants/entries/${r.id}`}

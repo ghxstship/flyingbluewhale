@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { DueDateBadge } from "@/components/ui/DueDateBadge";
 import { MetricCard } from "@/components/ui/MetricCard";
@@ -156,7 +156,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ v
             )}
           />
         ) : (
-          <DataTable<Row>
+          <DataView<Row>
             rows={rows}
             rowHref={(r) => `/studio/punch/${r.id}`}
             emptyLabel={t("console.punch.empty.label", undefined, "No punch items")}
@@ -175,7 +175,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ v
                 key: "code",
                 header: t("console.punch.column.code", undefined, "Code"),
                 render: (r) => r.code,
-                className: "font-mono text-xs",
+                mono: true,
                 accessor: (r) => r.code,
               },
               {
@@ -212,7 +212,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ v
                 key: "due",
                 header: t("console.punch.column.due", undefined, "Due"),
                 render: (r) => fmtDate(r.due_at),
-                className: "font-mono text-xs",
+                mono: true,
                 accessor: (r) => r.due_at ?? null,
               },
               {

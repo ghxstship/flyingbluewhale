@@ -3,7 +3,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -93,7 +93,7 @@ export default async function Page() {
           />
         </div>
 
-        <DataTable<TrademarkRow>
+        <DataView<TrademarkRow>
           rows={rows}
           tableId="console:commercial:licensing"
           emptyLabel={t("console.commercial.licensing.emptyTitle", undefined, "No Trademarks Registered")}

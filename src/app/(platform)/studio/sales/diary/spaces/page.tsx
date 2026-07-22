@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import { requireSession } from "@/lib/auth";
@@ -47,7 +47,7 @@ export default async function SpacesPage() {
         }
       />
       <div className="page-content">
-        <DataTable<SpaceRow>
+        <DataView<SpaceRow>
           rows={rows}
           columns={[
             {

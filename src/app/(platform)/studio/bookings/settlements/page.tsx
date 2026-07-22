@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -93,7 +93,7 @@ export default async function Page() {
           />
         </div>
 
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) =>
             r.talent_offer_id
@@ -112,42 +112,43 @@ export default async function Page() {
               header: t("console.bookings.settlements.col.showDate", undefined, "Show Date"),
               render: (r) => r.show_date,
               accessor: (r) => r.show_date,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "gbor",
               header: t("console.bookings.settlements.col.gbor", undefined, "GBOR"),
               render: (r) => formatMoney(r.gross_box_office_cents),
               accessor: (r) => Number(r.gross_box_office_cents),
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "nbor",
               header: t("console.bookings.settlements.col.nbor", undefined, "NBOR"),
               render: (r) => formatMoney(r.nbor_cents),
               accessor: (r) => Number(r.nbor_cents),
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "artist",
               header: t("console.bookings.settlements.col.artistPayout", undefined, "Artist Payout"),
               render: (r) => formatMoney(r.artist_payout_cents),
               accessor: (r) => Number(r.artist_payout_cents),
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "balance",
               header: t("console.bookings.settlements.col.balanceDue", undefined, "Balance Due"),
               render: (r) => formatMoney(r.balance_due_cents),
               accessor: (r) => Number(r.balance_due_cents),
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "att",
               header: t("console.bookings.settlements.col.paidAtt", undefined, "Paid Att."),
               render: (r) => fmt.number(r.paid_attendance ?? 0),
               accessor: (r) => Number(r.paid_attendance ?? 0),
-              className: "font-mono text-xs tabular-nums",
+              mono: true,
+              tabular: true,
             },
             {
               key: "settlement_state",

@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -77,7 +77,7 @@ export default async function RevenueTransactionsPage() {
             )}
           />
         ) : (
-          <DataTable<TxnRow>
+          <DataView<TxnRow>
             rows={rows}
             columns={[
               {
@@ -93,7 +93,7 @@ export default async function RevenueTransactionsPage() {
                 header: t("console.revenue.transactions.col.amount", undefined, "Amount"),
                 render: (r) => formatMoney(r.amount_cents, r.currency),
                 accessor: (r) => r.amount_cents,
-                className: "tabular-nums",
+                tabular: true,
               },
               {
                 key: "processor",

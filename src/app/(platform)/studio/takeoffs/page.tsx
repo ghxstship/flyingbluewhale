@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -104,7 +104,7 @@ export default async function Page() {
             value={fmt.number(rows.filter((r) => r.calibration_in_per_ft).length)}
           />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/takeoffs/${r.id}`}
           emptyLabel={t("console.takeoffs.emptyLabel", undefined, "No takeoffs yet")}
@@ -138,7 +138,7 @@ export default async function Page() {
               header: t("console.takeoffs.col.sheet", undefined, "Sheet"),
               render: (r) => (r.site_plan ? `${r.site_plan.code} · ${r.site_plan.title}` : "—"),
               accessor: (r) => r.site_plan?.code ?? null,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "cost_code",
@@ -154,14 +154,14 @@ export default async function Page() {
               header: t("console.takeoffs.col.items", undefined, "Items"),
               render: (r) => fmt.number(r.item_count),
               accessor: (r) => r.item_count,
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "qty",
               header: t("console.takeoffs.col.quantity", undefined, "Quantity"),
               render: (r) => `${Number(r.total_quantity).toFixed(2)} ${r.unit}`,
               accessor: (r) => Number(r.total_quantity),
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
           ]}
         />

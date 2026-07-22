@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
 import { listOrgScopedPage } from "@/lib/db/resource";
@@ -58,7 +58,7 @@ export default async function Page({
         }
       />
       <div className="page-content space-y-3">
-        <DataTable
+        <DataView
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           totalCount={total}
           rowHref={(r) => `/studio/commercial/sponsors/${r.id}`}
@@ -83,14 +83,16 @@ export default async function Page({
             {
               key: "quantity",
               header: t("console.commercial.sponsors.columns.quantity", undefined, "Quantity"),
-              render: (r) => <span className="font-mono text-xs">{String(r.quantity ?? "—")}</span>,
+              render: (r) => String(r.quantity ?? "—"),
               accessor: (r) => r.quantity ?? null,
+              mono: true,
             },
             {
               key: "delivered",
               header: t("console.commercial.sponsors.columns.delivered", undefined, "Delivered"),
-              render: (r) => <span className="font-mono text-xs">{String(r.delivered ?? "—")}</span>,
+              render: (r) => String(r.delivered ?? "—"),
               accessor: (r) => r.delivered ?? null,
+              mono: true,
             },
             {
               key: "status",
@@ -103,8 +105,9 @@ export default async function Page({
             {
               key: "due_by",
               header: t("console.commercial.sponsors.columns.dueBy", undefined, "Due By"),
-              render: (r) => <span className="font-mono text-xs">{String(r.due_by ?? "—")}</span>,
+              render: (r) => String(r.due_by ?? "—"),
               accessor: (r) => r.due_by ?? null,
+              mono: true,
             },
           ]}
         />

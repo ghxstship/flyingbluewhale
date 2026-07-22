@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
@@ -63,7 +63,7 @@ export default async function LeadsPage() {
         action={<Button href="/studio/leads/new">{t("console.leads.newLead", undefined, "+ New Lead")}</Button>}
       />
       <div className="page-content">
-        <DataTable<CrmRecord>
+        <DataView<CrmRecord>
           rows={rows}
           totalCount={totalCount}
           rowHref={(row) => `/studio/leads/${row.id}`}
@@ -113,14 +113,14 @@ export default async function LeadsPage() {
               key: "value",
               header: t("console.leads.columns.value", undefined, "Value"),
               render: (row) => formatMoney(row.estimated_value_minor),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (row) => Number(row.estimated_value_minor ?? 0),
             },
             {
               key: "source",
               header: t("console.leads.columns.source", undefined, "Source"),
               render: (row) => row.source ?? "—",
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (row) => row.source ?? null,
               filterable: true,
               groupable: true,
@@ -129,14 +129,13 @@ export default async function LeadsPage() {
               key: "email",
               header: t("console.leads.columns.email", undefined, "Email"),
               render: (row) => row.contact_email ?? "—",
-              className: "font-mono text-xs",
               accessor: (row) => row.contact_email ?? null,
             },
             {
               key: "updated",
               header: t("console.leads.columns.updated", undefined, "Updated"),
               render: (row) => timeAgo(row.updated_at),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (row) => row.updated_at,
             },
           ]}

@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -103,7 +103,7 @@ export default async function Page() {
             value={fmt.number(draftCount)}
           />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/schedule/baselines/${r.id}`}
           emptyLabel={t("console.schedule.baselines.emptyLabel", undefined, "No schedule baselines yet")}
@@ -137,7 +137,7 @@ export default async function Page() {
               header: t("console.schedule.baselines.colActivities", undefined, "Activities"),
               render: (r) => fmt.number(r.activity_count),
               accessor: (r) => r.activity_count,
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "source",

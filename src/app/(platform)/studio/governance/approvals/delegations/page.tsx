@@ -1,7 +1,8 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
+import { MONO_CELL_CLASS } from "@/components/views/data-view-model";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -69,7 +70,7 @@ export default async function Page() {
         }
       />
       <div className="page-content">
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           emptyLabel={t("console.governance.approvals.delegations.emptyLabel", undefined, "No delegations yet")}
           emptyDescription={t(
@@ -90,7 +91,7 @@ export default async function Page() {
                 <span>
                   {DELEGATION_SCOPE_LABEL[r.scope as DelegationScope] ?? r.scope}
                   {r.scope_ref ? (
-                    <span className="ml-1 font-mono text-xs text-[var(--p-text-2)]">{r.scope_ref}</span>
+                    <span className={`ml-1 text-[var(--p-text-2)] ${MONO_CELL_CLASS}`}>{r.scope_ref}</span>
                   ) : null}
                 </span>
               ),

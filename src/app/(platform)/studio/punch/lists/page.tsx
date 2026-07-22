@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -143,7 +143,7 @@ export default async function Page() {
         }
       />
       <div className="page-content space-y-5">
-        <DataTable<Row>
+        <DataView<Row>
           rows={hydrated}
           emptyLabel={t("console.punch.lists.emptyLabel", undefined, "No punch lists")}
           emptyDescription={t(
@@ -188,14 +188,15 @@ export default async function Page() {
               key: "items",
               header: t("console.punch.lists.col.items", undefined, "Items"),
               render: (r) => (
-                <span className="font-mono text-xs">
+                <>
                   {r.open_count}/{r.item_count}{" "}
                   <span className="text-[var(--p-text-2)]">
                     {t("console.punch.lists.openSuffix", undefined, "open")}
                   </span>
-                </span>
+                </>
               ),
               accessor: (r) => r.open_count,
+              mono: true,
             },
             {
               key: "status",
@@ -215,8 +216,9 @@ export default async function Page() {
             {
               key: "created_at",
               header: t("console.punch.lists.col.created", undefined, "Created"),
-              render: (r) => <span className="font-mono text-xs">{fmt.date(r.created_at)}</span>,
+              render: (r) => fmt.date(r.created_at),
               accessor: (r) => r.created_at,
+              mono: true,
               sortable: true,
             },
             {

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -79,7 +79,7 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
         }
       />
       <div className="page-content">
-        <DataTable<SubmissionRow>
+        <DataView<SubmissionRow>
           rows={rows}
           rowHref={(r) => `/studio/forms/${formId}/submissions/${r.id}`}
           emptyLabel={t("console.forms.submissions.emptyLabel", undefined, "No submissions yet")}
@@ -103,8 +103,9 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
             {
               key: "created_at",
               header: t("console.forms.submissions.column.submitted", undefined, "Submitted"),
-              render: (r) => <span className="font-mono text-xs">{r.created_at?.slice(0, 16).replace("T", " ")}</span>,
+              render: (r) => r.created_at?.slice(0, 16).replace("T", " "),
               accessor: (r) => r.created_at ?? null,
+              mono: true,
             },
           ]}
         />

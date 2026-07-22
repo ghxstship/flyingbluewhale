@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
@@ -67,7 +67,7 @@ export default async function ProposalTemplatesPage() {
         }
       />
       <div className="page-content max-w-5xl">
-        <DataTable<TemplateRow>
+        <DataView<TemplateRow>
           rows={rows}
           tableId="console:proposals:templates"
           rowHref={(r) => `/studio/proposals/templates/${r.id}`}

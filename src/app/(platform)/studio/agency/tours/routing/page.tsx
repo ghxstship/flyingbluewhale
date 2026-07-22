@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -72,7 +72,7 @@ export default async function Page() {
         }
       />
       <div className="page-content">
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           emptyLabel={t("console.agency.tours.routing.empty.label", undefined, "No routed dates yet")}
           emptyDescription={t(
@@ -86,14 +86,15 @@ export default async function Page() {
               header: t("console.agency.tours.routing.col.leg", undefined, "Leg"),
               render: (r) => (r.tour_leg_index != null ? `#${r.tour_leg_index + 1}` : "—"),
               accessor: (r) => r.tour_leg_index ?? 0,
-              className: "font-mono text-xs tabular-nums",
+              mono: true,
+              tabular: true,
             },
             {
               key: "date",
               header: t("console.agency.tours.routing.col.date", undefined, "Date"),
               render: (r) => r.performance_date ?? "—",
               accessor: (r) => r.performance_date,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "tour",
@@ -106,7 +107,7 @@ export default async function Page() {
               header: t("console.agency.tours.routing.col.fee", undefined, "Fee"),
               render: (r) => (r.fee_cents != null ? formatMoney(r.fee_cents) : "—"),
               accessor: (r) => Number(r.fee_cents ?? 0),
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "state",

@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -110,7 +110,7 @@ export default async function Page() {
           />
           <MetricCard label={t("console.drawings.draft", undefined, "Draft")} value={fmt.number(draftCount)} />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/drawings/${r.id}`}
           emptyLabel={t("console.drawings.emptyLabel", undefined, "No sheet sets yet")}
@@ -146,7 +146,7 @@ export default async function Page() {
               accessor: (r) => r.discipline,
               filterable: true,
               groupable: true,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "version",
@@ -156,14 +156,14 @@ export default async function Page() {
                   <span className="text-[var(--p-text-2)]">{t("console.drawings.none", undefined, "none")}</span>
                 ),
               accessor: (r) => r.current_version?.version_label ?? null,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "sheets",
               header: t("console.drawings.col.sheets", undefined, "Sheets"),
               render: (r) => fmt.number(r.member_count),
               accessor: (r) => r.member_count,
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "state",

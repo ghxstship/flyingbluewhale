@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { listOrgScopedWithCount } from "@/lib/db/resource";
@@ -48,7 +48,7 @@ export default async function BeosPage() {
         action={<Button href="/studio/sales/beos/new">+ New BEO</Button>}
       />
       <div className="page-content">
-        <DataTable<BeoRow>
+        <DataView<BeoRow>
           rows={rows}
           totalCount={totalCount}
           rowHref={(r) => `/studio/sales/beos/${r.id}`}

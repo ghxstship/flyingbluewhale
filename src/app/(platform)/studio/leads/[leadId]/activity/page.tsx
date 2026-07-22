@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -42,7 +42,7 @@ export default async function Page({ params }: { params: Promise<{ leadId: strin
         subtitle={t("console.leads.activity.subtitle", undefined, "Audit trail for this lead.")}
       />
       <div className="page-content">
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           emptyLabel={t("console.leads.activity.emptyLabel", undefined, "No Activity Yet")}
           emptyDescription={t(

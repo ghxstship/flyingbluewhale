@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
@@ -76,7 +76,7 @@ export default async function Page() {
           <MetricCard label="Summarized" value={String(summarizedCount)} />
           <MetricCard label="Action Items" value={String(totalActions)} />
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/meetings/notes/${r.id}`}
           emptyLabel="No meeting notes yet"
@@ -106,7 +106,7 @@ export default async function Page() {
               header: "Action Items",
               render: (r) => String(r.action_item_count),
               accessor: (r) => r.action_item_count,
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "state",
@@ -121,7 +121,7 @@ export default async function Page() {
               header: "Created",
               render: (r) => fmt.date(new Date(r.created_at)),
               accessor: (r) => r.created_at,
-              className: "font-mono text-xs",
+              mono: true,
             },
           ]}
         />

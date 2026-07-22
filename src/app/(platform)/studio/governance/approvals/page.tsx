@@ -2,7 +2,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { RealtimeRefresh } from "@/components/RealtimeRefresh";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -85,7 +85,7 @@ export default async function Page() {
             }
           />
         ) : (
-          <DataTable<Row>
+          <DataView<Row>
             rows={rows}
             rowHref={(r) => `/studio/governance/approvals/${r.id}`}
             emptyLabel={t("console.governance.approvals.emptyTitle", undefined, "No approvals in flight")}
@@ -98,11 +98,8 @@ export default async function Page() {
               {
                 key: "subject_table",
                 header: t("console.governance.approvals.columns.subject", undefined, "Subject"),
-                render: (r) => (
-                  <span className="font-mono text-xs">
-                    {r.subject_table}/{r.subject_id.slice(0, 8)}
-                  </span>
-                ),
+                render: (r) => `${r.subject_table}/${r.subject_id.slice(0, 8)}`,
+                mono: true,
               },
               {
                 key: "state",

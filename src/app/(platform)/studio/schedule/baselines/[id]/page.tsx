@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -187,7 +187,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           </section>
         )}
 
-        <DataTable<Activity>
+        <DataView<Activity>
           rows={activities}
           emptyLabel={t(
             "console.schedule.baselines.detail.table.emptyLabel",
@@ -205,7 +205,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               header: t("console.schedule.baselines.detail.table.code", undefined, "Code"),
               render: (a) => a.code,
               accessor: (a) => a.code,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "name",
@@ -218,28 +218,28 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               header: t("console.schedule.baselines.detail.table.start", undefined, "Start"),
               render: (a) => fmt.dateParts(a.start_planned, { month: "short", day: "numeric", year: "2-digit" }),
               accessor: (a) => a.start_planned,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "finish",
               header: t("console.schedule.baselines.detail.table.finish", undefined, "Finish"),
               render: (a) => fmt.dateParts(a.finish_planned, { month: "short", day: "numeric", year: "2-digit" }),
               accessor: (a) => a.finish_planned,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "duration",
               header: t("console.schedule.baselines.detail.table.duration", undefined, "Dur (d)"),
               render: (a) => Number(a.duration_days).toFixed(1),
               accessor: (a) => Number(a.duration_days),
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "float",
               header: t("console.schedule.baselines.detail.table.float", undefined, "Float (d)"),
               render: (a) => (a.total_float_days != null ? Number(a.total_float_days).toFixed(1) : "—"),
               accessor: (a) => a.total_float_days,
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "critical",
@@ -253,7 +253,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               header: t("console.schedule.baselines.detail.table.percent", undefined, "%"),
               render: (a) => `${Number(a.percent_complete).toFixed(0)}%`,
               accessor: (a) => Number(a.percent_complete),
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
           ]}
         />

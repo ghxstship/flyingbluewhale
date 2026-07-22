@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -50,7 +50,7 @@ export default async function Page() {
         }
       />
       <div className="page-content">
-        <DataTable<SheetListRow>
+        <DataView<SheetListRow>
           rows={rows}
           rowHref={(r) => `/studio/collaborate/sheets/${r.id}`}
           emptyLabel="No sheets yet"
@@ -70,8 +70,9 @@ export default async function Page() {
             {
               key: "columns",
               header: "Columns",
-              render: (r) => <span className="font-mono text-xs">{r.columns.length}</span>,
+              render: (r) => r.columns.length,
               accessor: (r) => r.columns.length,
+              mono: true,
             },
             {
               key: "sheet_state",
@@ -84,8 +85,9 @@ export default async function Page() {
             {
               key: "updated_at",
               header: "Updated",
-              render: (r) => <span className="font-mono text-xs">{r.updated_at?.slice(0, 10)}</span>,
+              render: (r) => r.updated_at?.slice(0, 10),
               accessor: (r) => r.updated_at ?? null,
+              mono: true,
             },
           ]}
         />

@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -108,7 +108,7 @@ export default async function Page() {
           />
         </div>
 
-        <DataTable<DealRow>
+        <DataView<DealRow>
           rows={rows}
           rowHref={(r) => `/studio/bookings/deals/${r.id}`}
           emptyLabel={t("console.bookings.deals.empty.label", undefined, "No Deals Yet")}
@@ -128,7 +128,7 @@ export default async function Page() {
               header: t("console.bookings.deals.col.performance", undefined, "Performance"),
               render: (r) => r.performance_date,
               accessor: (r) => r.performance_date,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "type",
@@ -143,21 +143,21 @@ export default async function Page() {
               header: t("console.bookings.deals.col.feeGuar", undefined, "Fee / Guar"),
               render: (r) => formatMoney(r.guarantee_cents ?? r.fee_cents),
               accessor: (r) => Number(r.guarantee_cents ?? r.fee_cents),
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "door",
               header: t("console.bookings.deals.col.door", undefined, "Door %"),
               render: (r) => (r.door_pct == null ? "—" : `${r.door_pct}%`),
               accessor: (r) => Number(r.door_pct ?? 0),
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "deposit",
               header: t("console.bookings.deals.col.deposit", undefined, "Deposit"),
               render: (r) => `${r.deposit_pct}%`,
               accessor: (r) => Number(r.deposit_pct ?? 0),
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "stage",

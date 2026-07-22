@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
 import { listOrgScopedPage } from "@/lib/db/resource";
@@ -58,7 +58,7 @@ export default async function Page({
         }
       />
       <div className="page-content space-y-3">
-        <DataTable
+        <DataView
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           totalCount={total}
           rowHref={(r) => `/studio/accommodation/blocks/${r.id}`}
@@ -95,14 +95,16 @@ export default async function Page({
             {
               key: "rooms_reserved",
               header: t("console.accommodation.blocks.columns.reserved", undefined, "Reserved"),
-              render: (r) => <span className="font-mono text-xs">{String(r.rooms_reserved ?? "—")}</span>,
+              render: (r) => String(r.rooms_reserved ?? "—"),
               accessor: (r) => r.rooms_reserved ?? null,
+              mono: true,
             },
             {
               key: "rooms_confirmed",
               header: t("console.accommodation.blocks.columns.confirmed", undefined, "Confirmed"),
-              render: (r) => <span className="font-mono text-xs">{String(r.rooms_confirmed ?? "—")}</span>,
+              render: (r) => String(r.rooms_confirmed ?? "—"),
               accessor: (r) => r.rooms_confirmed ?? null,
+              mono: true,
             },
           ]}
         />

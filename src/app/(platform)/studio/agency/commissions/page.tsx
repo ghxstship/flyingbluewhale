@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -78,7 +78,7 @@ export default async function Page() {
           />
         </div>
 
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) =>
             r.talent_offer_id
@@ -97,21 +97,21 @@ export default async function Page() {
               header: t("console.agency.commissions.col.show", undefined, "Show"),
               render: (r) => r.show_date,
               accessor: (r) => r.show_date,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "comm",
               header: t("console.agency.commissions.col.commission", undefined, "Commission"),
               render: (r) => formatMoney(r.agent_commission_cents),
               accessor: (r) => Number(r.agent_commission_cents),
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "artist",
               header: t("console.agency.commissions.col.artistPayout", undefined, "Artist Payout"),
               render: (r) => formatMoney(r.artist_payout_cents),
               accessor: (r) => Number(r.artist_payout_cents),
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "settlement_state",

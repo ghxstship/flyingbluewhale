@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -174,7 +174,7 @@ export default async function Page() {
             "A lens over the master schedule: every event with type Meeting. Action items added to a meeting auto-create a task for the assignee. Closure is bidirectional via meeting_action_items.task_id.",
           )}
         </div>
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/meetings/${r.id}`}
           emptyLabel={t("console.meetings.empty.label", undefined, "No meetings yet")}
@@ -194,7 +194,7 @@ export default async function Page() {
               header: t("console.meetings.columns.code", undefined, "Code"),
               render: (r) => r.code,
               accessor: (r) => r.code,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "title",
@@ -225,14 +225,14 @@ export default async function Page() {
               render: (r) =>
                 fmt.dateParts(r.starts_at, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }),
               accessor: (r) => r.starts_at,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "attendees",
               header: t("console.meetings.columns.people", undefined, "People"),
               render: (r) => fmt.number(r.attendee_count),
               accessor: (r) => r.attendee_count,
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "actions",
@@ -244,7 +244,7 @@ export default async function Page() {
                   <span className="text-[var(--p-text-2)]">{fmt.number(r.open_action_count)}</span>
                 ),
               accessor: (r) => r.open_action_count,
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "state",

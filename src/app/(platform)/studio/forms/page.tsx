@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -62,7 +62,7 @@ export default async function Page() {
         }
       />
       <div className="page-content">
-        <DataTable<FormRow>
+        <DataView<FormRow>
           rows={rows}
           rowHref={(r) => `/studio/forms/${r.id}`}
           emptyLabel={t("console.forms.emptyLabel", undefined, "No forms yet")}
@@ -86,8 +86,9 @@ export default async function Page() {
             {
               key: "slug",
               header: t("console.forms.column.slug", undefined, "Slug"),
-              render: (r) => <span className="font-mono text-xs">{r.slug}</span>,
+              render: (r) => r.slug,
               accessor: (r) => r.slug ?? null,
+              mono: true,
             },
             {
               key: "form_state",
@@ -100,8 +101,9 @@ export default async function Page() {
             {
               key: "updated_at",
               header: t("console.forms.column.updated", undefined, "Updated"),
-              render: (r) => <span className="font-mono text-xs">{r.updated_at?.slice(0, 10)}</span>,
+              render: (r) => r.updated_at?.slice(0, 10),
               accessor: (r) => r.updated_at?.slice ?? null,
+              mono: true,
             },
           ]}
         />

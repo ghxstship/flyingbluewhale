@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession } from "@/lib/auth";
@@ -133,7 +133,7 @@ export default async function TakeoffDetail({ params }: { params: Promise<{ id: 
           <h3 className="text-sm font-semibold">
             {t("console.takeoffs.detail.measurements", undefined, "Measurements")}
           </h3>
-          <DataTable<Item>
+          <DataView<Item>
             rows={items}
             emptyLabel={t("console.takeoffs.detail.emptyLabel", undefined, "No measurements yet")}
             emptyDescription={t("console.takeoffs.detail.emptyDescription", undefined, "Items captured against this takeoff (counts, lengths, areas, volumes) roll up into the total above.")}
@@ -158,7 +158,7 @@ export default async function TakeoffDetail({ params }: { params: Promise<{ id: 
                 header: t("console.takeoffs.detail.col.quantity", undefined, "Quantity"),
                 render: (r) => `${Number(r.measured_quantity).toFixed(2)} ${takeoff.unit}`,
                 accessor: (r) => Number(r.measured_quantity),
-                className: "font-mono text-xs text-right",
+                numeric: true,
               },
             ]}
           />

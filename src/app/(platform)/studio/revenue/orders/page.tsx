@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
@@ -69,7 +69,7 @@ export default async function RevenueOrdersPage() {
             )}
           />
         ) : (
-          <DataTable<OrderRow>
+          <DataView<OrderRow>
             rows={rows}
             columns={[
               {
@@ -97,7 +97,7 @@ export default async function RevenueOrdersPage() {
                 header: t("console.revenue.orders.col.total", undefined, "Total"),
                 render: (r) => formatMoney(r.total_cents, r.currency),
                 accessor: (r) => r.total_cents,
-                className: "tabular-nums",
+                tabular: true,
               },
               {
                 key: "state",

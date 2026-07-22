@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
@@ -68,7 +68,7 @@ export default async function SchedulePage() {
       <div className="page-content space-y-5">
         <ScheduleCalendarView events={calendarEvents} />
 
-        <DataTable<EventRow>
+        <DataView<EventRow>
           rows={rows}
           rowHref={(r) => (r.event_kind === "meeting" ? `/studio/meetings/${r.id}` : `/studio/events/${r.id}`)}
           columns={[
@@ -91,14 +91,14 @@ export default async function SchedulePage() {
               key: "starts",
               header: t("console.schedule.col.starts", undefined, "Starts"),
               render: (r) => formatDate(r.starts_at, "long"),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.starts_at,
             },
             {
               key: "ends",
               header: t("console.schedule.col.ends", undefined, "Ends"),
               render: (r) => formatDate(r.ends_at, "long"),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.ends_at,
             },
             {

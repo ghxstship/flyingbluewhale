@@ -3,7 +3,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { FileViewer } from "@/components/ui/FileViewer";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -278,7 +278,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               )}
             </span>
           </header>
-          <DataTable<Member>
+          <DataView<Member>
             rows={memberRows}
             rowHref={(m) => (m.site_plan ? `/studio/site-plans/${m.site_plan.id}` : "#")}
             emptyLabel={t("console.drawings.detail.emptyLabel", undefined, "No sheets in this version yet")}
@@ -293,14 +293,15 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 header: "#",
                 render: (m) => m.ordinal.toString(),
                 accessor: (m) => m.ordinal,
-                className: "font-mono text-xs text-right w-12",
+                numeric: true,
+                className: "w-12",
               },
               {
                 key: "code",
                 header: t("console.drawings.detail.columnCode", undefined, "Code"),
                 render: (m) => m.site_plan?.code ?? "—",
                 accessor: (m) => m.site_plan?.code ?? null,
-                className: "font-mono text-xs",
+                mono: true,
               },
               {
                 key: "title",
@@ -322,7 +323,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 header: t("console.drawings.detail.columnRev", undefined, "Rev (At Publish)"),
                 render: (m) => m.revision_letter_at_publish ?? m.site_plan?.revision_letter ?? "—",
                 accessor: (m) => m.revision_letter_at_publish ?? m.site_plan?.revision_letter ?? null,
-                className: "font-mono text-xs",
+                mono: true,
               },
               {
                 key: "doc_state",

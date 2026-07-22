@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
@@ -39,7 +39,7 @@ export default async function WhiteboardsPage() {
         }
       />
       <div className="page-content">
-        <DataTable<WhiteboardListItem>
+        <DataView<WhiteboardListItem>
           rows={boards}
           rowHref={(b) => `/studio/collaborate/whiteboards/${b.id}`}
           emptyLabel="No whiteboards yet"

@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -62,7 +62,7 @@ export default async function Page() {
         }
       />
       <div className="page-content space-y-5">
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/agency/roster/${r.id}`}
           emptyLabel={t("console.agency.roster.emptyLabel", undefined, "No Roster Yet")}
@@ -91,7 +91,7 @@ export default async function Page() {
                   ? `${(r.commission_bps / 100).toFixed(2)}%`
                   : t("console.agency.roster.commissionDefault", undefined, "default"),
               accessor: (r) => Number(r.commission_bps ?? 0),
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "exclusive",
@@ -109,7 +109,7 @@ export default async function Page() {
               header: t("console.agency.roster.column.signed", undefined, "Signed"),
               render: (r) => r.signed_at ?? "—",
               accessor: (r) => r.signed_at,
-              className: "font-mono text-xs",
+              mono: true,
             },
           ]}
         />

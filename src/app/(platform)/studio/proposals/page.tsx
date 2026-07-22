@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { countOrgScoped, listOrgScoped } from "@/lib/db/resource";
@@ -47,7 +47,7 @@ export default async function ProposalsPage() {
         }
       />
       <div className="page-content">
-        <DataTable<Tables<"proposals">>
+        <DataView<Tables<"proposals">>
           rows={rows}
           totalCount={totalCount}
           rowHref={(r) => `/studio/proposals/${r.id}`}
@@ -80,7 +80,7 @@ export default async function ProposalsPage() {
               key: "amount",
               header: t("console.proposals.columns.amount", undefined, "Amount"),
               render: (r) => formatMoney(r.amount_cents ?? 0),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => Number(r.amount_cents ?? 0),
             },
             {
@@ -95,14 +95,14 @@ export default async function ProposalsPage() {
               key: "expires",
               header: t("console.proposals.columns.expires", undefined, "Expires"),
               render: (r) => (r.expires_at ? formatDate(r.expires_at) : "—"),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.expires_at ?? null,
             },
             {
               key: "updated",
               header: t("console.proposals.columns.updated", undefined, "Updated"),
               render: (r) => timeAgo(r.updated_at),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.updated_at,
             },
           ]}

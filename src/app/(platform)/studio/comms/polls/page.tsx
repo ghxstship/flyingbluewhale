@@ -1,7 +1,7 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -64,7 +64,7 @@ export default async function Page() {
         }
       />
       <div className="page-content">
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/comms/polls/${r.id}`}
           emptyLabel={t("console.comms.polls.emptyLabel", undefined, "No polls yet")}

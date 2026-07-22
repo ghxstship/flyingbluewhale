@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -113,7 +113,7 @@ export default async function RevenuePayoutsPage() {
             )}
           />
         ) : (
-          <DataTable<PayoutRow>
+          <DataView<PayoutRow>
             rows={rows}
             columns={[
               {
@@ -133,7 +133,7 @@ export default async function RevenuePayoutsPage() {
                 header: t("console.revenue.payouts.col.net", undefined, "Net"),
                 render: (r) => formatMoney(r.net_cents, r.currency),
                 accessor: (r) => r.net_cents,
-                className: "tabular-nums",
+                tabular: true,
               },
               {
                 key: "state",

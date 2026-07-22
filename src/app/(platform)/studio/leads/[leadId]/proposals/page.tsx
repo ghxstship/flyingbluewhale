@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
@@ -23,7 +23,7 @@ export default async function Page() {
         subtitle={t("console.leads.proposals.subtitle", undefined, "Proposals sourced from this lead.")}
       />
       <div className="page-content">
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           emptyLabel={t("console.leads.proposals.emptyLabel", undefined, "No Proposals")}
           emptyDescription={t(

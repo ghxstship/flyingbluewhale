@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -91,7 +91,7 @@ export default async function Page() {
           />
         </div>
 
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/agency/tours/${r.tour_id}`}
           emptyLabel={t("console.agency.tours.empty.label", undefined, "No tours yet")}
@@ -124,28 +124,29 @@ export default async function Page() {
               header: t("console.agency.tours.col.legs", undefined, "Legs"),
               render: (r) => `${r.settled_legs}/${r.leg_count}`,
               accessor: (r) => Number(r.leg_count),
-              className: "font-mono text-xs tabular-nums",
+              mono: true,
+              tabular: true,
             },
             {
               key: "gbor",
               header: t("console.agency.tours.col.gbor", undefined, "GBOR"),
               render: (r) => formatMoney(r.gross_box_office_cents),
               accessor: (r) => Number(r.gross_box_office_cents),
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "nbor",
               header: t("console.agency.tours.col.nbor", undefined, "NBOR"),
               render: (r) => formatMoney(r.nbor_cents),
               accessor: (r) => Number(r.nbor_cents),
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "starts",
               header: t("console.agency.tours.col.starts", undefined, "Starts"),
               render: (r) => r.starts_on ?? "—",
               accessor: (r) => r.starts_on,
-              className: "font-mono text-xs",
+              mono: true,
             },
           ]}
         />

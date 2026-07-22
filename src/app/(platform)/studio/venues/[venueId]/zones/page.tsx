@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -75,7 +75,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
         ]}
       />
       <div className="page-content space-y-5">
-        <DataTable<ZoneRow>
+        <DataView<ZoneRow>
           rows={zones}
           emptyLabel={t("console.venues.zones.emptyLabel", undefined, "No zones yet")}
           emptyDescription={t(
@@ -87,7 +87,8 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
             {
               key: "code",
               header: t("console.venues.zones.column.code", undefined, "Code"),
-              render: (r) => <span className="font-mono text-xs">{r.code}</span>,
+              render: (r) => r.code,
+              mono: true,
               accessor: (r) => r.code ?? null,
             },
             {

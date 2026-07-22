@@ -1,5 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
+import { MONO_CELL_CLASS } from "@/components/views/data-view-model";
 import { Badge } from "@/components/ui";
 import { FilterBar } from "@/components/ui/FilterBar";
 import { requireSession } from "@/lib/auth";
@@ -95,7 +96,7 @@ export default async function AtomsPage({
             {t("console.xpms.atoms.loadError", { message: error.message }, `Could not load atoms: ${error.message}`)}
           </div>
         ) : null}
-        <DataTable<AtomRow>
+        <DataView<AtomRow>
           tableId="xpms.atoms"
           rows={rows}
           searchable
@@ -111,7 +112,7 @@ export default async function AtomsPage({
               header: t("console.xpms.atoms.columns.identifier", undefined, "Identifier"),
               render: (r) => r.identifier,
               accessor: (r) => r.identifier,
-              className: "font-mono text-[11px]",
+              mono: true,
               sortable: true,
             },
             {
@@ -140,7 +141,7 @@ export default async function AtomsPage({
               header: t("console.xpms.atoms.columns.xtc", undefined, "XTC"),
               render: (r) => formatXtcCode(r.xtc_code),
               accessor: (r) => r.xtc_code,
-              className: "font-mono text-[11px]",
+              mono: true,
               sortable: true,
             },
             {
@@ -148,7 +149,7 @@ export default async function AtomsPage({
               header: t("console.xpms.atoms.columns.phase", undefined, "Phase"),
               render: (r) => (
                 <span className="text-xs">
-                  <span className="me-1 font-mono text-[11px] text-[var(--p-text-2)]">{PHASE_NUM[r.phase] ?? "?"}</span>
+                  <span className={`me-1 ${MONO_CELL_CLASS} text-[var(--p-text-2)]`}>{PHASE_NUM[r.phase] ?? "?"}</span>
                   {r.phase}
                 </span>
               ),
@@ -170,14 +171,14 @@ export default async function AtomsPage({
               key: "qty",
               header: t("console.xpms.atoms.columns.qty", undefined, "Qty"),
               render: (r) => (
-                <span className="font-mono text-xs">
+                <span>
                   {r.quantity ?? 1}
                   {r.unit ? <span className="ms-1 text-[var(--p-text-2)]">{r.unit}</span> : null}
                 </span>
               ),
               accessor: (r) => Number(r.quantity ?? 1),
               sortable: true,
-              className: "text-right",
+              numeric: true,
             },
           ]}
         />

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { requireSession } from "@/lib/auth";
@@ -152,7 +152,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
           </section>
         )}
 
-        <DataTable<ItemRow>
+        <DataView<ItemRow>
           rows={items}
           emptyLabel={t("console.venues.handover.empty.label", undefined, "No handover items yet")}
           emptyDescription={t(
@@ -178,13 +178,15 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
             {
               key: "due",
               header: t("console.venues.handover.columns.due", undefined, "Due"),
-              render: (r) => <span className="font-mono text-xs">{fmtDate(r.due_at)}</span>,
+              render: (r) => fmtDate(r.due_at),
+              mono: true,
               accessor: (r) => r.due_at ?? null,
             },
             {
               key: "resolved",
               header: t("console.venues.handover.columns.resolved", undefined, "Resolved"),
-              render: (r) => <span className="font-mono text-xs">{fmtDate(r.resolved_at)}</span>,
+              render: (r) => fmtDate(r.resolved_at),
+              mono: true,
               accessor: (r) => r.resolved_at ?? null,
             },
             {

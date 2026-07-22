@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
 import { listOrgScopedPage } from "@/lib/db/resource";
@@ -54,7 +54,7 @@ export default async function Page({
         }
       />
       <div className="page-content space-y-3">
-        <DataTable
+        <DataView
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           totalCount={total}
           rowHref={(r) => `/studio/transport/dispatch/${r.id}`}
@@ -79,13 +79,15 @@ export default async function Page({
             {
               key: "vehicle_ref",
               header: t("console.transport.dispatch.col.vehicle", undefined, "Vehicle"),
-              render: (r) => <span className="font-mono text-xs">{String(r.vehicle_ref ?? "—")}</span>,
+              render: (r) => String(r.vehicle_ref ?? "—"),
+              mono: true,
               accessor: (r) => r.vehicle_ref ?? null,
             },
             {
               key: "scheduled_depart",
               header: t("console.transport.dispatch.col.depart", undefined, "Depart"),
-              render: (r) => <span className="font-mono text-xs">{String(r.scheduled_depart ?? "—")}</span>,
+              render: (r) => String(r.scheduled_depart ?? "—"),
+              mono: true,
               accessor: (r) => r.scheduled_depart ?? null,
             },
             {

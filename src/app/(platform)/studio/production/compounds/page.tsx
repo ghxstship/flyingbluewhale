@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -87,7 +87,7 @@ export default async function Page() {
           </section>
         )}
 
-        <DataTable<VenueRow>
+        <DataView<VenueRow>
           rows={rows}
           rowHref={(r) => `/studio/venues/${r.id}`}
           emptyLabel={t("console.production.compounds.emptyLabel", undefined, "No broadcast compounds")}
@@ -112,7 +112,7 @@ export default async function Page() {
               key: "kind",
               header: t("console.production.compounds.col.kind", undefined, "Kind"),
               render: (r) => r.kind.toUpperCase(),
-              className: "font-mono text-xs",
+              mono: true,
               filterable: true,
               groupable: true,
               accessor: (r) => r.kind.toUpperCase ?? null,
@@ -126,9 +126,8 @@ export default async function Page() {
             {
               key: "capacity",
               header: t("console.production.compounds.col.capacity", undefined, "Capacity"),
-              render: (r) => (
-                <span className="font-mono text-xs">{r.capacity != null ? fmt.number(r.capacity) : "—"}</span>
-              ),
+              render: (r) => (r.capacity != null ? fmt.number(r.capacity) : "—"),
+              mono: true,
               accessor: (r) => r.capacity ?? null,
             },
             {

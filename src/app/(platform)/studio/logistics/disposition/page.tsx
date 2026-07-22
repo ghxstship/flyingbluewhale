@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -108,7 +108,7 @@ export default async function Page() {
           />
         </div>
 
-        <DataTable<AssetRow>
+        <DataView<AssetRow>
           rows={rows}
           rowHref={(r) => `/studio/assets/${r.id}`}
           emptyLabel={t("console.logistics.disposition.empty.label", undefined, "Nothing pending disposition")}
@@ -128,7 +128,7 @@ export default async function Page() {
               key: "tag",
               header: t("console.logistics.disposition.col.tag", undefined, "Tag"),
               render: (r) => r.asset_tag ?? "—",
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.asset_tag ?? null,
             },
             {
@@ -143,7 +143,7 @@ export default async function Page() {
               key: "rate",
               header: t("console.logistics.disposition.col.dailyRate", undefined, "Daily Rate"),
               render: (r) => (r.daily_rate_minor != null ? formatMoney(r.daily_rate_minor) : "—"),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => Number(r.daily_rate_minor ?? 0),
             },
             {

@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
 import { listOrgScopedPage } from "@/lib/db/resource";
@@ -58,7 +58,7 @@ export default async function Page({
         }
       />
       <div className="page-content space-y-3">
-        <DataTable
+        <DataView
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           totalCount={total}
           rowHref={(r) => `/studio/legal/privacy/dsar/${r.id}`}
@@ -77,7 +77,7 @@ export default async function Page({
             {
               key: "requester_email",
               header: t("console.legal.privacy.dsar.col.requester", undefined, "Requester"),
-              render: (r) => <span className="font-mono text-xs">{String(r.requester_email ?? "—")}</span>,
+              render: (r) => String(r.requester_email ?? "—"),
               accessor: (r) => r.requester_email ?? null,
             },
             {
@@ -99,7 +99,8 @@ export default async function Page({
             {
               key: "due_by",
               header: t("console.legal.privacy.dsar.col.due", undefined, "Due"),
-              render: (r) => <span className="font-mono text-xs">{String(r.due_by ?? "—")}</span>,
+              render: (r) => String(r.due_by ?? "—"),
+              mono: true,
               accessor: (r) => r.due_by ?? null,
             },
           ]}

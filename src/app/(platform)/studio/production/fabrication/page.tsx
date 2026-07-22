@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { listOrgScopedWithCount } from "@/lib/db/resource";
@@ -43,7 +43,7 @@ export default async function FabricationPage() {
         }
       />
       <div className="page-content">
-        <DataTable<Tables<"fabrication_orders">>
+        <DataView<Tables<"fabrication_orders">>
           rows={rows}
           totalCount={totalCount}
           rowHref={(r) => `/studio/production/fabrication/${r.id}`}
@@ -77,7 +77,7 @@ export default async function FabricationPage() {
               key: "due",
               header: t("console.production.fabrication.col.due", undefined, "Due"),
               render: (r) => formatDate(r.due_at, "medium"),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.due_at,
             },
           ]}

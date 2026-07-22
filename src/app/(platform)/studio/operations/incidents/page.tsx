@@ -2,7 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusChip, type StatusTone } from "@/components/ui/StatusChip";
 import { DueDateBadge } from "@/components/ui/DueDateBadge";
 import { requireSession } from "@/lib/auth";
@@ -90,7 +90,7 @@ export default async function IncidentsPage({ searchParams }: { searchParams: Pr
             )}
           />
         ) : (
-          <DataTable<IncidentRow>
+          <DataView<IncidentRow>
             rows={rows}
             rowHref={(r) => `/studio/operations/incidents/${r.id}`}
             emptyLabel={t("console.operations.incidents.emptyLabel", undefined, "No incidents reported")}
@@ -109,7 +109,7 @@ export default async function IncidentsPage({ searchParams }: { searchParams: Pr
                 key: "when",
                 header: t("console.operations.incidents.columns.when", undefined, "When"),
                 render: (r) => fmt.dateTime(r.occurred_at),
-                className: "font-mono text-xs",
+                mono: true,
                 accessor: (r) => r.occurred_at ?? null,
               },
               {

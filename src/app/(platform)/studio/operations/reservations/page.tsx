@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -153,7 +153,7 @@ export default async function Page() {
           />
         </div>
 
-        <DataTable<ReservationRow>
+        <DataView<ReservationRow>
           rows={rows}
           rowHref={(r) => `/studio/operations/reservations/${r.id}`}
           emptyLabel={t("console.reservations.emptyLabel", undefined, "No reservations yet")}
@@ -175,7 +175,7 @@ export default async function Page() {
               header: t("console.reservations.columns.party", undefined, "Party"),
               render: (r) => fmt.number(r.party_size),
               accessor: (r) => r.party_size,
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "table",
@@ -196,7 +196,7 @@ export default async function Page() {
                   minute: "2-digit",
                 }),
               accessor: (r) => r.reserved_for,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "state",

@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
 import { listOrgScopedPage } from "@/lib/db/resource";
@@ -53,7 +53,7 @@ export default async function Page({
         }
       />
       <div className="page-content space-y-3">
-        <DataTable
+        <DataView
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           totalCount={total}
           rowHref={(r) => `/studio/accreditation/vetting/${r.id}`}
@@ -73,7 +73,7 @@ export default async function Page({
             {
               key: "person_email",
               header: t("console.accreditation.vetting.columns.email", undefined, "Email"),
-              render: (r) => <span className="font-mono text-xs">{String(r.person_email ?? "—")}</span>,
+              render: (r) => String(r.person_email ?? "—"),
               accessor: (r) => r.person_email ?? null,
             },
             {
@@ -85,7 +85,8 @@ export default async function Page({
             {
               key: "created_at",
               header: t("console.accreditation.vetting.columns.submitted", undefined, "Submitted"),
-              render: (r) => <span className="font-mono text-xs">{String(r.created_at ?? "—")}</span>,
+              render: (r) => String(r.created_at ?? "—"),
+              mono: true,
               accessor: (r) => r.created_at ?? null,
             },
           ]}

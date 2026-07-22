@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
 import { listOrgScopedPage } from "@/lib/db/resource";
@@ -52,7 +52,7 @@ export default async function Page({
         }
       />
       <div className="page-content space-y-3">
-        <DataTable
+        <DataView
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           totalCount={total}
           columns={[
@@ -71,13 +71,15 @@ export default async function Page({
             {
               key: "gate_code",
               header: t("console.accreditation.scans.columns.gate", undefined, "Gate"),
-              render: (r) => <span className="font-mono text-xs">{String(r.gate_code ?? "—")}</span>,
+              render: (r) => String(r.gate_code ?? "—"),
+              mono: true,
               accessor: (r) => r.gate_code ?? null,
             },
             {
               key: "scanned_at",
               header: t("console.accreditation.scans.columns.at", undefined, "At"),
-              render: (r) => <span className="font-mono text-xs">{String(r.scanned_at ?? "—")}</span>,
+              render: (r) => String(r.scanned_at ?? "—"),
+              mono: true,
               accessor: (r) => r.scanned_at ?? null,
             },
           ]}

@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
+import { MONO_CELL_CLASS } from "@/components/views/data-view-model";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -129,7 +130,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
           </section>
         )}
 
-        <DataTable<SpecRow>
+        <DataView<SpecRow>
           rows={specs}
           emptyLabel={t("console.venues.design.emptyLabel", undefined, "No design specs uploaded")}
           emptyDescription={t(
@@ -155,13 +156,15 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
             {
               key: "revision",
               header: t("console.venues.design.col.rev", undefined, "Rev"),
-              render: (r) => <span className="font-mono text-xs">{r.revision}</span>,
+              render: (r) => r.revision,
+              mono: true,
               accessor: (r) => r.revision ?? null,
             },
             {
               key: "updated",
               header: t("console.venues.design.col.updated", undefined, "Updated"),
-              render: (r) => <span className="font-mono text-xs">{fmtDate(r.updated_at)}</span>,
+              render: (r) => fmtDate(r.updated_at),
+              mono: true,
               accessor: (r) => r.updated_at ?? null,
             },
             {
@@ -169,7 +172,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
               header: t("console.venues.design.col.bom", undefined, "BOM"),
               render: (r) =>
                 r.bom_requisition_id ? (
-                  <span className="font-mono text-[11px] text-[var(--p-accent)]">
+                  <span className={`${MONO_CELL_CLASS} text-[var(--p-accent)]`}>
                     {t("console.venues.design.bom.linked", undefined, "linked")}
                   </span>
                 ) : (

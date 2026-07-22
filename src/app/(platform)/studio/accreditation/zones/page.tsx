@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -57,7 +57,7 @@ export default async function Page() {
         )}
       />
       <div className="page-content">
-        <DataTable
+        <DataView
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           emptyLabel={t("console.accreditation.zones.emptyLabel", undefined, "No zones defined")}
           emptyDescription={t(
@@ -69,7 +69,8 @@ export default async function Page() {
             {
               key: "code",
               header: t("console.accreditation.zones.columns.code", undefined, "Code"),
-              render: (r) => <span className="font-mono text-xs">{String(r.code ?? "—")}</span>,
+              render: (r) => String(r.code ?? "—"),
+              mono: true,
               accessor: (r) => r.code ?? null,
             },
             {
@@ -87,12 +88,8 @@ export default async function Page() {
             {
               key: "parent_zone_id",
               header: t("console.accreditation.zones.columns.parent", undefined, "Parent"),
-              render: (r) =>
-                r.parent_zone_id ? (
-                  <span className="font-mono text-xs">{String(r.parent_zone_id).slice(0, 8)}…</span>
-                ) : (
-                  "—"
-                ),
+              render: (r) => (r.parent_zone_id ? `${String(r.parent_zone_id).slice(0, 8)}…` : "—"),
+              mono: true,
               accessor: (r) => r.parent_zone_id ?? null,
             },
           ]}

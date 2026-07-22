@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
 import { listOrgScopedPage } from "@/lib/db/resource";
@@ -58,7 +58,7 @@ export default async function Page({
         }
       />
       <div className="page-content space-y-3">
-        <DataTable
+        <DataView
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           totalCount={total}
           rowHref={(r) => `/studio/legal/insurance/${r.id}`}
@@ -83,7 +83,8 @@ export default async function Page({
             {
               key: "policy_no",
               header: t("console.legal.insurance.columns.policyNo", undefined, "Policy No."),
-              render: (r) => <span className="font-mono text-xs">{String(r.policy_no ?? "—")}</span>,
+              render: (r) => String(r.policy_no ?? "—"),
+              mono: true,
               accessor: (r) => r.policy_no ?? null,
             },
             {
@@ -97,13 +98,15 @@ export default async function Page({
             {
               key: "effective_on",
               header: t("console.legal.insurance.columns.effective", undefined, "Effective"),
-              render: (r) => <span className="font-mono text-xs">{String(r.effective_on ?? "—")}</span>,
+              render: (r) => String(r.effective_on ?? "—"),
+              mono: true,
               accessor: (r) => r.effective_on ?? null,
             },
             {
               key: "expires_on",
               header: t("console.legal.insurance.columns.expires", undefined, "Expires"),
-              render: (r) => <span className="font-mono text-xs">{String(r.expires_on ?? "—")}</span>,
+              render: (r) => String(r.expires_on ?? "—"),
+              mono: true,
               accessor: (r) => r.expires_on ?? null,
             },
           ]}

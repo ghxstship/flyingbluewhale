@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -87,7 +87,7 @@ export default async function Page() {
           </section>
         )}
 
-        <DataTable<AssetRow>
+        <DataView<AssetRow>
           rows={av}
           rowHref={(r) => `/studio/assets/${r.id}`}
           emptyLabel={t("console.production.av.emptyLabel", undefined, "No AV assets identified")}
@@ -111,7 +111,8 @@ export default async function Page() {
             {
               key: "asset_tag",
               header: t("console.production.av.columns.tag", undefined, "Tag"),
-              render: (r) => <span className="font-mono text-xs">{r.asset_tag ?? "—"}</span>,
+              render: (r) => r.asset_tag ?? "—",
+              mono: true,
               accessor: (r) => r.asset_tag ?? null,
             },
             {
@@ -125,7 +126,8 @@ export default async function Page() {
             {
               key: "serial",
               header: t("console.production.av.columns.serial", undefined, "Serial"),
-              render: (r) => <span className="font-mono text-xs">{r.serial ?? "—"}</span>,
+              render: (r) => r.serial ?? "—",
+              mono: true,
               accessor: (r) => r.serial ?? null,
             },
             {

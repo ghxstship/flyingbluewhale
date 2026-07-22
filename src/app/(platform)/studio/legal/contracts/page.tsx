@@ -2,7 +2,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
 import { listOrgScopedPage } from "@/lib/db/resource";
@@ -69,7 +69,7 @@ export default async function Page({
         }
       />
       <div className="page-content space-y-3">
-        <DataTable<ContractRow>
+        <DataView<ContractRow>
           rows={rows}
           totalCount={total}
           rowHref={(r) => `/studio/legal/contracts/${r.id}`}

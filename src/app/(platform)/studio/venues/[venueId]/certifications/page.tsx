@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
+import { MONO_CELL_CLASS } from "@/components/views/data-view-model";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -133,7 +134,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
           />
         </div>
 
-        <DataTable<CertRow>
+        <DataView<CertRow>
           rows={certs}
           emptyLabel={t("console.venues.certifications.empty.label", undefined, "No certifications uploaded")}
           emptyDescription={t(
@@ -157,13 +158,15 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
             {
               key: "issued",
               header: t("console.venues.certifications.columns.issued", undefined, "Issued"),
-              render: (r) => <span className="font-mono text-xs">{fmtDate(r.issued_on)}</span>,
+              render: (r) => fmtDate(r.issued_on),
+              mono: true,
               accessor: (r) => r.issued_on ?? null,
             },
             {
               key: "expires",
               header: t("console.venues.certifications.columns.expires", undefined, "Expires"),
-              render: (r) => <span className="font-mono text-xs">{fmtDate(r.expires_on)}</span>,
+              render: (r) => fmtDate(r.expires_on),
+              mono: true,
               accessor: (r) => r.expires_on ?? null,
             },
             {
@@ -179,7 +182,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
               header: t("console.venues.certifications.columns.file", undefined, "File"),
               render: (r) =>
                 r.file_path ? (
-                  <code className="font-mono text-[11px]">{r.file_path.slice(0, 40)}…</code>
+                  <code className={MONO_CELL_CLASS}>{r.file_path.slice(0, 40)}…</code>
                 ) : (
                   <span className="text-[var(--p-text-2)]">—</span>
                 ),

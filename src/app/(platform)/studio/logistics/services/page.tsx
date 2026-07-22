@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -93,7 +93,7 @@ export default async function Page() {
           />
         </div>
 
-        <DataTable<ServiceRequest>
+        <DataView<ServiceRequest>
           rows={rows}
           rowHref={(r) => `/studio/services/requests/${r.id}`}
           emptyLabel={t("console.logistics.services.empty.label", undefined, "No logistics service requests")}
@@ -134,7 +134,7 @@ export default async function Page() {
               key: "opened",
               header: t("console.logistics.services.columns.opened", undefined, "Opened"),
               render: (r) => relativeTime(r.opened_at),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.opened_at ?? null,
             },
             {

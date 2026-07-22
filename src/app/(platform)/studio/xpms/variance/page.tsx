@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 type Row = {
   // The view groups by (org_id, project_id, class_code, reason) so we
-  // synthesise a stable id from those keys for DataTable.
+  // synthesise a stable id from those keys for DataView.
   id: string;
   org_id: string;
   project_id: string | null;
@@ -56,7 +56,7 @@ export default async function VariancePage() {
         subtitle={t("console.xpms.variance.subtitle", undefined, "Planned vs. actual delta, with reason codes.")}
       />
       <div className="page-content">
-        <DataTable<Row>
+        <DataView<Row>
           tableId="xpms.variance"
           rows={rows}
           searchable
@@ -94,7 +94,7 @@ export default async function VariancePage() {
               header: t("console.xpms.variance.columns.entries", undefined, "Entries"),
               render: (r) => r.entries,
               accessor: (r) => r.entries,
-              className: "text-right font-mono text-xs",
+              numeric: true,
               sortable: true,
             },
             {
@@ -102,7 +102,7 @@ export default async function VariancePage() {
               header: t("console.xpms.variance.columns.qtyDelta", undefined, "Qty Δ"),
               render: (r) => r.qty_delta_total ?? 0,
               accessor: (r) => Number(r.qty_delta_total ?? 0),
-              className: "text-right font-mono text-xs",
+              numeric: true,
               sortable: true,
             },
             {
@@ -110,7 +110,7 @@ export default async function VariancePage() {
               header: t("console.xpms.variance.columns.costDelta", undefined, "Cost Δ (Cents)"),
               render: (r) => r.cost_delta_cents_total ?? 0,
               accessor: (r) => Number(r.cost_delta_cents_total ?? 0),
-              className: "text-right font-mono text-xs",
+              numeric: true,
               sortable: true,
             },
           ]}

@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -59,7 +59,7 @@ export default async function Page() {
 
   const rows = (data ?? []) as unknown as Row[];
 
-  // DataTable requires an `id`; asset_id is unique.
+  // DataView requires an `id`; asset_id is unique.
   const tableRows = rows.map((r) => ({ ...r, id: r.asset_id }));
 
   const idleCount = rows.filter((r) => Number(r.utilization_pct_30d ?? 0) < 25).length;
@@ -97,7 +97,7 @@ export default async function Page() {
             "Rolled up from asset_movements. Under-utilized = < 25% over the last 30 days. Idle revenue = (30 − reserved_days) × daily_rate. What could have been earned had the asset been on a job.",
           )}
         </div>
-        <DataTable
+        <DataView
           rows={tableRows}
           rowHref={(r) => `/studio/assets/${r.asset_id}`}
           emptyLabel={t("console.production.equipment.utilization.emptyLabel", undefined, "No equipment yet")}
@@ -118,7 +118,7 @@ export default async function Page() {
               header: t("console.production.equipment.utilization.col.tag", undefined, "Tag"),
               render: (r) => r.asset_tag ?? "—",
               accessor: (r) => r.asset_tag,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "asset_kind",
@@ -134,14 +134,14 @@ export default async function Page() {
               header: t("console.production.equipment.utilization.col.moves30d", undefined, "Moves 30d"),
               render: (r) => fmt.number(r.movements_30d),
               accessor: (r) => r.movements_30d,
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "reserved_30d",
               header: t("console.production.equipment.utilization.col.reserved30d", undefined, "Reserved 30d"),
               render: (r) => `${Number(r.reserved_days_30d).toFixed(1)}d`,
               accessor: (r) => Number(r.reserved_days_30d),
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "util_30d",
@@ -158,14 +158,14 @@ export default async function Page() {
               header: t("console.production.equipment.utilization.col.util90d", undefined, "Util 90d"),
               render: (r) => `${Number(r.utilization_pct_90d ?? 0).toFixed(1)}%`,
               accessor: (r) => Number(r.utilization_pct_90d ?? 0),
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
             {
               key: "idle_rev",
               header: t("console.production.equipment.utilization.col.idleRev30d", undefined, "Idle Rev 30d"),
               render: (r) => (r.idle_revenue_30d_cents != null ? fmt.money(Number(r.idle_revenue_30d_cents)) : "—"),
               accessor: (r) => Number(r.idle_revenue_30d_cents ?? 0),
-              className: "font-mono text-xs text-right",
+              numeric: true,
             },
           ]}
         />

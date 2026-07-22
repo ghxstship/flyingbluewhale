@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
 import { listOrgScopedPage } from "@/lib/db/resource";
@@ -58,7 +58,7 @@ export default async function Page({
         }
       />
       <div className="page-content space-y-3">
-        <DataTable
+        <DataView
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           totalCount={total}
           rowHref={(r) => `/studio/logistics/ratecard/${r.id}`}
@@ -83,7 +83,8 @@ export default async function Page({
             {
               key: "sku",
               header: t("console.logistics.ratecard.columns.sku", undefined, "SKU"),
-              render: (r) => <span className="font-mono text-xs">{String(r.sku ?? "—")}</span>,
+              render: (r) => String(r.sku ?? "—"),
+              mono: true,
               accessor: (r) => r.sku ?? null,
             },
             {
@@ -95,7 +96,8 @@ export default async function Page({
             {
               key: "unit_price_cents",
               header: t("console.logistics.ratecard.columns.unitCents", undefined, "Unit ¢"),
-              render: (r) => <span className="font-mono text-xs">{String(r.unit_price_cents ?? "—")}</span>,
+              render: (r) => String(r.unit_price_cents ?? "—"),
+              mono: true,
               accessor: (r) => Number(r.unit_price_cents ?? 0),
             },
           ]}

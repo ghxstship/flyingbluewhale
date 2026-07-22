@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { requireSession } from "@/lib/auth";
@@ -134,7 +134,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
           </section>
         )}
 
-        <DataTable<ItemRow>
+        <DataView<ItemRow>
           rows={items}
           emptyLabel={t("console.venues.closeout.emptyLabel", undefined, "No closeout items yet")}
           emptyDescription={t(
@@ -160,13 +160,15 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
             {
               key: "due",
               header: t("console.venues.closeout.column.due", undefined, "Due"),
-              render: (r) => <span className="font-mono text-xs">{fmtDate(r.due_at)}</span>,
+              render: (r) => fmtDate(r.due_at),
+              mono: true,
               accessor: (r) => r.due_at ?? null,
             },
             {
               key: "completed",
               header: t("console.venues.closeout.column.completed", undefined, "Completed"),
-              render: (r) => <span className="font-mono text-xs">{fmtDate(r.completed_at)}</span>,
+              render: (r) => fmtDate(r.completed_at),
+              mono: true,
               accessor: (r) => r.completed_at ?? null,
             },
             {

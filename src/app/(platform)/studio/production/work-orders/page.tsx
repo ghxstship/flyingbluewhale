@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable, type Column } from "@/components/DataTable";
+import { DataView, type DataViewColumn } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -59,7 +59,7 @@ export default async function WorkOrdersPage() {
   const active = rows.filter((r) => ["awarded", "in-progress"].includes(r.work_order_state)).length;
   const closed = rows.filter((r) => ["closed", "invoiced", "approved"].includes(r.work_order_state)).length;
 
-  const columns: Column<Row>[] = [
+  const columns: DataViewColumn<Row>[] = [
     { key: "title", header: t("console.production.workOrders.col.title", undefined, "Title"), render: (r) => r.title },
     { key: "trade", header: t("console.production.workOrders.col.trade", undefined, "Trade"), render: (r) => r.trade },
     {
@@ -75,7 +75,8 @@ export default async function WorkOrdersPage() {
     {
       key: "budget",
       header: t("console.production.workOrders.col.budget", undefined, "Budget"),
-      render: (r) => <span className="font-mono">{formatCents(r.budget_guide_cents)}</span>,
+      render: (r) => formatCents(r.budget_guide_cents),
+      tabular: true,
     },
   ];
 
@@ -103,7 +104,7 @@ export default async function WorkOrdersPage() {
         <MetricCard label={t("console.production.workOrders.closed", undefined, "Closed")} value={String(closed)} />
       </div>
 
-      <DataTable
+      <DataView
         rows={rows}
         columns={columns}
         rowHref={(r) => `/studio/production/work-orders/${r.id}`}

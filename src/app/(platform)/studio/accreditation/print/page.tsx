@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
@@ -58,7 +58,7 @@ export default async function Page() {
         }
       />
       <div className="page-content">
-        <DataTable
+        <DataView
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           emptyLabel={t("console.accreditation.print.emptyLabel", undefined, "No badges queued")}
           emptyDescription={t(
@@ -76,7 +76,8 @@ export default async function Page() {
             {
               key: "card_barcode",
               header: t("console.accreditation.print.columns.barcode", undefined, "Barcode"),
-              render: (r) => <span className="font-mono text-xs">{String(r.card_barcode ?? "—")}</span>,
+              render: (r) => String(r.card_barcode ?? "—"),
+              mono: true,
               accessor: (r) => r.card_barcode ?? null,
             },
             {

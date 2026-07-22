@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -95,7 +95,7 @@ export default async function Page() {
           />
         </div>
 
-        <DataTable<LogRow>
+        <DataView<LogRow>
           rows={rows}
           rowHref={(r) => `/studio/operations/daily-log/${r.id}`}
           emptyLabel={t("console.operations.dailyLog.emptyLabel", undefined, "No daily logs yet")}
@@ -114,7 +114,7 @@ export default async function Page() {
               key: "date",
               header: t("console.operations.dailyLog.col.date", undefined, "Date"),
               render: (r) => fmtDate(r.log_date),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.log_date ?? null,
             },
             {

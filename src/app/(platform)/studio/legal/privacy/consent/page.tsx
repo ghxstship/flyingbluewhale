@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { PagerNav } from "@/components/ui/PagerNav";
 import { requireSession } from "@/lib/auth";
 import { listOrgScopedPage } from "@/lib/db/resource";
@@ -52,7 +52,7 @@ export default async function Page({
         }
       />
       <div className="page-content space-y-3">
-        <DataTable
+        <DataView
           rows={rows as Array<{ id: string } & Record<string, unknown>>}
           totalCount={total}
           columns={[
@@ -71,7 +71,8 @@ export default async function Page({
             {
               key: "version",
               header: t("console.legal.privacy.consent.columns.version", undefined, "Version"),
-              render: (r) => <span className="font-mono text-xs">{String(r.version ?? "—")}</span>,
+              render: (r) => String(r.version ?? "—"),
+              mono: true,
               accessor: (r) => r.version ?? null,
             },
           ]}

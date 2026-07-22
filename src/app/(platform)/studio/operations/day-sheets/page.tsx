@@ -1,6 +1,6 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -77,7 +77,7 @@ export default async function Page() {
           <MetricCard label={t("console.daySheets.metric.draft", undefined, "In Draft")} value={String(draft)} />
         </div>
 
-        <DataTable<Row>
+        <DataView<Row>
           rows={rows}
           rowHref={(r) => `/studio/operations/day-sheets/${r.id}`}
           emptyLabel={t("console.daySheets.empty.label", undefined, "No day sheets yet")}
@@ -97,7 +97,7 @@ export default async function Page() {
               header: t("console.daySheets.col.date", undefined, "Date"),
               render: (r) => r.sheet_date ?? "—",
               accessor: (r) => r.sheet_date,
-              className: "font-mono text-xs",
+              mono: true,
             },
             {
               key: "city",
@@ -122,7 +122,7 @@ export default async function Page() {
               header: t("console.daySheets.col.doors", undefined, "Doors"),
               render: (r) => r.doors ?? "—",
               accessor: (r) => r.doors,
-              className: "font-mono text-xs tabular-nums",
+              tabular: true,
             },
             {
               key: "state",

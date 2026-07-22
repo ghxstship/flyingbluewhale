@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { listOrgScopedWithCount } from "@/lib/db/resource";
 import { createClient } from "@/lib/supabase/server";
@@ -50,7 +50,7 @@ export default async function RentalsPage() {
         }
       />
       <div className="page-content">
-        <DataTable<Rental>
+        <DataView<Rental>
           rows={rows}
           totalCount={totalCount}
           rowHref={(r) => `/studio/production/rentals/${r.id}`}
@@ -83,21 +83,21 @@ export default async function RentalsPage() {
               key: "starts",
               header: t("console.production.rentals.columns.starts", undefined, "Starts"),
               render: (r) => formatDate(r.starts_at, "long"),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.starts_at,
             },
             {
               key: "ends",
               header: t("console.production.rentals.columns.ends", undefined, "Ends"),
               render: (r) => formatDate(r.ends_at, "long"),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.ends_at,
             },
             {
               key: "rate",
               header: t("console.production.rentals.columns.rate", undefined, "Rate"),
               render: (r) => formatMoney(r.rate_cents),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => Number(r.rate_cents ?? 0),
             },
           ]}

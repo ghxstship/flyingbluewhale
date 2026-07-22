@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { requireSession } from "@/lib/auth";
@@ -105,7 +105,7 @@ export default async function Page({ params }: { params: Promise<{ code: string 
             </Link>
           </div>
 
-          <DataTable<Atom>
+          <DataView<Atom>
             rows={atoms}
             emptyLabel={t("console.xpms.classes.detail.empty.label", undefined, "No Atoms In This Class")}
             emptyDescription={t(

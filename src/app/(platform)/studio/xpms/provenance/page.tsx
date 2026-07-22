@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui";
 import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
@@ -54,7 +54,7 @@ export default async function ProvenancePage() {
         }
       />
       <div className="page-content">
-        <DataTable<Edge>
+        <DataView<Edge>
           tableId="xpms.provenance"
           rows={edges}
           searchable
@@ -79,7 +79,7 @@ export default async function ProvenancePage() {
               header: t("console.xpms.provenance.columns.fromAtom", undefined, "From atom"),
               render: (e) => e.from_atom_id,
               accessor: (e) => e.from_atom_id,
-              className: "font-mono text-[11px]",
+              mono: true,
               sortable: true,
             },
             {
@@ -87,7 +87,7 @@ export default async function ProvenancePage() {
               header: t("console.xpms.provenance.columns.toAtom", undefined, "To atom"),
               render: (e) => e.to_atom_id,
               accessor: (e) => e.to_atom_id,
-              className: "font-mono text-[11px]",
+              mono: true,
               sortable: true,
             },
             {

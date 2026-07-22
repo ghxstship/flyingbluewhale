@@ -1,5 +1,5 @@
 import { ModuleHeader } from "@/components/Shell";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui";
 import { hasSupabase } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
@@ -9,7 +9,7 @@ import { getRequestT } from "@/lib/i18n/request";
 export const dynamic = "force-dynamic";
 
 type CodebookRow = {
-  // DataTable requires `id`; we synthesise from the line code
+  // DataView requires `id`; we synthesise from the line code
   id: string;
   class_code: number;
   class_name: string | null;
@@ -70,7 +70,7 @@ export default async function CodebookPage() {
             )}
           </div>
         ) : null}
-        <DataTable<CodebookRow>
+        <DataView<CodebookRow>
           tableId="xpms.codebook"
           rows={rows}
           searchable
@@ -86,7 +86,7 @@ export default async function CodebookPage() {
               header: t("console.xpms.codebook.columns.code", undefined, "Code"),
               render: (r) => formatXtcCode(r.line_code),
               accessor: (r) => r.line_code,
-              className: "font-mono text-xs",
+              mono: true,
               sortable: true,
             },
             {

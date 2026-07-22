@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 import { ModuleHeader } from "@/components/Shell";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { fmtDateTime, money } from "@/components/detail/DetailShell";
 import { getRequestT } from "@/lib/i18n/request";
 
@@ -58,7 +58,7 @@ export default async function LogisticsPage() {
         }
       />
       <div className="page-content max-w-5xl">
-        <DataTable<RentalRow>
+        <DataView<RentalRow>
           rows={rows}
           tableId="console:production:logistics"
           rowHref={(r) => `/studio/production/rentals/${r.id}`}

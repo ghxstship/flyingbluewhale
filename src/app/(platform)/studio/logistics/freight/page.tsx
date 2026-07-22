@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { MetricCard } from "@/components/ui/MetricCard";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -142,7 +142,7 @@ export default async function Page() {
             {t("console.logistics.freight.manifests.heading", undefined, "Arrival / departure manifests")}
           </h3>
           <div className="mt-3">
-            <DataTable<ManifestRow>
+            <DataView<ManifestRow>
               rows={manifests}
               tableId="console:logistics:freight:manifests"
               emptyLabel={t("console.logistics.freight.manifests.emptyTitle", undefined, "No A&D manifests on file")}

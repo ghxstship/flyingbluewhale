@@ -1,5 +1,16 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { enqueue, list, remove, size, flush, type QueuedItem } from "./queue";
+import {
+  clearFailed,
+  enqueue,
+  failedCount,
+  flush,
+  list,
+  listFailed,
+  markFailed,
+  remove,
+  size,
+  type QueuedItem,
+} from "./queue";
 
 /**
  * Offline queue (kit 21 W8). jsdom provides a real localStorage, so the outbox
@@ -83,5 +94,83 @@ describe("offline queue", () => {
     await flush("chat", send);
     expect(list("chat")).toEqual([]);
     expect(list("daily-log").map((q) => q.id)).toEqual(["b"]);
+  });
+});
+
+/**
+ * T1-1 additions — failed-item parking + the shared per-kind drain mutex.
+ * The failure mode each pins: a poisoned row wedging every later write of
+ * its kind forever, and two drain paths (surface-mounted + app-level)
+ * double-sending the same queued item on reconnect.
+ */
+describe("failed-item parking (T1-1)", () => {
+  beforeEach(() => window.localStorage.clear());
+
+  it("markFailed parks an item and flush skips it, draining the rest", async () => {
+    enqueue(item("a"));
+    enqueue(item("b"));
+    enqueue(item("c"));
+    markFailed("b", "Validation rejected");
+    const send = vi.fn().mockResolvedValue(true);
+    const n = await flush("chat", send);
+    expect(n).toBe(2);
+    expect(send).toHaveBeenCalledTimes(2);
+    expect(list("chat").map((q) => q.id)).toEqual(["b"]);
+    expect(failedCount()).toBe(1);
+    expect(listFailed()[0]?.failed?.message).toBe("Validation rejected");
+  });
+
+  it("clearFailed re-arms parked items (attempts survive)", async () => {
+    enqueue(item("a"));
+    markFailed("a", "no");
+    markFailed("a", "still no");
+    expect(listFailed()[0]?.failed?.attempts).toBe(2);
+    expect(clearFailed()).toBe(1);
+    expect(failedCount()).toBe(0);
+    const send = vi.fn().mockResolvedValue(true);
+    expect(await flush("chat", send)).toBe(1);
+  });
+
+  it("markFailed on an unknown id is a no-op", () => {
+    markFailed("ghost", "whatever");
+    expect(failedCount()).toBe(0);
+  });
+});
+
+describe("per-kind drain mutex (T1-1)", () => {
+  beforeEach(() => window.localStorage.clear());
+
+  it("a concurrent flush of the same kind short-circuits to 0", async () => {
+    enqueue(item("a"));
+    let release!: () => void;
+    const gate = new Promise<void>((r) => (release = r));
+    const slowSend = vi.fn().mockImplementation(async () => {
+      await gate;
+      return true;
+    });
+    const first = flush("chat", slowSend);
+    const second = await flush("chat", vi.fn().mockResolvedValue(true));
+    expect(second).toBe(0); // lock held — nothing double-sent
+    release();
+    expect(await first).toBe(1);
+    expect(size()).toBe(0);
+    expect(slowSend).toHaveBeenCalledTimes(1);
+  });
+
+  it("different kinds drain concurrently", async () => {
+    enqueue(item("a", "chat"));
+    enqueue(item("b", "daily-log"));
+    let release!: () => void;
+    const gate = new Promise<void>((r) => (release = r));
+    const slow = vi.fn().mockImplementation(async () => {
+      await gate;
+      return true;
+    });
+    const first = flush("chat", slow);
+    const other = await flush("daily-log", vi.fn().mockResolvedValue(true));
+    expect(other).toBe(1);
+    release();
+    await first;
+    expect(size()).toBe(0);
   });
 });

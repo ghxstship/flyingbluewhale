@@ -30,6 +30,7 @@ export const QUEUEABLE_ENDPOINTS = [
   "/api/v1/scan",
   "/api/v1/accreditation/scan",
   "/api/v1/equipment/scan",
+  "/api/v1/kiosk/punch",
 ] as const;
 
 export type QueueableEndpoint = (typeof QUEUEABLE_ENDPOINTS)[number];

@@ -14,6 +14,7 @@ import { InstallVisitBeacon } from "@/components/mobile/InstallCard";
 import { SwUpdateToast } from "@/components/mobile/SwUpdateToast";
 import { ScrollMemory } from "@/components/mobile/ScrollMemory";
 import { StoragePersistence } from "@/components/mobile/StoragePersistence";
+import { OfflineDrainer } from "@/components/mobile/OfflineDrainer";
 import { TenantShell, resolveTenant } from "@/components/TenantShell";
 import { MobileAppBar } from "@/components/mobile/MobileAppBar";
 import { MobileNavDrawer } from "@/components/mobile/MobileNavDrawer";
@@ -192,6 +193,10 @@ export default async function MobileLayout({ children }: { children: React.React
         <SwUpdateToast />
         <ScrollMemory />
         <StoragePersistence />
+        {/* T1-1: app-level outbox drainer — replays BOTH offline queues on
+            reconnect / tab return / interval, independent of which surface
+            enqueued. Renders nothing; failures surface via <SyncBanner>. */}
+        <OfflineDrainer />
         <MobileTabBar items={mobileTabs} badges={badges} />
         {/* Kit 33 v3.0: the More tab opens this left nav drawer (grouped IA +
             gated Manage section + footer) rather than routing to a list. It

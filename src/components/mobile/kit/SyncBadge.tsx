@@ -16,8 +16,9 @@ import { KIcon } from "./icon";
  *   queued   — writes waiting for reconnect (warning tone)
  *   syncing  — replaying the outbox now (info tone, spinning icon)
  *   stale    — the SW served an offline copy (warning tone)
+ *   failed   — queued writes the server rejected on replay (danger tone)
  */
-export type SyncBadgeState = "offline" | "queued" | "syncing" | "stale";
+export type SyncBadgeState = "offline" | "queued" | "syncing" | "stale" | "failed";
 
 export type SyncBadgeProps = {
   state: SyncBadgeState;
@@ -31,6 +32,7 @@ const STATE_ICON: Record<SyncBadgeState, string> = {
   queued: "CloudUpload",
   syncing: "RefreshCw",
   stale: "History",
+  failed: "TriangleAlert",
 };
 
 /** Tone source per state — resolves from --p-* only (DS token rule). */
@@ -39,6 +41,7 @@ const STATE_TONE: Record<SyncBadgeState, string> = {
   queued: "var(--p-warning)",
   syncing: "var(--p-info)",
   stale: "var(--p-warning)",
+  failed: "var(--p-danger)",
 };
 
 const STATE_INK: Record<SyncBadgeState, string> = {
@@ -46,6 +49,7 @@ const STATE_INK: Record<SyncBadgeState, string> = {
   queued: "var(--p-warning-text, var(--p-text-1))",
   syncing: "var(--p-info-text, var(--p-text-1))",
   stale: "var(--p-warning-text, var(--p-text-1))",
+  failed: "var(--p-danger-text, var(--p-text-1))",
 };
 
 export function SyncBadge({ state, label, style }: SyncBadgeProps) {

@@ -29,6 +29,15 @@ export type QueuedItem<T = unknown> = {
   /** Epoch ms the write was queued (passed in — Date.now() is banned in
    *  some contexts, and injecting it keeps the module pure/testable). */
   queuedAt: number;
+  /**
+   * Set when a background replay hit a TERMINAL rejection (validation / FSM /
+   * auth — the server answered and said no). The row is parked, not dropped:
+   * `flush` skips it so one poisoned write can't wedge every later item of
+   * its kind, and the shell banner offers an explicit retry (`clearFailed`).
+   * Transient failures (network, 5xx) never set this — they just stop the
+   * drain and wait for the next reconnect.
+   */
+  failed?: { at: number; message: string; attempts: number };
 };
 
 const KEY = "atlvs.offline.queue.v1";
@@ -88,26 +97,96 @@ export function size(): number {
   return read().length;
 }
 
+/** Items parked by a terminal replay rejection (see `QueuedItem.failed`). */
+export function listFailed(): QueuedItem[] {
+  return read().filter((q) => q.failed);
+}
+
+/** Count of parked-failed items — the shell banner's "N failed" chip. */
+export function failedCount(): number {
+  return listFailed().length;
+}
+
+/**
+ * Park an item as terminally failed (server answered with a business /
+ * validation rejection during a background replay). Keeps the row + payload
+ * so the user can retry explicitly; `flush` skips it meanwhile.
+ */
+export function markFailed(id: string, message: string): void {
+  const items = read();
+  const item = items.find((q) => q.id === id);
+  if (!item) return;
+  item.failed = {
+    at: Date.now(),
+    message,
+    attempts: (item.failed?.attempts ?? 0) + 1,
+  };
+  write(items);
+}
+
+/**
+ * Clear the failed mark (all items, or just `ids`) so the next drain retries
+ * them. Returns how many were re-armed. The retry affordance in the shell
+ * <SyncBanner> calls this, then nudges a drain.
+ */
+export function clearFailed(ids?: string[]): number {
+  const items = read();
+  let cleared = 0;
+  for (const item of items) {
+    if (!item.failed) continue;
+    if (ids && !ids.includes(item.id)) continue;
+    delete item.failed;
+    cleared += 1;
+  }
+  if (cleared) write(items);
+  return cleared;
+}
+
+/**
+ * Per-kind drain mutex, shared by every drain path in the bundle (the
+ * surface-mounted `useOfflineQueue` drain AND the app-level drainer island).
+ * Without it, a reconnect can fire both at once and double-send the same
+ * queued item — the enqueue is idempotent on id, the server insert is not.
+ * Returns null (without running `fn`) when a drain for `kind` is already in
+ * flight; that drain is already working the same items.
+ */
+const drainingKinds = new Set<string>();
+export async function withKindLock<T>(kind: string, fn: () => Promise<T>): Promise<T | null> {
+  if (drainingKinds.has(kind)) return null;
+  drainingKinds.add(kind);
+  try {
+    return await fn();
+  } finally {
+    drainingKinds.delete(kind);
+  }
+}
+
 /**
  * Replay the queued items for `kind` in order via `send`. Each item that
  * sends successfully is removed; the first failure stops the drain (so
  * ordering holds and a transient error doesn't drop later writes). Returns
  * the count flushed. `send` throwing OR resolving false counts as a failure.
+ * Items parked as `failed` are skipped (explicit retry re-arms them); a
+ * concurrent drain of the same kind short-circuits to 0 via the kind lock.
  */
 export async function flush(
   kind: string,
   send: (item: QueuedItem) => Promise<boolean | void>,
 ): Promise<number> {
-  let flushed = 0;
-  for (const item of list(kind)) {
-    try {
-      const ok = await send(item);
-      if (ok === false) break;
-      remove(item.id);
-      flushed += 1;
-    } catch {
-      break;
+  const flushed = await withKindLock(kind, async () => {
+    let n = 0;
+    for (const item of list(kind)) {
+      if (item.failed) continue;
+      try {
+        const ok = await send(item);
+        if (ok === false) break;
+        remove(item.id);
+        n += 1;
+      } catch {
+        break;
+      }
     }
-  }
-  return flushed;
+    return n;
+  });
+  return flushed ?? 0;
 }

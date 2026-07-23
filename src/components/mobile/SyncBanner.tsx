@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { requestQueueDrain } from "@/lib/offline/queue-status";
 import { drainOutboxFromWindow, outboxSize } from "@/lib/offline/outbox";
-import { size as localQueueSize, OUTBOX_EVENT } from "@/lib/offline/queue";
+import { clearFailed, failedCount, size as localQueueSize, OUTBOX_EVENT } from "@/lib/offline/queue";
+import { drainAppQueue } from "@/lib/offline/drainer";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { SyncBadge } from "@/components/mobile/kit";
 
@@ -26,12 +27,17 @@ import { SyncBadge } from "@/components/mobile/kit";
 export function SyncBanner() {
   const t = useT();
   const [total, setTotal] = useState(0);
+  const [failed, setFailed] = useState(0);
   const [online, setOnline] = useState(true);
   const [staleAt, setStaleAt] = useState<number | null>(null);
   const [staleSeen, setStaleSeen] = useState(false);
 
   const refresh = useCallback(() => {
-    void outboxSize().then((idb) => setTotal(idb + localQueueSize()));
+    const parked = failedCount();
+    setFailed(parked);
+    // Parked-failed rows are not "syncing" — count them separately so the
+    // syncing line can't spin forever on writes the server already rejected.
+    void outboxSize().then((idb) => setTotal(idb + localQueueSize() - parked));
   }, []);
 
   useEffect(() => {
@@ -74,13 +80,22 @@ export function SyncBanner() {
   }, [refresh]);
 
   const showQueue = total > 0;
+  const showFailed = failed > 0;
   const showStale = staleSeen;
-  if (!showQueue && !showStale) return null;
+  if (!showQueue && !showFailed && !showStale) return null;
 
   const syncNow = () => {
     requestQueueDrain();
     if (!navigator.serviceWorker?.controller) void drainOutboxFromWindow().then(refresh);
+    void drainAppQueue().then(refresh);
     setTimeout(refresh, 1_500);
+  };
+
+  // T1-1 retry affordance: re-arm the parked-failed rows, then drain now.
+  const retryFailed = () => {
+    clearFailed();
+    refresh();
+    syncNow();
   };
 
   const staleAgeMin = staleAt ? Math.max(0, Math.round((Date.now() - staleAt) / 60_000)) : null;
@@ -92,6 +107,8 @@ export function SyncBanner() {
   const queueLabel = online
     ? t("ui.sync.syncing", { count: total }, `Syncing ${total} change${total === 1 ? "" : "s"}…`)
     : t("ui.sync.queued", { count: total }, `${total} change${total === 1 ? "" : "s"} queued. They sync when back online`);
+
+  const failedLabel = t("ui.sync.failed", { count: failed }, `${failed} change${failed === 1 ? "" : "s"} couldn't sync`);
 
   return (
     <div
@@ -109,17 +126,30 @@ export function SyncBanner() {
           app-level here. */}
       <span className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
         {showQueue && <SyncBadge state={online ? "syncing" : "queued"} label={queueLabel} />}
+        {showFailed && <SyncBadge state="failed" label={failedLabel} />}
         {showStale && <SyncBadge state="stale" label={staleLabel} />}
       </span>
-      {online && showQueue && (
+      {online && showFailed ? (
         <button
           type="button"
-          onClick={syncNow}
+          onClick={retryFailed}
           className="shrink-0 font-medium text-[var(--p-info)] underline"
           style={{ minHeight: 44, minWidth: 44 }}
         >
-          {t("ui.sync.now", undefined, "Sync now")}
+          {t("ui.sync.retry", undefined, "Retry")}
         </button>
+      ) : (
+        online &&
+        showQueue && (
+          <button
+            type="button"
+            onClick={syncNow}
+            className="shrink-0 font-medium text-[var(--p-info)] underline"
+            style={{ minHeight: 44, minWidth: 44 }}
+          >
+            {t("ui.sync.now", undefined, "Sync now")}
+          </button>
+        )
       )}
     </div>
   );

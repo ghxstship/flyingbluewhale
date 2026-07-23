@@ -5,7 +5,7 @@ import { useEffect, useState, useTransition } from "react";
 import { FolderOpen } from "lucide-react";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { KIcon } from "@/components/mobile/kit";
+import { appendTranscriptToTextarea, DictationButton, KIcon } from "@/components/mobile/kit";
 import { OfflineSyncBanner } from "@/components/mobile/OfflineSyncBanner";
 import { useOfflineQueue } from "@/lib/offline/useOfflineQueue";
 import { enqueue, list } from "@/lib/offline/queue";
@@ -111,7 +111,11 @@ export function DailyLogForm({ projects }: { projects: ProjectOpt[] }) {
    * still queued.
    */
   useEffect(() => {
-    void sweepOrphans(list(QUEUE_KIND).map((i) => i.id));
+    // ALL kinds, not just daily-log: the byte store is shared with the other
+    // queued-photo surfaces (T1-1 photo outbox) — sweeping against only this
+    // form's ids would reclaim photos that incident / lost-found / handover
+    // rows still reference.
+    void sweepOrphans(list().map((i) => i.id));
   }, []);
 
   /**
@@ -326,6 +330,11 @@ export function DailyLogForm({ projects }: { projects: ProjectOpt[] }) {
               name="notes"
               placeholder={t("m.dailyLog.new.notesPh", undefined, "Headcounts, deliveries, blockers, incidents…")}
             />
+            {/* T1-3 dictation — appends to whatever is typed. Renders nothing
+                unless server-side transcription is configured. */}
+            <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 6 }}>
+              <DictationButton onText={(text) => appendTranscriptToTextarea("dl-notes", text)} />
+            </div>
           </div>
           <div className="fld">
             <label htmlFor="dl-photo">{t("m.dailyLog.new.photos", undefined, "Site Photos")}</label>

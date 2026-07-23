@@ -187,6 +187,9 @@ export async function putPhotos(
   /** Overridable so the bound itself is testable without allocating 64MB.
    *  Callers should leave it alone. */
   budgetBytes = MAX_QUEUED_BYTES,
+  /** First index to key this batch at. The photo-outbox uses it to append a
+   *  single late photo behind an earlier batch without clobbering key #0. */
+  startAt = 0,
 ): Promise<PhotoMeta[]> {
   if (files.length === 0) return [];
 
@@ -199,20 +202,38 @@ export async function putPhotos(
   const db = await openDb();
   try {
     const metas: PhotoMeta[] = [];
-    for (let n = 0; n < files.length; n++) {
-      const file = files[n]!;
+    for (let i = 0; i < files.length; i++) {
+      const n = startAt + i;
+      const file = files[i]!;
       const bytes = await file.arrayBuffer();
       await tx(db, "readwrite", (s) => s.put({ key: blobKey(itemId, n), itemId, bytes } satisfies BlobRow));
       metas.push({
         n,
         filename: file.name,
         contentType: file.type || "image/jpeg",
-        fix: fixes[n] ?? null,
+        fix: fixes[i] ?? null,
       });
     }
     return metas;
   } finally {
     db.close();
+  }
+}
+
+/** Whether the bytes for one queued photo are still present. The
+ *  photo-outbox surfaces this as a per-photo state instead of discovering a
+ *  hole at replay time. */
+export async function hasPhoto(itemId: string, n: number): Promise<boolean> {
+  try {
+    const db = await openDb();
+    try {
+      const row = await tx<BlobRow | undefined>(db, "readonly", (s) => s.get(blobKey(itemId, n)));
+      return !!row?.bytes;
+    } finally {
+      db.close();
+    }
+  } catch {
+    return false;
   }
 }
 

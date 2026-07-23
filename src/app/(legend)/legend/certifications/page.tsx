@@ -10,11 +10,14 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import {
   ACCREDITATION_STATE_LABELS,
   ACCREDITATION_STATE_TONES,
+  RECERT_STATE_LABELS,
   effectiveAccreditationState,
   type AccreditationState,
   type Certification,
   type CertificationHolder,
+  type RecertState,
 } from "@/lib/legend_compliance";
+import { canDecideRecert } from "@/lib/legend_recert";
 import { RecertButton } from "./RecertButton";
 import { getRequestT } from "@/lib/i18n/request";
 
@@ -43,7 +46,7 @@ export default async function CertificationsPage() {
   const db = (await createClient()) as unknown as LooseSupabase;
   const now = new Date();
 
-  const [{ data: holderData }, { data: certData }] = await Promise.all([
+  const [{ data: holderData }, { data: certData }, { data: recertData }] = await Promise.all([
     db
       .from("certification_holders")
       .select("id, org_id, certification_id, user_id, source_course_id, issued_at, expires_on, last_recert_at, next_recert_due, accreditation_state")
@@ -55,10 +58,25 @@ export default async function CertificationsPage() {
       .eq("org_id", session.orgId)
       .eq("certification_state", "active")
       .is("deleted_at", null),
+    // The caller's recert requests — the wallet renders their live state
+    // (requested / in review / denied) so a request never silently vanishes.
+    // select("*") tolerates the decision_note column pre-migration.
+    db
+      .from("certification_recerts")
+      .select("*")
+      .eq("org_id", session.orgId)
+      .eq("user_id", session.userId)
+      .order("submitted_at", { ascending: false }),
   ]);
 
   const certs = new Map(((certData ?? []) as Certification[]).map((c) => [c.id, c]));
   const holders = (holderData ?? []) as CertificationHolder[];
+  // Latest request per holding (rows arrive newest-first).
+  type MyRecert = { holder_id: string; recert_state: RecertState; decision_note?: string | null };
+  const latestRecert = new Map<string, MyRecert>();
+  for (const r of (recertData ?? []) as MyRecert[]) {
+    if (!latestRecert.has(r.holder_id)) latestRecert.set(r.holder_id, r);
+  }
 
   return (
     <>
@@ -82,7 +100,10 @@ export default async function CertificationsPage() {
             const cert = certs.get(h.certification_id);
             const eff: AccreditationState = effectiveAccreditationState(h, cert?.recert_window_days ?? 30, now);
             const tone = ACCREDITATION_STATE_TONES[eff];
-            const recertable = eff === "expiring" || eff === "expired";
+            const myRecert = latestRecert.get(h.id);
+            const recertPending = myRecert ? canDecideRecert(myRecert.recert_state) : false;
+            const recertDenied = myRecert?.recert_state === "rejected";
+            const recertable = (eff === "expiring" || eff === "expired") && !recertPending;
             return (
               <div key={h.id} className="surface flex flex-col gap-2 p-4">
                 <div className="flex items-start justify-between gap-2">
@@ -119,6 +140,26 @@ export default async function CertificationsPage() {
                   >
                     {t("console.legend.certifications.verificationRecord", undefined, "Verification record")}
                   </Link>
+                  {recertPending && myRecert && (
+                    <Badge variant="info">
+                      {t(
+                        "console.legend.certifications.recertState",
+                        { state: RECERT_STATE_LABELS[myRecert.recert_state] },
+                        `Recert: ${RECERT_STATE_LABELS[myRecert.recert_state]}`,
+                      )}
+                    </Badge>
+                  )}
+                  {recertDenied && myRecert && (
+                    <Badge variant="error">
+                      {myRecert.decision_note
+                        ? t(
+                            "console.legend.certifications.recertDeniedNote",
+                            { note: myRecert.decision_note },
+                            `Recert denied: ${myRecert.decision_note}`,
+                          )
+                        : t("console.legend.certifications.recertDenied", undefined, "Recert denied")}
+                    </Badge>
+                  )}
                   {recertable && (
                     <RecertButton
                       holderId={h.id}

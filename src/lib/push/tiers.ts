@@ -53,6 +53,9 @@ export const PUSH_KIND_TIER: Record<PushKind, PushTier> = {
   timesheet: "ambient",
   payroll: "ambient",
   time_correction: "ambient",
+  // A decision on a recert request you filed — request/decision parity with
+  // time_off and approval, not learning-feed noise like `course`.
+  certification: "ambient",
   // digest — feed noise; bundled, never buzzes one-by-one.
   announcement: "digest",
   kudos: "digest",

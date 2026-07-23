@@ -30,6 +30,7 @@ export const NOTIF_KINDS = [
   "shift_swap",
   "time_off",
   "course",
+  "certification",
   "incident",
   "approval",
   "timesheet",
@@ -71,6 +72,7 @@ export const NOTIF_KIND_FALLBACKS: NotifKindRow[] = [
   { kind: "shift_swap", label: "Shift Swap", description: "Swap request decisions" },
   { kind: "time_off", label: "Time Off", description: "Time-off request decisions" },
   { kind: "course", label: "Courses", description: "Course assignments + pass results" },
+  { kind: "certification", label: "Certifications", description: "Recertification request decisions" },
   { kind: "incident", label: "Incidents", description: "Field incident updates (manager+ only)" },
   { kind: "approval", label: "Approvals", description: "Decisions and escalations on approval requests" },
   // Covers both directions: the worker's own sheet events (notify(), via

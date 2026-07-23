@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Avatar } from "@/components/ui/Avatar";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -66,7 +67,7 @@ export default async function ComplianceMatrixPage() {
   const db = (await createClient()) as unknown as LooseSupabase;
   const now = new Date();
 
-  const [members, { data: certData }, { data: holderData }] = await Promise.all([
+  const [members, { data: certData }, { data: holderData }, { count: pendingRecerts }] = await Promise.all([
     listOrgMembers(session.orgId),
     db
       .from("legend_certifications")
@@ -79,6 +80,12 @@ export default async function ComplianceMatrixPage() {
       .from("certification_holders")
       .select("id, org_id, certification_id, user_id, source_course_id, issued_at, expires_on, last_recert_at, next_recert_due, accreditation_state")
       .eq("org_id", session.orgId),
+    // Pending recert requests — surfaced as the queue link's live count.
+    db
+      .from("certification_recerts")
+      .select("id", { count: "exact", head: true })
+      .eq("org_id", session.orgId)
+      .in("recert_state", ["requested", "in_review"]),
   ]);
 
   const certs = (certData ?? []) as Certification[];
@@ -132,6 +139,22 @@ export default async function ComplianceMatrixPage() {
           undefined,
           "Org credential health: every member × certification, colored by state.",
         )}
+        action={
+          <div className="flex items-center gap-2">
+            <Link href="/legend/compliance/recerts" className="ps-btn ps-btn--primary ps-btn--sm">
+              {pendingRecerts
+                ? t(
+                    "console.legend.compliance.queueLinkCount",
+                    { n: String(pendingRecerts) },
+                    `Recert Queue (${pendingRecerts})`,
+                  )
+                : t("console.legend.compliance.queueLink", undefined, "Recert Queue")}
+            </Link>
+            <Link href="/legend/certifications/definitions" className="ps-btn ps-btn--secondary ps-btn--sm">
+              {t("console.legend.compliance.definitionsLink", undefined, "Credential Types")}
+            </Link>
+          </div>
+        }
       />
 
       <div className="mb-4 flex flex-wrap gap-2">

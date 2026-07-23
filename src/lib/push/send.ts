@@ -40,6 +40,10 @@ export type PushKind =
   | "shift_swap"
   | "time_off"
   | "course"
+  // LEG3ND recert decisions (L-P6b): a recertification request you submitted
+  // was approved or denied. Distinct from `course` (assignments + pass
+  // results) — a credential decision is neither.
+  | "certification"
   | "incident"
   // Approval workflow: a request you initiated was decided, or an approval
   // was escalated to you. Previously sent with NO kind, which bypassed the
@@ -510,6 +514,7 @@ const KIND_EMAIL_LABEL: Record<PushKind, string> = {
   shift_swap: "Shift Swap",
   time_off: "Time Off",
   course: "Course",
+  certification: "Certification",
   incident: "Incident",
   approval: "Approval",
   timesheet: "Timesheet",

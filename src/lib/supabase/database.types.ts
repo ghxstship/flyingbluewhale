@@ -9440,8 +9440,10 @@ export type Database = {
           name: string
           org_id: string
           price_cents: number
+          product_kind: string
           product_state: string
           sku: string
+          stock_qty: number | null
           stripe_price_id: string | null
           updated_at: string
         }
@@ -9455,8 +9457,10 @@ export type Database = {
           name: string
           org_id: string
           price_cents: number
+          product_kind?: string
           product_state?: string
           sku: string
+          stock_qty?: number | null
           stripe_price_id?: string | null
           updated_at?: string
         }
@@ -9470,14 +9474,64 @@ export type Database = {
           name?: string
           org_id?: string
           price_cents?: number
+          product_kind?: string
           product_state?: string
           sku?: string
+          stock_qty?: number | null
           stripe_price_id?: string | null
           updated_at?: string
         }
         Relationships: [
           {
             foreignKeyName: "credit_products_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      credit_purchases: {
+        Row: {
+          created_at: string
+          credit_product_id: string
+          credits_spent: number
+          id: string
+          item_name: string
+          org_id: string
+          purchase_state: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          credit_product_id: string
+          credits_spent: number
+          id?: string
+          item_name: string
+          org_id: string
+          purchase_state?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          credit_product_id?: string
+          credits_spent?: number
+          id?: string
+          item_name?: string
+          org_id?: string
+          purchase_state?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "credit_purchases_credit_product_id_fkey"
+            columns: ["credit_product_id"]
+            isOneToOne: false
+            referencedRelation: "credit_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credit_purchases_org_id_fkey"
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "orgs"
@@ -18714,6 +18768,7 @@ export type Database = {
       }
       legend_courses: {
         Row: {
+          completion_achievement_id: string | null
           course_state: string
           cover_path: string | null
           created_at: string
@@ -18728,6 +18783,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          completion_achievement_id?: string | null
           course_state?: string
           cover_path?: string | null
           created_at?: string
@@ -18742,6 +18798,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          completion_achievement_id?: string | null
           course_state?: string
           cover_path?: string | null
           created_at?: string
@@ -23023,6 +23080,54 @@ export type Database = {
           },
         ]
       }
+      org_xpms_atom_settings: {
+        Row: {
+          created_at: string
+          enabled: boolean
+          id: string
+          notes: string | null
+          org_id: string
+          org_label: string | null
+          updated_at: string
+          xpms_atom_id: string
+        }
+        Insert: {
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          notes?: string | null
+          org_id: string
+          org_label?: string | null
+          updated_at?: string
+          xpms_atom_id: string
+        }
+        Update: {
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          notes?: string | null
+          org_id?: string
+          org_label?: string | null
+          updated_at?: string
+          xpms_atom_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "org_xpms_atom_settings_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "org_xpms_atom_settings_xpms_atom_id_fkey"
+            columns: ["xpms_atom_id"]
+            isOneToOne: false
+            referencedRelation: "xpms_catalog"
+            referencedColumns: ["xpms_atom_id"]
+          },
+        ]
+      }
       orgs: {
         Row: {
           branding: Json
@@ -25911,6 +26016,57 @@ export type Database = {
           },
           {
             foreignKeyName: "project_emails_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_corpus_links: {
+        Row: {
+          created_at: string
+          id: string
+          last_synced_at: string | null
+          org_id: string
+          project_id: string
+          source_id: string
+          source_type: Database["public"]["Enums"]["embedding_source_type"]
+          synced_by: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_synced_at?: string | null
+          org_id: string
+          project_id: string
+          source_id: string
+          source_type: Database["public"]["Enums"]["embedding_source_type"]
+          synced_by?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_synced_at?: string | null
+          org_id?: string
+          project_id?: string
+          source_id?: string
+          source_type?: Database["public"]["Enums"]["embedding_source_type"]
+          synced_by?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_corpus_links_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_corpus_links_project_id_fkey"
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { KIcon } from "./icon";
 import { mkItems } from "./Menu";
 import { useDismissable } from "./useDismissable";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Item-level unit listing — real instances with interchangeable list/grid
@@ -58,6 +59,7 @@ function toneBar(tone: UnitTone): string {
 type SortKey = "tag" | "status";
 
 export function ItemUnits({ units, onToast }: ItemUnitsProps) {
+  const t = useT();
   const [view, setView] = useState<"list" | "grid">("list");
   const [q, setQ] = useState("");
   const [sort, setSort] = useState<SortKey>("tag");
@@ -71,8 +73,8 @@ export function ItemUnits({ units, onToast }: ItemUnitsProps) {
   );
   const sortItems = mkItems(
     [
-      ["tag", "By Unit ID"],
-      ["status", "By Status"],
+      ["tag", t("m.kit.units.byId", undefined, "By Unit ID")],
+      ["status", t("m.kit.units.byStatus", undefined, "By Status")],
     ] as const,
     sort,
     setSort,
@@ -82,9 +84,9 @@ export function ItemUnits({ units, onToast }: ItemUnitsProps) {
     <div>
       <div className="searchbar" style={{ marginBottom: 8 }}>
         <KIcon name="Search" size={16} />
-        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search units…" />
+        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("m.kit.units.searchPlaceholder", undefined, "Search units…")} />
         {q && (
-          <button type="button" aria-label="Clear search" onClick={() => setQ("")} style={{ border: "none", background: "none", padding: 0, cursor: "pointer", display: "inline-flex", color: "inherit" }}>
+          <button type="button" aria-label={t("m.kit.bar.clearSearch", undefined, "Clear search")} onClick={() => setQ("")} style={{ border: "none", background: "none", padding: 0, cursor: "pointer", display: "inline-flex", color: "inherit" }}>
             <KIcon name="X" size={15} />
           </button>
         )}
@@ -95,7 +97,7 @@ export function ItemUnits({ units, onToast }: ItemUnitsProps) {
           className="pill ico"
           data-active={view === "grid" || undefined}
           onClick={() => setView((v) => (v === "list" ? "grid" : "list"))}
-          aria-label="Toggle view"
+          aria-label={t("m.kit.units.toggleView", undefined, "Toggle view")}
         >
           <KIcon name={view === "list" ? "LayoutGrid" : "List"} size={16} />
         </button>
@@ -107,13 +109,13 @@ export function ItemUnits({ units, onToast }: ItemUnitsProps) {
             onClick={() => setSortOpen((o) => !o)}
             aria-haspopup="menu"
             aria-expanded={sortOpen}
-            aria-label="Sort"
+            aria-label={t("m.kit.bar.sort", undefined, "Sort")}
           >
             <KIcon name="ArrowDownUp" size={16} />
           </button>
           {sortOpen && (
             <>
-              <button type="button" className="menu-back" aria-label="Close sort menu" onClick={() => setSortOpen(false)} />
+              <button type="button" className="menu-back" aria-label={t("m.kit.units.closeSort", undefined, "Close sort menu")} onClick={() => setSortOpen(false)} />
               <div ref={sortRef} className="ps-menu pop" role="menu">
                 {sortItems.map((it, i) => (
                   <button key={i} type="button" className="mi" role="menuitem" onClick={it.onSelect}>
@@ -127,7 +129,7 @@ export function ItemUnits({ units, onToast }: ItemUnitsProps) {
         </div>
         <span className="sp" />
         <span className="s" style={{ fontSize: 11 }}>
-          {rows.length} units
+          {t("m.kit.units.count", { count: rows.length }, `${rows.length} units`)}
         </span>
       </div>
       {view === "list" ? (

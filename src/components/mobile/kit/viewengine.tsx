@@ -4,9 +4,10 @@ import { useState, type ReactNode } from "react";
 import { KIcon } from "./icon";
 import { Sheet } from "./Sheet";
 import { pressable } from "./blocks";
-import { DataTable } from "./DataTable";
-import { VIEW_ICON, type ViewMode } from "./ViewToggle";
+import { DataTable, useFilterOpLabels } from "./DataTable";
+import { VIEW_ICON, useViewModeLabels, type ViewMode } from "./ViewToggle";
 import type { FieldDef, FieldType, SortRule } from "./DataTable";
+import { useLocale, useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Airtable-plus schema-driven view engine: kit 34 v3.3/v3.4
@@ -18,8 +19,9 @@ import type { FieldDef, FieldType, SortRule } from "./DataTable";
  * calendar/gallery). The View Options + Share & Export controls render as
  * full-width bottom-sheet drawers (the canon `Sheet` chrome), not popovers.
  *
- * Generic + presentational: callers pass translated labels + data. No i18n,
- * no Supabase here.
+ * Generic + presentational: callers pass translated labels + data; the kit's
+ * own chrome strings (Sort / Group by / View Options / …) resolve through
+ * `useT()` with byte-identical English fallbacks. No Supabase here.
  */
 
 /** Project clock: the demo "now" so relative dates (Today / This week) resolve.
@@ -255,6 +257,8 @@ export function FilterGroups<T>({
   model: FilterModel;
   setModel: (m: FilterModel) => void;
 }) {
+  const t = useT();
+  const opLabels = useFilterOpLabels();
   const m = model && model.groups ? model : emptyFilterModel();
   const setGroup = (gi: number, patch: Partial<FilterGroup>) =>
     setModel({ ...m, groups: m.groups.map((g, j) => (j === gi ? { ...g, ...patch } : g)) });
@@ -270,7 +274,7 @@ export function FilterGroups<T>({
         <div key={gi} style={{ marginBottom: 12 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
             <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: ".03em", textTransform: "uppercase", color: "var(--p-text-3)" }}>
-              {gi === 0 ? "Where" : "…and where"}
+              {gi === 0 ? t("m.kit.filter.where", undefined, "Where") : t("m.kit.filter.andWhere", undefined, "…and where")}
             </span>
             {gi > 0 && (
               <button
@@ -284,7 +288,7 @@ export function FilterGroups<T>({
             )}
             <div style={{ flex: 1 }} />
             {m.groups.length > 1 && (
-              <button type="button" onClick={() => delGroup(gi)} aria-label="Remove condition group" style={{ border: "none", background: "none", color: "var(--p-text-3)", cursor: "pointer", padding: 2 }}>
+              <button type="button" onClick={() => delGroup(gi)} aria-label={t("m.kit.filter.removeGroup", undefined, "Remove condition group")} style={{ border: "none", background: "none", color: "var(--p-text-3)", cursor: "pointer", padding: 2 }}>
                 <KIcon name="Trash2" size={15} />
               </button>
             )}
@@ -299,7 +303,7 @@ export function FilterGroups<T>({
                   <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                     <span style={{ width: 46, fontSize: 11, fontWeight: 700, color: "var(--p-text-3)" }}>
                       {ri === 0 ? (
-                        "When"
+                        t("m.kit.filter.when", undefined, "When")
                       ) : (
                         <button
                           type="button"
@@ -317,7 +321,7 @@ export function FilterGroups<T>({
                         const nf = fields.find((x) => x.id === e.target.value)!;
                         updRule(gi, ri, { field: e.target.value, op: MODEL_FILTER_OPS[bucket(nf.type)][0]![0], value: "", value2: "" });
                       }}
-                      aria-label="Filter field"
+                      aria-label={t("m.kit.filter.field", undefined, "Filter field")}
                       style={{ ...SEL, flex: 1 }}
                     >
                       {fields.map((x) => (
@@ -326,22 +330,22 @@ export function FilterGroups<T>({
                         </option>
                       ))}
                     </select>
-                    <button type="button" onClick={() => delRule(gi, ri)} aria-label="Remove condition" style={{ border: "none", background: "none", color: "var(--p-text-3)", cursor: "pointer", padding: 2 }}>
+                    <button type="button" onClick={() => delRule(gi, ri)} aria-label={t("m.kit.filter.removeCondition", undefined, "Remove condition")} style={{ border: "none", background: "none", color: "var(--p-text-3)", cursor: "pointer", padding: 2 }}>
                       <KIcon name="X" size={15} />
                     </button>
                   </div>
                   <div style={{ display: "flex", gap: 6, paddingLeft: 52 }}>
-                    <select value={r.op} onChange={(e) => updRule(gi, ri, { op: e.target.value as ModelFilterOp })} aria-label="Operator" style={{ ...SEL, flex: "0 0 auto" }}>
+                    <select value={r.op} onChange={(e) => updRule(gi, ri, { op: e.target.value as ModelFilterOp })} aria-label={t("m.kit.filter.operator", undefined, "Operator")} style={{ ...SEL, flex: "0 0 auto" }}>
                       {ops.map(([id, lbl]) => (
                         <option key={id} value={id}>
-                          {lbl}
+                          {opLabels[id] ?? lbl}
                         </option>
                       ))}
                     </select>
                     {needsVal &&
                       (f.type === "select" || f.type === "bool" ? (
-                        <select value={r.value || ""} onChange={(e) => updRule(gi, ri, { value: e.target.value })} aria-label="Filter value" style={{ ...SEL, flex: 1 }}>
-                          <option value="">Choose…</option>
+                        <select value={r.value || ""} onChange={(e) => updRule(gi, ri, { value: e.target.value })} aria-label={t("m.kit.filter.value", undefined, "Filter value")} style={{ ...SEL, flex: 1 }}>
+                          <option value="">{t("m.kit.filter.choose", undefined, "Choose…")}</option>
                           {(f.options || []).map((o) => (
                             <option key={o} value={o}>
                               {o}
@@ -351,32 +355,32 @@ export function FilterGroups<T>({
                       ) : f.type === "date" ? (
                         r.op === "dbetween" ? (
                           <div style={{ display: "flex", gap: 4, flex: 1 }}>
-                            <input type="date" value={r.value || ""} onChange={(e) => updRule(gi, ri, { value: e.target.value })} aria-label="From date" style={{ ...SEL, flex: 1 }} />
-                            <input type="date" value={r.value2 || ""} onChange={(e) => updRule(gi, ri, { value2: e.target.value })} aria-label="To date" style={{ ...SEL, flex: 1 }} />
+                            <input type="date" value={r.value || ""} onChange={(e) => updRule(gi, ri, { value: e.target.value })} aria-label={t("m.kit.filter.fromDate", undefined, "From date")} style={{ ...SEL, flex: 1 }} />
+                            <input type="date" value={r.value2 || ""} onChange={(e) => updRule(gi, ri, { value2: e.target.value })} aria-label={t("m.kit.filter.toDate", undefined, "To date")} style={{ ...SEL, flex: 1 }} />
                           </div>
                         ) : (
-                          <input type="date" value={r.value || ""} onChange={(e) => updRule(gi, ri, { value: e.target.value })} aria-label="Filter date" style={{ ...SEL, flex: 1 }} />
+                          <input type="date" value={r.value || ""} onChange={(e) => updRule(gi, ri, { value: e.target.value })} aria-label={t("m.kit.filter.date", undefined, "Filter date")} style={{ ...SEL, flex: 1 }} />
                         )
                       ) : (
-                        <input value={r.value || ""} onChange={(e) => updRule(gi, ri, { value: e.target.value })} placeholder="value" aria-label="Filter value" type={f.type === "num" ? "number" : "text"} style={{ ...SEL, flex: 1 }} />
+                        <input value={r.value || ""} onChange={(e) => updRule(gi, ri, { value: e.target.value })} placeholder={t("m.kit.filter.valuePlaceholder", undefined, "value")} aria-label={t("m.kit.filter.value", undefined, "Filter value")} type={f.type === "num" ? "number" : "text"} style={{ ...SEL, flex: 1 }} />
                       ))}
                   </div>
                 </div>
               );
             })}
             <button type="button" className="pill" onClick={() => addRule(gi)} style={{ marginTop: 10, justifyContent: "center" }}>
-              <KIcon name="Plus" size={13} /> Add condition
+              <KIcon name="Plus" size={13} /> {t("m.kit.filter.addCondition", undefined, "Add condition")}
             </button>
           </div>
         </div>
       ))}
       <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
         <button type="button" className="pill" onClick={addGroup} style={{ flex: 1, justifyContent: "center" }}>
-          <KIcon name="Plus" size={13} /> Add condition group
+          <KIcon name="Plus" size={13} /> {t("m.kit.filter.addGroup", undefined, "Add condition group")}
         </button>
         {m.groups.length > 0 && (
           <button type="button" className="pill" onClick={() => setModel(emptyFilterModel())} style={{ justifyContent: "center" }}>
-            Clear all
+            {t("m.kit.filter.clearAll", undefined, "Clear all")}
           </button>
         )}
       </div>
@@ -386,6 +390,7 @@ export function FilterGroups<T>({
 
 /** Multi-key sort with up/down reorder. */
 export function SortReorder<T>({ fields, rules, setRules }: { fields: FieldDef<T>[]; rules: SortRule[]; setRules: (r: SortRule[]) => void }) {
+  const t = useT();
   const used = new Set((rules || []).map((r) => r.field));
   const free = fields.filter((f) => !used.has(f.id));
   const add = () => {
@@ -402,19 +407,19 @@ export function SortReorder<T>({ fields, rules, setRules }: { fields: FieldDef<T
   };
   return (
     <div>
-      {(!rules || !rules.length) && <div className="hint" style={{ marginBottom: 10 }}>No sort applied. Records show in default order.</div>}
+      {(!rules || !rules.length) && <div className="hint" style={{ marginBottom: 10 }}>{t("m.kit.sort.noneHint", undefined, "No sort applied. Records show in default order.")}</div>}
       {(rules || []).map((r, i) => (
         <div key={i} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
-            <button type="button" onClick={() => move(i, -1)} disabled={i === 0} aria-label="Move up" style={{ border: "none", background: "none", cursor: i === 0 ? "default" : "pointer", color: i === 0 ? "var(--p-border)" : "var(--p-text-3)", padding: 0, lineHeight: 0.6 }}>
+            <button type="button" onClick={() => move(i, -1)} disabled={i === 0} aria-label={t("m.kit.sort.moveUp", undefined, "Move up")} style={{ border: "none", background: "none", cursor: i === 0 ? "default" : "pointer", color: i === 0 ? "var(--p-border)" : "var(--p-text-3)", padding: 0, lineHeight: 0.6 }}>
               <KIcon name="ChevronUp" size={14} />
             </button>
-            <button type="button" onClick={() => move(i, 1)} disabled={i === rules.length - 1} aria-label="Move down" style={{ border: "none", background: "none", cursor: i === rules.length - 1 ? "default" : "pointer", color: i === rules.length - 1 ? "var(--p-border)" : "var(--p-text-3)", padding: 0, lineHeight: 0.6 }}>
+            <button type="button" onClick={() => move(i, 1)} disabled={i === rules.length - 1} aria-label={t("m.kit.sort.moveDown", undefined, "Move down")} style={{ border: "none", background: "none", cursor: i === rules.length - 1 ? "default" : "pointer", color: i === rules.length - 1 ? "var(--p-border)" : "var(--p-text-3)", padding: 0, lineHeight: 0.6 }}>
               <KIcon name="ChevronDown" size={14} />
             </button>
           </div>
-          <span style={{ fontSize: 11, color: "var(--p-text-3)", width: 34 }}>{i === 0 ? "Sort" : "then"}</span>
-          <select value={r.field} onChange={(e) => upd(i, { field: e.target.value })} aria-label="Sort field" style={{ ...SEL, flex: 1 }}>
+          <span style={{ fontSize: 11, color: "var(--p-text-3)", width: 34 }}>{i === 0 ? t("m.kit.sort.label", undefined, "Sort") : t("m.kit.sort.then", undefined, "then")}</span>
+          <select value={r.field} onChange={(e) => upd(i, { field: e.target.value })} aria-label={t("m.kit.sort.field", undefined, "Sort field")} style={{ ...SEL, flex: 1 }}>
             {fields.map((x) => (
               <option key={x.id} value={x.id} disabled={used.has(x.id) && x.id !== r.field}>
                 {x.label}
@@ -422,20 +427,20 @@ export function SortReorder<T>({ fields, rules, setRules }: { fields: FieldDef<T
             ))}
           </select>
           <button type="button" onClick={() => upd(i, { dir: r.dir === "asc" ? "desc" : "asc" })} className="pill" style={{ padding: "6px 9px", gap: 3 }}>
-            <KIcon name={r.dir === "asc" ? "ArrowUp" : "ArrowDown"} size={13} /> {r.dir === "asc" ? "A→Z" : "Z→A"}
+            <KIcon name={r.dir === "asc" ? "ArrowUp" : "ArrowDown"} size={13} /> {r.dir === "asc" ? t("m.kit.sort.az", undefined, "A→Z") : t("m.kit.sort.za", undefined, "Z→A")}
           </button>
-          <button type="button" onClick={() => del(i)} aria-label="Remove sort" style={{ border: "none", background: "none", color: "var(--p-text-3)", cursor: "pointer", padding: 2 }}>
+          <button type="button" onClick={() => del(i)} aria-label={t("m.kit.sort.remove", undefined, "Remove sort")} style={{ border: "none", background: "none", color: "var(--p-text-3)", cursor: "pointer", padding: 2 }}>
             <KIcon name="X" size={15} />
           </button>
         </div>
       ))}
       <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
         <button type="button" className="pill" onClick={add} disabled={!free.length} style={{ flex: 1, justifyContent: "center", opacity: free.length ? 1 : 0.5 }}>
-          <KIcon name="Plus" size={13} /> Add sort
+          <KIcon name="Plus" size={13} /> {t("m.kit.sort.add", undefined, "Add sort")}
         </button>
         {rules && rules.length > 0 && (
           <button type="button" className="pill" onClick={() => setRules([])} style={{ justifyContent: "center" }}>
-            Clear
+            {t("m.kit.clear", undefined, "Clear")}
           </button>
         )}
       </div>
@@ -445,6 +450,7 @@ export function SortReorder<T>({ fields, rules, setRules }: { fields: FieldDef<T
 
 /** Multi-level grouping picker (group by field, then by field). */
 export function GroupBuilder<T>({ fields, levels, setLevels }: { fields: FieldDef<T>[]; levels: string[]; setLevels: (l: string[]) => void }) {
+  const t = useT();
   const lv = levels || [];
   const used = new Set(lv);
   const groupable = fields.filter((f) => f.type !== "num");
@@ -455,23 +461,23 @@ export function GroupBuilder<T>({ fields, levels, setLevels }: { fields: FieldDe
   };
   return (
     <div>
-      {!lv.length && <div className="hint" style={{ marginBottom: 10 }}>No grouping: flat list. Group by a field to see collapsible sections.</div>}
+      {!lv.length && <div className="hint" style={{ marginBottom: 10 }}>{t("m.kit.group.noneHint", undefined, "No grouping: flat list. Group by a field to see collapsible sections.")}</div>}
       {lv.map((id, i) => (
         <div key={i} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
-          <span style={{ fontSize: 11, color: "var(--p-text-3)", width: 60 }}>{i === 0 ? "Group by" : "then by"}</span>
-          <select value={id} onChange={(e) => set(i, e.target.value)} aria-label="Group by field" style={{ ...SEL, flex: 1 }}>
+          <span style={{ fontSize: 11, color: "var(--p-text-3)", width: 60 }}>{i === 0 ? t("m.kit.group.groupBy", undefined, "Group by") : t("m.kit.group.thenBy", undefined, "then by")}</span>
+          <select value={id} onChange={(e) => set(i, e.target.value)} aria-label={t("m.kit.group.field", undefined, "Group by field")} style={{ ...SEL, flex: 1 }}>
             {groupable.map((x) => (
               <option key={x.id} value={x.id} disabled={used.has(x.id) && x.id !== id}>
                 {x.label}
               </option>
             ))}
-            <option value="none">Remove</option>
+            <option value="none">{t("m.kit.group.remove", undefined, "Remove")}</option>
           </select>
         </div>
       ))}
       {free.length > 0 && lv.length < 3 && (
         <button type="button" className="pill" onClick={add} style={{ justifyContent: "center", marginTop: 2 }}>
-          <KIcon name="Plus" size={13} /> {lv.length ? "Add sub-group" : "Group by field"}
+          <KIcon name="Plus" size={13} /> {lv.length ? t("m.kit.group.addSub", undefined, "Add sub-group") : t("m.kit.group.field", undefined, "Group by field")}
         </button>
       )}
     </div>
@@ -506,14 +512,18 @@ export function ViewSheet<T>({
   views?: ViewMode[];
   onClose: () => void;
 }) {
+  const t = useT();
+  const viewLabels = useViewModeLabels();
   const nF = countFilterRules(model);
   const nS = (sortRules || []).filter((r) => r.field).length;
   const nG = (levels || []).filter(Boolean).length;
   const SEGS: [string, string, string, number][] = [
-    ...((views ? [["layout", "Layout", "LayoutGrid", 0]] : []) as [string, string, string, number][]),
-    ["filter", "Filter", "SlidersHorizontal", nF],
-    ["sort", "Sort", "ArrowDownUp", nS],
-    ["group", "Group", "Group", nG],
+    ...((views
+      ? [["layout", t("m.kit.viewSheet.layout", undefined, "Layout"), "LayoutGrid", 0]]
+      : []) as [string, string, string, number][]),
+    ["filter", t("m.kit.viewSheet.filter", undefined, "Filter"), "SlidersHorizontal", nF],
+    ["sort", t("m.kit.viewSheet.sort", undefined, "Sort"), "ArrowDownUp", nS],
+    ["group", t("m.kit.viewSheet.group", undefined, "Group"), "Group", nG],
   ];
   const [seg, setSeg] = useState(tab || (views ? "layout" : "filter"));
   const resetAll = () => {
@@ -522,7 +532,7 @@ export function ViewSheet<T>({
     setLevels([]);
   };
   return (
-    <Sheet icon="SlidersHorizontal" title="View Options" onClose={onClose} panelStyle={{ maxHeight: "86%" }}>
+    <Sheet icon="SlidersHorizontal" title={t("m.kit.viewSheet.title", undefined, "View Options")} onClose={onClose} panelStyle={{ maxHeight: "86%" }}>
       <div className="viewseg" style={{ marginBottom: 14 }}>
         {SEGS.map(([id, lab, ic, n]) => (
           <button key={id} type="button" className={seg === id ? "on" : ""} aria-pressed={seg === id} onClick={() => setSeg(id)}>
@@ -549,7 +559,7 @@ export function ViewSheet<T>({
                 }}
               >
                 <KIcon name={VIEW_ICON[v] || "List"} size={20} />
-                <span style={{ fontSize: 12.5, fontWeight: 700 }}>{v[0]!.toUpperCase() + v.slice(1)}</span>
+                <span style={{ fontSize: 12.5, fontWeight: 700 }}>{viewLabels[v] ?? v[0]!.toUpperCase() + v.slice(1)}</span>
               </button>
             ))}
           </div>
@@ -560,10 +570,10 @@ export function ViewSheet<T>({
       </div>
       <div style={{ display: "flex", gap: 10 }}>
         <button type="button" className="ps-btn ps-btn--secondary ps-btn--lg" style={{ flex: 1, justifyContent: "center" }} onClick={resetAll}>
-          Reset All
+          {t("m.kit.viewSheet.resetAll", undefined, "Reset All")}
         </button>
         <button type="button" className="ps-btn ps-btn--cta ps-btn--lg" style={{ flex: 1.4, justifyContent: "center" }} onClick={onClose}>
-          Done
+          {t("m.kit.viewSheet.done", undefined, "Done")}
         </button>
       </div>
     </Sheet>
@@ -612,6 +622,7 @@ export function ShareSheet<T>({
   rows?: readonly T[];
   fields?: readonly FieldDef<T>[];
 }) {
+  const t = useT();
   const [seg, setSeg] = useState("share");
   const [linkOn, setLinkOn] = useState(true);
   const [copied, setCopied] = useState(false);
@@ -668,9 +679,12 @@ export function ShareSheet<T>({
   };
 
   return (
-    <Sheet icon="Share" title="Share & Export" onClose={onClose} panelStyle={{ maxHeight: "86%" }}>
+    <Sheet icon="Share" title={t("m.kit.share.title", undefined, "Share & Export")} onClose={onClose} panelStyle={{ maxHeight: "86%" }}>
       <div className="viewseg" style={{ marginBottom: 14 }}>
-        {([["share", "Share", "Link"], ["export", "Export", "Download"]] as [string, string, string][]).map(([id, lab, ic]) => (
+        {([
+          ["share", t("m.kit.share.share", undefined, "Share"), "Link"],
+          ["export", t("m.kit.share.export", undefined, "Export"), "Download"],
+        ] as [string, string, string][]).map(([id, lab, ic]) => (
           <button key={id} type="button" className={seg === id ? "on" : ""} aria-pressed={seg === id} onClick={() => setSeg(id)}>
             <KIcon name={ic} size={14} /> {lab}
           </button>
@@ -679,8 +693,8 @@ export function ShareSheet<T>({
       {seg === "share" && (
         <div>
           <div className="sech" style={{ marginTop: 0 }}>
-            <h2>Shareable Link</h2>
-            <ShareToggle on={linkOn} set={setLinkOn} label="Shareable link" />
+            <h2>{t("m.kit.share.linkTitle", undefined, "Shareable Link")}</h2>
+            <ShareToggle on={linkOn} set={setLinkOn} label={t("m.kit.share.linkToggle", undefined, "Shareable link")} />
           </div>
           {linkOn && (
             <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
@@ -689,43 +703,48 @@ export function ShareSheet<T>({
                 <input readOnly value={link} style={{ fontFamily: "var(--p-mono)", fontSize: 12 }} />
               </div>
               <button type="button" className={`ps-btn ${copied ? "ps-btn--secondary" : "ps-btn--cta"} ps-btn--lg`} onClick={copy} style={{ flex: "none", justifyContent: "center" }}>
-                <KIcon name={copied ? "Check" : "Copy"} size={15} /> {copied ? "Copied" : "Copy"}
+                <KIcon name={copied ? "Check" : "Copy"} size={15} /> {copied ? t("m.kit.share.copied", undefined, "Copied") : t("m.kit.share.copy", undefined, "Copy")}
               </button>
             </div>
           )}
           <p className="s" style={{ color: "var(--p-text-3)", margin: "0 0 12px", lineHeight: 1.4 }}>
-            Opens this view for teammates already on ATLVS. Permissioned public links and expiring
-            links are set up in the ATLVS web console.
+            {t("m.kit.share.linkHint", undefined, "Opens this view for teammates already on ATLVS. Permissioned public links and expiring links are set up in the ATLVS web console.")}
           </p>
           <div className="sech">
-            <h2>Invite People</h2>
+            <h2>{t("m.kit.share.invite", undefined, "Invite People")}</h2>
           </div>
           <a
             className="ps-btn ps-btn--secondary ps-btn--lg"
             style={{ width: "100%", justifyContent: "center" }}
-            href={`mailto:?subject=${encodeURIComponent(title || "ATLVS view")}&body=${encodeURIComponent(link)}`}
+            href={`mailto:?subject=${encodeURIComponent(title || t("m.kit.share.emailSubject", undefined, "ATLVS view"))}&body=${encodeURIComponent(link)}`}
           >
-            <KIcon name="Send" size={15} /> Share via Email
+            <KIcon name="Send" size={15} /> {t("m.kit.share.viaEmail", undefined, "Share via Email")}
           </a>
         </div>
       )}
       {seg === "export" && (
         <div>
           <div className="sech" style={{ marginTop: 0 }}>
-            <h2>Export{canExport ? ` · ${rows!.length} ${rows!.length === 1 ? "row" : "rows"}` : ""}</h2>
+            <h2>
+              {canExport
+                ? rows!.length === 1
+                  ? t("m.kit.share.exportOne", undefined, "Export · 1 row")
+                  : t("m.kit.share.exportMany", { count: rows!.length }, `Export · ${rows!.length} rows`)
+                : t("m.kit.share.exportTitle", undefined, "Export")}
+            </h2>
           </div>
           {canExport ? (
             <>
-              <ShareRow icon="Sheet" t="CSV Spreadsheet" s="Rows & columns as filtered" right={<KIcon name="Download" size={16} style={{ color: "var(--p-text-3)" }} />} onClick={exportCsv} />
-              <ShareRow icon="Braces" t="JSON" s="Raw records for developers" right={<KIcon name="Download" size={16} style={{ color: "var(--p-text-3)" }} />} onClick={exportJson} />
+              <ShareRow icon="Sheet" t={t("m.kit.share.csv", undefined, "CSV Spreadsheet")} s={t("m.kit.share.csvSub", undefined, "Rows & columns as filtered")} right={<KIcon name="Download" size={16} style={{ color: "var(--p-text-3)" }} />} onClick={exportCsv} />
+              <ShareRow icon="Braces" t={t("m.kit.share.json", undefined, "JSON")} s={t("m.kit.share.jsonSub", undefined, "Raw records for developers")} right={<KIcon name="Download" size={16} style={{ color: "var(--p-text-3)" }} />} onClick={exportJson} />
             </>
           ) : (
             <p className="s" style={{ color: "var(--p-text-3)", margin: "0 0 12px", lineHeight: 1.4 }}>
-              Row exports (CSV / JSON) are available from list and table views.
+              {t("m.kit.share.exportHint", undefined, "Row exports (CSV / JSON) are available from list and table views.")}
             </p>
           )}
           <div className="sech">
-            <h2>Print</h2>
+            <h2>{t("m.kit.share.print", undefined, "Print")}</h2>
           </div>
           <button
             type="button"
@@ -736,16 +755,13 @@ export function ShareSheet<T>({
               window.print();
             }}
           >
-            <KIcon name="Printer" size={15} /> Print Current View
+            <KIcon name="Printer" size={15} /> {t("m.kit.share.printCta", undefined, "Print Current View")}
           </button>
         </div>
       )}
     </Sheet>
   );
 }
-
-const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const WEEKDAY = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 /** Schema-driven multi-view renderer: list / table / board / calendar / gallery. */
 export function DataView<T>({
@@ -775,6 +791,8 @@ export function DataView<T>({
    *  rail). Applied only to the ungrouped list layout. */
   listWrapClassName?: string;
 }) {
+  const t = useT();
+  const { bcp47 } = useLocale();
   if (view === "table") return <DataTable fields={fields} items={items} onRow={onRow} />;
   if (view === "board") {
     const f = fields.find((x) => x.id === statusField);
@@ -812,6 +830,9 @@ export function DataView<T>({
     const withDate = items.map((it) => ({ it, iso: iso ? iso(it) : null })).filter((x) => x.iso);
     const noDate = items.filter((it) => !(iso && iso(it)));
     const days = [...new Set(withDate.map((x) => x.iso as string))].sort();
+    // Locale-aware date chrome (replaces the hardcoded EN month/weekday tables).
+    const monFmt = new Intl.DateTimeFormat(bcp47, { month: "short" });
+    const wdFmt = new Intl.DateTimeFormat(bcp47, { weekday: "long" });
     return (
       <div>
         {days.map((day) => {
@@ -821,12 +842,12 @@ export function DataView<T>({
             <div key={day} style={{ marginBottom: 12 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, margin: "2px 0 8px" }}>
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", width: 40, height: 40, borderRadius: 10, background: isToday ? "var(--p-accent)" : "var(--p-surface-2, var(--p-surface))", border: "1px solid var(--p-border)", color: isToday ? "var(--p-accent-contrast)" : "var(--p-text-1)", flex: "none" }}>
-                  <span style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", opacity: 0.8 }}>{MON[d.getMonth()]}</span>
+                  <span style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", opacity: 0.8 }}>{monFmt.format(d)}</span>
                   <span style={{ fontSize: 16, fontWeight: 800, lineHeight: 1 }}>{d.getDate()}</span>
                 </div>
                 <div style={{ fontSize: 12.5, fontWeight: 700, color: "var(--p-text-2)" }}>
-                  {WEEKDAY[d.getDay()]}
-                  {isToday && <span style={{ color: "var(--p-accent)" }}> · Today</span>}
+                  {wdFmt.format(d)}
+                  {isToday && <span style={{ color: "var(--p-accent)" }}> · {t("m.kit.cal.today", undefined, "Today")}</span>}
                 </div>
               </div>
               {withDate.filter((x) => x.iso === day).map((x, i) => <div key={i}>{renderRow(x.it)}</div>)}
@@ -836,7 +857,7 @@ export function DataView<T>({
         {noDate.length > 0 && (
           <div style={{ marginBottom: 12 }}>
             <div className="sech" style={{ margin: "2px 0 8px" }}>
-              <h2>Unscheduled</h2>
+              <h2>{t("m.kit.cal.unscheduled", undefined, "Unscheduled")}</h2>
             </div>
             {noDate.map((it, i) => <div key={i}>{renderRow(it)}</div>)}
           </div>

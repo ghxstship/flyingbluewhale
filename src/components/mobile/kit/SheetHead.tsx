@@ -1,6 +1,7 @@
 "use client";
 
 import { KIcon } from "./icon";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Canonical drawer header — kit 31 `SheetHead`
@@ -17,7 +18,9 @@ export type SheetHeadProps = {
   onClose: () => void;
 };
 
-export function SheetHead({ icon, title, sub, closeLabel = "Close", onClose }: SheetHeadProps) {
+export function SheetHead({ icon, title, sub, closeLabel, onClose }: SheetHeadProps) {
+  const t = useT();
+  const close = closeLabel ?? t("m.kit.close", undefined, "Close");
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 10, margin: "0 0 10px" }}>
       {icon && (
@@ -29,7 +32,7 @@ export function SheetHead({ icon, title, sub, closeLabel = "Close", onClose }: S
         <div style={{ fontFamily: "var(--p-heading)", textTransform: "uppercase", fontSize: 18 }}>{title}</div>
         {sub && <div className="s">{sub}</div>}
       </div>
-      <button type="button" className="modal-x" onClick={onClose} aria-label={closeLabel}>
+      <button type="button" className="modal-x" onClick={onClose} aria-label={close}>
         <KIcon name="X" size={17} />
       </button>
     </div>

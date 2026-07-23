@@ -4,6 +4,7 @@ import * as React from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { ChevronsUpDown, Search, Bell, Sparkles } from "lucide-react";
 import { MobileSwitcherSheet } from "./MobileSwitcherSheet";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * COMPVSS app bar — kit 28 `.appbar`
@@ -39,6 +40,7 @@ export function MobileAppBar({
   currentOrgId,
   currentProjectId,
 }: MobileAppBarProps) {
+  const t = useT();
   const router = useRouter();
   const pathname = usePathname();
   const [switcherOpen, setSwitcherOpen] = React.useState(false);
@@ -52,7 +54,7 @@ export function MobileAppBar({
           type="button"
           className="brandbtn"
           onClick={() => router.push("/m/aurora")}
-          aria-label="Ask Aurora AI"
+          aria-label={t("m.appBar.askAurora", undefined, "Ask Aurora AI")}
         >
           <svg viewBox="0 0 128 128" style={{ width: 30, height: 30 }} aria-hidden="true">
             <rect width="128" height="128" rx="28" fill="var(--p-accent)" />
@@ -80,12 +82,12 @@ export function MobileAppBar({
         </button>
 
         {/* Org + project context. Opens the switcher sheet. */}
-        <button type="button" className="ctx" onClick={() => setSwitcherOpen(true)} aria-label="Switch workspace or project">
+        <button type="button" className="ctx" onClick={() => setSwitcherOpen(true)} aria-label={t("m.appBar.switch", undefined, "Switch workspace or project")}>
           <span style={{ minWidth: 0 }}>
             <span className="org">{orgName}</span>
             <span className="proj">
               {projectLive && <span className="live" />}
-              {projectName ?? "All Projects"}
+              {projectName ?? t("m.appBar.allProjects", undefined, "All Projects")}
               <ChevronsUpDown size={11} />
             </span>
           </span>
@@ -95,10 +97,10 @@ export function MobileAppBar({
 
         {/* Kit 29: Global Search is a first-class route (/m/search) reached
             from the top bar — supersedes the kit-28 overlay drawer. */}
-        <button type="button" className="iconbtn" onClick={() => router.push("/m/search")} aria-label="Search">
+        <button type="button" className="iconbtn" onClick={() => router.push("/m/search")} aria-label={t("m.appBar.search", undefined, "Search")}>
           <Search size={19} />
         </button>
-        <button type="button" className="iconbtn" onClick={() => router.push("/m/notifications")} aria-label="Notifications">
+        <button type="button" className="iconbtn" onClick={() => router.push("/m/notifications")} aria-label={t("m.appBar.notifications", undefined, "Notifications")}>
           <Bell size={19} />
           {unread > 0 && <span className="dot">{unread > 99 ? "99+" : unread}</span>}
         </button>
@@ -107,7 +109,7 @@ export function MobileAppBar({
           className="avatar"
           data-active={onIdentity ? true : undefined}
           onClick={() => router.push("/m/profile")}
-          aria-label="Profile & settings"
+          aria-label={t("m.appBar.profile", undefined, "Profile & settings")}
         >
           {initials}
         </button>

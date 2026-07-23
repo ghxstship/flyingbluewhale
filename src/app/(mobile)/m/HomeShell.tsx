@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 
 import { KIcon, RoseCard, Sheet, TOOLS } from "@/components/mobile/kit";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { useToast } from "@/lib/hooks/useToast";
 import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
 import { QUICK_ACTIONS, QUICK_ACTION_IDS, type QuickActionId } from "@/lib/mobile/quick-actions";
@@ -214,14 +215,15 @@ export function HomeShell({
   // Live decidable count — the kit computes the Approve badge from the open
   // queue (v2.8: "was hardcoded 3"), never from an unrelated tally.
   const decidable = data.approvals?.filter((a) => a.stepId != null).length ?? 0;
-  const t = useToast();
+  const t = useT();
+  const toast = useToast();
   // Adapt the canonical sonner toast to the kit ToolSheet's {tone,title,message} shape.
   const toolToast = ({ tone, title, message }: { tone: string; title: string; message?: string }) => {
     const opts = message ? { description: message } : undefined;
-    if (tone === "ok" || tone === "success") t.success(title, opts);
-    else if (tone === "warn" || tone === "warning") t.warning(title, opts);
-    else if (tone === "danger" || tone === "error") t.error(title, opts);
-    else t.info(title, opts);
+    if (tone === "ok" || tone === "success") toast.success(title, opts);
+    else if (tone === "warn" || tone === "warning") toast.warning(title, opts);
+    else if (tone === "danger" || tone === "error") toast.error(title, opts);
+    else toast.info(title, opts);
   };
 
 
@@ -289,7 +291,7 @@ export function HomeShell({
                     <span style={{ flex: 1, minWidth: 0, fontWeight: 600 }}>{QA_LABEL[id]}</span>
                     <button
                       type="button"
-                      aria-label={`Move ${QA_LABEL[id]} up`}
+                      aria-label={t("m.home.moveActionUp", { label: QA_LABEL[id] }, `Move ${QA_LABEL[id]} up`)}
                       disabled={i === 0}
                       onClick={() => qaMove(id, -1)}
                       style={qaEditBtnStyle(i === 0)}
@@ -298,7 +300,7 @@ export function HomeShell({
                     </button>
                     <button
                       type="button"
-                      aria-label={`Move ${QA_LABEL[id]} down`}
+                      aria-label={t("m.home.moveActionDown", { label: QA_LABEL[id] }, `Move ${QA_LABEL[id]} down`)}
                       disabled={i === qaIds.length - 1}
                       onClick={() => qaMove(id, 1)}
                       style={qaEditBtnStyle(i === qaIds.length - 1)}
@@ -307,7 +309,7 @@ export function HomeShell({
                     </button>
                     <button
                       type="button"
-                      aria-label={`Remove ${QA_LABEL[id]}`}
+                      aria-label={t("m.home.removeAction", { label: QA_LABEL[id] }, `Remove ${QA_LABEL[id]}`)}
                       disabled={qaIds.length <= 1}
                       onClick={() => qaRemove(id)}
                       style={qaEditBtnStyle(qaIds.length <= 1, "var(--p-danger)")}
@@ -334,7 +336,7 @@ export function HomeShell({
                         <span style={{ flex: 1, minWidth: 0, fontWeight: 600 }}>{QA_LABEL[id]}</span>
                         <button
                           type="button"
-                          aria-label={`Add ${QA_LABEL[id]}`}
+                          aria-label={t("m.home.addAction", { label: QA_LABEL[id] }, `Add ${QA_LABEL[id]}`)}
                           onClick={() => qaAdd(id)}
                           style={qaEditBtnStyle(false, "var(--p-success)")}
                         >
@@ -361,7 +363,7 @@ export function HomeShell({
       {/* Toolbox — field utilities (unit/ops/OSHA/weather/radio/checklists) in a
           bottom sheet. Mirrors the kit reference's home Toolbox grid. */}
       <div className="sech">
-        <h2>Toolbox</h2>
+        <h2>{t("m.home.toolbox", undefined, "Toolbox")}</h2>
       </div>
       {/* `.toolgrid` / `.toolcard`, not `.qa`. The Toolbox is a two-up grid of
           bordered cards with the icon beside the label — the kit's own CSS for

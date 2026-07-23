@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { KIcon } from "@/components/mobile/kit";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Aurora AI — the full-screen agentic-chat surface (kit 33 v3.0, the 5th tab).
@@ -21,64 +22,62 @@ import { KIcon } from "@/components/mobile/kit";
 
 type Msg = { me: true; txt: string } | { me: false; txt: string; tool: string };
 
-const PROMPT_CARDS: [string, string][] = [
-  ["CalendarDays", "What's my next shift?"],
-  ["Megaphone", "Summarize the crew feed"],
-  ["TriangleAlert", "How do I report an incident?"],
-  ["CalendarOff", "How much time off do I have?"],
-];
-const FOLLOWUPS = ["What else can you do?", "How do I report an incident?", "Where's my schedule?"];
+/** The client translator shape (`useT()`), threaded into the deterministic guide. */
+type Tr = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
 
-function answerFor(q: string): string {
-  const t = q.toLowerCase();
-  if (/next shift|when.*work|schedule/.test(t))
-    return "Your shifts live on the Schedule tab. Open it to see your next call, its location and times. Tap a shift for the full brief.";
-  if (/incident|report|injur|hazard/.test(t))
-    return "To file an incident: open Tasks then Report It (also under Quick Actions on Home). Pick a type, set severity, add a photo, and it routes to Ops.";
-  if (/convert|ft|feet|meter|metre|lb|kg/.test(t))
-    return "The Unit Converter is in your Toolbox. It handles length, weight and temperature for quick on-site math.";
-  if (/cater|food|meal|eat/.test(t))
-    return "Meal service times and your meal voucher are on your Rose and in the venue guide. Check Access & Rose for the voucher.";
-  if (/radio|channel/.test(t))
-    return "Radio channel assignments are in the Toolbox under Radio Channels, and on the shift brief for the zone you're working.";
-  if (/pass|credential|access|rose/.test(t))
-    return "Your Rose (credential) is on the Home tab. Open it to see status and access zones, or to request additional permissions.";
-  if (/feed|summar|catch up|what.*happen|announce/.test(t))
-    return "The crew feed is on the Community tab. Must-reads are pinned at the top. Open it to catch up on everything since your last shift.";
-  if (/time off|pto|vacation|day off/.test(t))
-    return "Open Time Off to see your balance, request days, or check the status of a pending request.";
-  return "I can point you to your schedule, reporting, access, conversions, time off and venue info. Try a suggestion below or ask me anything.";
+function answerFor(t: Tr, q: string): string {
+  const s = q.toLowerCase();
+  if (/next shift|when.*work|schedule/.test(s))
+    return t("m.aurora.ansShift", undefined, "Your shifts live on the Schedule tab. Open it to see your next call, its location and times. Tap a shift for the full brief.");
+  if (/incident|report|injur|hazard/.test(s))
+    return t("m.aurora.ansIncident", undefined, "To file an incident: open Tasks then Report It (also under Quick Actions on Home). Pick a type, set severity, add a photo, and it routes to Ops.");
+  if (/convert|ft|feet|meter|metre|lb|kg/.test(s))
+    return t("m.aurora.ansConvert", undefined, "The Unit Converter is in your Toolbox. It handles length, weight and temperature for quick on-site math.");
+  if (/cater|food|meal|eat/.test(s))
+    return t("m.aurora.ansCatering", undefined, "Meal service times and your meal voucher are on your Rose and in the venue guide. Check Access & Rose for the voucher.");
+  if (/radio|channel/.test(s))
+    return t("m.aurora.ansRadio", undefined, "Radio channel assignments are in the Toolbox under Radio Channels, and on the shift brief for the zone you're working.");
+  if (/pass|credential|access|rose/.test(s))
+    return t("m.aurora.ansRose", undefined, "Your Rose (credential) is on the Home tab. Open it to see status and access zones, or to request additional permissions.");
+  if (/feed|summar|catch up|what.*happen|announce/.test(s))
+    return t("m.aurora.ansFeed", undefined, "The crew feed is on the Community tab. Must-reads are pinned at the top. Open it to catch up on everything since your last shift.");
+  if (/time off|pto|vacation|day off/.test(s))
+    return t("m.aurora.ansTimeOff", undefined, "Open Time Off to see your balance, request days, or check the status of a pending request.");
+  return t("m.aurora.ansDefault", undefined, "I can point you to your schedule, reporting, access, conversions, time off and venue info. Try a suggestion below or ask me anything.");
 }
 
-function toolFor(q: string): string {
-  const t = q.toLowerCase();
-  if (/shift|schedule|work/.test(t)) return "Schedule";
-  if (/incident|report|injur|hazard/.test(t)) return "Tasks & Reports";
-  if (/pass|credential|access|rose/.test(t)) return "Access & Rose";
-  if (/time off|pto|vacation|day off/.test(t)) return "Time Off";
-  if (/feed|summar|catch up|announce/.test(t)) return "Community";
-  if (/cater|food|meal|radio|channel/.test(t)) return "Venue Info";
-  return "ATLVS";
+function toolFor(t: Tr, q: string): string {
+  const s = q.toLowerCase();
+  if (/shift|schedule|work/.test(s)) return t("m.aurora.toolSchedule", undefined, "Schedule");
+  if (/incident|report|injur|hazard/.test(s)) return t("m.aurora.toolTasks", undefined, "Tasks & Reports");
+  if (/pass|credential|access|rose/.test(s)) return t("m.aurora.toolAccess", undefined, "Access & Rose");
+  if (/time off|pto|vacation|day off/.test(s)) return t("m.aurora.toolTimeOff", undefined, "Time Off");
+  if (/feed|summar|catch up|announce/.test(s)) return t("m.aurora.toolCommunity", undefined, "Community");
+  if (/cater|food|meal|radio|channel/.test(s)) return t("m.aurora.toolVenue", undefined, "Venue Info");
+  return t("m.aurora.toolDefault", undefined, "ATLVS");
 }
 
-function greetingWord(): string {
+type GreetKey = "hello" | "morning" | "afternoon" | "evening";
+
+function greetingKey(): GreetKey {
   const h = new Date().getHours();
-  if (h < 12) return "Good morning";
-  if (h < 18) return "Good afternoon";
-  return "Good evening";
+  if (h < 12) return "morning";
+  if (h < 18) return "afternoon";
+  return "evening";
 }
 
 export function AuroraChat({ firstName }: { firstName: string }) {
+  const t = useT();
   const [msgs, setMsgs] = React.useState<Msg[]>([]);
   const [draft, setDraft] = React.useState("");
   // Hydration-safe: init to a stable placeholder, resolve the time-of-day
   // greeting + connectivity after mount (live-time-in-render is the #418 trap).
-  const [greeting, setGreeting] = React.useState("Hello");
+  const [greeting, setGreeting] = React.useState<GreetKey>("hello");
   const [online, setOnline] = React.useState(true);
   const threadRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
-    setGreeting(greetingWord());
+    setGreeting(greetingKey());
     setOnline(navigator.onLine);
     const on = () => setOnline(true);
     const off = () => setOnline(false);
@@ -94,12 +93,35 @@ export function AuroraChat({ firstName }: { firstName: string }) {
     threadRef.current?.scrollTo({ top: threadRef.current.scrollHeight, behavior: "smooth" });
   }, [msgs]);
 
-  const ask = React.useCallback((q: string) => {
-    const text = q.trim();
-    if (!text) return;
-    setMsgs((m) => [...m, { me: true, txt: text }, { me: false, txt: answerFor(text), tool: toolFor(text) }]);
-    setDraft("");
-  }, []);
+  const ask = React.useCallback(
+    (q: string) => {
+      const text = q.trim();
+      if (!text) return;
+      setMsgs((m) => [...m, { me: true, txt: text }, { me: false, txt: answerFor(t, text), tool: toolFor(t, text) }]);
+      setDraft("");
+    },
+    [t],
+  );
+
+  const promptCards: [string, string][] = [
+    ["CalendarDays", t("m.aurora.promptShift", undefined, "What's my next shift?")],
+    ["Megaphone", t("m.aurora.promptFeed", undefined, "Summarize the crew feed")],
+    ["TriangleAlert", t("m.aurora.promptIncident", undefined, "How do I report an incident?")],
+    ["CalendarOff", t("m.aurora.promptTimeOff", undefined, "How much time off do I have?")],
+  ];
+  const followups = [
+    t("m.aurora.followWhatElse", undefined, "What else can you do?"),
+    t("m.aurora.promptIncident", undefined, "How do I report an incident?"),
+    t("m.aurora.followSchedule", undefined, "Where's my schedule?"),
+  ];
+  const greetText =
+    greeting === "morning"
+      ? t("m.aurora.greetMorning", undefined, "Good morning")
+      : greeting === "afternoon"
+        ? t("m.aurora.greetAfternoon", undefined, "Good afternoon")
+        : greeting === "evening"
+          ? t("m.aurora.greetEvening", undefined, "Good evening")
+          : t("m.aurora.greetHello", undefined, "Hello");
 
   return (
     <div className="aurora-screen" ref={threadRef}>
@@ -108,16 +130,19 @@ export function AuroraChat({ firstName }: { firstName: string }) {
           <KIcon name="Sparkles" size={16} />
         </span>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <h1 className="aurora-head-t">Aurora AI</h1>
-          <div className="aurora-head-s">Field intelligence · {online ? "online" : "offline"}</div>
+          <h1 className="aurora-head-t">{t("m.aurora.title", undefined, "Aurora AI")}</h1>
+          <div className="aurora-head-s">
+            {t("m.aurora.fieldIntelligence", undefined, "Field intelligence")} ·{" "}
+            {online ? t("m.aurora.online", undefined, "online") : t("m.aurora.offline", undefined, "offline")}
+          </div>
         </div>
         {msgs.length > 0 && (
           <button
             type="button"
             className="modal-x"
             onClick={() => setMsgs([])}
-            aria-label="New chat"
-            title="New chat"
+            aria-label={t("m.aurora.newChat", undefined, "New chat")}
+            title={t("m.aurora.newChat", undefined, "New chat")}
           >
             <KIcon name="PenSquare" size={16} />
           </button>
@@ -130,13 +155,13 @@ export function AuroraChat({ firstName }: { firstName: string }) {
             <KIcon name="Sparkles" size={26} />
           </span>
           <div className="aurora-hi">
-            {greeting}, {firstName}
+            {greetText}, {firstName}
           </div>
           <div className="aurora-sub">
-            Ask about your shifts, crew, access or the venue and I&apos;ll point you to the right screen.
+            {t("m.aurora.hint", undefined, "Ask about your shifts, crew, access or the venue and I'll point you to the right screen.")}
           </div>
           <div className="aurora-cards">
-            {PROMPT_CARDS.map(([ic, p]) => (
+            {promptCards.map(([ic, p]) => (
               <button type="button" className="aurora-card" key={p} onClick={() => ask(p)}>
                 <KIcon name={ic} size={16} />
                 <span>{p}</span>
@@ -166,14 +191,14 @@ export function AuroraChat({ firstName }: { firstName: string }) {
                        the answer instead of trailing it. */
                     <div className="ai-cites" style={{ margin: "0 0 8px" }}>
                       <span className="ai-cite" style={{ cursor: "default" }}>
-                        <KIcon name="Compass" size={11} /> See <b>{m.tool}</b>
+                        <KIcon name="Compass" size={11} /> {t("m.aurora.see", undefined, "See")} <b>{m.tool}</b>
                       </span>
                     </div>
                   )}
                   <div className="au-text">{m.txt}</div>
                   {i === msgs.length - 1 && (
                     <div className="au-follow">
-                      {FOLLOWUPS.map((f) => (
+                      {followups.map((f) => (
                         <button type="button" key={f} onClick={() => ask(f)}>
                           {f}
                         </button>
@@ -198,17 +223,17 @@ export function AuroraChat({ firstName }: { firstName: string }) {
           <input
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
-            placeholder="Ask Aurora anything…"
-            aria-label="Ask Aurora anything"
+            placeholder={t("m.aurora.placeholder", undefined, "Ask Aurora anything…")}
+            aria-label={t("m.aurora.ask", undefined, "Ask Aurora anything")}
             enterKeyHint="send"
           />
-          <button type="submit" className="au-send" aria-label="Send" disabled={!draft.trim()}>
+          <button type="submit" className="au-send" aria-label={t("m.aurora.send", undefined, "Send")} disabled={!draft.trim()}>
             <KIcon name="ArrowUp" size={16} />
           </button>
         </form>
         <div className="au-foot">
-          <KIcon name="ShieldCheck" size={11} /> Preview · Aurora guides you to the right screen. Live agent
-          coming soon
+          <KIcon name="ShieldCheck" size={11} />{" "}
+          {t("m.aurora.previewNote", undefined, "Preview · Aurora guides you to the right screen. Live agent coming soon")}
         </div>
       </div>
     </div>

@@ -3,6 +3,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import { SheetHead } from "./SheetHead";
 import { useDismissable } from "./useDismissable";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Canonical bottom-sheet shell — kit 32 Drawer System (v2.8),
@@ -46,13 +47,14 @@ export type SheetProps = {
 };
 
 export function Sheet({ icon, title, sub, closeLabel, onClose, ariaLabel, panelStyle, children }: SheetProps) {
+  const t = useT();
   const panelRef = useDismissable<HTMLDivElement>(true, onClose);
   return (
     <div className="sheet">
       <button
         type="button"
         className="sheet-bg"
-        aria-label={closeLabel ?? "Close"}
+        aria-label={closeLabel ?? t("m.kit.close", undefined, "Close")}
         tabIndex={-1}
         style={{ border: "none", padding: 0, cursor: "default" }}
         onClick={onClose}

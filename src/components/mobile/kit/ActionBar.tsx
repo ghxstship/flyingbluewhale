@@ -3,7 +3,8 @@
 import { useState, type ReactNode } from "react";
 import { KIcon } from "./icon";
 import { PillMenu, Popover, mkItems } from "./Menu";
-import { VIEW_ICON, type ViewMode } from "./ViewToggle";
+import { VIEW_ICON, useViewModeLabels, type ViewMode } from "./ViewToggle";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import {
   FilterBuilder,
   SortBuilder,
@@ -105,6 +106,8 @@ export function ActionBar<T>({
   share = true,
   exportRows,
 }: ActionBarProps<T>) {
+  const t = useT();
+  const viewLabels = useViewModeLabels();
   const glab = groupOpts ? Object.fromEntries(groupOpts) : undefined;
   const slab = sortOpts ? Object.fromEntries(sortOpts) : undefined;
   const drawer = !!(fields && filterModel && setFilterModel);
@@ -131,11 +134,11 @@ export function ActionBar<T>({
       <div className="actionbar">
         <div className="searchbar">
           <KIcon name="Search" size={16} />
-          <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={placeholder} aria-label={placeholder || "Search"} />
+          <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={placeholder} aria-label={placeholder || t("m.kit.bar.search", undefined, "Search")} />
           {query && (
             <button
               type="button"
-              aria-label="Clear search"
+              aria-label={t("m.kit.bar.clearSearch", undefined, "Clear search")}
               onClick={() => setQuery("")}
               style={{ border: "none", background: "none", padding: 0, cursor: "pointer", display: "inline-flex", color: "inherit" }}
             >
@@ -146,14 +149,14 @@ export function ActionBar<T>({
         <div className="clusters">
           {views && view && setView && !drawer && (
             <PillMenu
-              label="View"
+              label={t("m.kit.bar.view", undefined, "View")}
               icon={VIEW_ICON[view] || "List"}
               openKey={k + "v"}
               menuOpen={menuOpen}
               setMenuOpen={setMenuOpen}
               align="right"
               items={views.map((v) => ({
-                label: v[0]!.toUpperCase() + v.slice(1),
+                label: viewLabels[v] ?? v[0]!.toUpperCase() + v.slice(1),
                 icon: <KIcon name={view === v ? "Check" : VIEW_ICON[v]} size={14} />,
                 onSelect: () => {
                   setView(v);
@@ -169,13 +172,13 @@ export function ActionBar<T>({
                 className="pill ico"
                 data-active={viewCount ? "" : undefined}
                 onClick={() => setSheet(views ? "layout" : "filter")}
-                aria-label="View options"
+                aria-label={t("m.kit.bar.viewOptions", undefined, "View options")}
               >
                 <KIcon name="SlidersHorizontal" size={16} />
                 {viewCount > 0 && <span className="acount">{viewCount}</span>}
               </button>
               {share && (
-                <button type="button" className="pill ico" onClick={() => setShareOpen(true)} aria-label="Share & export">
+                <button type="button" className="pill ico" onClick={() => setShareOpen(true)} aria-label={t("m.kit.bar.share", undefined, "Share & export")}>
                   <KIcon name="Share" size={16} />
                 </button>
               )}
@@ -184,7 +187,7 @@ export function ActionBar<T>({
             <>
               {groupOpts && glab && group != null && setGroup && (
                 <PillMenu
-                  label={group === "none" ? "Group" : `Group: ${glab[group]}`}
+                  label={group === "none" ? t("m.kit.bar.group", undefined, "Group") : t("m.kit.bar.groupActive", { label: glab[group]! }, `Group: ${glab[group]}`)}
                   icon="Group"
                   active={group !== "none"}
                   openKey={k + "g"}
@@ -196,7 +199,7 @@ export function ActionBar<T>({
               )}
               {adv ? (
                 <Popover
-                  label="Sort"
+                  label={t("m.kit.bar.sort", undefined, "Sort")}
                   icon="ArrowDownUp"
                   count={nSort}
                   width={272}
@@ -213,7 +216,7 @@ export function ActionBar<T>({
                 sort != null &&
                 setSort && (
                   <PillMenu
-                    label={`Sort: ${slab[sort]}`}
+                    label={t("m.kit.bar.sortActive", { label: slab[sort]! }, `Sort: ${slab[sort]}`)}
                     icon="ArrowDownUp"
                     openKey={k + "s"}
                     menuOpen={menuOpen}
@@ -225,7 +228,7 @@ export function ActionBar<T>({
               )}
               {adv ? (
                 <Popover
-                  label="Filter"
+                  label={t("m.kit.bar.filter", undefined, "Filter")}
                   icon="SlidersHorizontal"
                   count={nFilter}
                   width={290}
@@ -245,7 +248,7 @@ export function ActionBar<T>({
               ) : (
                 filterChildren && (
                   <Popover
-                    label="Filter"
+                    label={t("m.kit.bar.filter", undefined, "Filter")}
                     icon="SlidersHorizontal"
                     count={filterActive || 0}
                     openKey={k + "f"}
@@ -264,7 +267,7 @@ export function ActionBar<T>({
       {pills && pills.length > 0 && (
         <div className="chips" style={{ paddingBottom: 10, marginTop: -2 }}>
           <button type="button" className={`chip ${anyPill ? "" : "on"}`} aria-pressed={!anyPill} onClick={() => onPillsClear?.()}>
-            All
+            {t("m.kit.bar.all", undefined, "All")}
           </button>
           {pills.map((p) => (
             <button key={p.label} type="button" className={`chip ${p.active ? "on" : ""}`} aria-pressed={p.active} onClick={p.on}>
@@ -292,7 +295,7 @@ export function ActionBar<T>({
       )}
       {drawer && shareOpen && (
         <ShareSheet
-          title={placeholder ? placeholder.replace(/^Search /, "").replace(/…$/, "") : "records"}
+          title={placeholder ? placeholder.replace(/^Search /, "").replace(/…$/, "") : t("m.kit.bar.records", undefined, "records")}
           onClose={() => setShareOpen(false)}
           rows={exportRows}
           fields={fields}

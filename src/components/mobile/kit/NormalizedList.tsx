@@ -2,6 +2,7 @@
 
 import { useMemo, useState, type ReactNode } from "react";
 import { ActionBar } from "./ActionBar";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { EmptySkeleton } from "./EmptySkeleton";
 import { DataView, GroupedTree, applyModel, groupTree, dataPills, advBar, emptyViewCtl, type ViewCtl } from "./viewengine";
 import type { FieldDef } from "./DataTable";
@@ -66,6 +67,7 @@ export function NormalizedList<T>({
   footer,
   listWrapClassName,
 }: NormalizedListProps<T>) {
+  const t = useT();
   const [ctl, setCtl] = useState<ViewCtl>(() => emptyViewCtl(initialView));
   const [menuOpen, setMenuOpen] = useState<string | null>(null);
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
@@ -111,7 +113,7 @@ export function NormalizedList<T>({
         exportRows={filtered}
       />
       {filtered.length === 0 ? (
-        <EmptySkeleton cols={empty.cols} title={empty.title} hint={empty.hint ?? "No items match these filters."} />
+        <EmptySkeleton cols={empty.cols} title={empty.title} hint={empty.hint ?? t("m.kit.emptyHint", undefined, "No items match these filters.")} />
       ) : tree ? (
         <GroupedTree skey={k} tree={tree} collapsed={collapsed} setCollapsed={setCollapsed} renderRow={(x) => renderRow(x as T)} />
       ) : (

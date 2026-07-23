@@ -2,6 +2,7 @@
 
 import { useMemo, useState, type ReactNode } from "react";
 import { KIcon } from "./icon";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Airtable-style view engine + schema-driven data table. Ported from the
@@ -70,6 +71,29 @@ export const FILTER_OPS: Record<"text" | "num" | "enum", ReadonlyArray<readonly 
     ["isnot", "is not"],
   ],
 };
+
+/**
+ * Locale-resolved display labels for the word-form filter operators (the
+ * symbol ops — = ≠ > < ≥ ≤ — need no translation). Shared by the popover
+ * builders here and the drawer builders in `viewengine.tsx`.
+ */
+export function useFilterOpLabels(): Record<string, string> {
+  const t = useT();
+  return {
+    contains: t("m.kit.op.contains", undefined, "contains"),
+    ncontains: t("m.kit.op.ncontains", undefined, "doesn't contain"),
+    is: t("m.kit.op.is", undefined, "is"),
+    isnot: t("m.kit.op.isnot", undefined, "is not"),
+    empty: t("m.kit.op.empty", undefined, "is empty"),
+    nempty: t("m.kit.op.nempty", undefined, "is not empty"),
+    don: t("m.kit.op.don", undefined, "is on"),
+    dbefore: t("m.kit.op.dbefore", undefined, "is before"),
+    dafter: t("m.kit.op.dafter", undefined, "is after"),
+    dbetween: t("m.kit.op.dbetween", undefined, "is between"),
+    dtoday: t("m.kit.op.dtoday", undefined, "is today"),
+    dweek: t("m.kit.op.dweek", undefined, "is this week"),
+  };
+}
 
 /** Map a FieldDef type to its FILTER_OPS bucket. */
 function opBucket(type: FieldType): "text" | "num" | "enum" {
@@ -171,6 +195,8 @@ export type FilterBuilderProps<T> = {
 };
 
 export function FilterBuilder<T>({ fields, rules, setRules, conj, setConj }: FilterBuilderProps<T>) {
+  const t = useT();
+  const opLabels = useFilterOpLabels();
   const first = fields[0];
   const add = () => {
     if (!first) return;
@@ -185,7 +211,7 @@ export function FilterBuilder<T>({ fields, rules, setRules, conj, setConj }: Fil
     <div style={{ width: 258 }}>
       {(!rules || !rules.length) && (
         <div className="hint" style={{ marginBottom: 8 }}>
-          No conditions. Show all items.
+          {t("m.kit.filter.noneHint", undefined, "No conditions. Show all items.")}
         </div>
       )}
       {(rules || []).map((r, i) => {
@@ -198,16 +224,16 @@ export function FilterBuilder<T>({ fields, rules, setRules, conj, setConj }: Fil
             <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
               <span style={{ width: 44, fontSize: 11, fontWeight: 700, color: "var(--p-text-3)" }}>
                 {i === 0 ? (
-                  "Where"
+                  t("m.kit.filter.where", undefined, "Where")
                 ) : (
                   <select
                     value={conj}
                     onChange={(e) => setConj(e.target.value as Conjunction)}
-                    aria-label="And / or"
+                    aria-label={t("m.kit.filter.conj", undefined, "And / or")}
                     style={{ ...selStyle, padding: "3px 4px", width: 44 }}
                   >
-                    <option value="and">And</option>
-                    <option value="or">Or</option>
+                    <option value="and">{t("m.kit.filter.and", undefined, "And")}</option>
+                    <option value="or">{t("m.kit.filter.or", undefined, "Or")}</option>
                   </select>
                 )}
               </span>
@@ -218,7 +244,7 @@ export function FilterBuilder<T>({ fields, rules, setRules, conj, setConj }: Fil
                   const nops = nf ? FILTER_OPS[opBucket(nf.type)] : FILTER_OPS.text;
                   upd(i, { field: e.target.value, op: nops[0]?.[0] ?? "contains", value: "" });
                 }}
-                aria-label="Filter field"
+                aria-label={t("m.kit.filter.field", undefined, "Filter field")}
                 style={{ ...selStyle, flex: 1 }}
               >
                 {fields.map((x) => (
@@ -230,7 +256,7 @@ export function FilterBuilder<T>({ fields, rules, setRules, conj, setConj }: Fil
               <button
                 type="button"
                 onClick={() => del(i)}
-                aria-label="Remove condition"
+                aria-label={t("m.kit.filter.removeCondition", undefined, "Remove condition")}
                 style={{ border: "none", background: "none", color: "var(--p-text-3)", cursor: "pointer", padding: 2 }}
               >
                 <KIcon name="X" size={14} />
@@ -240,12 +266,12 @@ export function FilterBuilder<T>({ fields, rules, setRules, conj, setConj }: Fil
               <select
                 value={r.op}
                 onChange={(e) => upd(i, { op: e.target.value as FilterOp })}
-                aria-label="Operator"
+                aria-label={t("m.kit.filter.operator", undefined, "Operator")}
                 style={{ ...selStyle, flex: "0 0 auto" }}
               >
                 {ops.map(([id, lbl]) => (
                   <option key={id} value={id}>
-                    {lbl}
+                    {opLabels[id] ?? lbl}
                   </option>
                 ))}
               </select>
@@ -254,10 +280,10 @@ export function FilterBuilder<T>({ fields, rules, setRules, conj, setConj }: Fil
                   <select
                     value={r.value}
                     onChange={(e) => upd(i, { value: e.target.value })}
-                    aria-label="Filter value"
+                    aria-label={t("m.kit.filter.value", undefined, "Filter value")}
                     style={{ ...selStyle, flex: 1 }}
                   >
-                    <option value="">Choose…</option>
+                    <option value="">{t("m.kit.filter.choose", undefined, "Choose…")}</option>
                     {(f.options || []).map((o) => (
                       <option key={o} value={o}>
                         {o}
@@ -268,8 +294,8 @@ export function FilterBuilder<T>({ fields, rules, setRules, conj, setConj }: Fil
                   <input
                     value={r.value}
                     onChange={(e) => upd(i, { value: e.target.value })}
-                    placeholder="value"
-                    aria-label="Filter value"
+                    placeholder={t("m.kit.filter.valuePlaceholder", undefined, "value")}
+                    aria-label={t("m.kit.filter.value", undefined, "Filter value")}
                     type={f.type === "num" ? "number" : "text"}
                     style={{ ...selStyle, flex: 1 }}
                   />
@@ -280,11 +306,11 @@ export function FilterBuilder<T>({ fields, rules, setRules, conj, setConj }: Fil
       })}
       <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
         <button type="button" className="pill" onClick={add} style={{ flex: 1, justifyContent: "center" }}>
-          <KIcon name="Plus" size={13} /> Add condition
+          <KIcon name="Plus" size={13} /> {t("m.kit.filter.addCondition", undefined, "Add condition")}
         </button>
         {rules && rules.length > 0 && (
           <button type="button" className="pill" onClick={() => setRules([])} style={{ justifyContent: "center" }}>
-            Clear
+            {t("m.kit.clear", undefined, "Clear")}
           </button>
         )}
       </div>
@@ -299,6 +325,7 @@ export type SortBuilderProps<T> = {
 };
 
 export function SortBuilder<T>({ fields, rules, setRules }: SortBuilderProps<T>) {
+  const t = useT();
   const used = new Set((rules || []).map((r) => r.field));
   const free = fields.filter((f) => !used.has(f.id));
   const add = () => {
@@ -312,16 +339,18 @@ export function SortBuilder<T>({ fields, rules, setRules }: SortBuilderProps<T>)
     <div style={{ width: 252 }}>
       {(!rules || !rules.length) && (
         <div className="hint" style={{ marginBottom: 8 }}>
-          No sort applied.
+          {t("m.kit.sort.noneShort", undefined, "No sort applied.")}
         </div>
       )}
       {(rules || []).map((r, i) => (
         <div key={i} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 7 }}>
-          <span style={{ fontSize: 11, color: "var(--p-text-3)", width: 26 }}>{i === 0 ? "Sort" : "then"}</span>
+          <span style={{ fontSize: 11, color: "var(--p-text-3)", width: 26 }}>
+            {i === 0 ? t("m.kit.sort.label", undefined, "Sort") : t("m.kit.sort.then", undefined, "then")}
+          </span>
           <select
             value={r.field}
             onChange={(e) => upd(i, { field: e.target.value })}
-            aria-label="Sort field"
+            aria-label={t("m.kit.sort.field", undefined, "Sort field")}
             style={{ ...selStyle, flex: 1 }}
           >
             {fields.map((x) => (
@@ -336,12 +365,13 @@ export function SortBuilder<T>({ fields, rules, setRules }: SortBuilderProps<T>)
             className="pill"
             style={{ padding: "5px 8px", gap: 3 }}
           >
-            <KIcon name={r.dir === "asc" ? "ArrowUp" : "ArrowDown"} size={12} /> {r.dir === "asc" ? "Asc" : "Desc"}
+            <KIcon name={r.dir === "asc" ? "ArrowUp" : "ArrowDown"} size={12} />{" "}
+            {r.dir === "asc" ? t("m.kit.sort.asc", undefined, "Asc") : t("m.kit.sort.desc", undefined, "Desc")}
           </button>
           <button
             type="button"
             onClick={() => del(i)}
-            aria-label="Remove sort"
+            aria-label={t("m.kit.sort.remove", undefined, "Remove sort")}
             style={{ border: "none", background: "none", color: "var(--p-text-3)", cursor: "pointer", padding: 2 }}
           >
             <KIcon name="X" size={14} />
@@ -356,11 +386,11 @@ export function SortBuilder<T>({ fields, rules, setRules }: SortBuilderProps<T>)
           disabled={!free.length}
           style={{ flex: 1, justifyContent: "center", opacity: free.length ? 1 : 0.5 }}
         >
-          <KIcon name="Plus" size={13} /> Add sort
+          <KIcon name="Plus" size={13} /> {t("m.kit.sort.add", undefined, "Add sort")}
         </button>
         {rules && rules.length > 0 && (
           <button type="button" className="pill" onClick={() => setRules([])} style={{ justifyContent: "center" }}>
-            Clear
+            {t("m.kit.clear", undefined, "Clear")}
           </button>
         )}
       </div>

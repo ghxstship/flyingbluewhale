@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import { KIcon } from "./icon";
 import { useDismissable } from "./useDismissable";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Dropdown-menu pieces for the COMPVSS mobile action bar.
@@ -72,6 +73,7 @@ export function PillMenu({
   items,
   align = "left",
 }: PillMenuProps) {
+  const t = useT();
   const open = menuOpen === openKey;
   const panelRef = useDismissable<HTMLDivElement>(open, () => setMenuOpen(null), { modal: false });
   return (
@@ -94,7 +96,7 @@ export function PillMenu({
           <button
             type="button"
             className="menu-back"
-            aria-label={`Close ${label} menu`}
+            aria-label={t("m.kit.menu.closeMenu", { label }, `Close ${label} menu`)}
             onClick={() => setMenuOpen(null)}
           />
           <MenuList menuRef={panelRef} className={`pop ${align === "right" ? "r" : ""}`.trim()} items={items} />
@@ -129,6 +131,7 @@ export function Popover({
   align = "left",
   children,
 }: PopoverProps) {
+  const t = useT();
   const open = menuOpen === openKey;
   const panelRef = useDismissable<HTMLDivElement>(open, () => setMenuOpen(null), { modal: false });
   return (
@@ -151,7 +154,7 @@ export function Popover({
           <button
             type="button"
             className="menu-back"
-            aria-label={`Close ${label}`}
+            aria-label={t("m.kit.menu.close", { label }, `Close ${label}`)}
             onClick={() => setMenuOpen(null)}
           />
           <div ref={panelRef} role="dialog" aria-label={label} className={`ps-menu pop ${align === "right" ? "r" : ""}`.trim()} style={{ width, padding: 14 }}>

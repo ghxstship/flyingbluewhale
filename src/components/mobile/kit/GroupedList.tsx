@@ -2,6 +2,7 @@
 
 import { type Dispatch, type ReactNode, type SetStateAction } from "react";
 import { KIcon } from "./icon";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
  * Collapsible grouped list. Ported from the prototype `GroupedList`.
@@ -19,6 +20,7 @@ export type GroupedListProps<T> = {
 };
 
 export function GroupedList<T>({ skey, groups, collapsed, setCollapsed, renderRow }: GroupedListProps<T>) {
+  const t = useT();
   const keys = groups.map(([name]) => `${skey}:${name}`);
   const allCollapsed = keys.length > 0 && keys.every((k) => collapsed.has(k));
   const toggleAll = () =>
@@ -40,7 +42,7 @@ export function GroupedList<T>({ skey, groups, collapsed, setCollapsed, renderRo
       <div className="grp-bar">
         <button type="button" className="grp-all" onClick={toggleAll}>
           <KIcon name={allCollapsed ? "ChevronsUpDown" : "ChevronsDownUp"} size={13} />{" "}
-          {allCollapsed ? "Expand all" : "Collapse all"}
+          {allCollapsed ? t("m.kit.expandAll", undefined, "Expand all") : t("m.kit.collapseAll", undefined, "Collapse all")}
         </button>
       </div>
       {groups.map(([name, items]) => {

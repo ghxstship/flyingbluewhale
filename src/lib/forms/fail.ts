@@ -1,4 +1,5 @@
 import type { ZodError } from "zod";
+import { actionErrorMessage } from "@/lib/errors";
 
 /**
  * Validation-failure helpers for server actions feeding <FormShell>.
@@ -51,7 +52,7 @@ export function echoValues(fd: FormData): Record<string, string> {
 export function formFail(
   error: ZodError,
   fd: FormData,
-  banner = "Check the fields below",
+  banner = actionErrorMessage("check-the-fields-below", "Check the fields below"),
 ): { error: string; fieldErrors: Record<string, string>; values: Record<string, string> } {
   return { error: banner, fieldErrors: zodFieldErrors(error), values: echoValues(fd) };
 }

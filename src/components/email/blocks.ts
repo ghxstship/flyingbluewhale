@@ -1,5 +1,5 @@
 /**
- * ATLVS Email Kit — composable block builders.
+ * ATLVS Email Kit: composable block builders.
  *
  * ── WHY INLINE HEX (and inline styles generally) ──────────────────────────
  * Email clients are NOT browsers. Gmail, Outlook (Word rendering engine),
@@ -14,11 +14,11 @@
  * layout with every style written INLINE as a hard-coded hex / px value.
  * That is why this kit centralizes the palette in `PALETTE` below and the
  * font stacks in `FONTS`, then INLINES those literal strings into every
- * element. There is no CSS-variable indirection at runtime — the constants
+ * element. There is no CSS-variable indirection at runtime: the constants
  * exist purely so the source has one place to edit, not so the client
  * resolves them. (CSS variables would silently fail in most inboxes.)
  *
- * Pure string builders only — no React, no DOM, no `react-dom/server`.
+ * Pure string builders only: no React, no DOM, no `react-dom/server`.
  * Each function returns an HTML fragment string safe to drop into a
  * table cell built by `layout.ts`.
  */
@@ -27,13 +27,13 @@ import { BRAND } from "@/lib/brand";
 /**
  * Single source of truth for every color used in emails.
  *
- * REQUIRED to be literal hex — these values are inlined into `style="..."`
+ * REQUIRED to be literal hex: these values are inlined into `style="..."`
  * attributes. Do not reference CSS variables here; email clients can't read
  * them. Mirrors the ATLVS v8 "palette-locked" neutrals + the volcanic-red
  * house accent (tokens.json). Keep in sync with src/app/theme/tokens.json.
  */
 export const PALETTE = {
-  /** House / primary accent — ATLVS volcanic red. */
+  /** House / primary accent: ATLVS volcanic red. */
   accent: "#E23414",
   /** Darker red for pressed/hover affordances and link emphasis.
       (Re-seeded W1 2026-07-22: #B7270D had drifted from the tokens.json
@@ -55,7 +55,7 @@ export const PALETTE = {
   text: "#181B23",
   /** Secondary / supporting copy. */
   muted: "#4A5563",
-  /** Tertiary — captions, legal, fallback URLs (AA floor). */
+  /** Tertiary: captions, legal, fallback URLs (AA floor). */
   tertiary: "#656D7A",
 
   /** Hairline borders + dividers. */
@@ -71,12 +71,12 @@ export type PaletteColor = keyof typeof PALETTE;
  * Courier for mono). Inlined into `font-family` declarations.
  */
 export const FONTS = {
-  /** Display / headings — Anton, degrading to a condensed system face. */
+  /** Display / headings: Anton, degrading to a condensed system face. */
   heading:
     "'Anton', 'Arial Narrow', 'Helvetica Neue', Helvetica, Arial, sans-serif",
-  /** Body / UI — Hanken Grotesk, degrading to Arial. */
+  /** Body / UI: Hanken Grotesk, degrading to Arial. */
   body: "'Hanken Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif",
-  /** Eyebrows / IDs / code — Space Mono, degrading to Courier. */
+  /** Eyebrows / IDs / code: Space Mono, degrading to Courier. */
   mono: "'Space Mono', 'Courier New', Courier, monospace",
 } as const;
 
@@ -114,7 +114,7 @@ export function emailButton({
   label: string;
   href: string;
   tone?: ButtonTone;
-  /** Optional co-brand fill override (literal hex) — producer-accent CTAs. */
+  /** Optional co-brand fill override (literal hex): producer-accent CTAs. */
   accent?: string;
   /** Foreground paired with `accent` (defaults to the house on-accent white). */
   onAccent?: string;
@@ -145,7 +145,7 @@ export function emailHeading(text: string, level: 1 | 2 | 3 = 1): string {
 
 /**
  * A body paragraph. Accepts trusted HTML so callers can include inline
- * <strong>/<a>/<br> — it is NOT escaped. Pass plain text through
+ * <strong>/<a>/<br>: it is NOT escaped. Pass plain text through
  * `escapeHtml` first if it may contain user input.
  */
 export function emailText(html: string): string {
@@ -171,7 +171,7 @@ export function emailSpacer(px: number): string {
 }
 
 /**
- * A boxed monospace code / token panel — used for verification codes and
+ * A boxed monospace code / token panel: used for verification codes and
  * fallback URLs. `value` is escaped. `large` renders it as a centered,
  * spaced one-time-code block.
  */
@@ -185,7 +185,7 @@ export function emailCodePanel(value: string, large = false): string {
 }
 
 /**
- * The header band — spaced ATLVS wordmark, optional logo image. `logoUrl`
+ * The header band: spaced ATLVS wordmark, optional logo image. `logoUrl`
  * must be an absolute https URL (mail clients can't resolve relative paths).
  */
 export function emailHeader(logoUrl?: string): string {
@@ -199,10 +199,10 @@ export function emailHeader(logoUrl?: string): string {
 }
 
 /**
- * The footer band — org name, optional postal address, and the legally
+ * The footer band: org name, optional postal address, and the legally
  * required "this is a transactional message" affordance. `orgName` and
  * `address` are escaped. `prefsUrl` (absolute https) adds a "manage
- * notification emails" link — pass it for notification-class mail so
+ * notification emails" link: pass it for notification-class mail so
  * recipients can tune delivery instead of marking spam; omit it for
  * strictly transactional sends (verification, receipts).
  */

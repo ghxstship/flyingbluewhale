@@ -173,7 +173,7 @@ describe("Voice guard — no em-dashes in (platform) console copy", () => {
 // line scanner to src/components + every src/app route group. The existing
 // debt (W3's sweep, not W1's) is pinned at the current measured count (433 at landing, 339 after W3a, 2026-07-22); the pin may
 // ONLY SHRINK — new dashes fail immediately, and W3 drives the pin to 0.
-const LEGACY_DASH_PIN = 339;
+const LEGACY_DASH_PIN = 0;
 const VOICE_EXT_SCOPES = [join(REPO_ROOT, "src", "components"), join(REPO_ROOT, "src", "app")];
 const VOICE_EXT_SRC = VOICE_EXT_SCOPES.flatMap((d) => walk(d)).filter(
   (f) => /\.tsx?$/.test(f) && !/\.test\.tsx?$/.test(f) && !f.startsWith(PLATFORM),
@@ -251,7 +251,7 @@ describe("Type guard — marketing uses the .eyebrow class", () => {
 // sets a text-xl..text-6xl utility in the same tag — those must be a bare
 // heading (the element wiring sizes it) or a .hed-* ramp class. Existing debt
 // is W2's sweep; pinned, shrink-only.
-const LEGACY_HEADING_BYPASS_PIN = 18;
+const LEGACY_HEADING_BYPASS_PIN = 0;
 const HEADING_BYPASS = /<h[1-4][^>]*className="[^"]*\btext-(xl|2xl|3xl|4xl|5xl|6xl)\b/;
 
 describe("Type guard — h1-h4 heading-ramp bypass may only shrink (GH-6)", () => {

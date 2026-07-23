@@ -523,10 +523,13 @@ describe("Design system — component primitive adoption", () => {
     // may ONLY SHRINK — new raw hexes fail immediately; when you fix a spot,
     // lower the pin. Target: 0 (remediation waves W2/W5 + owner ruling 4
     // re-seeds the branding/proposal seed hexes).
-    const LEGACY_HEX_PIN = 90;
+    const LEGACY_HEX_PIN = 58;
     const HEX_RE = /#[0-9a-fA-F]{6}\b|#[0-9a-fA-F]{3}\b(?![0-9a-fA-F])/;
     const EXEMPT_RE = [/^src\/lib\/pdf\//, /^src\/app\/og\//, /^src\/app\/opengraph-image/, /print\/page\.tsx$/];
     const ALLOW = new Set<string>([
+      // The /aurora northern-lights band is the SANCTIONED page-scoped brand
+      // moment (plan §2b; audit ruling): its hexes are the identity, not debt.
+      "src/app/(marketing)/aurora/page.tsx",
       "src/components/email/blocks.ts",
       "src/components/social/SocialCard.tsx",
       "src/components/auth/OAuthButtons.tsx",

@@ -15,7 +15,7 @@ import { useToast } from "@/lib/hooks/useToast";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
- * RecordShare — the canonical share affordance for a detail record
+ * RecordShare: the canonical share affordance for a detail record
  * (kit 21 wave W3, dead-ends D2·D3·D4). One button, every real endpoint:
  *
  *   • Copy Link  → writes the record's absolute deep link to the clipboard.
@@ -70,7 +70,7 @@ export function RecordShare({ path, title, fields, compact = false, className = 
       await navigator.clipboard.writeText(url);
       toast.success(t("share.copied", undefined, "Link copied"), { description: url });
     } catch {
-      // Clipboard blocked (insecure context / permission) — surface the URL
+      // Clipboard blocked (insecure context / permission): surface the URL
       // so the operator can copy it by hand rather than failing silently.
       toast.error(t("share.copyFailed", undefined, "Couldn't copy. Here's the link"), {
         description: url,

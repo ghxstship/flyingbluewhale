@@ -9,7 +9,7 @@ import { VIEW_ICON, type ViewMode } from "./ViewToggle";
 import type { FieldDef, FieldType, SortRule } from "./DataTable";
 
 /**
- * Airtable-plus schema-driven view engine — kit 34 v3.3/v3.4
+ * Airtable-plus schema-driven view engine: kit 34 v3.3/v3.4
  * (design_handoff_compvss_field/runtime/app.jsx: `FilterGroups` / `applyModel`
  * / `groupTree` / `ViewSheet` / `ShareSheet` / `DataView` / `GroupedTree`).
  *
@@ -22,8 +22,8 @@ import type { FieldDef, FieldType, SortRule } from "./DataTable";
  * no Supabase here.
  */
 
-/** Project clock — the demo "now" so relative dates (Today / This week) resolve.
- *  A module constant (never `new Date()` at render — that desyncs SSR/hydration).
+/** Project clock: the demo "now" so relative dates (Today / This week) resolve.
+ *  A module constant (never `new Date()` at render: that desyncs SSR/hydration).
  *  Seed datasets anchor to this. */
 export const NOW_ISO = "2026-06-20";
 
@@ -478,7 +478,7 @@ export function GroupBuilder<T>({ fields, levels, setLevels }: { fields: FieldDe
   );
 }
 
-/** View Options bottom sheet — Layout · Filter · Sort · Group in one drawer. */
+/** View Options bottom sheet: Layout · Filter · Sort · Group in one drawer. */
 export function ViewSheet<T>({
   tab,
   fields,
@@ -594,7 +594,7 @@ function ShareRow({ icon, t, s, right, onClick }: { icon: string; t: string; s?:
 }
 
 /**
- * Share & Export bottom sheet — a REAL shareable link (this view's live URL) +
+ * Share & Export bottom sheet: a REAL shareable link (this view's live URL) +
  * genuine client-side row exports (CSV / JSON) + print. No fabricated share-token
  * service or automation backend: permissioned/expiring public links, scheduled
  * delivery, webhooks and embeds are provisioned in the ATLVS web console, so they
@@ -615,7 +615,7 @@ export function ShareSheet<T>({
   const [seg, setSeg] = useState("share");
   const [linkOn, setLinkOn] = useState(true);
   const [copied, setCopied] = useState(false);
-  // Honest link: the live URL of the current view — copy/share what resolves.
+  // Honest link: the live URL of the current view: copy/share what resolves.
   const link = typeof window !== "undefined" ? window.location.href : "";
   const slug =
     (title || "view").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "view";
@@ -747,7 +747,7 @@ export function ShareSheet<T>({
 const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const WEEKDAY = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-/** Schema-driven multi-view renderer — list / table / board / calendar / gallery. */
+/** Schema-driven multi-view renderer: list / table / board / calendar / gallery. */
 export function DataView<T>({
   view,
   items,

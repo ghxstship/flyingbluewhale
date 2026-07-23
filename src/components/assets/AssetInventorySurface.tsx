@@ -1,7 +1,7 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { MetricCard } from "@/components/ui/MetricCard";
-import { DataTable } from "@/components/DataTable";
+import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
@@ -22,7 +22,7 @@ const CLASS_TONE: Record<AssetClass, "info" | "warning" | "muted"> = {
 
 /**
  * The unified Assets & Inventory registry (kit 20 Phase A, acceptance
- * fixtures 04/05): one DataTable over the merged `assets` store, reused by
+ * fixtures 04/05): one DataView over the merged `assets` store, reused by
  * the Registry and by the Fleet / Lots lenses (`classFilter`). Screenshot
  * anatomy: eyebrow → title → tab family → stat tiles → registry table with
  * Class · Kind · Source · Qty · Location · Disposition columns.
@@ -127,7 +127,7 @@ export async function AssetInventorySurface({
             value={String(maintenance)}
           />
         </div>
-        <DataTable<Asset>
+        <DataView<Asset>
           rows={rows}
           rowHref={(r) => `/studio/assets/${r.id}`}
           emptyLabel={t("console.assets.emptyLabel", undefined, "No assets yet")}
@@ -168,7 +168,7 @@ export async function AssetInventorySurface({
               key: "asset_kind",
               header: t("console.assets.columns.kind", undefined, "Kind"),
               render: (r) => toTitle(r.asset_kind),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.asset_kind,
               filterable: true,
               groupable: true,
@@ -185,7 +185,7 @@ export async function AssetInventorySurface({
               key: "qty",
               header: t("console.assets.columns.qty", undefined, "Qty"),
               render: (r) => String(r.qty),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.qty,
             },
             {
@@ -215,14 +215,14 @@ export async function AssetInventorySurface({
               key: "tag",
               header: t("console.assets.columns.assetTag", undefined, "Asset Tag"),
               render: (r) => r.asset_tag ?? "—",
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => r.asset_tag ?? null,
             },
             {
               key: "rate",
               header: t("console.assets.columns.dailyRate", undefined, "Daily Rate"),
               render: (r) => formatMoney(r.daily_rate_minor),
-              className: "font-mono text-xs",
+              mono: true,
               accessor: (r) => Number(r.daily_rate_minor ?? 0),
             },
           ]}

@@ -9,6 +9,12 @@ import type { CSSProperties, HTMLAttributes } from "react";
  *
  * Lifecycle rule (kit): loading → Skeleton · no data → EmptyState · failure →
  * EmptyState error/offline. Never collapse the three.
+ *
+ * Canon (W5 vocabulary consolidation, 2026-07-22): `<Skeleton>` IS the
+ * `.ps-skel` shimmer — the component is the documented wrapper over the kit
+ * class (same pixel output; adds the shape presets + aria-hidden). Prefer it
+ * over hand-writing `.ps-skel` divs in TSX; existing raw `.ps-skel` usages
+ * are grandfathered until a dedicated migration pass.
  */
 export type SkeletonVariant = "line" | "text" | "title" | "avatar" | "chip" | "button" | "block";
 

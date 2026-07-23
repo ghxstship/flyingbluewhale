@@ -140,9 +140,14 @@ export function ChatComposer({
         {turns.map((turn) => (
           <ChatBubble key={turn.id} messageRole={turn.role} content={turn.content} />
         ))}
-        {streaming ? <ChatBubble messageRole="assistant" content={streaming} /> : null}
+        {streaming ? <ChatBubble messageRole="assistant" content={streaming} streaming /> : null}
         {busy && !streaming ? (
-          <p className="font-mono text-xs text-[var(--p-text-2)]">Thinking…</p>
+          /* kit-ai.css thinking indicator (W5, F-28) — tool-running dots */
+          <p className="ai-think" role="status" aria-label="Thinking">
+            <i />
+            <i />
+            <i />
+          </p>
         ) : null}
       </div>
 
@@ -188,23 +193,35 @@ export function ChatComposer({
   );
 }
 
-function ChatBubble({ messageRole, content }: { messageRole: string; content: string }) {
+function ChatBubble({
+  messageRole,
+  content,
+  streaming = false,
+}: {
+  messageRole: string;
+  content: string;
+  streaming?: boolean;
+}) {
   const isUser = messageRole === "user";
+  if (isUser) {
+    return (
+      <div className="flex justify-end">
+        <div className="max-w-[80%] rounded-lg bg-[var(--p-accent)] px-3 py-2 text-sm whitespace-pre-wrap text-[var(--p-accent-contrast,white)]">
+          {content}
+        </div>
+      </div>
+    );
+  }
+  // kit-ai.css adoption (W5, F-28): assistant turns are `.ai-msg` agentic
+  // answer cards; a live reply shimmers via `.ai-stream` until the frame
+  // settles into the persisted transcript.
   return (
-    <div className={isUser ? "flex justify-end" : "flex justify-start"}>
-      <div
-        className={
-          isUser
-            ? "max-w-[80%] rounded-lg bg-[var(--p-accent)] px-3 py-2 text-sm whitespace-pre-wrap text-[var(--p-accent-contrast,white)]"
-            : "surface-raised max-w-[80%] rounded-lg px-3 py-2 text-sm whitespace-pre-wrap text-[var(--p-text-1)]"
-        }
-      >
-        {!isUser ? (
-          <div className="mb-1 font-mono text-[11px] tracking-[0.12em] text-[var(--p-text-3)] uppercase">
-            {messageRole}
-          </div>
-        ) : null}
-        {content}
+    <div className="flex justify-start">
+      <div className="ai-msg max-w-[80%]">
+        <div className="ai-msg__head">{messageRole}</div>
+        <div className="ai-msg__body whitespace-pre-wrap">
+          {streaming ? <span className="ai-stream">{content}</span> : content}
+        </div>
       </div>
     </div>
   );

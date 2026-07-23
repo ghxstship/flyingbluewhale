@@ -134,7 +134,7 @@ export async function verifyChallengeAction(_: FormState, fd: FormData): Promise
 
   if (recoveryMatch) {
     if (!isServiceClientAvailable()) {
-      return { error: "Recovery codes aren't available — contact your admin." };
+      return { error: "Recovery codes aren't available. Contact your admin." };
     }
     const normalized = codeRaw.toLowerCase().replace(/-/g, "");
     const reformatted = `${normalized.slice(0, 8)}-${normalized.slice(8)}`;

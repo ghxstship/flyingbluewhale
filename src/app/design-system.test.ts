@@ -86,7 +86,6 @@ describe("Design system — component primitive adoption", () => {
     const ALLOW = new Set<string>([
       // Primitives themselves
       "src/components/ui/Button.tsx",
-      "src/components/ui/DatePicker.tsx",
       "src/components/ui/Combobox.tsx",
       "src/components/ui/DensityToggle.tsx",
       "src/components/ui/ThemeToggle.tsx",

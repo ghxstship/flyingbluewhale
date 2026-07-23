@@ -108,13 +108,13 @@ export async function signupAction(_: FormState, formData: FormData): Promise<Fo
     // Duplicate email — surface as field error
     if (error.message.toLowerCase().includes("already")) {
       return {
-        error: "An account with this email exists — try signing in",
+        error: "An account with this email exists. Try signing in.",
         fieldErrors: { email: "This email is already registered" },
       };
     }
     return { error: error.message };
   }
-  if (!data.user) return { error: "Signup failed — no user returned." };
+  if (!data.user) return { error: "Signup failed: no user returned." };
 
   // Email confirmation required — Supabase returns no session until the user
   // clicks the link. Route to /verify-email so they aren't dumped on a

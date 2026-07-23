@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { Building2, ChevronsUpDown, ChevronUp, ArrowRightLeft, LayoutGrid, Check, Search } from "lucide-react";
-import { SheetHead } from "@/components/mobile/kit";
+import { Sheet } from "@/components/mobile/kit";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
 /**
@@ -92,17 +92,6 @@ export function MobileSwitcherSheet({
   const org =
     orgs.find((o) => o.id === currentOrgId) ?? orgs[0] ?? { id: currentOrgId, name: "Workspace", sub: "Organization" };
 
-  // Esc closes — the sheet is a modal and a keyboard user must be able to
-  // leave it without a mouse.
-  React.useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
-
   if (!open) return null;
 
   const switchOrg = async (id: string) => {
@@ -134,34 +123,22 @@ export function MobileSwitcherSheet({
     .filter((p) => !q || `${p.name} ${p.client} ${p.venue} ${p.location}`.toLowerCase().includes(q.toLowerCase()));
 
   return (
-    <div className="sheet" role="dialog" aria-modal="true" aria-label="Switch workspace or project">
-      <button
-        type="button"
-        className="sheet-bg"
-        aria-label={t("m.switcher.close", undefined, "Close")}
-        tabIndex={-1}
-        style={{ border: "none", padding: 0, cursor: "default" }}
-        onClick={onClose}
-      />
-      <div className="sheet-panel">
-        <div className="sheet-grip" />
-
-        {/* Kit 32 (drawer canon v2.8): the switcher is a CONTEXT drawer and
-            carries the canonical SheetHead — icon · title · sub · explicit ✕
-            (kit runtime: `<SheetHead icon="Building2" title="Workspace"
-            sub={org · N Projects} …/>`). Scrim-tap alone is not a close
-            affordance. */}
-        <SheetHead
-          icon="Building2"
-          title={t("m.switcher.head", undefined, "Workspace")}
-          sub={t(
-            "m.switcher.headSub",
-            { org: org.name, n: projects.length },
-            `${org.name} · ${projects.length} Projects`,
-          )}
-          closeLabel={t("m.switcher.close", undefined, "Close")}
-          onClose={onClose}
-        />
+    /* Kit 32 (drawer canon v2.8): the switcher is a CONTEXT drawer on the kit
+       Sheet shell — scrim, canonical SheetHead (icon · title · sub · explicit
+       ✕) and the ESC / focus-trap / focus-restore semantics via
+       useDismissable. Scrim-tap alone is not a close affordance. */
+    <Sheet
+      icon="Building2"
+      title={t("m.switcher.head", undefined, "Workspace")}
+      sub={t(
+        "m.switcher.headSub",
+        { org: org.name, n: projects.length },
+        `${org.name} · ${projects.length} Projects`,
+      )}
+      closeLabel={t("m.switcher.close", undefined, "Close")}
+      ariaLabel={t("m.switcher.aria", undefined, "Switch workspace or project")}
+      onClose={onClose}
+    >
         <div className="item" style={{ background: "var(--p-surface-2)" }}>
           <span
             style={{
@@ -304,7 +281,6 @@ export function MobileSwitcherSheet({
             {!data ? "Loading projects…" : "No projects match these filters."}
           </div>
         )}
-      </div>
-    </div>
+    </Sheet>
   );
 }

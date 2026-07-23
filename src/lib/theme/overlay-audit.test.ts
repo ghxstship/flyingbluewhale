@@ -21,7 +21,8 @@ const OVERLAY_FILES = [
   "src/components/ui/DropdownMenu.tsx",
   "src/components/ui/Select.tsx",
   "src/components/ui/Combobox.tsx",
-  "src/components/ui/DatePicker.tsx",
+  // ui/DatePicker.tsx deleted 2026-07-22 (W5, owner ruling 3): zero-consumer
+  // primitive — native <input type="date"> is the date-entry canon.
   // ui/Toast.tsx deleted 2026-07-10 (F-06): its ToastProvider was never
   // mounted and the barrel-exported useToast threw. Toasts are sonner's
   // <Toaster> (root layout) behind @/lib/hooks/useToast.

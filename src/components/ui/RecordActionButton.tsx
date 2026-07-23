@@ -43,8 +43,16 @@ type ActionMode = Common & {
   action: () => Promise<{ error?: string } | void>;
   /** When set, show a confirmation dialog before running the action. */
   confirm?: { title?: string; body: string; confirmLabel?: string };
-  /** Toast on success. Defaults to "Done". */
-  successMessage?: string;
+  /**
+   * Toast on success. Defaults to "Done". Pass `null` to suppress the
+   * success toast (the v7.8 "dumb trigger" contract: a successful action
+   * redirects, so reaching the post-await path implies an error state).
+   */
+  successMessage?: string | null;
+  /** Swap the label while the action is pending (v7.8 compat). */
+  pendingLabel?: ReactNode;
+  /** `router.refresh()` after a successful action. Defaults to true. */
+  refreshOnSuccess?: boolean;
 };
 
 export function RecordActionButton(props: LinkMode | ActionMode) {
@@ -60,7 +68,7 @@ export function RecordActionButton(props: LinkMode | ActionMode) {
     );
   }
 
-  const { action, confirm, successMessage } = props as ActionMode;
+  const { action, confirm, successMessage, pendingLabel, refreshOnSuccess = true } = props as ActionMode;
 
   const run = () => {
     startTransition(async () => {
@@ -70,8 +78,8 @@ export function RecordActionButton(props: LinkMode | ActionMode) {
           toast.error(res.error);
           return;
         }
-        toast.success(successMessage ?? "Done");
-        router.refresh();
+        if (successMessage !== null) toast.success(successMessage ?? "Done");
+        if (refreshOnSuccess) router.refresh();
       } catch (e) {
         toast.error(e instanceof Error ? e.message : "Action failed");
       }
@@ -88,7 +96,7 @@ export function RecordActionButton(props: LinkMode | ActionMode) {
         aria-label={props["aria-label"]}
         onClick={() => (confirm ? setOpen(true) : run())}
       >
-        {props.label}
+        {pending && pendingLabel != null ? pendingLabel : props.label}
       </Button>
       {confirm ? (
         <Dialog open={open} onOpenChange={(o) => (!pending ? setOpen(o) : null)}>

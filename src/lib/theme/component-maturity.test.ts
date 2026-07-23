@@ -54,24 +54,7 @@ describe("component maturity registry (taxonomy ↔ ui/)", () => {
  * SHRINK: a new zero-importer primitive fails immediately, and an entry that
  * gains an importer (or is deleted) must leave the set.
  */
-const ZERO_ADOPTION_GRANDFATHER = new Set<string>([
-  "ButtonGroup",
-  "Carousel",
-  "DatePicker",
-  "DescriptionList",
-  "Divider",
-  "ListRow",
-  "MediaCard",
-  "Meter",
-  "NumberInput",
-  "PinInput",
-  "RadioGroup",
-  "RecordHeader",
-  "RoleControl",
-  "Slider",
-  "TimePicker",
-  "UploadZone",
-]);
+const ZERO_ADOPTION_GRANDFATHER = new Set<string>([]); // emptied 2026-07-22: W5 deleted all 15, Divider adopted
 
 describe("component adoption ratchet (GH-5)", () => {
   function walk(dir: string): string[] {

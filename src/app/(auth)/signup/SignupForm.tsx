@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useActionState, useEffect } from "react";
 import { toast } from "@/lib/hooks/useToast";
 import { AuthShell } from "@/components/auth/AuthShell";
-import { OAuthButtons, AuthDivider } from "@/components/auth/OAuthButtons";
+import { OAuthButtons } from "@/components/auth/OAuthButtons";
+import { Divider } from "@/components/ui/Divider";
 import { PasswordField } from "@/components/auth/PasswordField";
 import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
@@ -47,7 +48,7 @@ export function SignupForm({ plan }: { plan?: string }) {
       }
     >
       <OAuthButtons />
-      <AuthDivider />
+      <Divider label="or continue with email" labelStyle="eyebrow" className="my-5" />
       <form action={formAction} className="space-y-4" noValidate>
         <Input
           label={t("auth.signup.name", undefined, "Name")}

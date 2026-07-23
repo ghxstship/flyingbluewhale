@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { Divider } from "@/components/ui/Divider";
 
 /**
  * AuthCard — the canonical centered auth surface (design-system canon,
@@ -61,11 +62,7 @@ export function AuthCard({
       )}
 
       {providers && providers.length > 0 && children && (
-        <div className="my-5 flex items-center gap-3 text-[11px] tracking-[0.2em] text-[var(--p-text-2)] uppercase">
-          <div className="h-px flex-1 bg-[var(--p-border)]" />
-          <span>{dividerLabel}</span>
-          <div className="h-px flex-1 bg-[var(--p-border)]" />
-        </div>
+        <Divider label={dividerLabel} labelStyle="eyebrow" className="my-5" />
       )}
 
       {children && <div className={providers && providers.length > 0 ? "" : "mt-6"}>{children}</div>}

@@ -588,8 +588,8 @@ a.mobile-shell .refchip:active, .mobile-shell a.refchip:active { text-decoration
 .mobile-shell .au-ai { display: flex; gap: 12px; }
 .mobile-shell .au-ava { width: 26px; height: 26px; border-radius: 8px; flex: none; display: flex; align-items: center; justify-content: center; color: #1f0e03; background: linear-gradient(135deg, var(--p-accent), color-mix(in oklab, var(--p-accent) 55%, #fff)); margin-top: 1px; }
 .mobile-shell .au-ai-body { flex: 1; min-width: 0; }
-.mobile-shell .au-tool { display: inline-flex; align-items: center; gap: 4px; font-family: var(--p-mono); font-size: 10px; letter-spacing: 0.03em; color: var(--p-text-3); background: var(--p-surface); border: 1px solid var(--p-border); border-radius: 999px; padding: 4px 8px; margin-bottom: 8px; }
-.mobile-shell .au-tool b { color: var(--p-text-2); font-weight: 700; }
+/* .au-tool retired (W5 2026-07-22, F-28): the Aurora tool-trace chip now
+   rides the kit-ai citation vocabulary (.ai-cites / .ai-cite). */
 .mobile-shell .au-text { font-size: 13.5px; line-height: 1.6; color: var(--p-text-1); }
 .mobile-shell .au-follow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
 .mobile-shell .au-follow button { font-size: 12px; font-weight: 600; padding: 8px 12px; border-radius: 999px; border: 1px solid var(--p-border); background: var(--p-surface); color: var(--p-accent-text); cursor: pointer; font-family: inherit; }

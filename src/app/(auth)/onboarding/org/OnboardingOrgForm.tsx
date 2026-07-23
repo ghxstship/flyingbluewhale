@@ -24,7 +24,7 @@ export function OnboardingOrgForm({ initialName = "", email }: { initialName?: s
       subtitle={t(
         "auth.onboarding.subtitle",
         { email },
-        `Signed in as ${email}. One more step — name the workspace your productions live in.`,
+        `Signed in as ${email}. One more step: name the workspace your productions live in.`,
       )}
     >
       <form action={formAction} className="space-y-4" noValidate>

@@ -29,10 +29,13 @@ const SOURCE_HREF: Record<string, (id: string) => string> = {
   meeting_note: (id) => `/studio/meetings/${id}`,
 };
 
-const CONFIDENCE_TONE: Record<CopilotResponse["confidence"], string> = {
-  high: "var(--p-success-text)",
-  medium: "var(--p-warning-text)",
-  low: "var(--p-danger-text)",
+// Confidence grade → `.ai-conf` meter fill (kit-ai.css). The kit colors the
+// bar itself (mid→high gradient, `data-level="low"` flips to low→mid); the
+// width is the calibrated read of the grade.
+const CONFIDENCE_WIDTH: Record<CopilotResponse["confidence"], string> = {
+  high: "92%",
+  medium: "58%",
+  low: "24%",
 };
 
 type Labels = {
@@ -115,48 +118,51 @@ export function CopilotPanel({ labels }: { labels: Labels }) {
       )}
 
       {result && (
-        <section className="surface" style={{ padding: "var(--p-5)", borderRadius: "var(--p-r-xl, 16px)" }} aria-live="polite">
-          <div style={{ display: "flex", alignItems: "center", gap: "var(--p-2)", marginBottom: "var(--p-3)" }}>
-            <span className="ps-badge" style={{ color: CONFIDENCE_TONE[result.confidence], fontWeight: 600, textTransform: "capitalize" }}>
-              {labels.confidence}: {result.confidence}
-            </span>
-            {!result.grounded && <span style={{ fontSize: 12, color: "var(--p-text-3)" }}>{labels.ungrounded}</span>}
+        // kit-ai.css adoption (W5, F-28): the answer is an `.ai-msg` agentic
+        // card — head (agent identity + grounding note), body (answer prose,
+        // `.ai-conf` calibrated confidence meter, `.ai-cite` source chips).
+        <section className="ai-msg" aria-live="polite">
+          <div className="ai-msg__head">
+            <span>Copilot</span>
+            {!result.grounded && <span style={{ marginLeft: "auto", textTransform: "none", letterSpacing: 0 }}>{labels.ungrounded}</span>}
           </div>
+          <div className="ai-msg__body">
+            <p style={{ margin: 0, whiteSpace: "pre-wrap" }}>{result.answer}</p>
 
-          <p style={{ margin: 0, whiteSpace: "pre-wrap", lineHeight: 1.55 }}>{result.answer}</p>
-
-          {result.citations.length > 0 && (
-            <div style={{ marginTop: "var(--p-4)" }}>
-              <div style={{ fontSize: 12, fontWeight: 600, color: "var(--p-text-2)", marginBottom: "var(--p-2)" }}>
-                {labels.sources}
+            <div className="ai-conf" data-level={result.confidence}>
+              <div className="ai-conf__lab">
+                <span>{labels.confidence}</span>
+                <span>{result.confidence}</span>
               </div>
-              <ol style={{ margin: 0, paddingLeft: "var(--p-4)", display: "flex", flexDirection: "column", gap: "var(--p-2)" }}>
+              <div className="ai-conf__bar">
+                <i style={{ width: CONFIDENCE_WIDTH[result.confidence] }} />
+              </div>
+            </div>
+
+            {result.citations.length > 0 && (
+              <div className="ai-cites" aria-label={labels.sources}>
                 {result.citations.map((c, i) => {
                   const href = SOURCE_HREF[c.sourceType]?.(c.sourceId);
-                  const label = (
+                  const body = (
                     <>
-                      <span style={{ textTransform: "capitalize", fontWeight: 500 }}>{c.sourceType.replace(/_/g, " ")}</span>
-                      <span style={{ color: "var(--p-text-3)", fontVariantNumeric: "tabular-nums" }}> · {Math.round(c.similarity * 100)}%</span>
+                      <span className="ai-cite__n">{i + 1}</span>
+                      <span style={{ textTransform: "capitalize" }}>{c.sourceType.replace(/_/g, " ")}</span>
+                      <span style={{ opacity: 0.75 }}>· {Math.round(c.similarity * 100)}%</span>
                     </>
                   );
-                  return (
-                    <li key={`${c.sourceId}-${i}`} style={{ fontSize: 13 }}>
-                      {href ? (
-                        <Link href={href} style={{ color: "var(--p-accent-text)" }}>
-                          {label}
-                        </Link>
-                      ) : (
-                        label
-                      )}
-                      <div style={{ color: "var(--p-text-2)", fontSize: 12, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                        {c.excerpt}
-                      </div>
-                    </li>
+                  return href ? (
+                    <Link key={`${c.sourceId}-${i}`} href={href} className="ai-cite" title={c.excerpt}>
+                      {body}
+                    </Link>
+                  ) : (
+                    <span key={`${c.sourceId}-${i}`} className="ai-cite" title={c.excerpt}>
+                      {body}
+                    </span>
                   );
                 })}
-              </ol>
-            </div>
-          )}
+              </div>
+            )}
+          </div>
         </section>
       )}
     </div>

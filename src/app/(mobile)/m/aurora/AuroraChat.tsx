@@ -32,19 +32,19 @@ const FOLLOWUPS = ["What else can you do?", "How do I report an incident?", "Whe
 function answerFor(q: string): string {
   const t = q.toLowerCase();
   if (/next shift|when.*work|schedule/.test(t))
-    return "Your shifts live on the Schedule tab — open it to see your next call, its location and times. Tap a shift for the full brief.";
+    return "Your shifts live on the Schedule tab. Open it to see your next call, its location and times. Tap a shift for the full brief.";
   if (/incident|report|injur|hazard/.test(t))
     return "To file an incident: open Tasks then Report It (also under Quick Actions on Home). Pick a type, set severity, add a photo, and it routes to Ops.";
   if (/convert|ft|feet|meter|metre|lb|kg/.test(t))
-    return "The Unit Converter is in your Toolbox — it handles length, weight and temperature for quick on-site math.";
+    return "The Unit Converter is in your Toolbox. It handles length, weight and temperature for quick on-site math.";
   if (/cater|food|meal|eat/.test(t))
-    return "Meal service times and your meal voucher are on your Rose and in the venue guide — check Access & Rose for the voucher.";
+    return "Meal service times and your meal voucher are on your Rose and in the venue guide. Check Access & Rose for the voucher.";
   if (/radio|channel/.test(t))
     return "Radio channel assignments are in the Toolbox under Radio Channels, and on the shift brief for the zone you're working.";
   if (/pass|credential|access|rose/.test(t))
-    return "Your Rose (credential) is on the Home tab — open it to see status and access zones, or to request additional permissions.";
+    return "Your Rose (credential) is on the Home tab. Open it to see status and access zones, or to request additional permissions.";
   if (/feed|summar|catch up|what.*happen|announce/.test(t))
-    return "The crew feed is on the Community tab — must-reads are pinned at the top. Open it to catch up on everything since your last shift.";
+    return "The crew feed is on the Community tab. Must-reads are pinned at the top. Open it to catch up on everything since your last shift.";
   if (/time off|pto|vacation|day off/.test(t))
     return "Open Time Off to see your balance, request days, or check the status of a pending request.";
   return "I can point you to your schedule, reporting, access, conversions, time off and venue info. Try a suggestion below or ask me anything.";
@@ -158,8 +158,16 @@ export function AuroraChat({ firstName }: { firstName: string }) {
                 </span>
                 <div className="au-ai-body">
                   {m.tool && (
-                    <div className="au-tool">
-                      <KIcon name="Compass" size={11} /> See <b>{m.tool}</b>
+                    /* kit-ai.css adoption (W5, F-28): the "See <surface>"
+                       tool-trace is the kit citation chip — provenance for the
+                       answer. Non-interactive here (the deterministic guide
+                       points, it doesn't navigate), hence the cursor reset;
+                       the kit's margin-top is zeroed because the chip leads
+                       the answer instead of trailing it. */
+                    <div className="ai-cites" style={{ margin: "0 0 8px" }}>
+                      <span className="ai-cite" style={{ cursor: "default" }}>
+                        <KIcon name="Compass" size={11} /> See <b>{m.tool}</b>
+                      </span>
                     </div>
                   )}
                   <div className="au-text">{m.txt}</div>
@@ -199,7 +207,7 @@ export function AuroraChat({ firstName }: { firstName: string }) {
           </button>
         </form>
         <div className="au-foot">
-          <KIcon name="ShieldCheck" size={11} /> Preview · Aurora guides you to the right screen — live agent
+          <KIcon name="ShieldCheck" size={11} /> Preview · Aurora guides you to the right screen. Live agent
           coming soon
         </div>
       </div>

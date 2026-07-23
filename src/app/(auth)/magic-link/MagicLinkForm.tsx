@@ -25,7 +25,7 @@ export function MagicLinkForm() {
       subtitle={t(
         "auth.magicLink.subtitle",
         undefined,
-        "We'll send a sign-in link to your inbox — no password required.",
+        "We'll send a sign-in link to your inbox. No password required.",
       )}
       footer={
         <Link href="/login" className="text-[var(--p-accent)] underline underline-offset-4">
@@ -35,7 +35,7 @@ export function MagicLinkForm() {
     >
       {state?.ok ? (
         <Alert kind="success">
-          {t("auth.magicLink.success", undefined, "Check your inbox — we sent a sign-in link that expires in 1 hour.")}
+          {t("auth.magicLink.success", undefined, "Check your inbox. We sent a sign-in link that expires in 1 hour.")}
         </Alert>
       ) : (
         <form action={formAction} className="space-y-4" noValidate>

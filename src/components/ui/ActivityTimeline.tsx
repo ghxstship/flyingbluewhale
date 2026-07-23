@@ -2,10 +2,16 @@ import type { ReactNode } from "react";
 import { Avatar } from "./Avatar";
 
 /**
- * <ActivityTimeline> — the cohort-community-class community feed primitive. A
- * vertical stream of contribution events (posts, replies, completions,
- * awards) with actor avatar, verb, optional body, and a relative time.
- * Token-only.
+ * <ContributionTimeline> — the cohort-community-class community feed
+ * primitive. A vertical stream of contribution events (posts, replies,
+ * completions, awards) with actor avatar, verb, optional body, and a relative
+ * time. Token-only.
+ *
+ * W5 vocabulary consolidation (F-07, 2026-07-22): this component was renamed
+ * from `ActivityTimeline` — that name now belongs solely to
+ * `@/components/gvteway/ActivityTimeline` (the winning, product-feed
+ * timeline over `public.activity`). A deprecated alias keeps the historical
+ * importers compiling; new code should use `ContributionTimeline`.
  */
 export type ActivityItem = {
   id: string;
@@ -22,7 +28,7 @@ export type ActivityItem = {
   badge?: ReactNode;
 };
 
-export function ActivityTimeline({ items, emptyLabel = "No activity yet" }: { items: ActivityItem[]; emptyLabel?: string }) {
+export function ContributionTimeline({ items, emptyLabel = "No activity yet" }: { items: ActivityItem[]; emptyLabel?: string }) {
   if (!items.length) {
     return <p className="px-1 py-6 text-center text-sm text-[var(--p-text-2)]">{emptyLabel}</p>;
   }
@@ -64,3 +70,10 @@ export function ActivityTimeline({ items, emptyLabel = "No activity yet" }: { it
     </ol>
   );
 }
+
+/**
+ * @deprecated Compat alias (W5, F-07). `ActivityTimeline` is
+ * `@/components/gvteway/ActivityTimeline`; this generic contribution stream
+ * is `ContributionTimeline`.
+ */
+export const ActivityTimeline = ContributionTimeline;

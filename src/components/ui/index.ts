@@ -56,7 +56,6 @@ export {
 } from "./Sheet";
 export { Combobox, MultiCombobox, type ComboboxOption } from "./Combobox";
 export { Popover, PopoverTrigger, PopoverContent, PopoverAnchor } from "./Popover";
-export { DatePicker } from "./DatePicker";
 export {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -95,57 +94,31 @@ export type { AchievementTone } from "./AchievementBadge";
 export { LeaderboardRow } from "./LeaderboardRow";
 export { LoyaltyTier } from "./LoyaltyTier";
 export type { LoyaltyTierTone } from "./LoyaltyTier";
-export { ActivityTimeline } from "./ActivityTimeline";
+export { ContributionTimeline, ActivityTimeline } from "./ActivityTimeline";
 export type { ActivityItem } from "./ActivityTimeline";
 // DataView moved: the canonical collection surface is `@/components/views/DataView`
 // (Option B, 2026-07-22). The old ui/DataView table⇄grid toggle was absorbed
 // by its gallery `renderCard` card-grid mode.
 
 // ── v8.1 inventory-completeness primitives ───────────────────────────────────
+// W5 vocabulary consolidation (audit 2026-07-22, owner ruling 3): the 14
+// zero-consumer primitives (ButtonGroup, Carousel, DatePicker,
+// DescriptionList, MediaCard, Meter, NumberInput, PinInput, RadioGroup,
+// RecordHeader, RoleControl, Slider, TimePicker, UploadZone) + ListRow were
+// DELETED — native-control canon covers date/time/number/radio inputs,
+// ProgressBar covers Meter, git history is the registry. Divider was ADOPTED
+// (it absorbed the auth shell's AuthDivider).
 export { Divider } from "./Divider";
 export type { DividerProps } from "./Divider";
-export { ButtonGroup, SplitButton } from "./ButtonGroup";
-export type { ButtonGroupProps, SplitButtonProps } from "./ButtonGroup";
-export { DescriptionList } from "./DescriptionList";
-export type { DescriptionItem, DescriptionListProps } from "./DescriptionList";
-export { RecordHeader } from "./RecordHeader";
-export type { RecordHeaderProps } from "./RecordHeader";
-export { Slider } from "./Slider";
-export type { SliderProps } from "./Slider";
-export { NumberInput } from "./NumberInput";
-export type { NumberInputProps } from "./NumberInput";
-export { TimePicker } from "./TimePicker";
-export type { TimePickerProps } from "./TimePicker";
-export { PinInput } from "./PinInput";
-export type { PinInputProps } from "./PinInput";
-export { RadioGroup } from "./RadioGroup";
-export type { RadioGroupProps, RadioOption } from "./RadioGroup";
 // Toast: the ui/Toast provider system was deleted in the 2026-07-10 audit
 // (F-06) — its ToastProvider was never mounted, so the barrel-exported
 // useToast threw at runtime. The one sanctioned toast API is
 // `@/lib/hooks/useToast` (sonner-backed; <Toaster> mounts in the root layout).
 export { ConfirmDialog, ConfirmDialogHost, useConfirm } from "./ConfirmDialog";
 export type { ConfirmTone, ConfirmDialogProps, ConfirmRequest } from "./ConfirmDialog";
-export { Meter } from "./Meter";
-export type { MeterTone, MeterVariant, MeterProps } from "./Meter";
 export { Coachmark, Tour } from "./Coachmark";
 export type { CoachmarkProps, TourStep, TourProps, CoachmarkBubbleContentProps } from "./Coachmark";
 // Pagination / BulkActionBar / ExportMenu / ImportPanel were removed in the
 // 2026-07-10 audit (A-15): dead duplicates with zero consumers — the DataTable
 // engine (DataTableInteractive) implements pagination, bulk actions, CSV
 // export, and import natively; server pages paginate with PagerNav.
-export { UploadZone } from "./UploadZone";
-export type { UploadZoneProps, UploadRejection } from "./UploadZone";
-export { MediaCard } from "./MediaCard";
-export type { MediaCardProps, MediaCardAspect } from "./MediaCard";
-export { Carousel } from "./Carousel";
-export type { CarouselProps } from "./Carousel";
-export { ListRow } from "./ListRow";
-export type { ListRowProps } from "./ListRow";
-export { RoleControl } from "./RoleControl";
-export type { RoleControlProps, RoleOption } from "./RoleControl";
-// Kit-vocabulary synonym (REPO_PARITY_HANDOFF_2 §4): the kit names this role
-// picker `RoleSelect`; alias so both vocabularies resolve rather than forking a
-// duplicate (mirrors the Coachmark/Tour dual-export above).
-export { RoleControl as RoleSelect } from "./RoleControl";
-export type { RoleControlProps as RoleSelectProps } from "./RoleControl";

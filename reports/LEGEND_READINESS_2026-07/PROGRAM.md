@@ -1,5 +1,17 @@
 # LEG3ND Deployment-Readiness Program
 
+**STATUS: COMPLETE — goal condition met 2026-07-23 (pushed 13d97194).**
+All 7 pillars landed; all 5 persona-matrix BLOCKERS closed (B-1 authoring,
+B-2 live sessions, B-3 recert queue, B-4 store economy, B-5 certification
+definitions) + the SHOULD set hardened (read-only floor, filtered nav,
+consistent denial, crews joinable, badges earnable); 7 program migrations
+applied (org chart, atom settings, doc-template settings, corpus links,
+recert closure, store economy + achievement link, crew self-membership);
+gate 199 files / 2107 tests / build 0; prod e2e 45/45 green post-deploy
+(legend coverage+personas+deep+xmce+signage+onboarding-gate + compvss
+deep). Deferred honestly: module grouping, course badge select (schema),
+multi-assessment consumption, crew capacity (no column) — filed below.
+
 **Goal (locked 2026-07-23):** LEG3ND full-stack deployment ready, all
 workflows for every user role and persona type. Positioning source:
 docs/marketing/MARKETING_ONBOARDING_REBUILD_PLAN.md (LEG3ND = the

@@ -181,3 +181,14 @@ NICE: signage print/export · community moderation tools.
 ## 6. Bottom line
 
 The learner consume-side (browse→enroll→lesson→quiz→certify + community + live + store-redeem) is genuinely deployment-grade: real data, correct gates, RLS-canon-guarded, e2e-proven for two personas. The product is **not** deployment-ready against the stated goal because five supply-side workflows (B-1..B-5) do not exist for ANY persona — content, sessions, credentials, recert processing, and store stock all require SQL seeds. Closing B-1 (course authoring, manager+ band, mirroring the resources-hub CRUD pattern) is the single highest-leverage move; B-3 and B-4 are small surfaces (a queue page + a store-admin page + a spend RPC) with outsized honesty impact.
+
+---
+
+## CLOSURE (2026-07-23, pushed 13d97194)
+
+All 5 BLOCKERS closed (teach authoring workbench; live-session scheduling;
+recert queue + decisions; store spend loop + stocking; certification-type
+CRUD) and the SHOULD set hardened (assertLegendWrite read-only floor on 23
+learner writes; Manage nav band-filtered; 6 authoring routes page-gated;
+publicSurfaces fixed; crews joinable; badges earnable; signage delete gate
++ 2 sessionless authoring pages fixed). Prod e2e 45/45 green post-deploy.

@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getRequestT();
   return buildMetadata({
-    title: t("marketing.marketplace.agencies.meta.title", undefined, "Agency Directory — Booking Agencies"),
+    title: t("marketing.marketplace.agencies.meta.title", undefined, "Agency Directory: Booking Agencies"),
     description: t(
       "marketing.marketplace.agencies.meta.description",
       undefined,

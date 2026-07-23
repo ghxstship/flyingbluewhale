@@ -11,7 +11,7 @@ import type { FormState } from "@/components/FormShell";
 import { INQUIRY_SUBJECT_KINDS, type InquirySubjectKind } from "@/lib/marketplace";
 
 const Schema = z.object({
-  message: z.string().min(10, "Tell them what you need — at least 10 characters").max(4000),
+  message: z.string().min(10, "Tell them what you need, at least 10 characters").max(4000),
   event_date: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, "Event date must be a valid date")

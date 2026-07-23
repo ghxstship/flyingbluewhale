@@ -27,10 +27,10 @@ export default async function Page() {
             placeholder="Load-in runbook"
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="doc_state" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.collaborate.docs.new.stateLabel", undefined, "State")}
             </label>
-            <select name="doc_state" required className="ps-input mt-1.5 w-full" defaultValue="draft">
+            <select id="doc_state" name="doc_state" required className="ps-input mt-1.5 w-full" defaultValue="draft">
               {DOC_STATES.map((s) => (
                 <option key={s} value={s}>
                   {DOC_STATE_LABEL[s]}

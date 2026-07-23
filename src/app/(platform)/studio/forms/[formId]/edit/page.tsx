@@ -111,10 +111,10 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
           </div>
 
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="description" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.forms.edit.fields.description", undefined, "Description")}
             </label>
-            <textarea
+            <textarea id="description"
               name="description"
               defaultValue={form.description ?? ""}
               rows={3}
@@ -144,11 +144,11 @@ export default async function Page({ params }: { params: Promise<{ formId: strin
           </div>
 
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="schema_json" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.forms.edit.fields.schemaJson", undefined, "Schema (JSON)")}{" "}
               <span className="text-[var(--p-danger)]">*</span>
             </label>
-            <textarea
+            <textarea id="schema_json"
               name="schema_json"
               defaultValue={schemaText}
               rows={20}

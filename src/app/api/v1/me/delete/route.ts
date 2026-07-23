@@ -95,7 +95,7 @@ export async function POST(req: NextRequest) {
         org_id: session.orgId,
         payload: {
           to: session.email,
-          subject: "Account deletion requested — 30-day grace",
+          subject: "Account deletion requested: 30-day grace",
           html: `<p>Your ATLVS Technologies account is scheduled for permanent deletion on <strong>${formatDate(new Date(purgeAt))}</strong>.</p><p>Sign in within that window to cancel the deletion. After 30 days all your data will be unrecoverable.</p>`,
         },
       });

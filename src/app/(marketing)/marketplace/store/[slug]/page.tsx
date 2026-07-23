@@ -66,7 +66,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         data={[
           productSchema({
             name: product.title,
-            description: product.description ?? `${product.title} — available in the GVTEWAY store.`,
+            description: product.description ?? `${product.title}, available in the GVTEWAY store.`,
             url: urlFor("marketing", `/marketplace/store/${product.slug}`),
             sku: product.id,
             price: (product.price_cents / 100).toFixed(2),

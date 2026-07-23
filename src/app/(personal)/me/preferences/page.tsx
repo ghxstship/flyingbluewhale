@@ -94,7 +94,7 @@ export default async function Page() {
                   old radio here posted mode values into the theme-slug field and
                   silently failed the whole save against the slug schema. */}
               <p className="mt-1.5 text-sm text-[var(--p-text-2)]">
-                {t("me.preferences.appearance.colorModeHint", undefined, "Light, dark, or follow your OS — set in")}{" "}
+                {t("me.preferences.appearance.colorModeHint", undefined, "Light, dark, or follow your OS. Set this in")}{" "}
                 <a className="font-medium text-[var(--p-accent-text)] underline" href="/me/settings/appearance">
                   {t("me.preferences.appearance.colorModeLink", undefined, "Appearance settings")}
                 </a>

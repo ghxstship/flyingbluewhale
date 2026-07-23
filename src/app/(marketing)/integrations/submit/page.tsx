@@ -13,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: t(
       "marketing.integrations.submit.meta.title",
       undefined,
-      "Submit a Partner Integration — ATLVS Partner Program",
+      "Submit a Partner Integration: ATLVS Partner Program",
     ),
     description: t(
       "marketing.integrations.submit.meta.description",
@@ -185,7 +185,7 @@ export default async function Page() {
             </label>
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                {t("marketing.integrations.submit.fields.capabilities", undefined, "Capabilities — One per Line")}
+                {t("marketing.integrations.submit.fields.capabilities", undefined, "Capabilities, One per Line")}
               </span>
               <textarea
                 name="capabilities"

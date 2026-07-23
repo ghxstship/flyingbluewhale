@@ -81,7 +81,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             {t(
               "marketing.pages.marketplace.calls.submit.closed.body",
               undefined,
-              "This open call is no longer accepting submissions — the deadline may have passed or the slot may be awarded.",
+              "This open call is no longer accepting submissions. The deadline may have passed or the slot may be awarded.",
             )}
           </p>
           <div className="mt-6">
@@ -203,12 +203,12 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
                 description: t(
                   "marketing.pages.marketplace.calls.submit.form.linksStep",
                   undefined,
-                  "Optional — work samples, one URL per line.",
+                  "Optional: work samples, one URL per line.",
                 ),
                 fields: (
                   <label className="flex flex-col gap-1.5">
                     <span className={LBL}>
-                      {t("marketing.pages.marketplace.calls.submit.form.links", undefined, "Links — One Per Line")}
+                      {t("marketing.pages.marketplace.calls.submit.form.links", undefined, "Links")}
                     </span>
                     <textarea
                       name="links"

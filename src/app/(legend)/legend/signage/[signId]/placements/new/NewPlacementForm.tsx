@@ -36,7 +36,7 @@ export function NewPlacementForm({
       <label className="block">
         <span className="text-xs font-medium text-[var(--p-text-2)]">Project (optional)</span>
         <select name="project_id" defaultValue="" className="ps-input mt-1.5 w-full">
-          <option value="">— Org-level (no project) —</option>
+          <option value="">Org-level (no project)</option>
           {projects.map((p) => (
             <option key={p.id} value={p.id}>
               {p.name}

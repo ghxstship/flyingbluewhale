@@ -97,7 +97,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             {t(
               "p.vendor.training.empty",
               undefined,
-              "No required training right now. Vendor onboarding usually includes safety induction, anti-bribery, and compliance modules — the producer will publish them here when needed.",
+              "No required training right now. Vendor onboarding usually includes safety induction, anti-bribery, and compliance modules. The producer will publish them here when needed.",
             )}
           </div>
         ) : (
@@ -138,7 +138,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           {t(
             "p.vendor.training.footer",
             undefined,
-            "Required modules cover vendor training, safety, compliance, ethics, and anti-bribery. Completion is tracked against your membership — your producer will share certificates as you complete each module.",
+            "Required modules cover vendor training, safety, compliance, ethics, and anti-bribery. Completion is tracked against your membership. Your producer will share certificates as you complete each module.",
           )}
         </p>
       </div>

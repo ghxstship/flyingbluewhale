@@ -59,10 +59,10 @@ export default async function Page() {
           submitLabel={t("console.workforce.deployment.new.submit", undefined, "Plan Deployment")}
         >
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="venue_id" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.workforce.deployment.new.venueLabel", undefined, "Venue")}
             </label>
-            <select name="venue_id" className="ps-input mt-1.5 w-full" required>
+            <select id="venue_id" name="venue_id" className="ps-input mt-1.5 w-full" required>
               {venues.map((v) => (
                 <option key={v.id} value={v.id}>
                   {v.name}

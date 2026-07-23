@@ -31,7 +31,7 @@ export default async function TwoFactorPage() {
         {t(
           "me.security.twoFactor.intro",
           undefined,
-          "Add a second factor — a six-digit code from an authenticator app — so a stolen password isn't enough to sign in.",
+          "Add a second factor (a six-digit code from an authenticator app) so a stolen password isn't enough to sign in.",
         )}{" "}
         {required
           ? t("me.security.twoFactor.requiredNote", undefined, "Your organization requires this for your role.")

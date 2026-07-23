@@ -30,7 +30,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description: t(
       "marketing.logoKit.meta.description",
       undefined,
-      "The ATLVS mark is the Waypoint — an 8-point navigational star with a centered void. Primary lockup, per-product app-icons, clearspace, endorsement, do/don't.",
+      "The ATLVS mark is the Waypoint: an 8-point navigational star with a centered void. Primary lockup, per-product app-icons, clearspace, endorsement, do/don't.",
     ),
     alternates: { canonical: "/brand-kit/logo-kit" },
   };
@@ -80,7 +80,7 @@ export default async function LogoKitPage() {
             {t(
               "marketing.logoKit.intro",
               undefined,
-              "The ATLVS mark is a waypoint — an eight-point navigational star with a center void, the navigation system rendered as one geometric glyph. Neutral SaaS register; recolors per product. Distinct from the cosmic GHXSTSHIP ghost-ship skull — the parent-company mark.",
+              "The ATLVS mark is a waypoint: an eight-point navigational star with a center void, the whole navigation system rendered as one geometric glyph. Neutral SaaS register; recolors per product. It stays distinct from the cosmic GHXSTSHIP ghost-ship skull, the parent-company mark.",
             )}
           </p>
         </header>
@@ -94,7 +94,7 @@ export default async function LogoKitPage() {
         </section>
 
         <section className="lk-section">
-          <h2>{t("marketing.logoKit.appIcons", undefined, "Product app-icons — one mark, three accents")}</h2>
+          <h2>{t("marketing.logoKit.appIcons", undefined, "Product app-icons: one mark, four accents")}</h2>
           <div className="lk-card lk-card--pad">
             <div className="lk-icons">
               {PRODUCT_ICONS.map((icon) => (
@@ -118,7 +118,7 @@ export default async function LogoKitPage() {
         </section>
 
         <section className="lk-section">
-          <h2>{t("marketing.logoKit.favicon", undefined, "Favicon / Min-size — the mark holds at every scale")}</h2>
+          <h2>{t("marketing.logoKit.favicon", undefined, "Favicon / Min-size: the mark holds at every scale")}</h2>
           <div className="lk-card lk-card--pad">
             <div className="lk-sizes">
               {SIZES.map((s) => (
@@ -141,7 +141,7 @@ export default async function LogoKitPage() {
 
         <section className="lk-section">
           <h2>
-            {t("marketing.logoKit.clearspace", undefined, "Clearspace — keep margin = ½ mark height on all sides")}
+            {t("marketing.logoKit.clearspace", undefined, "Clearspace: keep margin = ½ mark height on all sides")}
           </h2>
           <div className="lk-clearbox">
             <div className="lk-clearbox-inner">
@@ -154,7 +154,7 @@ export default async function LogoKitPage() {
         </section>
 
         <section className="lk-section">
-          <h2>{t("marketing.logoKit.endorsement", undefined, "Endorsement — ATLVS + GHXSTSHIP parent")}</h2>
+          <h2>{t("marketing.logoKit.endorsement", undefined, "Endorsement: ATLVS + GHXSTSHIP parent")}</h2>
           <div className="lk-card lk-endorse">
             <Image src="/brand/atlvs-mark.svg" alt="" width={44} height={44} />
             <div className="lk-wm" style={{ fontSize: 22 }}>
@@ -180,7 +180,7 @@ export default async function LogoKitPage() {
                   {t(
                     "marketing.logoKit.do1",
                     undefined,
-                    "Recolor the tile to the product accent; keep the mark white — or ink on light.",
+                    "Recolor the tile to the product accent; keep the mark white, or ink on light.",
                   )}
                 </li>
                 <li>{t("marketing.logoKit.do2", undefined, "Maintain clearspace = ½ mark height.")}</li>
@@ -199,7 +199,7 @@ export default async function LogoKitPage() {
                   {t(
                     "marketing.logoKit.dont1",
                     undefined,
-                    "Recolor or gradient the star itself — only the tile carries color.",
+                    "Recolor or gradient the star itself. Only the tile carries color.",
                   )}
                 </li>
                 <li>

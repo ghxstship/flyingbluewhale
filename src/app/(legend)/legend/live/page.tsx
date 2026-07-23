@@ -73,7 +73,7 @@ export default async function LiveSessionsPage() {
 
   return (
     <>
-      <ModuleHeader eyebrow="LEG3ND · Learn" title="Live Sessions" subtitle="Webinars, cohort labs, and instructor-led workshops — register to reserve your seat." />
+      <ModuleHeader eyebrow="LEG3ND · Learn" title="Live Sessions" subtitle="Webinars, cohort labs, and instructor-led workshops. Register to reserve your seat." />
 
       <div className="metric-grid mb-6">
         <MetricCard label="Upcoming" value={upcoming} />

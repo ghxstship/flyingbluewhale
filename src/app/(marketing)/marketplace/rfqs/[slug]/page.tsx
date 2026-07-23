@@ -58,7 +58,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     });
   }
   return buildMetadata({
-    title: `${r.title} — Open RFQ on ATLVS`,
+    title: `${r.title} · Open RFQ on ATLVS`,
     description: metaDescription(
       r.description,
       `${r.org_name} is sourcing vendors for ${r.title} through the ATLVS marketplace. Review the scope and submit a bid.`,

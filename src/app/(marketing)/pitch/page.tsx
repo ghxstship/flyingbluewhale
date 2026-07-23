@@ -12,7 +12,7 @@ import { buildMetadata } from "@/lib/seo";
 export function generateMetadata(): Metadata {
   return buildMetadata({
     title: "Pitch deck",
-    description: "The ATLVS Technologies story — problem, ecosystem, the four apps, the receipts.",
+    description: "The ATLVS Technologies story: problem, ecosystem, the four apps, the receipts.",
     path: "/pitch",
     noIndex: true,
   });

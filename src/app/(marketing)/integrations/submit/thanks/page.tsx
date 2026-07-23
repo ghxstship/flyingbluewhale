@@ -7,7 +7,7 @@ import { getRequestT } from "@/lib/i18n/request";
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getRequestT();
   return buildMetadata({
-    title: t("marketing.integrations.thanks.meta.title", undefined, "Submission Received — ATLVS Partner Program"),
+    title: t("marketing.integrations.thanks.meta.title", undefined, "Submission Received: ATLVS Partner Program"),
     description: t(
       "marketing.integrations.thanks.meta.description",
       undefined,
@@ -41,7 +41,7 @@ export default async function Page() {
           {t(
             "marketing.integrations.thanks.body.before",
             undefined,
-            "Your proposal is in the queue. The ATLVS partner-AM team typically responds within 5 business days. Watch the inbox you submitted with — we'll reach out from",
+            "Your proposal is in the queue. The ATLVS partner-AM team typically replies within 5 business days. Watch the inbox you submitted with. We'll reach out from",
           )}{" "}
           <span className="font-mono">partners@atlvs.pro</span>.
         </p>

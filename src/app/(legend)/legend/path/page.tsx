@@ -75,7 +75,7 @@ export default async function LearningPathPage() {
       <ModuleHeader
         eyebrow="LEG3ND · Learn"
         title="Learning Path"
-        subtitle="Your sequential route through the org's published courses — complete each unit to unlock the next."
+        subtitle="Your sequential route through the org's published courses. Complete each unit to unlock the next."
       />
 
       <div className="metric-grid mb-6">

@@ -53,10 +53,10 @@ export async function generateMetadata({ params }: { params: Promise<{ handle: s
     });
   }
   return buildMetadata({
-    title: `${a.display_name} — Agency on ATLVS`,
+    title: `${a.display_name} · Agency on ATLVS`,
     description: metaDescription(
       a.bio,
-      `Work with ${a.display_name} through the ATLVS marketplace — roster, commission terms, and booking inquiries in one profile.`,
+      `Work with ${a.display_name} through the ATLVS marketplace: roster, commission terms, and booking inquiries in one profile.`,
     ),
     path: `/marketplace/agencies/${a.public_handle}`,
     ogImageEyebrow: "ATLVS Marketplace",

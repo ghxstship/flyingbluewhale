@@ -140,10 +140,10 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
           >
             <input type="hidden" name="application_id" value={a.id} />
             <div>
-              <label className="text-xs font-medium text-[var(--p-text-2)]">
+              <label htmlFor="status" className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.marketplace.postings.applicants.detail.stageLabel", undefined, "Stage")}
               </label>
-              <select name="status" className="ps-input mt-1.5 w-full" defaultValue={a.job_application_state}>
+              <select id="status" name="status" className="ps-input mt-1.5 w-full" defaultValue={a.job_application_state}>
                 {JOB_APPLICATION_STATUSES.map((s) => (
                   <option key={s} value={s}>
                     {s}
@@ -160,10 +160,10 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
               defaultValue={a.score ?? ""}
             />
             <div>
-              <label className="text-xs font-medium text-[var(--p-text-2)]">
+              <label htmlFor="reviewer_notes" className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.marketplace.postings.applicants.detail.reviewerNotesLabel", undefined, "Reviewer Notes")}
               </label>
-              <textarea
+              <textarea id="reviewer_notes"
                 name="reviewer_notes"
                 rows={4}
                 maxLength={4000}

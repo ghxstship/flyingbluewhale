@@ -58,10 +58,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             defaultValue={a.title}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="body" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.comms.announcements.edit.bodyLabel", undefined, "Body")}
             </label>
-            <textarea
+            <textarea id="body"
               name="body"
               rows={6}
               required
@@ -71,10 +71,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="audience" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.comms.announcements.edit.audienceLabel", undefined, "Audience")}
             </label>
-            <select name="audience" className="ps-input mt-1.5 w-full" defaultValue={a.audience}>
+            <select id="audience" name="audience" className="ps-input mt-1.5 w-full" defaultValue={a.audience}>
               <option value="all">{t("console.comms.announcements.edit.audience.all", undefined, "All")}</option>
               <option value="crew">{t("console.comms.announcements.edit.audience.crew", undefined, "Crew")}</option>
               <option value="contractors">

@@ -52,7 +52,7 @@ export function LessonComplete({
         className="ps-btn ps-btn--cta ps-btn--lg"
         style={{ minHeight: 44, justifyContent: "center" }}
       >
-        {pending ? "…" : alreadyDone ? "Completed — continue" : "Mark complete & continue"}
+        {pending ? "…" : alreadyDone ? "Completed. Continue" : "Mark complete & continue"}
       </button>
       {error && (
         <p className="ps-alert ps-alert--danger" role="alert">

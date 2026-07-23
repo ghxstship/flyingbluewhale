@@ -34,7 +34,7 @@ export default async function InboxPage({ searchParams }: { searchParams: Search
             {t(
               "me.inbox.subtitle",
               undefined,
-              "All your activity across the platform — assignments, mentions, status changes.",
+              "All your activity across the platform: assignments, mentions, status changes.",
             )}
           </p>
         </header>

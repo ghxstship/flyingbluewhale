@@ -128,10 +128,10 @@ export default async function Page({ params }: { params: Promise<{ jobId: string
               {t("console.operations.maintenance.job.complete.heading", undefined, "Complete")}
             </h3>
             <div>
-              <label className="text-xs font-medium text-[var(--p-text-2)]">
+              <label htmlFor="outcome" className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.operations.maintenance.job.complete.outcomeLabel", undefined, "Outcome")}
               </label>
-              <select name="outcome" defaultValue="pass" className="ps-input mt-1.5 w-full" required>
+              <select id="outcome" name="outcome" defaultValue="pass" className="ps-input mt-1.5 w-full" required>
                 <option value="pass">
                   {t("console.operations.maintenance.job.complete.outcome.pass", undefined, "Pass")}
                 </option>
@@ -148,10 +148,10 @@ export default async function Page({ params }: { params: Promise<{ jobId: string
               </select>
             </div>
             <div>
-              <label className="text-xs font-medium text-[var(--p-text-2)]">
+              <label htmlFor="notes" className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.operations.maintenance.job.complete.notesLabel", undefined, "Notes")}
               </label>
-              <textarea name="notes" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
+              <textarea id="notes" name="notes" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
             </div>
             <div className="flex justify-end">
               <Button type="submit">

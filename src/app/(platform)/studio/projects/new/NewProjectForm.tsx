@@ -22,10 +22,10 @@ export function NewProjectForm({ clients = [], venues = [] }: { clients?: Option
         maxLength={120}
       />
       <div>
-        <label className="text-xs font-medium text-[var(--p-text-2)]">
+        <label htmlFor="description" className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.projects.new.description", undefined, "Description")}
         </label>
-        <textarea name="description" rows={4} maxLength={2000} className="ps-input mt-1.5 w-full" />
+        <textarea id="description" name="description" rows={4} maxLength={2000} className="ps-input mt-1.5 w-full" />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <Input label={t("console.projects.new.startDate", undefined, "Start Date")} name="startDate" type="date" />
@@ -33,10 +33,10 @@ export function NewProjectForm({ clients = [], venues = [] }: { clients?: Option
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
+          <label htmlFor="clientId" className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.projects.new.client", undefined, "Client")}
           </label>
-          <select name="clientId" className="ps-input mt-1.5 w-full" defaultValue="">
+          <select id="clientId" name="clientId" className="ps-input mt-1.5 w-full" defaultValue="">
             <option value="">{t("console.projects.new.none", undefined, "None")}</option>
             {clients.map((c) => (
               <option key={c.id} value={c.id}>
@@ -46,10 +46,10 @@ export function NewProjectForm({ clients = [], venues = [] }: { clients?: Option
           </select>
         </div>
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
+          <label htmlFor="primaryVenueId" className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.projects.new.primaryVenue", undefined, "Primary Venue")}
           </label>
-          <select name="primaryVenueId" className="ps-input mt-1.5 w-full" defaultValue="">
+          <select id="primaryVenueId" name="primaryVenueId" className="ps-input mt-1.5 w-full" defaultValue="">
             <option value="">{t("console.projects.new.none", undefined, "None")}</option>
             {venues.map((v) => (
               <option key={v.id} value={v.id}>
@@ -69,10 +69,10 @@ export function NewProjectForm({ clients = [], venues = [] }: { clients?: Option
       />
       <div className="grid gap-4 sm:grid-cols-3">
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
+          <label htmlFor="geographicScope" className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.projects.new.geographicScope", undefined, "Geographic Scope")}
           </label>
-          <select name="geographicScope" className="ps-input mt-1.5 w-full" defaultValue="">
+          <select id="geographicScope" name="geographicScope" className="ps-input mt-1.5 w-full" defaultValue="">
             <option value="">—</option>
             <option value="local">{t("console.projects.new.scope.local", undefined, "Local")}</option>
             <option value="regional">{t("console.projects.new.scope.regional", undefined, "Regional")}</option>
@@ -83,10 +83,10 @@ export function NewProjectForm({ clients = [], venues = [] }: { clients?: Option
           </select>
         </div>
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
+          <label htmlFor="tourStructure" className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.projects.new.tourStructure", undefined, "Tour Structure")}
           </label>
-          <select name="tourStructure" className="ps-input mt-1.5 w-full" defaultValue="">
+          <select id="tourStructure" name="tourStructure" className="ps-input mt-1.5 w-full" defaultValue="">
             <option value="">—</option>
             <option value="single_stop">{t("console.projects.new.tour.singleStop", undefined, "Single Stop")}</option>
             <option value="multi_stop_sequential">
@@ -98,10 +98,10 @@ export function NewProjectForm({ clients = [], venues = [] }: { clients?: Option
           </select>
         </div>
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
+          <label htmlFor="productionStyle" className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.projects.new.productionStyle", undefined, "Production Style")}
           </label>
-          <select name="productionStyle" className="ps-input mt-1.5 w-full" defaultValue="">
+          <select id="productionStyle" name="productionStyle" className="ps-input mt-1.5 w-full" defaultValue="">
             <option value="">—</option>
             <option value="editorial">{t("console.projects.new.style.editorial", undefined, "Editorial")}</option>
             <option value="documentary">{t("console.projects.new.style.documentary", undefined, "Documentary")}</option>

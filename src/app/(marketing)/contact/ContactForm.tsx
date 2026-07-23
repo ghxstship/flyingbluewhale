@@ -75,9 +75,9 @@ export function ContactForm({
         <label className="text-xs font-medium text-[var(--p-text-2)]">
           {t("marketing.pages.contact.form.fields.scale")}
           <select name="scale" className="ps-input mt-1.5 w-full">
-            <option>1–5</option>
-            <option>6–20</option>
-            <option>21–50</option>
+            <option>1 to 5</option>
+            <option>6 to 20</option>
+            <option>21 to 50</option>
             <option>50+</option>
           </select>
         </label>

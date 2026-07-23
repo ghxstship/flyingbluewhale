@@ -11,11 +11,12 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { createServiceClient } from "@/lib/supabase/server";
 import {
-  deleteDailyLogPhoto,
+  deleteDailyLogPhotoById,
   transitionDailyLog,
   uploadDailyLogPhoto,
   toggleDailyLogSignoff,
 } from "./actions";
+import { DeleteForm } from "@/components/DeleteForm";
 import { DAILY_LOG_SECTIONS } from "./sections";
 import { StatusForm } from "@/components/StatusForm";
 import { Button } from "@/components/ui/Button";
@@ -296,13 +297,15 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                       <div className="font-mono text-[11px] text-[var(--p-text-2)]">{fmt.dateTime(p.taken_at)}</div>
                     </div>
                     {photosEditable && (
-                      <form action={deleteDailyLogPhoto}>
-                        <input type="hidden" name="dailyLogId" value={id} />
-                        <input type="hidden" name="photoId" value={p.id} />
-                        <Button type="submit" size="sm" variant="ghost">
-                          {t("common.remove", undefined, "Remove")}
-                        </Button>
-                      </form>
+                      <DeleteForm
+                        action={deleteDailyLogPhotoById.bind(null, id, p.id)}
+                        label={t("common.remove", undefined, "Remove")}
+                        confirm={t(
+                          "console.operations.dailyLog.detail.deletePhotoConfirm",
+                          undefined,
+                          "Remove this photo? The file is deleted from the log.",
+                        )}
+                      />
                     )}
                   </div>
                 </li>

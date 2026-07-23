@@ -4,7 +4,7 @@ import { buildMetadata } from "@/lib/seo";
 export const metadata = buildMetadata({
   title: "Privacy Policy",
   description:
-    "How ATLVS Technologies collects, uses, and protects your data — account info, workspace content, telemetry, retention, and your rights.",
+    "How ATLVS Technologies collects, uses, and protects your data: account info, workspace content, telemetry, retention, and your rights.",
   path: "/legal/privacy",
 });
 

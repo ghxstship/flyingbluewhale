@@ -84,7 +84,7 @@ export default async function TrainingConsolePage() {
 
   return (
     <>
-      <ModuleHeader eyebrow="LEG3ND · Manage" title="Training Console" subtitle="Org compliance, the learner roster, and course assignment — manager view." />
+      <ModuleHeader eyebrow="LEG3ND · Manage" title="Training Console" subtitle="Org compliance, the learner roster, and course assignment (manager view)." />
 
       <div className="metric-grid mb-6">
         <MetricCard label="Members" value={members.length} />

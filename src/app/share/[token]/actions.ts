@@ -28,7 +28,7 @@ export async function submitPasscode(prev: PasscodeFormState, fd: FormData): Pro
 
   const result = await consumeShareLink({ token, passcode });
   if (!result.ok) {
-    if (result.reason === "passcode_wrong") return { error: "Wrong passcode — try again" };
+    if (result.reason === "passcode_wrong") return { error: "Wrong passcode. Try again." };
     if (result.reason === "passcode_required") return { error: "Passcode required" };
     if (result.reason === "expired") return { error: "This link has expired" };
     if (result.reason === "revoked") return { error: "This link has been revoked" };

@@ -9,7 +9,8 @@ import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import { getRequestT } from "@/lib/i18n/request";
 import { timeAgo, toTitle } from "@/lib/format";
-import { addResponseLine, deleteResponseLine } from "./actions";
+import { addResponseLine, deleteResponseLineById } from "./actions";
+import { DeleteForm } from "@/components/DeleteForm";
 import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
@@ -227,14 +228,15 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
                     </td>
                     {editable && (
                       <td className="text-right">
-                        <form action={deleteResponseLine}>
-                          <input type="hidden" name="rfqId" value={rfqId} />
-                          <input type="hidden" name="responseId" value={responseId} />
-                          <input type="hidden" name="lineId" value={l.id} />
-                          <Button type="submit" size="sm" variant="ghost">
-                            {t("common.remove", undefined, "Remove")}
-                          </Button>
-                        </form>
+                        <DeleteForm
+                          action={deleteResponseLineById.bind(null, rfqId, responseId, l.id)}
+                          label={t("common.remove", undefined, "Remove")}
+                          confirm={t(
+                            "console.procurement.rfqs.responses.deleteLineConfirm",
+                            undefined,
+                            "Remove this response line? The headline total is recalculated.",
+                          )}
+                        />
                       </td>
                     )}
                   </tr>

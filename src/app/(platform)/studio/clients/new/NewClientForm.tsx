@@ -25,10 +25,10 @@ export function NewClientForm() {
         placeholder="https://"
       />
       <div>
-        <label className="text-xs font-medium text-[var(--p-text-2)]">
+        <label htmlFor="notes" className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.clients.new.notes", undefined, "Notes")}
         </label>
-        <textarea name="notes" rows={3} className="ps-input mt-1.5 w-full" />
+        <textarea id="notes" name="notes" rows={3} className="ps-input mt-1.5 w-full" />
       </div>
     </FormShell>
   );

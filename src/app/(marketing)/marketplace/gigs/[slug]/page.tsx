@@ -78,14 +78,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     return buildMetadata({
       title: "Crew Gigs on the ATLVS Marketplace",
       description:
-        "Browse open crew gigs from production teams on the ATLVS marketplace — rates, locations, and requirements up front.",
+        "Browse open crew gigs from production teams on the ATLVS marketplace: rates, locations, and requirements up front.",
       path: `/marketplace/gigs/${slug}`,
       noIndex: true,
     });
   }
   const where = [r.city, r.region, r.country].filter(Boolean).join(", ");
   return buildMetadata({
-    title: `${r.title} — Crew Gig on ATLVS`,
+    title: `${r.title} · Crew Gig on ATLVS`,
     description: metaDescription(
       r.description,
       `${r.org_name} is hiring for ${r.title}${where ? ` in ${where}` : ""} through the ATLVS marketplace. Review the role and apply.`,

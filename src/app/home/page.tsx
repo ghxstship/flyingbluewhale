@@ -12,7 +12,7 @@ const BRAND_DOT: Record<string, string> = {
 };
 
 const TAGLINE: Record<string, string> = {
-  platform: "Operator console — ERP × CRM × PM.",
+  platform: "Operator console: ERP × CRM × PM.",
   portal: "Public interface & marketplace.",
   mobile: "Site & venue field operations.",
 };

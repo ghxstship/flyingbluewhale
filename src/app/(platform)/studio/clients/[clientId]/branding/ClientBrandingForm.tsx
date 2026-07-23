@@ -86,7 +86,7 @@ export function ClientBrandingForm({ initial }: { initial: Initial }) {
 function ColorField({ label, name, value, onChange }: { label: string; name: string; value: string; onChange: (v: string) => void }) {
   return (
     <div>
-      <label className="block text-xs font-medium text-[var(--p-text-2)]">{label}</label>
+      <label htmlFor={name} className="block text-xs font-medium text-[var(--p-text-2)]">{label}</label>
       <div className="mt-1 flex items-center gap-2">
         <input
           type="color"
@@ -97,6 +97,7 @@ function ColorField({ label, name, value, onChange }: { label: string; name: str
         />
         <input
           type="text"
+          id={name}
           name={name}
           value={value}
           onChange={(e) => onChange(e.target.value)}

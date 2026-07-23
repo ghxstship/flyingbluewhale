@@ -100,7 +100,7 @@ export default async function RunDetailPage({ params }: { params: Promise<{ id: 
           {findingsWithRule.length === 0 ? (
             <EmptyState
               title="No findings"
-              description="This run passed clean — no active rules were tripped for the selected scope."
+              description="This run passed clean. No active rules were tripped for the selected scope."
             />
           ) : (
             <FindingsTable runId={run.id} findings={findingsWithRule} />

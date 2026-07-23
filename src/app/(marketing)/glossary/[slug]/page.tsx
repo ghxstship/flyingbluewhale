@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     });
   }
   return buildMetadata({
-    title: t("marketing.glossary.detail.meta.title", { term: entry.term }, "{term} — Definition"),
+    title: t("marketing.glossary.detail.meta.title", { term: entry.term }, "{term}: Definition"),
     description: entry.short,
     path: `/glossary/${entry.slug}`,
     keywords: [

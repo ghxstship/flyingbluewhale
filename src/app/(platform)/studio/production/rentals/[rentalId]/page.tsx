@@ -8,7 +8,8 @@ import { createClient } from "@/lib/supabase/server";
 import { fmtDateTime, money } from "@/components/detail/DetailShell";
 import { DownloadLink } from "@/components/DownloadLink";
 import { getRequestT } from "@/lib/i18n/request";
-import { endRentalNow, deleteRental } from "../actions";
+import { DeleteForm } from "@/components/DeleteForm";
+import { endRentalNow, deleteRentalById } from "../actions";
 
 export default async function Page({ params }: { params: Promise<{ rentalId: string }> }) {
   const { rentalId } = await params;
@@ -127,12 +128,15 @@ export default async function Page({ params }: { params: Promise<{ rentalId: str
         <section className="surface p-4 text-xs">
           <div className="flex items-center justify-between">
             <Badge variant="muted">{t("console.production.rentals.detail.lifecycle", undefined, "Lifecycle")}</Badge>
-            <form action={deleteRental}>
-              <input type="hidden" name="id" value={row.id} />
-              <button type="submit" className="text-[color:var(--p-danger)] hover:underline">
-                {t("console.production.rentals.detail.deleteRental", undefined, "Delete rental")}
-              </button>
-            </form>
+            <DeleteForm
+              action={deleteRentalById.bind(null, row.id)}
+              label={t("console.production.rentals.detail.deleteRental", undefined, "Delete rental")}
+              confirm={t(
+                "console.production.rentals.detail.deleteConfirm",
+                undefined,
+                "Delete this rental? The record is removed for everyone on the project.",
+              )}
+            />
           </div>
         </section>
       </div>

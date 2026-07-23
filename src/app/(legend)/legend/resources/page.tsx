@@ -75,7 +75,7 @@ export default async function ResourcesHubPage() {
         {resources.length === 0 && collections.length === 0 ? (
           <EmptyState
             title="No resources yet"
-            description="Build a curated library of links, documents, templates, and references — grouped into collections."
+            description="Build a curated library of links, documents, templates, and references, grouped into collections."
             action={<Button href="/legend/resources/new">+ New Resource</Button>}
             secondaryAction={
               <Button href="/legend/resources/collections/new" variant="secondary">

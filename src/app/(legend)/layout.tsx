@@ -58,7 +58,7 @@ export default async function LegendLayout({ children }: { children: ReactNode }
             <Link
               href="/legend"
               className="atlvs-wordmark text-lg font-semibold text-[var(--p-text-1)]"
-              aria-label="LEG3ND — home"
+              aria-label="LEG3ND home"
             >
               L E G 3 N D
             </Link>

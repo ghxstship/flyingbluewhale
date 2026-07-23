@@ -129,7 +129,7 @@ export async function enrollMfaAction(): Promise<EnrollResult> {
 
 export async function verifyEnrollmentAction(factorId: string, code: string): Promise<VerifyResult> {
   if (!hasSupabase) return { error: "Supabase is not configured." };
-  if (!factorId) return { error: "Missing factor — restart enrollment." };
+  if (!factorId) return { error: "Missing factor. Restart enrollment." };
   if (!/^\d{6}$/.test(code.trim())) return { error: "Enter the 6-digit code from your authenticator app." };
 
   const session = await getSession();

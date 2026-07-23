@@ -17,9 +17,9 @@ import {
 import { SetLocaleCta } from "../es-ES/SetLocaleCta";
 
 export const metadata: Metadata = buildMetadata({
-  title: "ATLVS — O motor por trás de novos mundos",
+  title: "ATLVS: O motor por trás de novos mundos",
   description:
-    "Desenvolva, construa, opere e viva produções ao vivo em uma só plataforma. Um registro, quatro apps conectados — ATLVS, COMPVSS, GVTEWAY, LEG3ND. RLS na base de dados. Construído por operadores.",
+    "Desenvolva, construa, opere e viva produções ao vivo em uma só plataforma. Um registro, quatro apps conectados: ATLVS, COMPVSS, GVTEWAY, LEG3ND. RLS na base de dados. Construído por operadores.",
   path: "/pt-BR",
   ogLocale: "pt_BR",
   languages: {
@@ -39,7 +39,7 @@ export const metadata: Metadata = buildMetadata({
 const FAQ_PT = [
   {
     q: "O que a plataforma faz?",
-    a: "Um registro, quatro apps conectados. A ATLVS desenvolve e constrói o mundo — projetos, advancing, finanças, compras e uma IA que redige a papelada. A COMPVSS opera em campo — escalas, certificações, leitura no portão, ocorrências, offline-first. A GVTEWAY é onde o mundo é vivido — bilheteria, portais, marketplace. A LEG3ND é o conhecimento sobre o qual ele é construído — o Standard, cursos, certificações, catálogo e motor de compliance.",
+    a: "Um registro, quatro apps conectados. A ATLVS desenvolve e constrói o mundo: projetos, advancing, finanças, compras e uma IA que redige a papelada. A COMPVSS opera em campo: escalas, certificações, leitura no portão, ocorrências, offline-first. A GVTEWAY é onde o mundo é vivido: bilheteria, portais, marketplace. A LEG3ND é o conhecimento sobre o qual ele é construído: o Standard, cursos, certificações, catálogo e motor de compliance.",
   },
   {
     q: "Para quem é?",
@@ -51,29 +51,29 @@ const FAQ_PT = [
   },
   {
     q: "O app de campo funciona mesmo offline?",
-    a: "Sim. A COMPVSS é um PWA offline-first. Leitura, ponto, daily log, registro de ocorrência, intake médico — tudo é enfileirado localmente e sincroniza quando o sinal volta. Testado em portões de 15.000 convidados.",
+    a: "Sim. A COMPVSS é um PWA offline-first. Leitura, ponto, daily log, registro de ocorrência, intake médico. Tudo é enfileirado localmente e sincroniza quando o sinal volta. Testado em portões de 15.000 convidados.",
   },
 ];
 
 const APPS_PT = [
   {
     name: "ATLVS",
-    body: "Desenvolva e construa o mundo — projetos, advancing, finanças, compras e uma IA que redige a papelada. A central de comando do produtor.",
+    body: "Desenvolva e construa o mundo: projetos, advancing, finanças, compras e uma IA que redige a papelada. A central de comando do produtor.",
     href: "/atlvs",
   },
   {
     name: "COMPVSS",
-    body: "Opere em campo — escalas, certificações, leitura no portão, ocorrências. Offline-first, ágil no portão mesmo quando o sinal não está.",
+    body: "Opere em campo: escalas, certificações, leitura no portão, ocorrências. Offline-first, ágil no portão mesmo quando o sinal não está.",
     href: "/compvss",
   },
   {
     name: "GVTEWAY",
-    body: "Onde o mundo é vivido — bilheteria, portais, marketplace. Cada persona com sua própria porta de entrada.",
+    body: "Onde o mundo é vivido: bilheteria, portais, marketplace. Cada persona com sua própria porta de entrada.",
     href: "/gvteway",
   },
   {
     name: "LEG3ND",
-    body: "O conhecimento sobre o qual o mundo é construído — o Standard, cursos, certificações, o catálogo e o motor de compliance.",
+    body: "O conhecimento sobre o qual o mundo é construído: o Standard, cursos, certificações, o catálogo e o motor de compliance.",
     href: "/legend",
   },
 ];
@@ -102,7 +102,7 @@ export default function HomePT() {
           Comande-os ao vivo.
         </h1>
         <p className="mt-6 max-w-2xl text-lg text-[var(--p-text-2)]">
-          Não é um CRM colado a um PM. Um único motor para o mundo inteiro — desenvolvido, construído, operado e vivido
+          Não é um CRM colado a um PM. Um único motor para o mundo inteiro: desenvolvido, construído, operado e vivido
           sobre um único registro.
         </p>
         <div className="mt-10 flex flex-wrap gap-3">

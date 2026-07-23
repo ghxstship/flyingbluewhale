@@ -42,7 +42,7 @@ export default async function CartPage({ searchParams }: { searchParams: Promise
 
         {checkout === "success" && (
           <Alert kind="success" className="mb-6">
-            Payment received — thank you. Your order is being processed.
+            Payment received, thank you. Your order is being processed.
           </Alert>
         )}
         {checkout === "cancelled" && (

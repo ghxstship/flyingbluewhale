@@ -77,7 +77,7 @@ function ColorField({
 }) {
   return (
     <div>
-      <label className="block text-xs font-medium text-[var(--p-text-2)]">{label}</label>
+      <label htmlFor={name} className="block text-xs font-medium text-[var(--p-text-2)]">{label}</label>
       <div className="mt-1 flex items-center gap-2">
         <input
           type="color"
@@ -88,6 +88,7 @@ function ColorField({
         />
         <input
           type="text"
+          id={name}
           name={name}
           value={value}
           onChange={(e) => onChange(e.target.value)}

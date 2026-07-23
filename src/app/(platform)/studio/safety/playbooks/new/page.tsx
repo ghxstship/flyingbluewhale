@@ -42,10 +42,10 @@ export default async function Page() {
             required
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="summary" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.playbooks.new.summaryLabel", undefined, "Summary")}
             </label>
-            <textarea
+            <textarea id="summary"
               name="summary"
               rows={3}
               maxLength={2000}
@@ -58,10 +58,10 @@ export default async function Page() {
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="kind" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.playbooks.new.kindLabel", undefined, "Kind")}
             </label>
-            <select name="kind" defaultValue="general" className="ps-input mt-1.5 w-full">
+            <select id="kind" name="kind" defaultValue="general" className="ps-input mt-1.5 w-full">
               <option value="crisis">{t("console.safety.playbooks.new.kind.crisis", undefined, "Crisis")}</option>
               <option value="safety">{t("console.safety.playbooks.new.kind.safety", undefined, "Safety")}</option>
               <option value="onboarding">

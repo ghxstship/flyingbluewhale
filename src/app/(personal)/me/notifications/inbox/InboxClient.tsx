@@ -125,7 +125,7 @@ export function InboxClient({
       description: t(
         "me.inbox.empty.snoozed.description",
         undefined,
-        "Snooze a row to defer it — it returns to your inbox at the chosen time.",
+        "Snooze a row to defer it. It returns to your inbox at the chosen time.",
       ),
     },
     done: {
@@ -243,7 +243,7 @@ export function InboxClient({
             {t(
               "me.inbox.subtitle",
               undefined,
-              "All your activity across the platform — assignments, mentions, status changes.",
+              "All your activity across the platform: assignments, mentions, status changes.",
             )}
           </p>
         </div>

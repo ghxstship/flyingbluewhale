@@ -20,10 +20,10 @@ export default async function Page() {
           submitLabel={t("console.ai.agents.new.submit", undefined, "Create Agent")}
         >
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="target_table" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.ai.agents.new.targetTable", undefined, "Target Table")}
             </label>
-            <select name="target_table" defaultValue={AGENT_TARGET_TABLES[0]} className="ps-input mt-1.5 w-full">
+            <select id="target_table" name="target_table" defaultValue={AGENT_TARGET_TABLES[0]} className="ps-input mt-1.5 w-full">
               {AGENT_TARGET_TABLES.map((table) => (
                 <option key={table} value={table}>
                   {table}
@@ -39,10 +39,10 @@ export default async function Page() {
             placeholder="summary"
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="source_columns" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.ai.agents.new.sourceColumns", undefined, "Source Columns")}
             </label>
-            <textarea
+            <textarea id="source_columns"
               name="source_columns"
               rows={2}
               maxLength={2000}
@@ -58,10 +58,10 @@ export default async function Page() {
             </p>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="prompt_template" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.ai.agents.new.promptTemplate", undefined, "Prompt Template")}
             </label>
-            <textarea
+            <textarea id="prompt_template"
               name="prompt_template"
               rows={5}
               required
@@ -71,10 +71,10 @@ export default async function Page() {
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="output_type" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.ai.agents.new.outputType", undefined, "Output Type")}
             </label>
-            <select name="output_type" defaultValue="text" className="ps-input mt-1.5 w-full">
+            <select id="output_type" name="output_type" defaultValue="text" className="ps-input mt-1.5 w-full">
               {AGENT_OUTPUT_TYPES.map((type) => (
                 <option key={type} value={type}>
                   {type}

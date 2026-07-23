@@ -54,7 +54,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       path: `/integrations/partners/${slug}`,
     });
   return buildMetadata({
-    title: t("marketing.integrations.partnerDetail.meta.title", { name: p.name }, "{name} — ATLVS Partner Integration"),
+    title: t("marketing.integrations.partnerDetail.meta.title", { name: p.name }, "{name}: ATLVS Partner Integration"),
     description: p.short_description,
     path: `/integrations/partners/${p.slug}`,
     ogImageEyebrow:

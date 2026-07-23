@@ -57,10 +57,10 @@ export default async function NewGuestListPage() {
             placeholder={t("console.boxOffice.new.placeholders.name", undefined, "VIP · Artist Comps · Press")}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="event_id" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.boxOffice.new.fields.event", undefined, "Event (Optional)")}
             </label>
-            <select name="event_id" className="ps-input mt-1.5 w-full" defaultValue="">
+            <select id="event_id" name="event_id" className="ps-input mt-1.5 w-full" defaultValue="">
               <option value="">{t("console.boxOffice.new.event.none", undefined, "No event")}</option>
               {events.map((e) => (
                 <option key={e.id} value={e.id}>
@@ -70,10 +70,10 @@ export default async function NewGuestListPage() {
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="notes" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.boxOffice.new.fields.notes", undefined, "Notes")}
             </label>
-            <textarea name="notes" rows={4} maxLength={2000} className="ps-input mt-1.5 w-full" />
+            <textarea id="notes" name="notes" rows={4} maxLength={2000} className="ps-input mt-1.5 w-full" />
           </div>
         </FormShell>
       </div>

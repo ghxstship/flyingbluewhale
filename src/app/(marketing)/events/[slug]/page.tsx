@@ -90,7 +90,7 @@ export default async function EventDetailPage({ params }: { params: Promise<{ sl
           {listing.starts_at && (
             <p className="font-mono text-sm text-[var(--p-text-3)]">
               {formatDate(listing.starts_at, "long")}
-              {listing.ends_at ? ` – ${formatDate(listing.ends_at, "long")}` : ""}
+              {listing.ends_at ? ` to ${formatDate(listing.ends_at, "long")}` : ""}
             </p>
           )}
           {listing.venue_name && <p className="text-[var(--p-text-2)]">{listing.venue_name}</p>}

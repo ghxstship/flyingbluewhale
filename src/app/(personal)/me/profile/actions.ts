@@ -117,7 +117,7 @@ export async function updatePublicProfile(_: State, fd: FormData): Promise<State
   if (error) {
     // Unique-violation on public_handle surfaces clearly to the user.
     if (error.message.includes("user_profiles_handle_unique")) {
-      return { error: "That handle is already taken — try a different one." };
+      return { error: "That handle is already taken. Try a different one." };
     }
     return actionFail(error.message, fd);
   }

@@ -133,7 +133,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ aut
     log.warn("automation.webhook.unsigned", {
       automationId: automation.id,
       orgId: automation.org_id,
-      msg: "Accepting unsigned inbound webhook — set webhook_secret to require HMAC verification",
+      msg: "Accepting unsigned inbound webhook. Set webhook_secret to require HMAC verification.",
     });
   }
 

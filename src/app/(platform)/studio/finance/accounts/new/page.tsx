@@ -54,10 +54,10 @@ export default async function NewAccountPage() {
             placeholder="Cash · operating"
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="account_type" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.finance.accounts.new.typeLabel", undefined, "Account type")}
             </label>
-            <select name="account_type" required className="ps-input mt-1.5 w-full" defaultValue="asset">
+            <select id="account_type" name="account_type" required className="ps-input mt-1.5 w-full" defaultValue="asset">
               <option value="asset">{t("console.finance.accounts.type.asset", undefined, "Asset")}</option>
               <option value="liability">
                 {t("console.finance.accounts.type.liability", undefined, "Liability")}
@@ -68,19 +68,19 @@ export default async function NewAccountPage() {
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="normal_balance" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.finance.accounts.new.normalLabel", undefined, "Normal balance")}
             </label>
-            <select name="normal_balance" required className="ps-input mt-1.5 w-full" defaultValue="debit">
+            <select id="normal_balance" name="normal_balance" required className="ps-input mt-1.5 w-full" defaultValue="debit">
               <option value="debit">{t("console.finance.accounts.normal.debit", undefined, "Debit")}</option>
               <option value="credit">{t("console.finance.accounts.normal.credit", undefined, "Credit")}</option>
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="parent_account_id" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.finance.accounts.new.parentLabel", undefined, "Parent account")}
             </label>
-            <select name="parent_account_id" className="ps-input mt-1.5 w-full" defaultValue="">
+            <select id="parent_account_id" name="parent_account_id" className="ps-input mt-1.5 w-full" defaultValue="">
               <option value="">
                 {t("console.finance.accounts.new.parentNone", undefined, "None (top level)")}
               </option>

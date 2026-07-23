@@ -53,10 +53,10 @@ export default async function Page() {
           submitLabel={t("console.marketplace.offers.new.submit", undefined, "Save Draft")}
         >
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="talent_profile_id" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.marketplace.offers.new.talentLabel", undefined, "Talent")}
             </label>
-            <select name="talent_profile_id" required className="ps-input mt-1.5 w-full">
+            <select id="talent_profile_id" name="talent_profile_id" required className="ps-input mt-1.5 w-full">
               <option value="">
                 {t("console.marketplace.offers.new.talentPlaceholder", undefined, "Select a talent profile…")}
               </option>
@@ -68,10 +68,10 @@ export default async function Page() {
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="project_id" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.marketplace.offers.new.projectLabel", undefined, "Project · Optional")}
             </label>
-            <select name="project_id" className="ps-input mt-1.5 w-full">
+            <select id="project_id" name="project_id" className="ps-input mt-1.5 w-full">
               <option value="">—</option>
               {projects.map((p) => (
                 <option key={p.id} value={p.id}>
@@ -121,10 +121,10 @@ export default async function Page() {
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="balance_terms" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.marketplace.offers.new.balanceTermsLabel", undefined, "Balance Terms")}
             </label>
-            <select name="balance_terms" className="ps-input mt-1.5 w-full" defaultValue={BALANCE_TERMS_DEFAULT}>
+            <select id="balance_terms" name="balance_terms" className="ps-input mt-1.5 w-full" defaultValue={BALANCE_TERMS_DEFAULT}>
               <option value="load_in">
                 {t("console.marketplace.offers.new.balanceTerms.loadIn", undefined, "On Load-In")}
               </option>

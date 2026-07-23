@@ -28,10 +28,10 @@ export default async function Page() {
           />
           <Input label={t("console.forms.new.titleLabel", undefined, "Title")} name="title" required maxLength={200} />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="description" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.forms.new.descriptionLabel", undefined, "Description")}
             </label>
-            <textarea name="description" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
+            <textarea id="description" name="description" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
           </div>
         </FormShell>
       </div>

@@ -249,10 +249,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             />
             <Input label={t("console.legal.contracts.detail.col.due", undefined, "Due")} name="due_at" type="date" />
             <div className="col-span-2">
-              <label className="text-xs font-medium text-[var(--p-text-2)]">
+              <label htmlFor="description-2" className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.legal.contracts.detail.col.description", undefined, "Description")}
               </label>
-              <textarea name="description" rows={2} required maxLength={1000} className="ps-input mt-1.5 w-full" />
+              <textarea id="description-2" name="description" rows={2} required maxLength={1000} className="ps-input mt-1.5 w-full" />
             </div>
             <label className="col-span-2 flex items-center gap-2 text-sm">
               <input type="checkbox" name="recurring" className="size-4" />
@@ -297,10 +297,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           >
             <input type="hidden" name="contract_id" value={cid} />
             <div>
-              <label className="text-xs font-medium text-[var(--p-text-2)]">
+              <label htmlFor="party_user_id" className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.legal.contracts.detail.col.party", undefined, "Party")}
               </label>
-              <select name="party_user_id" className="ps-input mt-1.5 w-full" defaultValue="">
+              <select id="party_user_id" name="party_user_id" className="ps-input mt-1.5 w-full" defaultValue="">
                 <option value="">
                   {t("console.legal.contracts.detail.partySelf", undefined, "Me (current user)")}
                 </option>
@@ -367,10 +367,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               placeholder="exclusivity"
             />
             <div className="col-span-2">
-              <label className="text-xs font-medium text-[var(--p-text-2)]">
+              <label htmlFor="description" className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.legal.contracts.detail.col.description", undefined, "Description")}
               </label>
-              <textarea name="description" rows={2} required maxLength={1000} className="ps-input mt-1.5 w-full" />
+              <textarea id="description" name="description" rows={2} required maxLength={1000} className="ps-input mt-1.5 w-full" />
             </div>
           </FormShell>
         </Card>
@@ -411,10 +411,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           >
             <input type="hidden" name="contract_id" value={cid} />
             <div>
-              <label className="text-xs font-medium text-[var(--p-text-2)]">
+              <label htmlFor="redline_summary" className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.legal.contracts.detail.col.redline", undefined, "Redline summary")}
               </label>
-              <textarea name="redline_summary" rows={2} maxLength={2000} className="ps-input mt-1.5 w-full" />
+              <textarea id="redline_summary" name="redline_summary" rows={2} maxLength={2000} className="ps-input mt-1.5 w-full" />
             </div>
           </FormShell>
         </Card>
@@ -472,10 +472,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             >
               <input type="hidden" name="contract_id" value={cid} />
               <div>
-                <label className="text-xs font-medium text-[var(--p-text-2)]">
+                <label htmlFor="signer_user_id" className="text-xs font-medium text-[var(--p-text-2)]">
                   {t("console.legal.contracts.detail.col.signer", undefined, "Signer")}
                 </label>
-                <select name="signer_user_id" required className="ps-input mt-1.5 w-full" defaultValue={session.userId}>
+                <select id="signer_user_id" name="signer_user_id" required className="ps-input mt-1.5 w-full" defaultValue={session.userId}>
                   {memberList.map((m) => (
                     <option key={m.id} value={m.id}>
                       {m.name ?? m.email}
@@ -484,10 +484,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 </select>
               </div>
               <div>
-                <label className="text-xs font-medium text-[var(--p-text-2)]">
+                <label htmlFor="version_id" className="text-xs font-medium text-[var(--p-text-2)]">
                   {t("console.legal.contracts.detail.col.version", undefined, "Version")}
                 </label>
-                <select name="version_id" required className="ps-input mt-1.5 w-full" defaultValue={versions[0]?.id}>
+                <select id="version_id" name="version_id" required className="ps-input mt-1.5 w-full" defaultValue={versions[0]?.id}>
                   {versions.map((v) => (
                     <option key={v.id} value={v.id}>
                       v{v.version}
@@ -503,10 +503,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 placeholder="counterparty"
               />
               <div>
-                <label className="text-xs font-medium text-[var(--p-text-2)]">
+                <label htmlFor="signature_method" className="text-xs font-medium text-[var(--p-text-2)]">
                   {t("console.legal.contracts.detail.col.method", undefined, "Method")}
                 </label>
-                <select name="signature_method" required className="ps-input mt-1.5 w-full" defaultValue="electronic">
+                <select id="signature_method" name="signature_method" required className="ps-input mt-1.5 w-full" defaultValue="electronic">
                   <option value="electronic">
                     {t("console.legal.contracts.detail.methodElectronic", undefined, "Electronic")}
                   </option>

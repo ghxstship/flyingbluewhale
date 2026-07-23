@@ -104,7 +104,7 @@ export default async function MobileJobsPage() {
       // were written by postJob and never read, so every card said "Open now"
       // regardless of when the shift actually is.
       when: p.shift_starts_at
-        ? `${fmt.dateParts(p.shift_starts_at, { month: "short", day: "numeric" })} · ${fmt.time(p.shift_starts_at)}${p.shift_ends_at ? `–${fmt.time(p.shift_ends_at)}` : ""}`
+        ? `${fmt.dateParts(p.shift_starts_at, { month: "short", day: "numeric" })} · ${fmt.time(p.shift_starts_at)}${p.shift_ends_at ? ` to ${fmt.time(p.shift_ends_at)}` : ""}`
         : t("m.gigs.openNow", undefined, "Open now"),
       gear: (p.gear_required as string | null) ?? null,
       certs: (p.certs_required ?? []).slice(0, 3),

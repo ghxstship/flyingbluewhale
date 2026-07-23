@@ -9,11 +9,12 @@ import { hasSupabase } from "@/lib/env";
 import { formatMoney } from "@/lib/i18n/format";
 import {
   addCoLine,
-  deleteCoLine,
+  deleteCoLineById,
   routePoChangeOrderToApprovalsAction,
   executeCoPostToBudgetAction,
   transitionPoChangeOrder,
 } from "./actions";
+import { DeleteForm } from "@/components/DeleteForm";
 import { StatusForm } from "@/components/StatusForm";
 import { Button } from "@/components/ui/Button";
 import { toTitle } from "@/lib/format";
@@ -213,13 +214,15 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                     </td>
                     {editable && (
                       <td className="text-right">
-                        <form action={deleteCoLine}>
-                          <input type="hidden" name="coId" value={id} />
-                          <input type="hidden" name="lineId" value={l.id} />
-                          <Button type="submit" size="sm" variant="ghost">
-                            {t("common.remove", undefined, "Remove")}
-                          </Button>
-                        </form>
+                        <DeleteForm
+                          action={deleteCoLineById.bind(null, id, l.id)}
+                          label={t("common.remove", undefined, "Remove")}
+                          confirm={t(
+                            "console.procurement.poChangeOrders.deleteLineConfirm",
+                            undefined,
+                            "Remove this change-order line? The order total is recalculated.",
+                          )}
+                        />
                       </td>
                     )}
                   </tr>

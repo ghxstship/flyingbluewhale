@@ -173,3 +173,12 @@ export async function toggleDailyLogSignoff(dailyLogId: string, section: string)
   }
   revalidatePath(`/studio/operations/daily-log/${dailyLogId}`);
 }
+
+/** W6 a11y — id-arg binding for `DeleteForm` (the confirm dialog invokes the
+ * action directly rather than posting a hidden-input form). */
+export async function deleteDailyLogPhotoById(dailyLogId: string, photoId: string): Promise<void> {
+  const fd = new FormData();
+  fd.set("dailyLogId", dailyLogId);
+  fd.set("photoId", photoId);
+  await deleteDailyLogPhoto(fd);
+}

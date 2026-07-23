@@ -86,3 +86,11 @@ export async function deleteDomainAction(formData: FormData) {
   if (error) throw new Error(`Could not delete org domain: ${error.message}`);
   revalidatePath("/studio/settings/domains");
 }
+
+/** W6 a11y — id-arg binding for `DeleteForm` (the confirm dialog invokes the
+ * action directly rather than posting a hidden-input form). */
+export async function deleteDomainById(id: string): Promise<void> {
+  const fd = new FormData();
+  fd.set("id", id);
+  await deleteDomainAction(fd);
+}

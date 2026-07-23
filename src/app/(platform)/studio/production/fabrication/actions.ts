@@ -157,3 +157,11 @@ export async function deleteFab(formData: FormData) {
   revalidatePath("/studio/production/fabrication");
   redirect("/studio/production/fabrication");
 }
+
+/** W6 a11y — id-arg binding for `DeleteForm` (the confirm dialog invokes the
+ * action directly rather than posting a hidden-input form). */
+export async function deleteFabById(id: string): Promise<void> {
+  const fd = new FormData();
+  fd.set("id", id);
+  await deleteFab(fd);
+}

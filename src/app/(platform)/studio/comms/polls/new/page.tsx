@@ -25,10 +25,10 @@ export default async function Page() {
             maxLength={300}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="options" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.comms.polls.new.optionsLabel", undefined, "Options (One per Line, Max 8)")}
             </label>
-            <textarea
+            <textarea id="options"
               name="options"
               rows={6}
               required
@@ -37,10 +37,10 @@ export default async function Page() {
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="audience" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.comms.polls.new.audienceLabel", undefined, "Audience")}
             </label>
-            <select name="audience" className="ps-input mt-1.5 w-full" defaultValue="all">
+            <select id="audience" name="audience" className="ps-input mt-1.5 w-full" defaultValue="all">
               <option value="all">{t("console.comms.polls.new.audienceAll", undefined, "All")}</option>
               <option value="crew">{t("console.comms.polls.new.audienceCrew", undefined, "Crew")}</option>
               <option value="contractors">

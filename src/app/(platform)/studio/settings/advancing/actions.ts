@@ -86,3 +86,11 @@ export async function deletePresetAction(fd: FormData): Promise<void> {
     .eq("org_id", session.orgId);
   revalidatePath(PATH);
 }
+
+/** W6 a11y — id-arg binding for `DeleteForm` (the confirm dialog invokes the
+ * action directly rather than posting a hidden-input form). */
+export async function deletePresetById(id: string): Promise<void> {
+  const fd = new FormData();
+  fd.set("preset_id", id);
+  await deletePresetAction(fd);
+}

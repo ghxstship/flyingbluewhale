@@ -44,10 +44,10 @@ export default async function Page() {
             type="date"
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="status" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.commercial.sponsors.new.fields.status", undefined, "Status")}
             </label>
-            <select name="status" defaultValue="open" className="ps-input mt-1.5 w-full">
+            <select id="status" name="status" defaultValue="open" className="ps-input mt-1.5 w-full">
               <option value="open">{t("console.commercial.sponsors.new.status.open", undefined, "Open")}</option>
               <option value="in_progress">
                 {t("console.commercial.sponsors.new.status.inProgress", undefined, "In progress")}

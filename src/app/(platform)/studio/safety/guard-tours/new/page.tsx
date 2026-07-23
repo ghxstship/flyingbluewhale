@@ -40,10 +40,10 @@ export default async function Page() {
             required
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="description" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.guardTours.new.descriptionLabel", undefined, "Description")}
             </label>
-            <textarea
+            <textarea id="description"
               name="description"
               rows={3}
               maxLength={2000}
@@ -56,10 +56,10 @@ export default async function Page() {
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="venue_id" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.guardTours.new.venueLabel", undefined, "Venue · Optional")}
             </label>
-            <select name="venue_id" defaultValue="" className="ps-input mt-1.5 w-full">
+            <select id="venue_id" name="venue_id" defaultValue="" className="ps-input mt-1.5 w-full">
               <option value="">
                 {t("console.safety.guardTours.new.venueNone", undefined, "None / multi-venue")}
               </option>

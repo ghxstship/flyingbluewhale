@@ -4,8 +4,8 @@ import { SITE } from "@/lib/seo";
 export const dynamic = "force-static";
 export const revalidate = 3600; // 1h — changelog rarely changes mid-day
 
-const SITE_NAME = "ATLVS Technologies — Changelog";
-const FEED_DESC = "Release notes for ATLVS Technologies — feature launches, reliability, security, and performance.";
+const SITE_NAME = "ATLVS Technologies · Changelog";
+const FEED_DESC = "Release notes for ATLVS Technologies: feature launches, reliability, security, and performance.";
 
 function escapeXml(s: string): string {
   return s

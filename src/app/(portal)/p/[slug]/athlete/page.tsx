@@ -49,7 +49,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     {
       href: `/p/${slug}/athlete/requests`,
       label: t("p.athlete.tiles.requests.label", undefined, "Service Requests"),
-      desc: t("p.athlete.tiles.requests.desc", undefined, "Medical, transport, room — log a request"),
+      desc: t("p.athlete.tiles.requests.desc", undefined, "Log a request for medical, transport, or room"),
       count: requestCount ?? 0,
     },
     {
@@ -66,7 +66,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     {
       href: `/p/${slug}/athlete/safeguarding`,
       label: t("p.athlete.tiles.safeguarding.label", undefined, "Safeguarding"),
-      desc: t("p.athlete.tiles.safeguarding.desc", undefined, "Confidential channel — report concerns"),
+      desc: t("p.athlete.tiles.safeguarding.desc", undefined, "Confidential channel to report concerns"),
       count: safeguardingCount ?? 0,
     },
     {

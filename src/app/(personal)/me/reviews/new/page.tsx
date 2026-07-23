@@ -53,7 +53,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<Sea
             {t(
               "me.reviews.new.explainer.anchored",
               undefined,
-              "Every review is anchored to a real transaction — a booking offer, an application, a submission, a purchase order, or a project. That's what keeps ratings honest.",
+              "Every review is anchored to a real transaction: a booking offer, an application, a submission, a purchase order, or a project. That's what keeps ratings honest.",
             )}
           </p>
           <p>

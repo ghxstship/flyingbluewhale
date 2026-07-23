@@ -30,10 +30,10 @@ export function NewSpaceForm() {
         />
       </div>
       <div>
-        <label className="text-xs font-medium text-[var(--p-text-2)]">
+        <label htmlFor="space_state" className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.diary.spaces.field.state", undefined, "State")}
         </label>
-        <select name="space_state" defaultValue="active" className="ps-input mt-1.5 w-full">
+        <select id="space_state" name="space_state" defaultValue="active" className="ps-input mt-1.5 w-full">
           {SPACE_STATES.map((s) => (
             <option key={s} value={s}>
               {SPACE_STATE_LABELS[s]}
@@ -42,10 +42,10 @@ export function NewSpaceForm() {
         </select>
       </div>
       <div>
-        <label className="text-xs font-medium text-[var(--p-text-2)]">
+        <label htmlFor="notes" className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.diary.spaces.field.notes", undefined, "Notes")}
         </label>
-        <textarea name="notes" rows={3} className="ps-input mt-1.5 w-full" />
+        <textarea id="notes" name="notes" rows={3} className="ps-input mt-1.5 w-full" />
       </div>
     </FormShell>
   );

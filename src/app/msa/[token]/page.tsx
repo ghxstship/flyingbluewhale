@@ -92,7 +92,7 @@ export default async function Page({ params }: { params: Promise<{ token: string
           <h2 className="eyebrow">Sign &amp; Submit</h2>
           <p className="text-sm text-[var(--p-text-2)]">
             Once signed, this Agreement applies to every engagement letter we issue you, until revoked or superseded.
-            You won&rsquo;t be asked to re-sign this for future productions — just the engagement letter for each one.
+            You won&rsquo;t be asked to re-sign this for future productions, just the engagement letter for each one.
           </p>
           <SignForm token={token} showChapter624={showChapter624} />
         </div>

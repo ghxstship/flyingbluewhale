@@ -133,7 +133,7 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
       <JsonLd
         data={[
           softwareApplicationSchema({
-            name: `ATLVS Technologies — ${mod.name} for ${ind.name}`,
+            name: `ATLVS Technologies · ${mod.name} for ${ind.name}`,
             description: `${mod.blurb} Built for ${ind.name.toLowerCase()} teams.`,
             url: `${SITE.baseUrl}${path}`,
           }),
@@ -217,7 +217,7 @@ export default async function FeatureIndustryPage({ params }: { params: Promise<
           {t(
             "marketing.features.industry.featureSetSub",
             { module: mod.name, industry: ind.name.toLowerCase() },
-            "The same primitives that ship in our {module} module — applied to {industry} workflows.",
+            "The same primitives that ship in our {module} module, applied to {industry} workflows.",
           )}
         </p>
         <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">

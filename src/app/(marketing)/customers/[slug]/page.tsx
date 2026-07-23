@@ -124,7 +124,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           <p className="text-base leading-snug">"{cs.quote_text}"</p>
           {(cs.quote_author || cs.quote_role) && (
             <footer className="mt-3 text-xs text-[var(--p-text-2)]">
-              — {cs.quote_author ?? ""}
+              {cs.quote_author ?? ""}
               {cs.quote_author && cs.quote_role ? ", " : ""}
               {cs.quote_role ?? ""}
             </footer>

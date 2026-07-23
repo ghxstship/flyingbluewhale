@@ -61,10 +61,10 @@ export default async function Page() {
             submitLabel={t("common.create", undefined, "Create")}
           >
             <div>
-              <label className="text-xs font-medium text-[var(--p-text-2)]">
+              <label htmlFor="po_id" className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.procurement.receiving.new.poLabel", undefined, "Purchase Order")}
               </label>
-              <select name="po_id" required className="ps-input mt-1.5 w-full" defaultValue="">
+              <select id="po_id" name="po_id" required className="ps-input mt-1.5 w-full" defaultValue="">
                 <option value="" disabled>
                   {t("console.procurement.receiving.new.poPlaceholder", undefined, "Select a purchase order…")}
                 </option>
@@ -94,10 +94,10 @@ export default async function Page() {
               {t("console.procurement.receiving.new.partialLabel", undefined, "Partial delivery")}
             </label>
             <div>
-              <label className="text-xs font-medium text-[var(--p-text-2)]">
+              <label htmlFor="notes" className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.procurement.receiving.new.notesLabel", undefined, "Notes")}
               </label>
-              <textarea name="notes" rows={3} maxLength={1000} className="ps-input mt-1.5 w-full" />
+              <textarea id="notes" name="notes" rows={3} maxLength={1000} className="ps-input mt-1.5 w-full" />
             </div>
           </FormShell>
         )}

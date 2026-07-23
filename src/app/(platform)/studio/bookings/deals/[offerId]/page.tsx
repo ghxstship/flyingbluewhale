@@ -296,10 +296,10 @@ async function CoProSection({ offerId }: { offerId: string }) {
           type="email"
         />
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
+          <label htmlFor="bonus_terms" className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.bookings.deals.detail.bonusTerms", undefined, "Bonus Terms")}
           </label>
-          <textarea
+          <textarea id="bonus_terms"
             name="bonus_terms"
             rows={3}
             maxLength={2000}

@@ -8,7 +8,7 @@ import { actionFail, formFail } from "@/lib/forms/fail";
 import type { FormState } from "@/components/FormShell";
 
 const Schema = z.object({
-  cover_note: z.string().min(10, "Tell the operator why you're a fit — at least 10 characters").max(4000),
+  cover_note: z.string().min(10, "Tell the operator why you're a fit, at least 10 characters").max(4000),
   portfolio_url: z.string().url("Portfolio must be a valid URL").max(400).optional().or(z.literal("")),
   phone: z.string().max(40).optional().or(z.literal("")),
 });

@@ -109,7 +109,7 @@ export async function snoozeAction(_: State, fd: FormData): Promise<State> {
     const hoursRaw = fd.get("hours");
     const hours = typeof hoursRaw === "string" ? Number(hoursRaw) : 1;
     if (!Number.isFinite(hours) || hours <= 0 || hours > 24 * 30) {
-      return { error: "Snooze window must be 1–720 hours" };
+      return { error: "Snooze window must be 1 to 720 hours" };
     }
     until = new Date(Date.now() + hours * 3600 * 1000).toISOString();
   }

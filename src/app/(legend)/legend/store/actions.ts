@@ -45,5 +45,5 @@ export async function redeemVoucherAction(_: State, fd: FormData): Promise<State
   }
 
   revalidatePath("/legend/store");
-  return { ok: `Redeemed — ${res.credits} credits added` };
+  return { ok: `Redeemed: ${res.credits} credits added` };
 }

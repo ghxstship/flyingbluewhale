@@ -26,7 +26,7 @@ export default async function PromoterTourPnL({ params }: { params: Promise<{ sl
           {t(
             "p.promoter.tour-pnl.intro",
             undefined,
-            "Routing economics across the legs on this engagement. For the audited finance roll-up your AM owns the numbers — request the closing pack from",
+            "Routing economics across the legs on this engagement. For the audited finance roll-up your AM owns the numbers. Request the closing pack from",
           )}{" "}
           <Link className="underline" href={`/p/${slug}/messages`}>
             /p/{slug}/messages

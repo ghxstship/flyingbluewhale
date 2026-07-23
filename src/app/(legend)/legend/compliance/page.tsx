@@ -109,7 +109,7 @@ export default async function ComplianceMatrixPage() {
 
   return (
     <>
-      <ModuleHeader eyebrow="LEG3ND · Compliance" title="Recert Matrix" subtitle="Org credential health — every member × certification, colored by state." />
+      <ModuleHeader eyebrow="LEG3ND · Compliance" title="Recert Matrix" subtitle="Org credential health: every member × certification, colored by state." />
 
       <div className="mb-4 flex flex-wrap gap-2">
         {ACCREDITATION_STATES.map((s) => {

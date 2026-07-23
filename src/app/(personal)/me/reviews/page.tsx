@@ -70,7 +70,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ r
           {t(
             "me.reviews.reviewedBanner",
             undefined,
-            "Review posted. It stays hidden until the other side posts theirs — then both release together.",
+            "Review posted. It stays hidden until the other side posts theirs. Then both release together.",
           )}
         </Alert>
       )}
@@ -128,7 +128,7 @@ function ReviewLi({
         {r.released_at ? (
           <Badge variant="success">{t("me.reviews.status.released", undefined, "released")}</Badge>
         ) : (
-          <Badge variant="warning">{t("me.reviews.status.hidden", undefined, "hidden — waiting on counterpart")}</Badge>
+          <Badge variant="warning">{t("me.reviews.status.hidden", undefined, "hidden, waiting on counterpart")}</Badge>
         )}
       </div>
       {r.body && <p className="mt-2 text-sm whitespace-pre-wrap">{r.body}</p>}

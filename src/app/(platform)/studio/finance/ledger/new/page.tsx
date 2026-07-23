@@ -69,10 +69,10 @@ export default async function NewJournalEntryPage() {
               placeholder="Monthly accrual"
             />
             <div>
-              <label className="text-xs font-medium text-[var(--p-text-2)]">
+              <label htmlFor="period_id" className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.finance.ledger.new.periodLabel", undefined, "Accounting period")}
               </label>
-              <select name="period_id" required className="ps-input mt-1.5 w-full" defaultValue={periods[0]?.id}>
+              <select id="period_id" name="period_id" required className="ps-input mt-1.5 w-full" defaultValue={periods[0]?.id}>
                 {periods.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.period_label}

@@ -71,7 +71,7 @@ export default async function PortalOnsitePage() {
       <header className="space-y-2">
         <p className="eyebrow eyebrow-accent">GVTEWAY</p>
         <h1>My Night</h1>
-        <p className="text-[var(--p-text-2)]">Set times, your people, and your passes — all in one place.</p>
+        <p className="text-[var(--p-text-2)]">Set times, your people, and your passes, all in one place.</p>
       </header>
 
       <section className="space-y-3">
@@ -119,7 +119,7 @@ export default async function PortalOnsitePage() {
             size="compact"
             icon={<UtensilsCrossed size={28} />}
             title="Not available here yet"
-            description="At participating venues, browse the F&B and merch menu and we'll run your order to your spot — no queue."
+            description="At participating venues, browse the F&B and merch menu and we'll run your order to your spot. No queue."
           />
         ) : (
           <ul className="space-y-2">
@@ -159,7 +159,7 @@ export default async function PortalOnsitePage() {
             size="compact"
             icon={<Ticket size={28} />}
             title="No linked passes"
-            description="Connect a ticketing provider in your account and your passes mirror here, read-only — ready to add to your OS wallet. GVTEWAY never holds your ticket of record."
+            description="Connect a ticketing provider in your account and your passes mirror here, read-only, ready to add to your OS wallet. GVTEWAY never holds your ticket of record."
           />
         ) : (
           <ul className="space-y-2">

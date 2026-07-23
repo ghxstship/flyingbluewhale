@@ -62,10 +62,10 @@ export const HEAT_DOC = {
   venue: "East Plaza · Kaseya Center",
   city: "Miami, FL",
   docNumber: "AGORA-HEAT-001",
-  version: "v1.1 — May 4, 2026",
+  version: "v1.1 · May 4, 2026",
   validity: "Valid for thirty (30) calendar days from the version date.",
   retainerCommitment: "12 months · auto-renewing",
-  programWindow: "26–27 NBA season activation cycle",
+  programWindow: "26/27 NBA season activation cycle",
   paymentDepositPct: 60,
   paymentBalancePct: 40,
 };
@@ -95,7 +95,7 @@ export const HEAT_RETAINER_TIERS: [RetainerTier, RetainerTier, RetainerTier] = [
     name: "Base",
     price: 5000,
     pitch: "Studio On Standby.",
-    fitFor: "1–4 activations per year · partner-led briefs · single-tier work",
+    fitFor: "1 to 4 activations per year · partner-led briefs · single-tier work",
     features: [
       {
         name: "Dedicated Producer",
@@ -121,7 +121,7 @@ export const HEAT_RETAINER_TIERS: [RetainerTier, RetainerTier, RetainerTier] = [
       {
         name: "Standard Asset Storage",
         detail:
-          "Climate-controlled hold between activations — your reusable structural and signage elements stay shop-side, ready for the next call.",
+          "Climate-controlled hold between activations. Your reusable structural and signage elements stay shop-side, ready for the next call.",
       },
       {
         name: "Build Pricing · 5% Off List",
@@ -135,7 +135,7 @@ export const HEAT_RETAINER_TIERS: [RetainerTier, RetainerTier, RetainerTier] = [
     name: "Elevated",
     price: 8000,
     pitch: "Operating Tempo.",
-    fitFor: "5–10 activations per year · multi-partner cadence · homestand rhythm",
+    fitFor: "5 to 10 activations per year · multi-partner cadence · homestand rhythm",
     features: [
       { name: "Everything In Base, Plus →", detail: "Includes every line in the Base tier." },
       {
@@ -152,11 +152,11 @@ export const HEAT_RETAINER_TIERS: [RetainerTier, RetainerTier, RetainerTier] = [
       },
       {
         name: "1 Concept Board / Quarter",
-        detail: "Off-cycle ideation board on a HEAT-chosen brief — fully unbilled.",
+        detail: "Off-cycle ideation board on a HEAT-chosen brief, fully unbilled.",
       },
       {
         name: "Express Scheduling",
-        detail: "Your work clears the queue ahead of Base — faster shop slot, faster turnaround.",
+        detail: "Your work clears the queue ahead of Base: faster shop slot, faster turnaround.",
       },
       {
         name: "Expanded Asset Storage",
@@ -188,11 +188,11 @@ export const HEAT_RETAINER_TIERS: [RetainerTier, RetainerTier, RetainerTier] = [
       { name: "28 Studio Hours / Month", detail: "Pooled concept + PM hours, rolling over the full quarter." },
       {
         name: "Unlimited Design Revisions",
-        detail: "Within three working sessions per activation — no per-round billing.",
+        detail: "Within three working sessions per activation, no per-round billing.",
       },
       {
         name: "2 Concept Boards / Quarter",
-        detail: "Off-cycle ideation boards on HEAT-chosen briefs — fully unbilled.",
+        detail: "Off-cycle ideation boards on HEAT-chosen briefs, fully unbilled.",
       },
       {
         name: "First-Call Scheduling",
@@ -200,7 +200,7 @@ export const HEAT_RETAINER_TIERS: [RetainerTier, RetainerTier, RetainerTier] = [
       },
       {
         name: "Dedicated Asset Storage",
-        detail: "Climate-controlled hold on a dedicated rack reserved for HEAT — your assets, your space, year-round.",
+        detail: "Climate-controlled hold on a dedicated rack reserved for HEAT: your assets, your space, year-round.",
       },
       {
         name: "Build Pricing · 12% Off List",
@@ -208,7 +208,7 @@ export const HEAT_RETAINER_TIERS: [RetainerTier, RetainerTier, RetainerTier] = [
       },
       {
         name: "Monthly Executive Review",
-        detail: "Monthly EBR with senior producer + creative director — agenda set by HEAT.",
+        detail: "Monthly EBR with senior producer + creative director, agenda set by HEAT.",
       },
     ],
     exclusive: [
@@ -218,7 +218,7 @@ export const HEAT_RETAINER_TIERS: [RetainerTier, RetainerTier, RetainerTier] = [
       },
       {
         name: "Embedded Creative Director",
-        detail: "4 hours / month of creative-director strategy access — concept, palette, treatment direction.",
+        detail: "4 hours / month of creative-director strategy access: concept, palette, treatment direction.",
       },
       {
         name: "First-Look On New Capabilities",
@@ -227,7 +227,7 @@ export const HEAT_RETAINER_TIERS: [RetainerTier, RetainerTier, RetainerTier] = [
       },
       {
         name: "Annual Brand Workshop",
-        detail: "Day-long off-site planning workshop at AGV Miami's facility — invited stakeholders only.",
+        detail: "Day-long off-site planning workshop at AGV Miami's facility, invited stakeholders only.",
       },
     ],
   },
@@ -258,15 +258,15 @@ export const HEAT_ADDONS: Addon[] = [
     category: "material",
     appliesTo: "activation",
     body: "Architectural brushed-steel surface treatment on hero faces. Adhesive-mounted to substrate, concealed seams. Premium finish that holds up across multi-week runs.",
-    price: "$8,000 – $15,000",
+    price: "$8,000 to $15,000",
   },
   {
     id: "tinted-mirror",
     name: "HEAT-Tinted Mirror Accent",
     category: "material",
     appliesTo: "activation",
-    body: "Heat-red tinted mirror across hero accent surfaces — shop-cut, edge-polished, adhesive-mounted.",
-    price: "$4,000 – $9,000",
+    body: "Heat-red tinted mirror across hero accent surfaces: shop-cut, edge-polished, adhesive-mounted.",
+    price: "$4,000 to $9,000",
   },
   {
     id: "stone-floor",
@@ -274,8 +274,8 @@ export const HEAT_ADDONS: Addon[] = [
     category: "material",
     appliesTo: "activation",
     tierMin: "medium",
-    body: "Stone, terrazzo, or premium-tile insert at the activation footprint — anchors the moment as a destination.",
-    price: "$12,000 – $28,000",
+    body: "Stone, terrazzo, or premium-tile insert at the activation footprint, anchoring the moment as a destination.",
+    price: "$12,000 to $28,000",
   },
   {
     id: "millwork-upgrade",
@@ -283,7 +283,7 @@ export const HEAT_ADDONS: Addon[] = [
     category: "material",
     appliesTo: "activation",
     body: "Hardwood, premium laminate, or stained-veneer millwork in place of standard powder-coat / laminate finish.",
-    price: "$6,000 – $18,000",
+    price: "$6,000 to $18,000",
   },
   {
     id: "backlit-plexi",
@@ -291,8 +291,8 @@ export const HEAT_ADDONS: Addon[] = [
     category: "material",
     appliesTo: "activation",
     tierMin: "small",
-    body: "Edge-lit milk plexi feature panel with diffuser and concealed dimmable drivers — Heat-red or partner-brand-color.",
-    price: "$7,000 – $14,000",
+    body: "Edge-lit milk plexi feature panel with diffuser and concealed dimmable drivers, Heat-red or partner-brand-color.",
+    price: "$7,000 to $14,000",
   },
   {
     id: "led-tower",
@@ -300,8 +300,8 @@ export const HEAT_ADDONS: Addon[] = [
     category: "material",
     appliesTo: "activation",
     tierMin: "medium",
-    body: "Programmable color-changing tower visible from the plaza approach — DMX-controlled.",
-    price: "$9,000 – $16,000",
+    body: "Programmable color-changing tower visible from the plaza approach, DMX-controlled.",
+    price: "$9,000 to $16,000",
   },
 
   // FUNCTIONAL UPGRADES (overlay on activation)
@@ -312,7 +312,7 @@ export const HEAT_ADDONS: Addon[] = [
     appliesTo: "activation",
     tierMin: "medium",
     body: "Mounting + structural surrounds for HEAT- or partner-supplied POS hardware, fitting moments, and integrated payment terminals.",
-    price: "$15,000 – $35,000",
+    price: "$15,000 to $35,000",
   },
   {
     id: "customization-bar",
@@ -320,8 +320,8 @@ export const HEAT_ADDONS: Addon[] = [
     category: "functional",
     appliesTo: "activation",
     tierMin: "medium",
-    body: "Engraving, embroidery, jersey customization, or print-on-demand workstation — partner brand-supplied equipment integrated into HEAT-styled millwork.",
-    price: "$18,000 – $28,000",
+    body: "Engraving, embroidery, jersey customization, or print-on-demand workstation: partner brand-supplied equipment integrated into HEAT-styled millwork.",
+    price: "$18,000 to $28,000",
   },
   {
     id: "photo-moment",
@@ -329,7 +329,7 @@ export const HEAT_ADDONS: Addon[] = [
     category: "functional",
     appliesTo: "activation",
     body: "Integrated photo or content-capture moment with share-out QR / AirDrop wall.",
-    price: "$12,000 – $22,000",
+    price: "$12,000 to $22,000",
   },
   {
     id: "av-surround",
@@ -337,7 +337,7 @@ export const HEAT_ADDONS: Addon[] = [
     category: "functional",
     appliesTo: "activation",
     body: "Mounting structure + cable channeling for HEAT-supplied LED wall, projection, or large-format screen array.",
-    price: "$8,000 – $18,000",
+    price: "$8,000 to $18,000",
   },
   {
     id: "vip-lounge",
@@ -345,8 +345,8 @@ export const HEAT_ADDONS: Addon[] = [
     category: "functional",
     appliesTo: "activation",
     tierMin: "large",
-    body: "Seating, bar surround, drink rail, and VIP curtain partition zone — requires Large activation footprint.",
-    price: "$22,000 – $45,000",
+    body: "Seating, bar surround, drink rail, and VIP curtain partition zone. Requires Large activation footprint.",
+    price: "$22,000 to $45,000",
   },
   {
     id: "container",
@@ -354,16 +354,16 @@ export const HEAT_ADDONS: Addon[] = [
     category: "functional",
     appliesTo: "activation",
     tierMin: "large",
-    body: "Shipping-container or modular-unit shell, fabricated and clad, freestanding on the plaza — flagship-grade signature pop-up.",
-    price: "$45,000 – $85,000",
+    body: "Shipping-container or modular-unit shell, fabricated and clad, freestanding on the plaza. A flagship-grade signature pop-up.",
+    price: "$45,000 to $85,000",
   },
   {
     id: "aerial",
     name: "Plaza-Canopy Aerial Banner Program",
     category: "functional",
     appliesTo: "activation",
-    body: "Aircraft-cable-rigged banner program against the East Plaza canopy — projection-mapping option available.",
-    price: "$8,000 – $16,000",
+    body: "Aircraft-cable-rigged banner program against the East Plaza canopy. Projection-mapping option available.",
+    price: "$8,000 to $16,000",
   },
 
   // SERVICE OVERLAYS (retainer or activation)
@@ -405,7 +405,7 @@ export const HEAT_ADDONS: Addon[] = [
     category: "service",
     appliesTo: "activation",
     body: "When partner-brand support is light, AGV Miami leads creative concept and design development end-to-end.",
-    price: "$12,000 – $28,000",
+    price: "$12,000 to $28,000",
   },
   {
     id: "asset-buildout",
@@ -413,7 +413,7 @@ export const HEAT_ADDONS: Addon[] = [
     category: "service",
     appliesTo: "retainer",
     body: "One-time intake to digitize and catalog HEAT + recurring partner brand assets, palette swatches, and approved creative.",
-    price: "$6,000 – $12,000",
+    price: "$6,000 to $12,000",
   },
   {
     id: "color-match",
@@ -429,7 +429,7 @@ export const HEAT_ADDONS: Addon[] = [
     category: "service",
     appliesTo: "activation",
     body: "Develops a HEAT-x-partner co-branding lockup, including approval routing through both brands.",
-    price: "$4,000 – $9,000",
+    price: "$4,000 to $9,000",
   },
 
   // LOGISTICS
@@ -503,7 +503,7 @@ export const HEAT_LIFECYCLE: LifecyclePhase[] = [
     intent: "Creative direction, material sampling, and HEAT / partner palette match.",
     milestones: [
       "Creative direction workshop with HEAT marketing + partner brand",
-      "Material sampling — paint, plexi, chemetal, mirror, print substrates",
+      "Material sampling: paint, plexi, chemetal, mirror, print substrates",
       "HEAT palette colour-matching against signed brand standards",
       "Design intent boards reviewed and signed off",
     ],
@@ -519,7 +519,7 @@ export const HEAT_LIFECYCLE: LifecyclePhase[] = [
       'CAD shop drawings to .25" tolerance issued for review',
       "Structural calculations stamped",
       "Electrical schematics for plexi / LED / screen integration drafted",
-      "Venue compliance package — fire-marshal, COIs, plaza load",
+      "Venue compliance package: fire-marshal, COIs, plaza load",
     ],
     deliverables: ["Full Engineering Package", "Permit-Ready Drawing Set", "Certificate of Insurance"],
     gate: "Drawings Signed Off → advance to Pre-Production & Procurement",
@@ -544,8 +544,8 @@ export const HEAT_LIFECYCLE: LifecyclePhase[] = [
     name: "Fabrication & Print",
     intent: "Shop build of every fabricated element plus large-format print and in-shop QC.",
     milestones: [
-      "Shop build start — millwork, plexi, mirror, signage, structure",
-      "Large-format print production — SEG, vinyl, banners, panels",
+      "Shop build start: millwork, plexi, mirror, signage, structure",
+      "Large-format print production: SEG, vinyl, banners, panels",
       "Sub-assembly fit-up and finish review in shop",
       "In-shop QC against signed proofs and material samples",
     ],
@@ -560,8 +560,8 @@ export const HEAT_LIFECYCLE: LifecyclePhase[] = [
     milestones: [
       "Crating and dunnage complete; manifest issued",
       "Freight dispatched to East Plaza loading dock with GPS tracking",
-      "Inbound at venue — receiving inventory check against manifest",
-      "40% balance invoiced — due 5 business days prior to load-in",
+      "Inbound at venue: receiving inventory check against manifest",
+      "40% balance invoiced, due 5 business days prior to load-in",
     ],
     deliverables: ["All Elements Received At Venue", "Inventory Reconciliation Report", "Damage / Exception Log"],
     gate: "All Elements Received & Inventoried → advance to Install & Activation",
@@ -572,11 +572,11 @@ export const HEAT_LIFECYCLE: LifecyclePhase[] = [
     name: "Install & Activation",
     intent: "Plaza load-in, install crew on-site, final dressing, walkthrough, run-of-show coverage.",
     milestones: [
-      "Plaza load-in begins (overnight window — non-game-day default)",
+      "Plaza load-in begins (overnight window, non-game-day default)",
       "Structure framing, panel mount, SEG install, dimensional signage, vinyl",
       "Final dressing pass and electrical commissioning",
       "HEAT / partner walkthrough and punch-list close",
-      "Activation window opens — PM coverage active",
+      "Activation window opens, PM coverage active",
     ],
     deliverables: ["Fully Installed Activation", "Punch List Closed", "Walkthrough Sign-Off", "Active PM Coverage"],
     gate: "HEAT / Partner Walkthrough Sign-Off → activation window opens",
@@ -612,7 +612,7 @@ export const HEAT_TAXONOMY: ScopeNode[] = [
     name: "Environmental Structure & Millwork",
     sub: "Modular Walls · Custom Millwork · Display Fixtures · Structural Engineering",
     narrative:
-      "Structural backbone of every HEAT activation — modular wall systems, custom millwork in HEAT palette, retail-grade display fixtures, and the engineering package that clears Kaseya Center venue ops review.",
+      "Structural backbone of every HEAT activation: modular wall systems, custom millwork in HEAT palette, retail-grade display fixtures, and the engineering package that clears Kaseya Center venue ops review.",
     appliesTo: ["small", "medium", "large"],
   },
   {
@@ -632,7 +632,7 @@ export const HEAT_TAXONOMY: ScopeNode[] = [
     name: "Large-Format Print & Graphics",
     sub: "SEG · Vinyl · Banners · Window Wraps · Floor Graphics",
     narrative:
-      "All large-format print — silicone-edge graphics, applied vinyl, banners, window wraps, floor graphics. HEAT-supplied creative; AGV Miami handles file prep, palette match, proofing, and production.",
+      "All large-format print: silicone-edge graphics, applied vinyl, banners, window wraps, floor graphics. HEAT-supplied creative; AGV Miami handles file prep, palette match, proofing, and production.",
     appliesTo: ["small", "medium", "large"],
   },
   {
@@ -642,7 +642,7 @@ export const HEAT_TAXONOMY: ScopeNode[] = [
     name: "Dimensional & Applied Signage",
     sub: "HEAT Crests · Partner Lockups · Vinyl Lettering · Wayfinding",
     narrative:
-      "Dimensional HEAT and partner brand crests at .5″–1″ depth, applied vinyl lettering, retail wayfinding, and plaza-specific operational signage.",
+      "Dimensional HEAT and partner brand crests at .5″ to 1″ depth, applied vinyl lettering, retail wayfinding, and plaza-specific operational signage.",
     appliesTo: ["small", "medium", "large"],
   },
   {
@@ -662,7 +662,7 @@ export const HEAT_TAXONOMY: ScopeNode[] = [
     name: "Transport & Staging Hardware",
     sub: "Custom Road Cases · Crating · Dunnage · Reusable Packing",
     narrative:
-      "Custom road cases for plexi, mirror, dimensional crests, and electronics — built once, reused across every install / strike cycle in the activation program.",
+      "Custom road cases for plexi, mirror, dimensional crests, and electronics. Built once, reused across every install / strike cycle in the activation program.",
     appliesTo: ["small", "medium", "large"],
   },
   // PRODUCTION SERVICES
@@ -673,7 +673,7 @@ export const HEAT_TAXONOMY: ScopeNode[] = [
     name: "Design & Engineering",
     sub: "CAD · Shop Drawings · Material Sampling · Pre-Pro PM",
     narrative:
-      "Pre-production engineering and creative coordination — CAD shop drawings to .25″ tolerance, palette sampling against the HEAT and partner brand standards, weekly working sessions through Print Proof Approval.",
+      "Pre-production engineering and creative coordination: CAD shop drawings to .25″ tolerance, palette sampling against the HEAT and partner brand standards, weekly working sessions through Print Proof Approval.",
     appliesTo: ["small", "medium", "large"],
   },
   {
@@ -693,7 +693,7 @@ export const HEAT_TAXONOMY: ScopeNode[] = [
     name: "Install Labor",
     sub: "Install Crew · Lead Supervision · Specialty Trades · Commissioning",
     narrative:
-      "Sized install crew for each activation — structure framing, panel mounting, SEG install, dimensional signage, vinyl application, final dressing, and a post-handover commissioning pass with HEAT and partner reps.",
+      "Sized install crew for each activation: structure framing, panel mounting, SEG install, dimensional signage, vinyl application, final dressing, and a post-handover commissioning pass with HEAT and partner reps.",
     appliesTo: ["small", "medium", "large"],
   },
   {
@@ -703,7 +703,7 @@ export const HEAT_TAXONOMY: ScopeNode[] = [
     name: "Strike & De-Install Labor",
     sub: "Strike Crew · Lead Supervision · Outbound Pack · Plaza Restoration",
     narrative:
-      "Strike crew triggered on activation window close — de-mount, panel removal, vinyl strip, plaza restoration, and a clean handover walkthrough with HEAT and venue ops.",
+      "Strike crew triggered on activation window close: de-mount, panel removal, vinyl strip, plaza restoration, and a clean handover walkthrough with HEAT and venue ops.",
     appliesTo: ["small", "medium", "large"],
   },
   {
@@ -713,7 +713,7 @@ export const HEAT_TAXONOMY: ScopeNode[] = [
     name: "Project Management & Client Services",
     sub: "Senior Producer · Activation-Window Coverage · Change Orders · Reconciliation",
     narrative:
-      "Dedicated senior producer from contract execution through closeout — single point of contact for HEAT marketing, partner brand, venue ops, and trades. Activation-window coverage handles ad-hoc requests and any in-window creative refresh.",
+      "Dedicated senior producer from contract execution through closeout: single point of contact for HEAT marketing, partner brand, venue ops, and trades. Activation-window coverage handles ad-hoc requests and any in-window creative refresh.",
     appliesTo: ["small", "medium", "large"],
   },
 ];
@@ -735,10 +735,10 @@ export const HEAT_TIERS: [ActivationTier, ActivationTier, ActivationTier] = [
     ceiling: 58000,
     precedents: ["Uber Eats × 49ers · Sourdough Sam"],
     narrative:
-      "A single hero moment — branded back-wall vignette, two display fixtures, integrated SEG, dimensional signage, and lighting. Ideal for a partner unlock, single-night activation, or seasonal merch drop on the East Plaza concourse.",
+      "A single hero moment: branded back-wall vignette, two display fixtures, integrated SEG, dimensional signage, and lighting. Ideal for a partner unlock, single-night activation, or seasonal merch drop on the East Plaza concourse.",
     included: [
       {
-        name: "Modular Hero Wall (10–15 LF)",
+        name: "Modular Hero Wall (10 to 15 LF)",
         desc: "Self-supporting modular wall in HEAT palette with cleated mounting for inserts. Ballast plates so no plaza penetration is required.",
       },
       {
@@ -778,11 +778,11 @@ export const HEAT_TIERS: [ActivationTier, ActivationTier, ActivationTier] = [
     ceiling: 125000,
     precedents: ["Abercrombie × NFL", "Lululemon × Wimbledon", "Dolphins × New Era Draft Party"],
     narrative:
-      "A self-contained brand environment — three- or four-sided kiosk with integrated retail, service counter, and full lighting program. Built for multi-week runs through a homestand or playoff push, with content surfaces on every face.",
+      "A self-contained brand environment: three- or four-sided kiosk with integrated retail, service counter, and full lighting program. Built for multi-week runs through a homestand or playoff push, with content surfaces on every face.",
     included: [
       {
         name: "Modular Kiosk Structure",
-        desc: "Three- or four-sided modular kiosk, 8–10ft tall, HEAT palette powder coat, ballast or floor plates.",
+        desc: "Three- or four-sided modular kiosk, 8 to 10ft tall, HEAT palette powder coat, ballast or floor plates.",
       },
       {
         name: "SEG Hero + Side Graphics",
@@ -798,7 +798,7 @@ export const HEAT_TIERS: [ActivationTier, ActivationTier, ActivationTier] = [
         desc: "HEAT and partner crests, dimensional logo block, edge-lit secondary signage.",
       },
       {
-        name: "Display Fixtures (4–6)",
+        name: "Display Fixtures (4 to 6)",
         desc: "Mix of tables, shelving, garment racks, and product display vignettes.",
       },
       {
@@ -840,16 +840,16 @@ export const HEAT_TIERS: [ActivationTier, ActivationTier, ActivationTier] = [
     num: "03",
     name: "Large",
     size: "40×40+ footprint · multi-zone activation, full retail buildout, or signature pop-up",
-    duration: "2-week to season-long run · 3–5 day install / 2-day strike",
+    duration: "2-week to season-long run · 3 to 5 day install / 2-day strike",
     base: 285000,
     ceiling: 295000,
     precedents: ["Mitchell & Ness × Legacy", "Sol de Janeiro × Sephora", "New Era Container Shop", "Gisou Pop-Up"],
     narrative:
-      "A signature plaza takeover — multi-zone retail, immersive brand environment, or full pop-up that anchors the East Plaza across a homestand, playoff window, or season-long sponsorship moment. Architectural backbone with the full lighting and print program; major architectural and retail systems available as Add-Ons.",
+      "A signature plaza takeover: multi-zone retail, immersive brand environment, or full pop-up that anchors the East Plaza across a homestand, playoff window, or season-long sponsorship moment. Architectural backbone with the full lighting and print program; major architectural and retail systems available as Add-Ons.",
     included: [
       {
         name: "Multi-Zone Structural System",
-        desc: "40×40+ footprint with 2–4 distinct activation zones, free-standing architecture, integrated structural engineering.",
+        desc: "40×40+ footprint with 2 to 4 distinct activation zones, free-standing architecture, integrated structural engineering.",
       },
       {
         name: "Hero Architectural Wall",
@@ -861,7 +861,7 @@ export const HEAT_TIERS: [ActivationTier, ActivationTier, ActivationTier] = [
       },
       {
         name: "Custom Millwork Retail System",
-        desc: "Full retail-grade millwork — counters, gondolas, display walls, fitting moments, fixturing.",
+        desc: "Full retail-grade millwork: counters, gondolas, display walls, fitting moments, fixturing.",
       },
       {
         name: "Dimensional Signage Program",
@@ -927,7 +927,7 @@ export const HEAT_SITES = [
   {
     tag: "02",
     name: "East Plaza · Bayfront Edge",
-    body: "Bayfront-facing strip with railing views and natural light. Ideal for medium kiosks, photo moments, and partner unveils. Limited overhead ceiling — favors freestanding rather than ceiling-suspended elements.",
+    body: "Bayfront-facing strip with railing views and natural light. Ideal for medium kiosks, photo moments, and partner unveils. Limited overhead ceiling favors freestanding rather than ceiling-suspended elements.",
   },
   {
     tag: "03",
@@ -1004,17 +1004,17 @@ export const HEAT_TERMS = [
 export const HEAT_CHANGE_ORDERS = [
   {
     name: "Multi-Activation Discount",
-    body: "When 3+ activations are committed within a single 30-day window, integrated production and freight efficiencies reduce per-activation buildout by 8–12%. Stacks on top of the retainer-tier discount.",
-    price: "8–12% per activation",
+    body: "When 3+ activations are committed within a single 30-day window, integrated production and freight efficiencies reduce per-activation buildout by 8 to 12%. Stacks on top of the retainer-tier discount.",
+    price: "8 to 12% per activation",
   },
   {
     name: "Asset Re-Deployment Credit",
-    body: "Reuse of structural, signage, or millwork elements across activations within the program credits 30–50% of original fabrication cost back against the next deployment.",
-    price: "30–50% credit per deployment",
+    body: "Reuse of structural, signage, or millwork elements across activations within the program credits 30 to 50% of original fabrication cost back against the next deployment.",
+    price: "30 to 50% credit per deployment",
   },
   {
     name: "Volume Print Tier",
-    body: "Annual print volume commitment unlocks Bronze / Silver / Gold print tier pricing across SEG, vinyl, banners, and floor graphics — applied to every activation in the program.",
+    body: "Annual print volume commitment unlocks Bronze / Silver / Gold print tier pricing across SEG, vinyl, banners, and floor graphics, applied to every activation in the program.",
     price: "Up to 15% off list",
   },
   {
@@ -1071,5 +1071,5 @@ export function fmtMoney(n: number): string {
 }
 
 export function fmtRange(base: number, ceiling: number): string {
-  return `${fmtMoney(base)} – ${fmtMoney(ceiling)}`;
+  return `${fmtMoney(base)} to ${fmtMoney(ceiling)}`;
 }

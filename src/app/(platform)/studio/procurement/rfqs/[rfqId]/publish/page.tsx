@@ -49,10 +49,10 @@ export default async function Page({ params }: { params: Promise<{ rfqId: string
         >
           <input type="hidden" name="rfq_id" value={r.id} />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="visibility" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.procurement.rfqs.publish.visibilityLabel", undefined, "Visibility")}
             </label>
-            <select name="visibility" className="ps-input mt-1.5 w-full" defaultValue={r.visibility}>
+            <select id="visibility" name="visibility" className="ps-input mt-1.5 w-full" defaultValue={r.visibility}>
               <option value="private">
                 {t("console.procurement.rfqs.publish.visibility.private", undefined, "Private (invited vendors only)")}
               </option>

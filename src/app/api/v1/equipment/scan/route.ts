@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
       .select("id");
     if (error) return apiError("internal", error.message);
     if (!updated || updated.length === 0) {
-      return apiError("conflict", "Asset state changed concurrently — re-scan to confirm current state");
+      return apiError("conflict", "Asset state changed concurrently. Re-scan to confirm current state.");
     }
     return apiOk({
       result: "ok" as const,

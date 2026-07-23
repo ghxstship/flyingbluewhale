@@ -83,3 +83,11 @@ export async function deleteCue(formData: FormData) {
   if (error) throw new Error(`Could not delete cue: ${error.message}`);
   revalidatePath("/studio/production/ros");
 }
+
+/** W6 a11y — id-arg binding for `DeleteForm` (the confirm dialog invokes the
+ * action directly rather than posting a hidden-input form). */
+export async function deleteCueById(id: string): Promise<void> {
+  const fd = new FormData();
+  fd.set("id", id);
+  await deleteCue(fd);
+}

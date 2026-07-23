@@ -192,10 +192,10 @@ export default async function JournalEntryDetailPage({ params }: { params: Promi
             <FormShell action={addJournalLine} submitLabel={t("common.add", undefined, "Add line")}>
               <input type="hidden" name="journal_entry_id" value={entry.id} />
               <div>
-                <label className="text-xs font-medium text-[var(--p-text-2)]">
+                <label htmlFor="account_id" className="text-xs font-medium text-[var(--p-text-2)]">
                   {t("console.finance.ledger.detail.form.account", undefined, "Account")}
                 </label>
-                <select name="account_id" required className="ps-input mt-1.5 w-full" defaultValue={accounts[0]?.id}>
+                <select id="account_id" name="account_id" required className="ps-input mt-1.5 w-full" defaultValue={accounts[0]?.id}>
                   {accounts.map((a) => (
                     <option key={a.id} value={a.id}>
                       {a.account_code} · {a.account_name}
@@ -204,10 +204,10 @@ export default async function JournalEntryDetailPage({ params }: { params: Promi
                 </select>
               </div>
               <div>
-                <label className="text-xs font-medium text-[var(--p-text-2)]">
+                <label htmlFor="side" className="text-xs font-medium text-[var(--p-text-2)]">
                   {t("console.finance.ledger.detail.form.side", undefined, "Side")}
                 </label>
-                <select name="side" required className="ps-input mt-1.5 w-full" defaultValue="debit">
+                <select id="side" name="side" required className="ps-input mt-1.5 w-full" defaultValue="debit">
                   <option value="debit">{t("console.finance.ledger.detail.form.debit", undefined, "Debit")}</option>
                   <option value="credit">
                     {t("console.finance.ledger.detail.form.credit", undefined, "Credit")}

@@ -14,10 +14,10 @@ export function NewReqForm() {
     >
       <Input label={t("console.procurement.requisitions.new.title", undefined, "Title")} name="title" required />
       <div>
-        <label className="text-xs font-medium text-[var(--p-text-2)]">
+        <label htmlFor="description" className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.procurement.requisitions.new.description", undefined, "Description")}
         </label>
-        <textarea name="description" rows={3} className="ps-input mt-1.5 w-full" />
+        <textarea id="description" name="description" rows={3} className="ps-input mt-1.5 w-full" />
       </div>
       <Input
         label={t("console.procurement.requisitions.new.estimatedCost", undefined, "Estimated Cost (USD)")}

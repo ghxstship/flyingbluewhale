@@ -19,10 +19,10 @@ export default async function Page() {
           submitLabel={t("console.safety.environmental.new.submit", undefined, "Log Event")}
         >
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="kind" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.environmental.new.kindLabel", undefined, "Kind")}
             </label>
-            <select name="kind" defaultValue="heat" className="ps-input mt-1.5 w-full" required>
+            <select id="kind" name="kind" defaultValue="heat" className="ps-input mt-1.5 w-full" required>
               <option value="heat">{t("console.safety.environmental.new.kind.heat", undefined, "Heat")}</option>
               <option value="cold">{t("console.safety.environmental.new.kind.cold", undefined, "Cold")}</option>
               <option value="wind">{t("console.safety.environmental.new.kind.wind", undefined, "Wind")}</option>
@@ -43,10 +43,10 @@ export default async function Page() {
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="severity" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.environmental.new.severityLabel", undefined, "Severity")}
             </label>
-            <select name="severity" defaultValue="advisory" className="ps-input mt-1.5 w-full" required>
+            <select id="severity" name="severity" defaultValue="advisory" className="ps-input mt-1.5 w-full" required>
               <option value="advisory">
                 {t("console.safety.environmental.new.severity.advisory", undefined, "Advisory")}
               </option>

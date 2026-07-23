@@ -55,7 +55,7 @@ export default async function LearnCatalogPage() {
         <p className="eyebrow eyebrow-accent">LEG3ND · Learn</p>
         <h1>Courses & LMS</h1>
         <p className="text-lg text-[var(--p-text-2)]">
-          Short courses on the standard, the signage system, and field readiness — on the XPMS 2.0 protocol.
+          Short courses on the standard, the signage system, and field readiness, on the XPMS 2.0 protocol.
         </p>
       </header>
 

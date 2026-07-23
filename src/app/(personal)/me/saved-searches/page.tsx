@@ -76,7 +76,7 @@ export default async function Page() {
           />
           <div>
             <label className="text-xs font-medium text-[var(--p-text-2)]">
-              {t("me.savedSearches.fields.query", undefined, "Query — JSON")}
+              {t("me.savedSearches.fields.query", undefined, "Query (JSON)")}
             </label>
             <textarea
               name="query"

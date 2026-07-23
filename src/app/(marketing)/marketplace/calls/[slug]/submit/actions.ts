@@ -8,7 +8,7 @@ import { actionFail, formFail } from "@/lib/forms/fail";
 import type { FormState } from "@/components/FormShell";
 
 const Schema = z.object({
-  cover_note: z.string().min(10, "Pitch the buyer — at least 10 characters").max(4000),
+  cover_note: z.string().min(10, "Pitch the buyer, at least 10 characters").max(4000),
   links: z.string().max(2000).optional().or(z.literal("")),
 });
 
@@ -24,7 +24,7 @@ export async function submitToCall(slug: string, _prev: FormState, fd: FormData)
     .slice(0, 10);
   for (const link of links) {
     if (!z.string().url().safeParse(link).success) {
-      return actionFail(`Links must be full URLs — "${link}" is not one. One link per line.`, fd);
+      return actionFail(`Links must be full URLs. "${link}" is not one. One link per line.`, fd);
     }
   }
 

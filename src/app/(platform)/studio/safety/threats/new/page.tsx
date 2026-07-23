@@ -33,10 +33,10 @@ export default async function Page() {
             required
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="description" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.threats.new.fields.description", undefined, "Description")}
             </label>
-            <textarea
+            <textarea id="description"
               name="description"
               rows={4}
               maxLength={5000}
@@ -49,10 +49,10 @@ export default async function Page() {
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="severity" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.threats.new.fields.severity", undefined, "Severity")}
             </label>
-            <select name="severity" defaultValue="medium" className="ps-input mt-1.5 w-full" required>
+            <select id="severity" name="severity" defaultValue="medium" className="ps-input mt-1.5 w-full" required>
               <option value="low">{t("console.safety.threats.new.severity.low", undefined, "Low")}</option>
               <option value="medium">{t("console.safety.threats.new.severity.medium", undefined, "Medium")}</option>
               <option value="high">{t("console.safety.threats.new.severity.high", undefined, "High")}</option>
@@ -62,10 +62,10 @@ export default async function Page() {
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="likelihood" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.threats.new.fields.likelihood", undefined, "Likelihood")}
             </label>
-            <select name="likelihood" defaultValue="possible" className="ps-input mt-1.5 w-full" required>
+            <select id="likelihood" name="likelihood" defaultValue="possible" className="ps-input mt-1.5 w-full" required>
               <option value="rare">{t("console.safety.threats.new.likelihood.rare", undefined, "Rare")}</option>
               <option value="unlikely">
                 {t("console.safety.threats.new.likelihood.unlikely", undefined, "Unlikely")}
@@ -80,10 +80,10 @@ export default async function Page() {
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="treatment" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.threats.new.fields.treatment", undefined, "Treatment")}
             </label>
-            <select name="treatment" defaultValue="mitigate" className="ps-input mt-1.5 w-full">
+            <select id="treatment" name="treatment" defaultValue="mitigate" className="ps-input mt-1.5 w-full">
               <option value="mitigate">
                 {t("console.safety.threats.new.treatment.mitigate", undefined, "Mitigate")}
               </option>
@@ -95,10 +95,10 @@ export default async function Page() {
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="classification" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.threats.new.fields.classification", undefined, "Classification")}
             </label>
-            <select name="classification" defaultValue="internal" className="ps-input mt-1.5 w-full">
+            <select id="classification" name="classification" defaultValue="internal" className="ps-input mt-1.5 w-full">
               <option value="public">
                 {t("console.safety.threats.new.classification.public", undefined, "Public")}
               </option>

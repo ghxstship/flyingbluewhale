@@ -13,7 +13,8 @@ import {
   ADVANCE_SECTION_LABEL,
   type AdvanceSectionKey,
 } from "@/lib/db/advance-packets";
-import { addPresetAction, deletePresetAction } from "./actions";
+import { addPresetAction, deletePresetById } from "./actions";
+import { DeleteForm } from "@/components/DeleteForm";
 
 type PresetRow = {
   id: string;
@@ -104,12 +105,15 @@ export default async function AdvancingSettingsPage() {
                             : "—"}
                         </td>
                         <td className="text-end">
-                          <form action={deletePresetAction} className="inline">
-                            <input type="hidden" name="preset_id" value={p.id} />
-                            <button type="submit" className="ps-btn ps-btn--sm">
-                              {t("common.remove", undefined, "Remove")}
-                            </button>
-                          </form>
+                          <DeleteForm
+                            action={deletePresetById.bind(null, p.id)}
+                            label={t("common.remove", undefined, "Remove")}
+                            confirm={t(
+                              "console.settings.advancing.deletePresetConfirm",
+                              undefined,
+                              "Remove this preset row? New packets stop seeding it.",
+                            )}
+                          />
                         </td>
                       </tr>
                     ))}

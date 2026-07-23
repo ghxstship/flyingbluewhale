@@ -45,12 +45,12 @@ export async function generateMetadata(): Promise<Metadata> {
     title: t(
       "marketing.brandKit.foundations.meta.title",
       undefined,
-      "Foundations · ATLVS Technologies — Brand & UI Kit",
+      "Foundations · ATLVS Technologies Brand & UI Kit",
     ),
     description: t(
       "marketing.brandKit.foundations.meta.description",
       undefined,
-      "ATLVS Technologies brand foundations: Waypoint mark, color, typography (MONUMENT — Anton + Hanken Grotesk), spacing, radii, elevation, motion, and iconography.",
+      "ATLVS Technologies brand foundations: the Waypoint mark, color, typography (MONUMENT, built on Anton + Hanken Grotesk), spacing, radii, elevation, motion, and iconography across all four apps.",
     ),
     alternates: { canonical: "/brand-kit/foundations" },
   };
@@ -90,7 +90,7 @@ export default async function FoundationsPage() {
             {t(
               "marketing.brandKit.foundations.logo.lead.after",
               undefined,
-              "— an eight-point navigational star with a center void, the navigation system rendered as one geometric glyph. Neutral SaaS register, recolored per product. It is distinct from the cosmic GHXSTSHIP ghost-ship skull, which is the parent-company mark only.",
+              ", an eight-point navigational star with a center void, the whole navigation system carved into one geometric glyph. Neutral SaaS register, recolored per product. It stands apart from the cosmic GHXSTSHIP ghost-ship skull, which is the parent-company mark only.",
             )}
           </p>
 
@@ -127,7 +127,7 @@ export default async function FoundationsPage() {
             {t(
               "marketing.brandKit.foundations.logo.note",
               undefined,
-              "The tile carries the product accent; the star stays white (or ink on light grounds). The wordmark is always spaced caps and nowrap — never lowercase, never unspaced except in URLs and IDs.",
+              "The tile carries the product accent; the star stays white (or ink on light grounds). The wordmark is always spaced caps and nowrap. Never lowercase, never unspaced except in URLs and IDs.",
             )}
           </p>
 
@@ -148,7 +148,7 @@ export default async function FoundationsPage() {
                   {t(
                     "marketing.brandKit.foundations.logo.spec.faceValue",
                     undefined,
-                    "— geometric, logo lockup only. Headings use Anton; body & UI use Hanken Grotesk.",
+                    "geometric, logo lockup only. Headings use Anton; body & UI use Hanken Grotesk.",
                   )}
                 </td>
               </tr>
@@ -157,7 +157,7 @@ export default async function FoundationsPage() {
                   <b>{t("marketing.brandKit.foundations.logo.spec.aLabel", undefined, "The A")}</b>
                 </td>
                 <td>
-                  {t("marketing.brandKit.foundations.logo.spec.aBefore", undefined, "A bare peak —")}{" "}
+                  {t("marketing.brandKit.foundations.logo.spec.aBefore", undefined, "A bare peak with")}{" "}
                   <b>{t("marketing.brandKit.foundations.logo.spec.aBold", undefined, "no crossbar")}</b>
                   {t(
                     "marketing.brandKit.foundations.logo.spec.aAfter",
@@ -247,7 +247,7 @@ export default async function FoundationsPage() {
             {t(
               "marketing.brandKit.foundations.appIcons.lead",
               undefined,
-              "Each product is the same waypoint on its own accent tile — instantly a family, instantly distinct.",
+              "Each product is the same waypoint on its own accent tile. Instantly a family, instantly distinct.",
             )}
           </p>
           <div className="kf-board">
@@ -297,7 +297,7 @@ export default async function FoundationsPage() {
                 {t(
                   "marketing.brandKit.foundations.appIcons.minSize",
                   undefined,
-                  "Min-size — the mark holds at every scale",
+                  "Min-size: the mark holds at every scale",
                 )}
                 <span className="ln" />
               </div>
@@ -399,7 +399,7 @@ export default async function FoundationsPage() {
                   {t(
                     "marketing.brandKit.foundations.clearspace.dontItems.1",
                     undefined,
-                    "Recolor or gradient the star itself — only the tile carries color.",
+                    "Recolor or gradient the star itself. Only the tile carries color.",
                   )}
                 </li>
                 <li>
@@ -435,7 +435,7 @@ export default async function FoundationsPage() {
               {t(
                 "marketing.brandKit.foundations.clearspace.endorsement.body",
                 undefined,
-                "The GHXSTSHIP skull appears only in the endorsement lockup — “an ATLVS Technologies, a GHXSTSHIP Industries company.” It is never the product app icon.",
+                "The GHXSTSHIP skull appears only in the endorsement lockup: “an ATLVS Technologies, a GHXSTSHIP Industries company.” It is never the product app icon.",
               )}
             </div>
           </div>
@@ -509,7 +509,7 @@ export default async function FoundationsPage() {
             {t(
               "marketing.brandKit.foundations.color.productIdentity",
               undefined,
-              "Product identity — the accent each app owns",
+              "Product identity: the accent each app owns",
             )}
             <span className="ln" />
           </div>
@@ -575,7 +575,7 @@ export default async function FoundationsPage() {
           </div>
 
           <div className="kf-sub">
-            {t("marketing.brandKit.foundations.color.semantic", undefined, "Semantic — shared across products")}
+            {t("marketing.brandKit.foundations.color.semantic", undefined, "Semantic, shared across all four products")}
             <span className="ln" />
           </div>
           <div className="kf-grid kf-grid-4">
@@ -618,7 +618,7 @@ export default async function FoundationsPage() {
             {t(
               "marketing.brandKit.foundations.type.lead.s2",
               undefined,
-              "— a single black weight that gives the product poster-scale presence. Body and UI stay",
+              "a single black weight that gives the product poster-scale presence. Body and UI stay",
             )}{" "}
             <b>Hanken Grotesk</b>{" "}
             {t("marketing.brandKit.foundations.type.lead.s3", undefined, "so tables and forms read clean;")}{" "}
@@ -667,7 +667,7 @@ export default async function FoundationsPage() {
                   Hanken Grotesk
                 </div>
                 <div style={{ fontSize: 12, color: "var(--p-text-3)", marginTop: 4 }}>
-                  {t("marketing.brandKit.foundations.type.face.hanken", undefined, "Body · UI · 400–800")}
+                  {t("marketing.brandKit.foundations.type.face.hanken", undefined, "Body · UI · 400 to 800")}
                 </div>
               </div>
             </div>
@@ -782,7 +782,7 @@ export default async function FoundationsPage() {
             {t(
               "marketing.brandKit.foundations.type.headerTreatmentsNote",
               undefined,
-              "Three sanctioned ways to deploy the wide headline. Use the right one for the context — don't mix more than one per view.",
+              "Three sanctioned ways to deploy the wide headline. Use the right one for the context. Never mix more than one per view.",
             )}
           </p>
           <div className="kf-grid kf-grid-3">
@@ -829,7 +829,7 @@ export default async function FoundationsPage() {
                   {t(
                     "marketing.brandKit.foundations.type.a3.note",
                     undefined,
-                    "One word takes the product accent — headlines self-brand. Covers, marketing, splash.",
+                    "One word takes the product accent so headlines self-brand. Covers, marketing, splash.",
                   )}
                 </p>
               </div>
@@ -873,7 +873,7 @@ export default async function FoundationsPage() {
             {t(
               "marketing.brandKit.foundations.spacing.lead.before",
               undefined,
-              "A 4px base grid. Density swaps the control and row rhythm — the same tokens tighten under",
+              "A 4px base grid. Density swaps the control and row rhythm. The same tokens tighten under",
             )}{" "}
             <code className="kf-code">data-density=&quot;compact&quot;</code>.
           </p>
@@ -905,7 +905,7 @@ export default async function FoundationsPage() {
             {t(
               "marketing.brandKit.foundations.radii.lead",
               undefined,
-              "Soft, productivity-tool friendly — never pop-art sharp. Pills for chips and toggles only.",
+              "Soft and productivity-tool friendly, never pop-art sharp. Pills for chips and toggles only.",
             )}
           </p>
           <div className="kf-board">
@@ -971,7 +971,7 @@ export default async function FoundationsPage() {
             {t(
               "marketing.brandKit.foundations.motion.lead.s2",
               undefined,
-              "across a theme switch — recolor instantly and animate",
+              "across a theme switch. Recolor instantly and animate",
             )}{" "}
             <code className="kf-code">filter</code>{" "}
             {t("marketing.brandKit.foundations.motion.lead.or", undefined, "or")}{" "}
@@ -1030,14 +1030,14 @@ export default async function FoundationsPage() {
           <p className="eb">{t("marketing.brandKit.foundations.icons.eyebrow", undefined, "Foundations · Icons")}</p>
           <h2>{t("marketing.brandKit.foundations.icons.heading", undefined, "Iconography")}</h2>
           <p className="lead">
-            {t("marketing.brandKit.foundations.icons.lead.before", undefined, "Phosphor Icons —")}{" "}
+            {t("marketing.brandKit.foundations.icons.lead.before", undefined, "Phosphor Icons:")}{" "}
             <b>{t("marketing.brandKit.foundations.icons.lead.bold", undefined, "Bold")}</b>{" "}
             {t("marketing.brandKit.foundations.icons.lead.mid", undefined, "weight for UI,")}{" "}
             <b>{t("marketing.brandKit.foundations.icons.lead.fill", undefined, "Fill")}</b>{" "}
             {t(
               "marketing.brandKit.foundations.icons.lead.after",
               undefined,
-              "for status seals and emphasis. Line up with text at 16–20px; standalone actions at 24px. Single-color, inheriting",
+              "for status seals and emphasis. Line up with text at 16 to 20px; standalone actions at 24px. Single-color, inheriting",
             )}{" "}
             <code className="kf-code">currentColor</code>.
           </p>

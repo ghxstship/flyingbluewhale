@@ -1,10 +1,10 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Link from "next/link";
-import { X } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { FormShell } from "@/components/FormShell";
 import { LabeledCheckbox } from "@/components/ui/Checkbox";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/Sheet";
 import { useT, useFormatters } from "@/lib/i18n/LocaleProvider";
 import { BASIS_LABEL, type CompensationBasis } from "@/lib/offer-letters/types";
 import { assignPersonAction } from "./actions";
@@ -50,6 +50,7 @@ export function AssignDrawer({
 }) {
   const t = useT();
   const f = useFormatters();
+  const router = useRouter();
   const action = assignPersonAction.bind(null, projectId);
   const [manual, setManual] = useState(false);
   const [roleId, setRoleId] = useState("");
@@ -80,34 +81,16 @@ export function AssignDrawer({
   const money = (cents: number) => f.money(cents);
 
   return (
-    <div className="fixed inset-0 z-[var(--p-z-overlay)]">
-      <Link
-        href={closeHref}
-        aria-label={t("console.projects.roster.assign.close", undefined, "Close")}
-        className="absolute inset-0 bg-[var(--overlay-backdrop)] backdrop-blur-sm"
-      />
-      <aside
-        role="dialog"
-        aria-modal="true"
-        aria-label={t("console.projects.roster.assign.title", undefined, "Assign To Project")}
-        className="absolute inset-y-0 right-0 z-[var(--p-z-modal)] flex w-full max-w-md flex-col overflow-y-auto border-l border-[var(--p-border)] bg-[var(--p-bg)] shadow-[var(--p-elev-2xl)]"
-      >
-        <div className="flex items-center justify-between border-b border-[var(--p-border)] px-5 py-4">
-          <div>
-            <div className="eyebrow">{t("console.projects.roster.assign.eyebrow", undefined, "Project Roster")}</div>
-            <h2 className="text-lg font-bold text-[var(--p-text-1)]">
-              {t("console.projects.roster.assign.title", undefined, "Assign To Project")}
-            </h2>
-          </div>
-          <Link
-            href={closeHref}
-            aria-label={t("console.projects.roster.assign.close", undefined, "Close")}
-            className="grid size-8 place-items-center rounded-md text-[var(--p-text-3)] hover:bg-[var(--p-surface-2,var(--p-surface))] hover:text-[var(--p-text-1)]"
-          >
-            <X size={16} />
-          </Link>
-        </div>
-        <div className="flex-1 px-5 py-4">
+    /* W6 a11y refit — the shared Radix Sheet primitive supplies the scrim,
+       Escape-to-close, focus trap + restore, and the ✕ control; closing
+       navigates back to the roster URL (the drawer mounts off `?assign=1`). */
+    <Sheet open onOpenChange={(o) => (!o ? router.push(closeHref) : null)}>
+      <SheetContent side="right" aria-label={t("console.projects.roster.assign.title", undefined, "Assign To Project")}>
+        <SheetHeader>
+          <div className="eyebrow">{t("console.projects.roster.assign.eyebrow", undefined, "Project Roster")}</div>
+          <SheetTitle>{t("console.projects.roster.assign.title", undefined, "Assign To Project")}</SheetTitle>
+        </SheetHeader>
+        <div className="flex-1">
           <FormShell
             action={action}
             submitLabel={
@@ -263,7 +246,7 @@ export function AssignDrawer({
             />
           </FormShell>
         </div>
-      </aside>
-    </div>
+      </SheetContent>
+    </Sheet>
   );
 }

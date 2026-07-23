@@ -319,3 +319,12 @@ export async function deleteCoLine(fd: FormData): Promise<void> {
   await refreshCoAmount(parsed.data.coId, session.orgId);
   revalidatePath(`/studio/procurement/po-change-orders/${parsed.data.coId}`);
 }
+
+/** W6 a11y — id-arg binding for `DeleteForm` (the confirm dialog invokes the
+ * action directly rather than posting a hidden-input form). */
+export async function deleteCoLineById(coId: string, lineId: string): Promise<void> {
+  const fd = new FormData();
+  fd.set("coId", coId);
+  fd.set("lineId", lineId);
+  await deleteCoLine(fd);
+}

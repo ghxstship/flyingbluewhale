@@ -63,11 +63,11 @@ export default async function Page() {
               style={{ textTransform: "uppercase" }}
             />
             <div>
-              <label className="text-xs font-medium text-[var(--p-text-2)]">
+              <label htmlFor="category" className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.inspections.templates.new.category.label", undefined, "Category")}{" "}
                 <span className="text-[var(--p-danger)]">*</span>
               </label>
-              <select name="category" required defaultValue="custom" className="ps-input mt-1.5 w-full">
+              <select id="category" name="category" required defaultValue="custom" className="ps-input mt-1.5 w-full">
                 {CATEGORIES.map(([v, l, key]) => (
                   <option key={v} value={v}>
                     {t(key, undefined, l)}
@@ -86,10 +86,10 @@ export default async function Page() {
           />
 
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="description" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.inspections.templates.new.description.label", undefined, "Description")}
             </label>
-            <textarea
+            <textarea id="description"
               name="description"
               rows={3}
               maxLength={2000}
@@ -103,10 +103,10 @@ export default async function Page() {
           </div>
 
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="items" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.inspections.templates.new.items.label", undefined, "Checklist items")}
             </label>
-            <textarea
+            <textarea id="items"
               name="items"
               rows={10}
               maxLength={20000}

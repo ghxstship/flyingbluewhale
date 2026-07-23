@@ -29,10 +29,10 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
         >
           <input type="hidden" name="talent_id" value={talentId} />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="kind" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.marketplace.talent.riders.new.kindLabel", undefined, "Kind")}
             </label>
-            <select name="kind" required className="ps-input mt-1.5 w-full">
+            <select id="kind" name="kind" required className="ps-input mt-1.5 w-full">
               {TALENT_RIDER_KINDS.map((k) => (
                 <option key={k} value={k}>
                   {toTitle(k)}
@@ -51,10 +51,10 @@ export default async function Page({ params }: { params: Promise<{ talentId: str
             maxLength={200}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="content" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.marketplace.talent.riders.new.bodyLabel", undefined, "Body")}
             </label>
-            <textarea name="content" rows={10} maxLength={20000} className="ps-input mt-1.5 w-full" />
+            <textarea id="content" name="content" rows={10} maxLength={20000} className="ps-input mt-1.5 w-full" />
           </div>
           <Input
             label={t("console.marketplace.talent.riders.new.fileUrlLabel", undefined, "File URL · Optional")}

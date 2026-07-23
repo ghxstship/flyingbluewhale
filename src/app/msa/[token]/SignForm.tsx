@@ -34,7 +34,7 @@ export function SignForm({ token, showChapter624 }: { token: string; showChapter
     >
       <div className="space-y-3">
         <h3 className="eyebrow">
-          {t("legal.msaSign.exhibitBHeading", undefined, "Exhibit B — Other Clients")}
+          {t("legal.msaSign.exhibitBHeading", undefined, "Exhibit B: Other Clients")}
         </h3>
         <p className="text-xs text-[var(--p-text-2)]">
           {t(
@@ -68,13 +68,13 @@ export function SignForm({ token, showChapter624 }: { token: string; showChapter
 
       <div className="space-y-3">
         <h3 className="eyebrow">
-          {t("legal.msaSign.exhibitCHeading", undefined, "Exhibit C — Capital Investment")}
+          {t("legal.msaSign.exhibitCHeading", undefined, "Exhibit C: Capital Investment")}
         </h3>
         <p className="text-xs text-[var(--p-text-2)]">
           {t(
             "legal.msaSign.exhibitCHint",
             undefined,
-            "Itemize what you bring to the table — business entity, insurance, equipment, tools, certifications, etc.",
+            "Itemize what you bring to the table: business entity, insurance, equipment, tools, certifications, etc.",
           )}
         </p>
         <div className="space-y-2">
@@ -98,13 +98,13 @@ export function SignForm({ token, showChapter624 }: { token: string; showChapter
       {showChapter624 && (
         <div className="space-y-3 rounded border border-[var(--p-border)] bg-[var(--p-surface-2)] p-4">
           <h3 className="eyebrow">
-            {t("legal.msaSign.nscbHeading", undefined, "NSCB License — Chapter 624")}
+            {t("legal.msaSign.nscbHeading", undefined, "NSCB License: Chapter 624")}
           </h3>
           <p className="text-xs text-[var(--p-text-2)]">
             {t(
               "legal.msaSign.nscbHint",
               undefined,
-              "Required for trade scopes that fall within NRS Chapter 624 — carpentry, electrical, rigging, etc. Skip if not applicable.",
+              "Required for trade scopes that fall within NRS Chapter 624, such as carpentry, electrical, and rigging. Skip if not applicable.",
             )}
           </p>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">

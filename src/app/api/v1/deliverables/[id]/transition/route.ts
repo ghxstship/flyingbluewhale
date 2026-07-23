@@ -78,7 +78,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       .select("id");
     if (upErr) return apiError("internal", upErr.message);
     if (!updated || updated.length === 0) {
-      return apiError("conflict", "Deliverable was modified concurrently — refresh and retry");
+      return apiError("conflict", "Deliverable was modified concurrently. Refresh and retry.");
     }
 
     const after = { status: nextStatus };

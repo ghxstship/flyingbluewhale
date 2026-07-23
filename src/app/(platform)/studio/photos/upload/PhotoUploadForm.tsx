@@ -82,12 +82,12 @@ export function PhotoUploadForm({ projects }: { projects: ComboboxOption[] }) {
       />
 
       <div>
-        <label className="text-xs font-medium text-[var(--p-text-2)]">
+        <label htmlFor="files" className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.photos.upload.photosLabel", undefined, "Photos")}{" "}
           <span className="text-[var(--p-danger)]">*</span>
         </label>
         <div className="mt-1.5">
-          <input
+          <input id="files"
             type="file"
             name="files"
             multiple

@@ -62,10 +62,10 @@ export function NewEnvelopeForm({
       />
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
+          <label htmlFor="provider" className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.envelopes.column.provider", undefined, "Provider")}
           </label>
-          <select name="provider" defaultValue="docusign" className="ps-input mt-1.5 w-full">
+          <select id="provider" name="provider" defaultValue="docusign" className="ps-input mt-1.5 w-full">
             {PROVIDERS.map((p) => (
               <option key={p} value={p}>
                 {providerLabel[p]}
@@ -74,10 +74,10 @@ export function NewEnvelopeForm({
           </select>
         </div>
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
+          <label htmlFor="target_type" className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.envelopes.column.target", undefined, "Target")}
           </label>
-          <select
+          <select id="target_type"
             name="target_type"
             defaultValue={defaultTargetType ?? "other"}
             className="ps-input mt-1.5 w-full"
@@ -99,10 +99,10 @@ export function NewEnvelopeForm({
       />
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
+          <label htmlFor="project_id" className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.envelopes.column.project", undefined, "Project")}
           </label>
-          <select name="project_id" defaultValue={defaultProjectId ?? ""} className="ps-input mt-1.5 w-full">
+          <select id="project_id" name="project_id" defaultValue={defaultProjectId ?? ""} className="ps-input mt-1.5 w-full">
             <option value="">{t("console.envelopes.new.noProject", undefined, "No project")}</option>
             {projects.map((p) => (
               <option key={p.id} value={p.id}>
@@ -118,10 +118,10 @@ export function NewEnvelopeForm({
         />
       </div>
       <div>
-        <label className="text-xs font-medium text-[var(--p-text-2)]">
+        <label htmlFor="body_md" className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.envelopes.new.body", undefined, "Body / notes")}
         </label>
-        <textarea name="body_md" rows={5} className="ps-input mt-1.5 w-full" />
+        <textarea id="body_md" name="body_md" rows={5} className="ps-input mt-1.5 w-full" />
       </div>
     </FormShell>
   );

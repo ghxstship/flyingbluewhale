@@ -26,7 +26,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const STATUS_LABEL: Record<string, string> = {
     pending: t("p.volunteer.application.status.pending", undefined, "Application received"),
     in_review: t("p.volunteer.application.status.in_review", undefined, "Under review"),
-    approved: t("p.volunteer.application.status.approved", undefined, "Approved — onboarding"),
+    approved: t("p.volunteer.application.status.approved", undefined, "Approved, onboarding"),
     active: t("p.volunteer.application.status.active", undefined, "Active volunteer"),
     declined: t("p.volunteer.application.status.declined", undefined, "Declined"),
   };

@@ -89,7 +89,7 @@ async function postHandler(req: NextRequest) {
           title: `Incident: ${input.summary}`,
           body:
             input.severity === "critical"
-              ? "CRITICAL — review immediately"
+              ? "CRITICAL: review immediately"
               : `Severity: ${input.severity}${input.location ? ` · ${input.location}` : ""}`,
           href: `/studio/operations/incidents/${data.id}`,
           data: { incidentId: data.id, severity: input.severity, projectId: input.projectId },

@@ -140,7 +140,7 @@ export default async function ConnectionsPage() {
           emptyBody: t(
             "m.connections.emptyBody",
             undefined,
-            "No other crew in this org yet — connections appear here as your network grows.",
+            "No other crew in this org yet. Connections appear here as your network grows.",
           ),
           connect: t("m.connections.connect", undefined, "Connect"),
           accept: t("m.connections.accept", undefined, "Accept"),

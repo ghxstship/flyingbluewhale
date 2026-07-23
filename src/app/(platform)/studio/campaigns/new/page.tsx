@@ -26,10 +26,10 @@ export default async function Page() {
             required
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="description" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.campaigns.new.fields.description", undefined, "Description")}
             </label>
-            <textarea
+            <textarea id="description"
               name="description"
               rows={3}
               maxLength={2000}
@@ -42,10 +42,10 @@ export default async function Page() {
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="channel" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.campaigns.new.fields.channel", undefined, "Channel")}
             </label>
-            <select name="channel" defaultValue="multi" className="ps-input mt-1.5 w-full">
+            <select id="channel" name="channel" defaultValue="multi" className="ps-input mt-1.5 w-full">
               <option value="email">{t("console.campaigns.new.channel.email", undefined, "Email")}</option>
               <option value="social">{t("console.campaigns.new.channel.social", undefined, "Social")}</option>
               <option value="paid">{t("console.campaigns.new.channel.paid", undefined, "Paid")}</option>
@@ -55,10 +55,10 @@ export default async function Page() {
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="kind" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.campaigns.new.fields.kind", undefined, "Kind")}
             </label>
-            <select name="kind" defaultValue="awareness" className="ps-input mt-1.5 w-full">
+            <select id="kind" name="kind" defaultValue="awareness" className="ps-input mt-1.5 w-full">
               <option value="awareness">{t("console.campaigns.new.kind.awareness", undefined, "Awareness")}</option>
               <option value="conversion">{t("console.campaigns.new.kind.conversion", undefined, "Conversion")}</option>
               <option value="loyalty">{t("console.campaigns.new.kind.loyalty", undefined, "Loyalty")}</option>

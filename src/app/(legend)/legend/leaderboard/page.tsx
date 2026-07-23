@@ -55,7 +55,7 @@ export default async function LeaderboardPage() {
 
   return (
     <>
-      <ModuleHeader eyebrow="LEG3ND · Community" title="Leaderboard" subtitle="Points, tiers, and achievements — shared with COMPVSS field." />
+      <ModuleHeader eyebrow="LEG3ND · Community" title="Leaderboard" subtitle="Points, tiers, and achievements, shared with COMPVSS field." />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px]">
         <section className="space-y-2">

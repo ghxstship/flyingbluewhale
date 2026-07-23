@@ -3,7 +3,7 @@
 import { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ActionBar, Fab, KIcon, SheetHead } from "@/components/mobile/kit";
+import { ActionBar, Fab, KIcon, Sheet } from "@/components/mobile/kit";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { createSpace } from "./actions";
@@ -164,27 +164,16 @@ export function SpacesView({ rows, eyebrow, title }: { rows: SpaceRow[]; eyebrow
       {/* Kit FAB: New Space. */}
       <Fab label={t("m.spaces.new", undefined, "New Space")} onClick={() => setCreateOpen(true)} />
 
+      {/* Kit 32 (drawer canon v2.8): FORM drawer (3 fields ≤ the 5-field cap)
+          on the kit Sheet shell — scrim, SheetHead (explicit ✕) and the
+          ESC / focus-trap / focus-restore semantics via useDismissable. */}
       {createOpen && (
-        <div className="sheet" role="dialog" aria-modal="true" aria-label={t("m.spaces.new", undefined, "New Space")}>
-          <button
-            type="button"
-            className="sheet-bg"
-            aria-label={t("m.spaces.sheetClose", undefined, "Close")}
-            tabIndex={-1}
-            style={{ border: "none", padding: 0, cursor: "default" }}
-            onClick={() => setCreateOpen(false)}
-          />
-          <div className="sheet-panel">
-            <div className="sheet-grip" />
-            {/* Kit 32 (drawer canon v2.8): FORM drawer (3 fields ≤ the 5-field
-                cap) with the canonical SheetHead — no sheet ships without an
-                explicit ✕. */}
-            <SheetHead
-              icon="UsersRound"
-              title={t("m.spaces.new", undefined, "New Space")}
-              closeLabel={t("m.spaces.sheetClose", undefined, "Close")}
-              onClose={() => setCreateOpen(false)}
-            />
+        <Sheet
+          icon="UsersRound"
+          title={t("m.spaces.new", undefined, "New Space")}
+          closeLabel={t("m.spaces.sheetClose", undefined, "Close")}
+          onClose={() => setCreateOpen(false)}
+        >
             {error && (
               <div className="ps-alert ps-alert--danger" role="alert" style={{ marginBottom: 10 }}>
                 {error}
@@ -236,8 +225,7 @@ export function SpacesView({ rows, eyebrow, title }: { rows: SpaceRow[]; eyebrow
               <KIcon name="Plus" size={15} />{" "}
               {pending ? t("m.spaces.creating", undefined, "Creating…") : t("m.spaces.create", undefined, "Create Space")}
             </button>
-          </div>
-        </div>
+        </Sheet>
       )}
     </div>
   );

@@ -43,10 +43,10 @@ export default async function Page() {
             maxLength={120}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="project_id" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.settings.timeClockZones.new.projectOptional", undefined, "Project · Optional")}
             </label>
-            <select name="project_id" className="ps-input mt-1.5 w-full" defaultValue="">
+            <select id="project_id" name="project_id" className="ps-input mt-1.5 w-full" defaultValue="">
               <option value="">
                 {t("console.settings.timeClockZones.new.projectNone", undefined, "None (org-wide)")}
               </option>

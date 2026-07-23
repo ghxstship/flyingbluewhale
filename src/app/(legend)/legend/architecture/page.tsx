@@ -32,7 +32,7 @@ export default async function ArchitecturePage() {
         <h1>ATLVS Ecosystem Map</h1>
         <p className="max-w-2xl text-[var(--p-text-2)]">
           {model.shells.length} shells · {totalRoutes} routes · {Object.keys(model.archetypes).length} archetypes.
-          Generated from <code className="font-mono text-sm">nav.ts</code> + the route tree — it re-renders whenever the
+          Generated from <code className="font-mono text-sm">nav.ts</code> + the route tree. It re-renders whenever the
           platform IA changes.
         </p>
         <p className="text-sm text-[var(--p-text-3)]">{model.meta.addressing}</p>

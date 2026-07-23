@@ -33,12 +33,12 @@ export default async function LegendHubPage() {
     {
       href: urlFor("platform", "/knowledge"),
       title: t("console.legend.tiles.standard.title", undefined, "The Standard"),
-      blurb: t("console.legend.tiles.standard.blurb", undefined, "Knowledge base — the canonical how-we-work reference."),
+      blurb: t("console.legend.tiles.standard.blurb", undefined, "The canonical how-we-work knowledge base."),
     },
     {
       href: "/legend/learn",
       title: t("console.legend.tiles.courses.title", undefined, "Courses"),
-      blurb: t("console.legend.tiles.courses.blurb", undefined, "LMS — learn, assess, certify on the XPMS 2.5 protocol."),
+      blurb: t("console.legend.tiles.courses.blurb", undefined, "LMS training tracks, lessons, and quizzes."),
     },
     {
       href: "/legend/certifications",
@@ -64,7 +64,7 @@ export default async function LegendHubPage() {
     {
       href: "/legend/engine",
       title: t("console.legend.tiles.engine.title", undefined, "Compliance Engine"),
-      blurb: t("console.legend.tiles.engine.blurb", undefined, "XMCE — author rules, run checks, triage findings."),
+      blurb: t("console.legend.tiles.engine.blurb", undefined, "XMCE: author rules, run checks, triage findings."),
     },
     {
       href: urlFor("platform", "/safety/incidents"),
@@ -79,7 +79,7 @@ export default async function LegendHubPage() {
     {
       href: "/legend/leaderboard",
       title: t("console.legend.tiles.leaderboard.title", undefined, "Leaderboard"),
-      blurb: t("console.legend.tiles.leaderboard.blurb", undefined, "Points, tiers, and achievements — shared with COMPVSS."),
+      blurb: t("console.legend.tiles.leaderboard.blurb", undefined, "Points, tiers, and achievements, shared with COMPVSS."),
     },
     {
       href: "/legend/store",
@@ -89,7 +89,7 @@ export default async function LegendHubPage() {
     {
       href: "/legend/compliance",
       title: t("console.legend.tiles.matrix.title", undefined, "Recert Matrix"),
-      blurb: t("console.legend.tiles.matrix.blurb", undefined, "Org credential health — member × certification, by state."),
+      blurb: t("console.legend.tiles.matrix.blurb", undefined, "Org credential health by member × certification and state."),
     },
   ];
 
@@ -98,7 +98,7 @@ export default async function LegendHubPage() {
       <ModuleHeader
         eyebrow={t("console.legend.eyebrow", undefined, "LEG3ND")}
         title={t("console.legend.title", undefined, "Knowledge")}
-        subtitle={t("console.legend.subtitle", undefined, "Knowledge · LMS · Resources — on the XPMS 2.5 protocol.")}
+        subtitle={t("console.legend.subtitle", undefined, "Knowledge · LMS · Resources, on the XPMS 2.0 protocol.")}
       />
       <div className="page-content">
         <div className="section-grid">

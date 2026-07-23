@@ -183,7 +183,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           <h3 className="text-sm font-semibold">{t("p.apply.list.title", undefined, "Your Applications")}</h3>
           {apps.length === 0 ? (
             <p className="mt-2 text-xs text-[var(--p-text-2)]">
-              {t("p.apply.list.empty", undefined, "No applications yet — your producer will invite you.")}
+              {t("p.apply.list.empty", undefined, "No applications yet. Your producer will invite you.")}
             </p>
           ) : (
             <ul className="mt-3 divide-y divide-[var(--p-border)]">

@@ -77,7 +77,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             {t(
               "marketing.pages.marketplace-gigs-apply.closed.body",
               undefined,
-              "This posting is no longer accepting applications — it may have expired or been filled.",
+              "This posting is no longer accepting applications. It may have expired or been filled.",
             )}
           </p>
           <div className="mt-6">

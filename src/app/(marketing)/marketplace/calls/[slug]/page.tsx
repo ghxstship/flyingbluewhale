@@ -64,7 +64,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     });
   }
   return buildMetadata({
-    title: `${c.title} — Open Call on ATLVS`,
+    title: `${c.title} · Open Call on ATLVS`,
     description: metaDescription(
       c.description,
       `${c.org_name} posted an open call for ${c.title} on the ATLVS marketplace. Review the brief and submit before the deadline.`,

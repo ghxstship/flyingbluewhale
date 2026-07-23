@@ -6,7 +6,8 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { fmtDate } from "@/components/detail/DetailShell";
-import { setFabStatus, deleteFab } from "../actions";
+import { DeleteForm } from "@/components/DeleteForm";
+import { setFabStatus, deleteFabById } from "../actions";
 import {
   getFabricationOrder,
   listProductionPhaseTransitions,
@@ -112,12 +113,15 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
             <Badge variant="muted">
               {t("console.production.fabrication.detail.lifecycleBadge", undefined, "Lifecycle")}
             </Badge>
-            <form action={deleteFab}>
-              <input type="hidden" name="id" value={row.id} />
-              <button type="submit" className="text-[color:var(--p-danger)] hover:underline">
-                {t("console.production.fabrication.detail.deleteOrder", undefined, "Delete Order")}
-              </button>
-            </form>
+            <DeleteForm
+              action={deleteFabById.bind(null, row.id)}
+              label={t("console.production.fabrication.detail.deleteOrder", undefined, "Delete Order")}
+              confirm={t(
+                "console.production.fabrication.detail.deleteConfirm",
+                undefined,
+                "Delete this fabrication order? The record is removed for everyone on the project.",
+              )}
+            />
           </div>
         </section>
 

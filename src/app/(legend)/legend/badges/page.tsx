@@ -51,7 +51,7 @@ export default async function BadgesPage() {
       <ModuleHeader
         eyebrow="LEG3ND · Compete"
         title="Badges"
-        subtitle="Your achievement collection — earned across LEG3ND learning and COMPVSS field work."
+        subtitle="Your achievement collection, earned across LEG3ND learning and COMPVSS field work."
       />
 
       <div className="metric-grid mb-6">

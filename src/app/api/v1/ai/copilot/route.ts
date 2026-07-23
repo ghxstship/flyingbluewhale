@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
     if ("error" in embedded || !embedded[0]) {
       return apiOk({
         answer:
-          "Grounded answers aren't available yet — the workspace document index isn't configured, so I can't cite sources. Ask an admin to enable the AI index.",
+          "Grounded answers aren't available yet: the workspace document index isn't configured, so I can't cite sources. Ask an admin to enable the AI index.",
         citations: [],
         confidence: "low" as const,
         grounded: false,

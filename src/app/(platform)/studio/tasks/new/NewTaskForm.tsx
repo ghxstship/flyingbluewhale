@@ -30,18 +30,18 @@ export function NewTaskForm({ atoms }: { atoms: AtomOptionWithProject[] }) {
     >
       <Input label={t("console.tasks.new.title", undefined, "Title")} name="title" required maxLength={200} />
       <div>
-        <label className="text-xs font-medium text-[var(--p-text-2)]">
+        <label htmlFor="description" className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.tasks.new.description", undefined, "Description")}
         </label>
-        <textarea name="description" rows={3} className="ps-input mt-1.5 w-full" />
+        <textarea id="description" name="description" rows={3} className="ps-input mt-1.5 w-full" />
       </div>
       <div className="grid gap-4 sm:grid-cols-3">
         <Input label={t("console.tasks.new.due", undefined, "Due")} name="due_at" type="date" />
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
+          <label htmlFor="priority" className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.tasks.new.priority", undefined, "Priority")}
           </label>
-          <select name="priority" defaultValue="2" className="ps-input mt-1.5 w-full">
+          <select id="priority" name="priority" defaultValue="2" className="ps-input mt-1.5 w-full">
             <option value="1">{t("console.tasks.new.priorityP1", undefined, "P1 · Urgent")}</option>
             <option value="2">{t("console.tasks.new.priorityP2", undefined, "P2 · High")}</option>
             <option value="3">{t("console.tasks.new.priorityP3", undefined, "P3 · Normal")}</option>

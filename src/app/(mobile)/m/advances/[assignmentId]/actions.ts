@@ -54,7 +54,7 @@ export async function fulfillAssignment(_prev: FulfillState, fd: FormData): Prom
     .select("id")
     .maybeSingle();
   if (upErr) return { error: upErr.message };
-  if (!updated) return { error: "State changed elsewhere — reload" };
+  if (!updated) return { error: "State changed elsewhere. Reload." };
 
   const { error: evErr } = await supabase.from("assignment_events").insert({
     assignment_id: parsed.data.assignmentId,

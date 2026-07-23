@@ -93,3 +93,11 @@ export async function deleteCustomRole(formData: FormData) {
   }
   revalidatePath("/studio/people/roles");
 }
+
+/** W6 a11y — id-arg binding for `DeleteForm` (the confirm dialog invokes the
+ * action directly rather than posting a hidden-input form). */
+export async function deleteCustomRoleById(id: string): Promise<void> {
+  const fd = new FormData();
+  fd.set("id", id);
+  await deleteCustomRole(fd);
+}

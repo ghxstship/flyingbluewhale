@@ -167,10 +167,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               <input type="hidden" name="instance_id" value={instance.id} />
               <input type="hidden" name="step_id" value={decisionStepId} />
               <div>
-                <label className="text-xs font-medium text-[var(--p-text-2)]">
+                <label htmlFor="decision" className="text-xs font-medium text-[var(--p-text-2)]">
                   {t("console.governance.approvals.detail.decisionLabel", undefined, "Decision")}
                 </label>
-                <select name="decision" required className="ps-input mt-1.5 w-full" defaultValue="approved">
+                <select id="decision" name="decision" required className="ps-input mt-1.5 w-full" defaultValue="approved">
                   {DECISION_KINDS.map((d) => (
                     <option key={d} value={d}>
                       {t(`console.governance.approvals.decision.${d}`, undefined, DECISION_LABEL[d])}
@@ -179,10 +179,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 </select>
               </div>
               <div>
-                <label className="text-xs font-medium text-[var(--p-text-2)]">
+                <label htmlFor="notes" className="text-xs font-medium text-[var(--p-text-2)]">
                   {t("console.governance.approvals.detail.notesLabel", undefined, "Notes")}
                 </label>
-                <textarea name="notes" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
+                <textarea id="notes" name="notes" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
               </div>
             </FormShell>
           </section>

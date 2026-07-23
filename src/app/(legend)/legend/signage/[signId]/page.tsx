@@ -99,7 +99,7 @@ export default async function SignDetail({ params }: { params: Promise<{ signId:
         <div className="surface p-5">
           <h3 className="text-sm font-semibold">Wayfinding preview</h3>
           <p className="mt-1 text-xs text-[var(--p-text-2)]">
-            Built to airport standards (ACRP 52 / AIGA-DOT / ISO 7010) — the {SIGNAGE_CATEGORY_LABELS[sign.category]}{" "}
+            Built to airport standards (ACRP 52 / AIGA-DOT / ISO 7010): the {SIGNAGE_CATEGORY_LABELS[sign.category]}{" "}
             color function, proportioned to cap height.
           </p>
           <div className="mt-4 flex flex-wrap items-end gap-4">

@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: t(
       "marketing.integrations.partners.meta.title",
       undefined,
-      "Partner Integrations — ATLVS Certified + Verified Partner Directory",
+      "Partner Integrations: ATLVS Certified + Verified Partner Directory",
     ),
     description: t(
       "marketing.integrations.partners.meta.description",
@@ -92,7 +92,7 @@ export default async function Page() {
           {t(
             "marketing.integrations.partners.lead",
             undefined,
-            "Third-party integrations that hit the ATLVS REST + GraphQL surface. Verified Partner integrations pass our technical review; Certified integrations also pass end-to-end QA on a live tenant. Build your own —",
+            "Third-party integrations that hit the ATLVS REST + GraphQL surface. Verified Partner integrations clear our technical review; Certified integrations also clear end-to-end QA on a live tenant. Build your own:",
           )}{" "}
           <Link href="/integrations/submit" className="underline">
             {t("marketing.integrations.partners.submitLink", undefined, "submit a proposal")}

@@ -110,3 +110,13 @@ export async function deleteResponseLine(fd: FormData): Promise<void> {
   revalidatePath(`/studio/procurement/rfqs/${parsed.data.rfqId}/responses/${responseId}`);
   revalidatePath(`/studio/procurement/rfqs/${parsed.data.rfqId}/responses`);
 }
+
+/** W6 a11y — id-arg binding for `DeleteForm` (the confirm dialog invokes the
+ * action directly rather than posting a hidden-input form). */
+export async function deleteResponseLineById(rfqId: string, responseId: string, lineId: string): Promise<void> {
+  const fd = new FormData();
+  fd.set("rfqId", rfqId);
+  fd.set("responseId", responseId);
+  fd.set("lineId", lineId);
+  await deleteResponseLine(fd);
+}

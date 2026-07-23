@@ -42,7 +42,7 @@ export const themeScript = `
     var validTypes = ['monument','legend'];
     var validTrends = ['immersive','experimental','dopamine','bold-type','dark','motion','gamified','neumorphic','synthwave','maximalist','collage','brutalist','sustainable'];
 
-    // Theme slug (palette) — single canonical kit skin. Stale cookie values
+    // Theme slug (palette): single canonical kit skin. Stale cookie values
     // (from purged ghxstship / pre-v3 CHROMA slugs) fall through to the default.
     var c = document.cookie.match(/(?:^|;\\s*)${THEME_COOKIE_NAME}=([^;]+)/);
     var fromCookie = c ? decodeURIComponent(c[1]) : null;
@@ -52,7 +52,7 @@ export const themeScript = `
                : (stored && valid.indexOf(stored) > -1) ? stored
                : 'atlvs-product';
     document.documentElement.setAttribute('data-theme', picked);
-    // Kit canon selector — paint .ps-* primitives without having to scope
+    // Kit canon selector: paint .ps-* primitives without having to scope
     // every selector to [data-theme="atlvs-product"].
     document.documentElement.setAttribute('data-ui', 'saas');
 
@@ -71,7 +71,7 @@ export const themeScript = `
       : rawMode;
     document.documentElement.setAttribute('data-mode', resolvedMode);
 
-    // Accent intensity — kit axis (soft / default / vivid). Cookie + storage only.
+    // Accent intensity: kit axis (soft / default / vivid). Cookie + storage only.
     var ac = document.cookie.match(/(?:^|;\\s*)${ACCENT_COOKIE_NAME}=([^;]+)/);
     var accentFromCookie = ac ? decodeURIComponent(ac[1]) : null;
     var accentStored = null;
@@ -81,7 +81,7 @@ export const themeScript = `
                : 'default';
     if (accent !== 'default') document.documentElement.setAttribute('data-accent', accent);
 
-    // Type axis (v5) — monument (default) / legend. Cookie + storage only.
+    // Type axis (v5): monument (default) / legend. Cookie + storage only.
     var tc = document.cookie.match(/(?:^|;\\s*)${TYPE_COOKIE_NAME}=([^;]+)/);
     var typeFromCookie = tc ? decodeURIComponent(tc[1]) : null;
     var typeStored = null;
@@ -91,7 +91,7 @@ export const themeScript = `
                  : 'monument';
     if (typeAxis !== 'monument') document.documentElement.setAttribute('data-type', typeAxis);
 
-    // Trend axis (v8.1) — personalization skin. Cookie + storage only; omitted
+    // Trend axis (v8.1): personalization skin. Cookie + storage only; omitted
     // when 'none' so the Monument base renders by default.
     var rc = document.cookie.match(/(?:^|;\\s*)${TREND_COOKIE_NAME}=([^;]+)/);
     var trendFromCookie = rc ? decodeURIComponent(rc[1]) : null;
@@ -100,7 +100,7 @@ export const themeScript = `
     var trend = (trendFromCookie && validTrends.indexOf(trendFromCookie) > -1) ? trendFromCookie
               : (trendStored && validTrends.indexOf(trendStored) > -1) ? trendStored
               : 'none';
-    // Trend CSS (23KB, kit-trends.css) is NOT on the core path — CLAUDE.md
+    // Trend CSS (23KB, kit-trends.css) is NOT on the core path; CLAUDE.md
     // requires it "never on the core path". It loads as a <link> ONLY when a
     // non-default trend is active. Injecting it here (pre-hydration, in <head>)
     // keeps it FOUC-free for users who have already picked a trend; the runtime
@@ -118,7 +118,7 @@ export const themeScript = `
       }
     }
 
-    // colorScheme — atlvs-product is light-family; dark mode overrides
+    // colorScheme: atlvs-product is light-family; dark mode overrides
     // come from [data-mode="dark"] selectors in the theme CSS.
     document.documentElement.style.colorScheme = resolvedMode === 'dark' ? 'dark' : 'light';
   } catch (e) {

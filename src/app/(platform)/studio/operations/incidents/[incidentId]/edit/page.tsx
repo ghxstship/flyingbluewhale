@@ -41,10 +41,10 @@ export default async function Page({ params }: { params: Promise<{ incidentId: s
             required
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="description" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.operations.incidents.edit.descriptionLabel", undefined, "Description")}
             </label>
-            <textarea
+            <textarea id="description"
               name="description"
               rows={4}
               maxLength={5000}
@@ -53,10 +53,10 @@ export default async function Page({ params }: { params: Promise<{ incidentId: s
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="severity" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.operations.incidents.edit.severityLabel", undefined, "Severity")}
             </label>
-            <select
+            <select id="severity"
               name="severity"
               defaultValue={(r.severity as string | undefined) ?? "minor"}
               className="ps-input mt-1.5 w-full"
@@ -73,10 +73,10 @@ export default async function Page({ params }: { params: Promise<{ incidentId: s
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="incident_state" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.operations.incidents.edit.statusLabel", undefined, "Status")}
             </label>
-            <select
+            <select id="incident_state"
               name="incident_state"
               defaultValue={(r.incident_state as string | undefined) ?? "open"}
               className="ps-input mt-1.5 w-full"

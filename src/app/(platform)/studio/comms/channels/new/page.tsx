@@ -58,10 +58,10 @@ export default async function NewChannelPage() {
             placeholder="production-floor"
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="kind" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.comms.channels.new.kindLabel", undefined, "Kind")}
             </label>
-            <select name="kind" required className="ps-input mt-1.5 w-full" defaultValue="project">
+            <select id="kind" name="kind" required className="ps-input mt-1.5 w-full" defaultValue="project">
               {CHANNEL_KINDS.map((k) => (
                 <option key={k} value={k}>
                   {t(`console.comms.channels.kind.${k}`, undefined, CHANNEL_KIND_LABEL[k])}
@@ -70,16 +70,16 @@ export default async function NewChannelPage() {
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="topic" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.comms.channels.new.topicLabel", undefined, "Topic")}
             </label>
-            <textarea name="topic" rows={2} maxLength={500} className="ps-input mt-1.5 w-full" />
+            <textarea id="topic" name="topic" rows={2} maxLength={500} className="ps-input mt-1.5 w-full" />
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="project_id" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.comms.channels.new.projectLabel", undefined, "Project")}
             </label>
-            <select name="project_id" className="ps-input mt-1.5 w-full" defaultValue="">
+            <select id="project_id" name="project_id" className="ps-input mt-1.5 w-full" defaultValue="">
               <option value="">{t("console.comms.channels.new.projectNone", undefined, "None")}</option>
               {projectRows.map((p) => (
                 <option key={p.id} value={p.id}>

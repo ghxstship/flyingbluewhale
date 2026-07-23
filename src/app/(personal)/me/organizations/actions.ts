@@ -98,7 +98,7 @@ export async function leaveOrgAction(_prev: State, fd: FormData): Promise<State>
       .eq("role", "owner")
       .is("deleted_at", null);
     if ((ownerCount ?? 0) <= 1) {
-      return { error: "You're the last owner — transfer ownership before leaving this organization." };
+      return { error: "You're the last owner. Transfer ownership before leaving this organization." };
     }
   }
 

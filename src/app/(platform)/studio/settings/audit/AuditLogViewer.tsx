@@ -95,10 +95,11 @@ export function AuditLogViewer({
           />
         </div>
         <div className="min-w-[160px]">
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
+          <label htmlFor="audit-action-filter" className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.settings.audit.actionLabel", undefined, "Action")}
           </label>
           <select
+            id="audit-action-filter"
             value={actionFilter}
             onChange={(e) => setActionFilter(e.target.value)}
             className="ps-input mt-1.5 w-full"
@@ -112,10 +113,11 @@ export function AuditLogViewer({
           </select>
         </div>
         <div className="min-w-[160px]">
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
+          <label htmlFor="audit-table-filter" className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.settings.audit.targetTableLabel", undefined, "Target Table")}
           </label>
           <select
+            id="audit-table-filter"
             value={tableFilter}
             onChange={(e) => setTableFilter(e.target.value)}
             className="ps-input mt-1.5 w-full"

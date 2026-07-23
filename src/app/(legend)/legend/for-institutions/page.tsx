@@ -18,12 +18,12 @@ const FAQ = [
   {
     title: "How does certification sync to the field?",
     content:
-      "Earned certifications and points flow to the same record store the rest of the ecosystem runs on — a credential earned in LEG3ND can gate a gate scan in COMPVSS the same day.",
+      "Earned certifications and points flow to the same record store the rest of the ecosystem runs on: a credential earned in LEG3ND can gate a gate scan in COMPVSS the same day.",
   },
   {
     title: "Is the signage library included?",
     content:
-      "The 60 public-domain AIGA / U.S. DOT wayfinding symbols ship with every workspace, color-mapped to the airport tone system — usable in your courses, plans, and on-site signage.",
+      "The 60 public-domain AIGA / U.S. DOT wayfinding symbols ship with every workspace, color-mapped to the airport tone system, usable in your courses, plans, and on-site signage.",
   },
   {
     title: "Do you support SSO for our learners?",
@@ -39,7 +39,7 @@ export default function ForInstitutionsPage() {
         <p className="eyebrow eyebrow-accent">LEG3ND · For Institutions</p>
         <h1>Hold the standard for your whole organization.</h1>
         <p className="text-lg text-[var(--p-text-2)]">
-          A standalone LMS, knowledge base, and resource hub on the XPMS 2.0 protocol — wired into the same record store
+          A standalone LMS, knowledge base, and resource hub on the XPMS 2.0 protocol, wired into the same record store
           your field operations run on. Train, certify, and recertify, then let those credentials gate real work.
         </p>
         <div className="flex flex-wrap gap-3 pt-2">

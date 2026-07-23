@@ -160,7 +160,7 @@ export default async function PortalRoomPage({
                   description={t(
                     "p.shared.messages.room.empty",
                     undefined,
-                    "Say hello — your account manager gets notified.",
+                    "Say hello. Your account manager gets notified.",
                   )}
                 />
               </li>

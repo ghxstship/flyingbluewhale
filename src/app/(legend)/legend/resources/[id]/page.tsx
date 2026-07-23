@@ -57,7 +57,7 @@ export default async function ResourceDetail({ params }: { params: Promise<{ id:
       <ModuleHeader
         eyebrow="Resource"
         title={resource.title}
-        subtitle={`${RESOURCE_KIND_LABELS[resource.kind]}${collection ? ` — ${collection.name}` : ""}`}
+        subtitle={`${RESOURCE_KIND_LABELS[resource.kind]}${collection ? ` · ${collection.name}` : ""}`}
         breadcrumbs={[
           { label: "LEG3ND" },
           { label: "Resources", href: "/legend/resources" },

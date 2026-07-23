@@ -37,7 +37,7 @@ export default async function PromoterHome({ params }: { params: Promise<{ slug:
       description: t(
         "p.promoter.home.coPro.description",
         undefined,
-        "Your share of the deal — fees, expenses, settlement basis.",
+        "Your share of the deal: fees, expenses, settlement basis.",
       ),
       body: (
         <div className="grid gap-2 sm:grid-cols-2">

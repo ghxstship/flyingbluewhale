@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
     // restoration is no longer safe (cascade reaper may have already taken
     // referenced rows). Surface a clear 409 so the caller knows it's a
     // hard delete now.
-    return apiError("conflict", "Grace window has expired — account cannot be restored");
+    return apiError("conflict", "Grace window has expired. The account cannot be restored.");
   }
 
   // Restore the profile. `email` + `name` come from auth.users which the

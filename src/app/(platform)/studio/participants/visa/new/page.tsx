@@ -37,10 +37,10 @@ export default async function Page() {
             maxLength={60}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="status" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.participants.visa.new.statusLabel", undefined, "Status")}
             </label>
-            <select name="status" defaultValue="open" className="ps-input mt-1.5 w-full">
+            <select id="status" name="status" defaultValue="open" className="ps-input mt-1.5 w-full">
               <option value="open">{t("console.participants.visa.new.status.open", undefined, "Open")}</option>
               <option value="invitation_letter">
                 {t("console.participants.visa.new.status.invitationLetter", undefined, "Invitation letter sent")}

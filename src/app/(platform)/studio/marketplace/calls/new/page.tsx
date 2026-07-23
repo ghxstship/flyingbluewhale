@@ -26,10 +26,10 @@ export default async function Page() {
             maxLength={200}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="kind" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.marketplace.calls.new.fields.kind", undefined, "Kind")}
             </label>
-            <select name="kind" className="ps-input mt-1.5 w-full" defaultValue="talent_call">
+            <select id="kind" name="kind" className="ps-input mt-1.5 w-full" defaultValue="talent_call">
               <option value="talent_call">
                 {t("console.marketplace.calls.new.kind.talentCall", undefined, "Talent Call")}
               </option>
@@ -41,10 +41,10 @@ export default async function Page() {
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="description" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.marketplace.calls.new.fields.description", undefined, "Description")}
             </label>
-            <textarea name="description" rows={6} maxLength={8000} className="ps-input mt-1.5 w-full" />
+            <textarea id="description" name="description" rows={6} maxLength={8000} className="ps-input mt-1.5 w-full" />
           </div>
           <Input
             label={t("console.marketplace.calls.new.fields.genreTags", undefined, "Genre Tags (Comma-separated)")}

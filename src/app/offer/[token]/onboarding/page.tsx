@@ -48,7 +48,7 @@ export default async function OnboardingPortalPage({ params }: { params: Promise
           {t(
             "legal.offerOnboarding.lockedPrefix",
             undefined,
-            "Open your engagement letter first to unlock onboarding —",
+            "Open your engagement letter first to unlock onboarding:",
           )}{" "}
           <Link href={`/offer/${token}`} className="underline">
             {t("legal.offerOnboarding.returnToLetter", undefined, "return to letter")}

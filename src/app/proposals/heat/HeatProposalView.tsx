@@ -129,7 +129,7 @@ function Hero() {
           {t(
             "legal.heatProposal.heroSub",
             undefined,
-            "A retained activation studio for the East Plaza inside Kaseya Center — concept, engineering, fabrication, install, and strike across a tiered menu of pop-up moments calibrated to partner unlocks, homestand rhythm, and signature plaza takeovers.",
+            "A retained activation studio for the East Plaza inside Kaseya Center: concept, engineering, fabrication, install, and strike across a tiered menu of pop-up moments calibrated to partner unlocks, homestand rhythm, and signature plaza takeovers.",
           )}
         </p>
         <dl className="heat-hero-meta">
@@ -191,7 +191,7 @@ function ProjectOverview() {
         sub={t(
           "legal.heatProposal.overviewSub",
           undefined,
-          "Three engagement vectors, designed to compound. Each activation pulls from a tiered build menu. A monthly retainer — pick one of three tiers — holds dedicated studio capacity behind the program. Add-Ons stack onto either, on demand.",
+          "Three engagement vectors, designed to compound. Each activation pulls from a tiered build menu. A monthly retainer (pick one of three tiers) holds dedicated studio capacity behind the program. Add-Ons stack onto either, on demand.",
         )}
       />
       <div className="heat-grid-3" style={{ marginTop: 24 }}>
@@ -282,7 +282,7 @@ function ProjectOverview() {
             />
             <Detail
               label={t("legal.heatProposal.assetReuse", undefined, "Asset Reuse")}
-              value={t("legal.heatProposal.assetReuseValue", undefined, "30–50% Credit On Re-Deployment")}
+              value={t("legal.heatProposal.assetReuseValue", undefined, "30 to 50% Credit On Re-Deployment")}
             />
           </dl>
         </div>
@@ -310,7 +310,7 @@ function RetainerTiers() {
         sub={t(
           "legal.heatProposal.retainerTiersSub",
           undefined,
-          "Three retainer tiers, scaled to your activation cadence. Each tier builds on the last — Elevated includes everything in Base, and Premium includes everything in Elevated plus exclusive lines reserved for the top tier.",
+          "Three retainer tiers, scaled to your activation cadence. Each tier builds on the last: Elevated includes everything in Base, and Premium includes everything in Elevated plus exclusive lines reserved for the top tier.",
         )}
       />
       <div className="heat-retainer-grid" style={{ marginTop: 28 }}>
@@ -391,7 +391,7 @@ function RetainerTiers() {
             {t(
               "legal.heatProposal.premiumExclusivesSub",
               undefined,
-              "Four lines available only at the Premium tier — not à la carte, not on Elevated, not as a one-off buy. Reserved for partners running a season-defining program with us.",
+              "Four lines available only at the Premium tier: not à la carte, not on Elevated, not as a one-off buy. Reserved for partners running a season-defining program with us.",
             )}
           </p>
           <ul className="heat-premium-banner-grid">
@@ -535,7 +535,7 @@ function ActivationTiers() {
                   {t(
                     "legal.heatProposal.tierFootnotePrefix",
                     undefined,
-                    "Larger architectural moves — chemetal cladding, container architecture, full POS retail, hospitality builds — are quoted separately from the",
+                    "Larger architectural moves (chemetal cladding, container architecture, full POS retail, hospitality builds) are quoted separately from the",
                   )}{" "}
                   <a href="#addons">{t("legal.heatProposal.addonsMenuLink", undefined, "Add-Ons menu")}</a>{" "}
                   {t(
@@ -569,7 +569,7 @@ function ScopeOfWork() {
         sub={t(
           "legal.heatProposal.scopeSub",
           undefined,
-          "Eleven scope nodes covering every fabricated and printed element plus the production services that move it from shop to plaza and back. Tier defines breadth and finish — not which nodes are touched.",
+          "Eleven scope nodes covering every fabricated and printed element plus the production services that move it from shop to plaza and back. Tier defines breadth and finish, not which nodes are touched.",
         )}
       />
       <div className="heat-grid-2" style={{ marginTop: 24 }}>
@@ -723,7 +723,7 @@ function ProductionLifecycle({
         sub={t(
           "legal.heatProposal.lifecycleSub",
           undefined,
-          "Eight phases, identical structure across every activation. The runway scales with build tier — Small condenses to five weeks, Medium runs nine, Large stretches to thirteen.",
+          "Eight phases, identical structure across every activation. The runway scales with build tier: Small condenses to five weeks, Medium runs nine, Large stretches to thirteen.",
         )}
       />
       <div
@@ -970,7 +970,7 @@ function Addons() {
         sub={t(
           "legal.heatProposal.addonsSub",
           undefined,
-          "The full menu of optional upgrades — material, functional, service, logistics, and documentation. Pick any item, add it to any retainer or any build. Priced by request.",
+          "The full menu of optional upgrades: material, functional, service, logistics, and documentation. Pick any item, add it to any retainer or any build. Priced by request.",
         )}
       />
       <div style={{ marginTop: 24, display: "grid", gap: 28 }}>
@@ -1093,7 +1093,7 @@ function ChangeOrders() {
         sub={t(
           "legal.heatProposal.changeOrdersSub",
           undefined,
-          "Scope outside the base tier menu — issued individually or stacked into a single activation SOW.",
+          "Scope outside the base tier menu, issued individually or stacked into a single activation SOW.",
         )}
       />
       <div className="heat-grid-2" style={{ marginTop: 24 }}>

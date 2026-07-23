@@ -3,7 +3,7 @@
 import { useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ActionBar, EmptySkeleton, Fab, GroupedList, KIcon, SheetHead, SwipeRow } from "@/components/mobile/kit";
+import { ActionBar, EmptySkeleton, Fab, GroupedList, KIcon, Sheet, SwipeRow } from "@/components/mobile/kit";
 import type { ViewMode } from "@/components/mobile/kit";
 import { useToast } from "@/lib/hooks/useToast";
 import { useT } from "@/lib/i18n/LocaleProvider";
@@ -230,17 +230,16 @@ export function TimeView({ rows, eyebrow, title }: { rows: TimeRow[]; eyebrow: s
         items.map(row)
       )}
 
-      {/* Kit 31 swipe Note — the shift-note form bound to the swiped entry. */}
+      {/* Kit 31 swipe Note — the shift-note form bound to the swiped entry.
+          Kit 32 drawer canon: the kit Sheet shell carries the scrim, SheetHead
+          and the ESC / focus-trap / focus-restore semantics via useDismissable. */}
       {noteTarget && (
-        <div className="sheet">
-          <button type="button" className="sheet-bg" aria-label={t("m.time.note.close", undefined, "Close")} onClick={() => setNoteTarget(null)} />
-          <div className="sheet-panel" role="dialog" aria-modal="true">
-            <div className="sheet-grip" />
-            <SheetHead
-              icon="StickyNote"
-              title={t("m.time.note.title", undefined, "Shift Note")}
-              onClose={() => setNoteTarget(null)}
-            />
+        <Sheet
+          icon="StickyNote"
+          title={t("m.time.note.title", undefined, "Shift Note")}
+          closeLabel={t("m.time.note.close", undefined, "Close")}
+          onClose={() => setNoteTarget(null)}
+        >
             <p className="form-intro" style={{ marginTop: 0 }}>
               {noteTarget.day} · {noteTarget.span}
             </p>
@@ -263,8 +262,7 @@ export function TimeView({ rows, eyebrow, title }: { rows: TimeRow[]; eyebrow: s
             >
               {pending ? t("m.time.note.saving", undefined, "Saving…") : t("m.time.note.save", undefined, "Add Note")}
             </button>
-          </div>
-        </div>
+        </Sheet>
       )}
 
       {/* Kit FAB: Add Note. */}

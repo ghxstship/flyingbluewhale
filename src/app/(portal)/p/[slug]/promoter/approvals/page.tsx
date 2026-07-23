@@ -103,7 +103,7 @@ export default async function PromoterApprovals({ params }: { params: Promise<{ 
                   <div>
                     <div className="text-sm font-semibold">
                       {propMap.get(a.proposal_id) ?? t("p.promoter.approvals.proposalFallback", undefined, "Proposal")}{" "}
-                      — {a.title ?? a.kind}
+                      {a.title ?? a.kind}
                     </div>
                     <div className="font-mono text-[11px] text-[var(--p-text-2)]">
                       {a.kind} · {fmt.date(a.created_at)}

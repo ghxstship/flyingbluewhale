@@ -167,7 +167,7 @@ export default async function ProfilePage() {
           {t(
             "me.profile.public.intro.after",
             undefined,
-            " is checked. Verification badges are awarded by the platform — they don’t appear here as editable fields.",
+            " is checked. Verification badges are awarded by the platform. They don’t appear here as editable fields.",
           )}
         </p>
         <div className="mt-4 max-w-2xl">
@@ -185,7 +185,7 @@ export default async function ProfilePage() {
               hint={t(
                 "me.profile.public.handle.hint",
                 undefined,
-                "3–64 chars, lowercase letters / digits / underscore / hyphen. Unique across the platform.",
+                "3 to 64 chars, lowercase letters / digits / underscore / hyphen. Unique across the platform.",
               )}
             />
             <Input
@@ -223,7 +223,7 @@ export default async function ProfilePage() {
                 placeholder={t("me.profile.public.bio.placeholder", undefined, "A few paragraphs about your practice.")}
               />
               <span className="text-[11px] text-[var(--p-text-2)]">
-                {t("me.profile.public.bio.hint", undefined, "Markdown not parsed — plain text only.")}
+                {t("me.profile.public.bio.hint", undefined, "Markdown not parsed; plain text only.")}
               </span>
             </label>
             <Input

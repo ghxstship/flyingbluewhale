@@ -260,7 +260,7 @@ export default async function MobileProfilePage() {
               {t(
                 "m.profile.steps.summary",
                 { done: doneN, total: steps.length },
-                `${doneN} of ${steps.length} — a complete profile auto-imports into every project you join.`,
+                `${doneN} of ${steps.length}. A complete profile auto-imports into every project you join.`,
               )}
             </div>
             {steps

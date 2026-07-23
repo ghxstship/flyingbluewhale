@@ -1,7 +1,8 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { CustomRoleForm } from "./CustomRoleForm";
-import { deleteCustomRole } from "./actions";
+import { DeleteForm } from "@/components/DeleteForm";
+import { deleteCustomRoleById } from "./actions";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
@@ -178,12 +179,14 @@ export default async function RolesPage() {
                     <td className="text-xs text-[var(--p-text-2)]">{(r.permissions ?? []).join(", ") || "—"}</td>
                     <td>
                       {!r.is_system && (
-                        <form action={deleteCustomRole}>
-                          <input type="hidden" name="id" value={r.id} />
-                          <button type="submit" className="text-xs text-[var(--p-danger)] hover:underline">
-                            {t("common.delete", undefined, "Delete")}
-                          </button>
-                        </form>
+                        <DeleteForm
+                          action={deleteCustomRoleById.bind(null, r.id)}
+                          confirm={t(
+                            "console.people.roles.deleteConfirm",
+                            { role: r.label },
+                            `Delete the custom role "${r.label}"? Members holding it fall back to their base role.`,
+                          )}
+                        />
                       )}
                     </td>
                   </tr>

@@ -50,7 +50,7 @@ export function RevisionDecision({ slug, proposalId, roundId }: { slug: string; 
       sub: t(
         "p.client.proposals.revisions.decision.reject.sub",
         undefined,
-        "Stop the line — significant rethink needed.",
+        "Stop the line. Significant rethink needed.",
       ),
       tone: "error",
     },
@@ -92,7 +92,7 @@ export function RevisionDecision({ slug, proposalId, roundId }: { slug: string; 
         placeholder={t(
           "p.client.proposals.revisions.decision.notePlaceholder",
           undefined,
-          "Notes for the team — what's working, what isn't…",
+          "Notes for the team: what's working, what isn't…",
         )}
         className="ps-input w-full"
       />

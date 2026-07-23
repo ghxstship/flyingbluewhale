@@ -36,10 +36,10 @@ export default async function Page() {
             required
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="notes" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.programs.reviews.new.fields.notes", undefined, "Notes")}
             </label>
-            <textarea name="notes" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
+            <textarea id="notes" name="notes" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
           </div>
         </FormShell>
       </div>

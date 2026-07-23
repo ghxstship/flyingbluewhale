@@ -18,7 +18,7 @@ const Schema = z.object({
   model: z.enum(["claude-opus-4-7", "claude-sonnet-4-6"]).default("claude-sonnet-4-6"),
 });
 
-const SYSTEM = `You are the ATLVS Technologies proposal-writing assistant, embedded in a production operations platform for live events, fabrication, and creative ops. Draft a polished, client-ready proposal in clean markdown given the proposal metadata and any operator instructions. Use a confident, premium voice; never compare to competitors. Cover scope, approach, deliverables, timeline, and a brief commercial summary. Keep it tight and operator-grade — no filler.`;
+const SYSTEM = `You are the ATLVS Technologies proposal-writing assistant, embedded in a production operations platform for live events, fabrication, and creative ops. Draft a polished, client-ready proposal in clean markdown given the proposal metadata and any operator instructions. Use a confident, premium voice; never compare to competitors. Cover scope, approach, deliverables, timeline, and a brief commercial summary. Keep it tight and operator-grade. No filler.`;
 
 export async function POST(req: Request) {
   // AI calls cost real dollars and are abuse magnets. Limit before model

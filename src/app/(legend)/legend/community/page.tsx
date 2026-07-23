@@ -84,7 +84,7 @@ export default async function CommunityPage() {
       />
       <div className="mx-auto max-w-2xl space-y-6">
         <PostComposer />
-        <ActivityTimeline items={items} emptyLabel="No posts yet — start the conversation." />
+        <ActivityTimeline items={items} emptyLabel="No posts yet. Start the conversation." />
       </div>
     </>
   );

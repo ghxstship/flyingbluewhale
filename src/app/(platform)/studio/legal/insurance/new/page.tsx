@@ -33,10 +33,10 @@ export default async function Page() {
             required
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="kind" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.legal.insurance.new.kindLabel", undefined, "Kind")}
             </label>
-            <select name="kind" defaultValue="general_liability" className="ps-input mt-1.5 w-full" required>
+            <select id="kind" name="kind" defaultValue="general_liability" className="ps-input mt-1.5 w-full" required>
               <option value="general_liability">
                 {t("console.legal.insurance.new.kind.generalLiability", undefined, "General Liability")}
               </option>

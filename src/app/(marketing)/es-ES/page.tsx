@@ -17,9 +17,9 @@ import {
 import { SetLocaleCta } from "./SetLocaleCta";
 
 export const metadata: Metadata = buildMetadata({
-  title: "ATLVS — El motor que da vida a nuevos mundos",
+  title: "ATLVS: El motor que da vida a nuevos mundos",
   description:
-    "Desarrolla, construye, opera y vive producciones en vivo sobre una sola plataforma. Un registro, cuatro apps conectadas — ATLVS, COMPVSS, GVTEWAY, LEG3ND. RLS en la base de datos. Construido por operadores.",
+    "Desarrolla, construye, opera y vive producciones en vivo sobre una sola plataforma. Un registro, cuatro apps conectadas: ATLVS, COMPVSS, GVTEWAY, LEG3ND. RLS en la base de datos. Construido por operadores.",
   path: "/es-ES",
   ogLocale: "es_ES",
   languages: {
@@ -39,7 +39,7 @@ export const metadata: Metadata = buildMetadata({
 const FAQ_ES = [
   {
     q: "¿Qué hace la plataforma?",
-    a: "Un registro, cuatro apps conectadas. ATLVS desarrolla y construye el mundo — proyectos, advancing, finanzas, compras y una IA que redacta el papeleo. COMPVSS lo opera sobre el terreno — turnos, certificaciones, escaneo en puerta, incidentes, offline-first. GVTEWAY es donde se vive el mundo — entradas, portales, marketplace. LEG3ND es el conocimiento sobre el que se levanta — el Standard, cursos, certificaciones, catálogo y motor de cumplimiento.",
+    a: "Un registro, cuatro apps conectadas. ATLVS desarrolla y construye el mundo: proyectos, advancing, finanzas, compras y una IA que redacta el papeleo. COMPVSS lo opera sobre el terreno: turnos, certificaciones, escaneo en puerta, incidentes, offline-first. GVTEWAY es donde se vive el mundo: entradas, portales, marketplace. LEG3ND es el conocimiento sobre el que se levanta: el Standard, cursos, certificaciones, catálogo y motor de cumplimiento.",
   },
   {
     q: "¿Para quién es?",
@@ -51,7 +51,7 @@ const FAQ_ES = [
   },
   {
     q: "¿La app de campo funciona de verdad offline?",
-    a: "Sí. COMPVSS es una PWA offline-first. Escaneo, fichaje, daily log, intake de incidente, intake médico — todo se encola localmente y sincroniza al volver la señal. Probado en puertas de 15,000 invitados.",
+    a: "Sí. COMPVSS es una PWA offline-first. Escaneo, fichaje, daily log, intake de incidente, intake médico. Todo se encola localmente y sincroniza al volver la señal. Probado en puertas de 15,000 invitados.",
   },
 ];
 
@@ -102,7 +102,7 @@ export default function HomeES() {
           Hazlos vivir en vivo.
         </h1>
         <p className="mt-6 max-w-2xl text-lg text-[var(--p-text-2)]">
-          No es un CRM pegado a un PM. Un solo motor para el mundo entero — desarrollado, construido, operado y vivido
+          No es un CRM pegado a un PM. Un solo motor para el mundo entero: desarrollado, construido, operado y vivido
           sobre un único registro.
         </p>
         <div className="mt-10 flex flex-wrap gap-3">

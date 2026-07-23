@@ -54,10 +54,10 @@ export default async function Page() {
           submitLabel={t("console.daySheets.new.submit", undefined, "Create Day Sheet")}
         >
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="tour_id" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.daySheets.new.fields.tour", undefined, "Tour · Optional")}
             </label>
-            <select name="tour_id" className="ps-input mt-1.5 w-full">
+            <select id="tour_id" name="tour_id" className="ps-input mt-1.5 w-full">
               <option value="">—</option>
               {tours.map((tour) => (
                 <option key={tour.id} value={tour.id}>
@@ -67,10 +67,10 @@ export default async function Page() {
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="project_id" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.daySheets.new.fields.project", undefined, "Date · Project · Optional")}
             </label>
-            <select name="project_id" className="ps-input mt-1.5 w-full">
+            <select id="project_id" name="project_id" className="ps-input mt-1.5 w-full">
               <option value="">—</option>
               {projects.map((p) => (
                 <option key={p.id} value={p.id}>

@@ -50,10 +50,10 @@ export default async function Page() {
             )}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="description" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.governance.approvals.policies.new.descriptionLabel", undefined, "Description")}
             </label>
-            <textarea name="description" rows={3} maxLength={1000} className="ps-input mt-1.5 w-full" />
+            <textarea id="description" name="description" rows={3} maxLength={1000} className="ps-input mt-1.5 w-full" />
           </div>
         </FormShell>
       </div>

@@ -177,7 +177,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           {t(
             "p.sponsor.entitlements.footnote",
             undefined,
-            "Evidence — proof of delivery (photo, link, signed receipt) — is attached as items are fulfilled. Disputes should be raised within 30 days of the listed due date.",
+            "Evidence, meaning proof of delivery (photo, link, signed receipt), is attached as items are fulfilled. Disputes should be raised within 30 days of the listed due date.",
           )}
         </p>
       </div>

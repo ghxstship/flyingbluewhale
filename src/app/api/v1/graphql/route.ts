@@ -40,7 +40,7 @@ export async function POST(req: Request) {
   const rl = await ratelimit({ key: keyFromRequest(req, "graphql"), ...RATE_BUDGETS.write });
   if (!rl.ok) {
     return Response.json(
-      { errors: [{ message: "Rate limited — slow down.", extensions: { code: "RATE_LIMITED" } }] },
+      { errors: [{ message: "Rate limited. Slow down.", extensions: { code: "RATE_LIMITED" } }] },
       { status: 429 },
     );
   }

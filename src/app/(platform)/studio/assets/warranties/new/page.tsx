@@ -35,11 +35,11 @@ export default async function Page() {
           submitLabel={t("common.create", undefined, "Create")}
         >
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="project_id" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.assets.warranties.new.projectLabel", undefined, "Project")}
               <span className="ms-0.5 text-[var(--p-danger)]">*</span>
             </label>
-            <select name="project_id" required className="ps-input mt-1.5 w-full" defaultValue="">
+            <select id="project_id" name="project_id" required className="ps-input mt-1.5 w-full" defaultValue="">
               <option value="" disabled>
                 {t("common.selectEllipsis", undefined, "Select…")}
               </option>
@@ -90,16 +90,16 @@ export default async function Page() {
             min="0"
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="coverage_summary_md" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.assets.warranties.new.coverageLabel", undefined, "Coverage summary")}
             </label>
-            <textarea name="coverage_summary_md" rows={4} maxLength={5000} className="ps-input mt-1.5 w-full" />
+            <textarea id="coverage_summary_md" name="coverage_summary_md" rows={4} maxLength={5000} className="ps-input mt-1.5 w-full" />
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="notes" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.assets.warranties.new.notesLabel", undefined, "Notes")}
             </label>
-            <textarea name="notes" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
+            <textarea id="notes" name="notes" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
           </div>
         </FormShell>
       </div>

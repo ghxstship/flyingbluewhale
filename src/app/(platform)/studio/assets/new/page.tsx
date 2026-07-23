@@ -57,10 +57,10 @@ export default async function Page() {
           />
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-medium text-[var(--p-text-2)]">
+              <label htmlFor="asset_class" className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.assets.new.classLabel", undefined, "Class")}
               </label>
-              <select name="asset_class" required className="ps-input mt-1.5 w-full" defaultValue="gear">
+              <select id="asset_class" name="asset_class" required className="ps-input mt-1.5 w-full" defaultValue="gear">
                 {ASSET_CLASSES.map((c) => (
                   <option key={c} value={c}>
                     {ASSET_CLASS_LABELS[c]}
@@ -80,10 +80,10 @@ export default async function Page() {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-medium text-[var(--p-text-2)]">
+              <label htmlFor="ownership" className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.assets.new.ownershipLabel", undefined, "Ownership")}
               </label>
-              <select name="ownership" required className="ps-input mt-1.5 w-full" defaultValue="owned">
+              <select id="ownership" name="ownership" required className="ps-input mt-1.5 w-full" defaultValue="owned">
                 {OWNERSHIPS.map((o) => (
                   <option key={o} value={o}>
                     {t(`console.assets.ownership.${o}`, undefined, o.replace(/_/g, " "))}
@@ -92,10 +92,10 @@ export default async function Page() {
               </select>
             </div>
             <div>
-              <label className="text-xs font-medium text-[var(--p-text-2)]">
+              <label htmlFor="disposition" className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.assets.new.dispositionLabel", undefined, "Disposition")}
               </label>
-              <select name="disposition" className="ps-input mt-1.5 w-full" defaultValue="">
+              <select id="disposition" name="disposition" className="ps-input mt-1.5 w-full" defaultValue="">
                 <option value="">{t("console.assets.new.dispositionNone", undefined, "None")}</option>
                 {ASSET_DISPOSITIONS.map((d) => (
                   <option key={d} value={d}>
@@ -107,10 +107,10 @@ export default async function Page() {
           </div>
           {locations.length > 0 && (
             <div>
-              <label className="text-xs font-medium text-[var(--p-text-2)]">
+              <label htmlFor="location_id" className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.assets.new.locationLabel", undefined, "Location")}
               </label>
-              <select name="location_id" className="ps-input mt-1.5 w-full" defaultValue="">
+              <select id="location_id" name="location_id" className="ps-input mt-1.5 w-full" defaultValue="">
                 <option value="">{t("console.assets.new.locationNone", undefined, "Unassigned")}</option>
                 {locations.map((l) => (
                   <option key={l.id} value={l.id}>
@@ -150,10 +150,10 @@ export default async function Page() {
             type="date"
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="notes" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.assets.new.notesLabel", undefined, "Notes")}
             </label>
-            <textarea name="notes" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
+            <textarea id="notes" name="notes" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
           </div>
         </FormShell>
       </div>

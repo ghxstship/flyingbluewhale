@@ -19,7 +19,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         description={t(
           "p.client.messages.empty.description",
           undefined,
-          "Your production desk sends project updates to the email on file; a copy lands here so you can scan the thread without searching your inbox. No inbound from this surface — reach your production lead directly for anything urgent.",
+          "Your production desk sends project updates to the email on file; a copy lands here so you can scan the thread without searching your inbox. No inbound from this surface. Reach your production lead directly for anything urgent.",
         )}
       />
     </PortalSubpage>

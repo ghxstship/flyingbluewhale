@@ -53,10 +53,10 @@ export default async function Page({ params }: { params: Promise<{ categoryId: s
             required
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="description" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.accreditation.categories.edit.descriptionLabel", undefined, "Description")}
             </label>
-            <textarea
+            <textarea id="description"
               name="description"
               rows={3}
               maxLength={500}

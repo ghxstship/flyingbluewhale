@@ -128,10 +128,10 @@ export default async function Page({ params }: { params: Promise<{ policyId: str
               defaultValue={String(steps.length + 1)}
             />
             <div>
-              <label className="text-xs font-medium text-[var(--p-text-2)]">
+              <label htmlFor="routing_kind" className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.governance.approvals.policies.detail.routingLabel", undefined, "Routing kind")}
               </label>
-              <select name="routing_kind" required className="ps-input mt-1.5 w-full" defaultValue="sequential">
+              <select id="routing_kind" name="routing_kind" required className="ps-input mt-1.5 w-full" defaultValue="sequential">
                 {ROUTING_KINDS.map((k) => (
                   <option key={k} value={k}>
                     {t(`console.governance.approvals.routing.${k}`, undefined, ROUTING_LABEL[k])}

@@ -25,16 +25,16 @@ export default async function Page() {
             maxLength={200}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="description" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.comms.surveys.new.descriptionLabel", undefined, "Description")}
             </label>
-            <textarea name="description" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
+            <textarea id="description" name="description" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="audience" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.comms.surveys.new.audienceLabel", undefined, "Audience")}
             </label>
-            <select name="audience" className="ps-input mt-1.5 w-full" defaultValue="all">
+            <select id="audience" name="audience" className="ps-input mt-1.5 w-full" defaultValue="all">
               <option value="all">{t("console.comms.surveys.new.audience.all", undefined, "All")}</option>
               <option value="crew">{t("console.comms.surveys.new.audience.crew", undefined, "Crew")}</option>
               <option value="contractors">

@@ -59,16 +59,16 @@ export async function generateMetadata({ params }: { params: Promise<{ handle: s
     return buildMetadata({
       title: "Talent on the ATLVS Marketplace",
       description:
-        "Browse artist EPKs, fee bands, and riders on the ATLVS marketplace — bookable talent, verified by operators.",
+        "Browse artist EPKs, fee bands, and riders on the ATLVS marketplace: bookable talent, verified by operators.",
       path: `/marketplace/talent/${handle}`,
       noIndex: true,
     });
   }
   return buildMetadata({
-    title: `${t.act_name} — Talent on ATLVS`,
+    title: `${t.act_name} · Talent on ATLVS`,
     description: metaDescription(
       t.tagline ?? t.bio,
-      `Book ${t.act_name} through the ATLVS marketplace — EPK, fee band, and booking inquiry in one place.`,
+      `Book ${t.act_name} through the ATLVS marketplace: EPK, fee band, and booking inquiry in one place.`,
     ),
     path: `/marketplace/talent/${t.public_handle}`,
     ogImageEyebrow: "ATLVS Marketplace",

@@ -16,13 +16,13 @@ export function NewWipSnapshotForm({ projects }: { projects: { id: string; name:
     >
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
+          <label htmlFor="project_id" className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.finance.wip.new.project", undefined, "Project")}
             <span aria-hidden="true" className="ms-0.5 text-[var(--p-danger)]">
               *
             </span>
           </label>
-          <select name="project_id" required defaultValue="" className="ps-input mt-1.5 w-full">
+          <select id="project_id" name="project_id" required defaultValue="" className="ps-input mt-1.5 w-full">
             <option value="" disabled>
               {t("console.finance.wip.new.selectProject", undefined, "Select a project")}
             </option>
@@ -120,10 +120,10 @@ export function NewWipSnapshotForm({ projects }: { projects: { id: string; name:
       />
 
       <div>
-        <label className="text-xs font-medium text-[var(--p-text-2)]">
+        <label htmlFor="notes" className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.finance.wip.new.notes", undefined, "Notes")}
         </label>
-        <textarea name="notes" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
+        <textarea id="notes" name="notes" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
       </div>
     </FormShell>
   );

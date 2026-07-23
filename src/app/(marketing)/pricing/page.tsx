@@ -661,7 +661,7 @@ export default async function PricingPage() {
               content: t(
                 "marketing.pages.pricing.billingFaq.q1.content",
                 undefined,
-                "Yes. Upgrade or downgrade whenever you like — changes are prorated to the day, and your data carries across every tier.",
+                "Yes. Upgrade or downgrade whenever you like. Changes are prorated to the day, and your data carries across every tier.",
               ),
             },
             {

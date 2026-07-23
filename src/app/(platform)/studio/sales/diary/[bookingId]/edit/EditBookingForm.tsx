@@ -46,10 +46,10 @@ export function EditBookingForm({
       submitLabel={t("console.diary.edit.submit", undefined, "Save Booking")}
     >
       <div>
-        <label className="text-xs font-medium text-[var(--p-text-2)]">
+        <label htmlFor="space_id" className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.diary.field.space", undefined, "Space")}
         </label>
-        <select name="space_id" required defaultValue={initial.space_id} className="ps-input mt-1.5 w-full">
+        <select id="space_id" name="space_id" required defaultValue={initial.space_id} className="ps-input mt-1.5 w-full">
           {spaces.map((s) => (
             <option key={s.id} value={s.id}>
               {s.name}
@@ -68,10 +68,10 @@ export function EditBookingForm({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
+          <label htmlFor="starts_at" className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.diary.field.startsAt", undefined, "Starts at")}
           </label>
-          <input
+          <input id="starts_at"
             name="starts_at"
             type="datetime-local"
             required
@@ -80,10 +80,10 @@ export function EditBookingForm({
           />
         </div>
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
+          <label htmlFor="ends_at" className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.diary.field.endsAt", undefined, "Ends at")}
           </label>
-          <input
+          <input id="ends_at"
             name="ends_at"
             type="datetime-local"
             required
@@ -95,10 +95,10 @@ export function EditBookingForm({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
+          <label htmlFor="booking_state" className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.diary.field.state", undefined, "State")}
           </label>
-          <select name="booking_state" defaultValue={initial.booking_state} className="ps-input mt-1.5 w-full">
+          <select id="booking_state" name="booking_state" defaultValue={initial.booking_state} className="ps-input mt-1.5 w-full">
             {BOOKING_STATES.map((s) => (
               <option key={s} value={s}>
                 {BOOKING_STATE_LABELS[s]}
@@ -117,10 +117,10 @@ export function EditBookingForm({
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
+          <label htmlFor="project_id" className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.diary.field.project", undefined, "Project (optional)")}
           </label>
-          <select name="project_id" defaultValue={initial.project_id ?? ""} className="ps-input mt-1.5 w-full">
+          <select id="project_id" name="project_id" defaultValue={initial.project_id ?? ""} className="ps-input mt-1.5 w-full">
             <option value="">{t("console.diary.field.none", undefined, "None")}</option>
             {projects.map((p) => (
               <option key={p.id} value={p.id}>
@@ -130,10 +130,10 @@ export function EditBookingForm({
           </select>
         </div>
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
+          <label htmlFor="client_id" className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.diary.field.client", undefined, "Client (optional)")}
           </label>
-          <select name="client_id" defaultValue={initial.client_id ?? ""} className="ps-input mt-1.5 w-full">
+          <select id="client_id" name="client_id" defaultValue={initial.client_id ?? ""} className="ps-input mt-1.5 w-full">
             <option value="">{t("console.diary.field.none", undefined, "None")}</option>
             {clients.map((c) => (
               <option key={c.id} value={c.id}>
@@ -145,10 +145,10 @@ export function EditBookingForm({
       </div>
 
       <div>
-        <label className="text-xs font-medium text-[var(--p-text-2)]">
+        <label htmlFor="notes" className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.diary.field.notes", undefined, "Notes")}
         </label>
-        <textarea name="notes" rows={3} defaultValue={initial.notes ?? ""} className="ps-input mt-1.5 w-full" />
+        <textarea id="notes" name="notes" rows={3} defaultValue={initial.notes ?? ""} className="ps-input mt-1.5 w-full" />
       </div>
     </FormShell>
   );

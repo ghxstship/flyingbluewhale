@@ -59,10 +59,10 @@ export default async function Page() {
           submitLabel={t("console.participants.entries.new.submit", undefined, "Add Entry")}
         >
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="delegation_id" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.participants.entries.new.delegationLabel", undefined, "Delegation")}
             </label>
-            <select name="delegation_id" className="ps-input mt-1.5 w-full" required>
+            <select id="delegation_id" name="delegation_id" className="ps-input mt-1.5 w-full" required>
               {delegations.map((d) => (
                 <option key={d.id} value={d.id}>
                   {d.code ? `${d.code} — ${d.name}` : d.name}
@@ -93,10 +93,10 @@ export default async function Page() {
             placeholder={t("console.participants.entries.new.eventPlaceholder", undefined, "e.g. 100m freestyle")}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="status" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.participants.entries.new.statusLabel", undefined, "Status")}
             </label>
-            <select name="status" defaultValue="nominated" className="ps-input mt-1.5 w-full">
+            <select id="status" name="status" defaultValue="nominated" className="ps-input mt-1.5 w-full">
               <option value="nominated">
                 {t("console.participants.entries.new.statusNominated", undefined, "Nominated")}
               </option>

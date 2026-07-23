@@ -183,10 +183,10 @@ export function ProposalEditor({
         />
         <div className="grid grid-cols-2 gap-2">
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="currency" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.proposals.edit.fields.currency", undefined, "Currency")}
             </label>
-            <select name="currency" defaultValue={defaults.currency} className="ps-input mt-1.5 w-full">
+            <select id="currency" name="currency" defaultValue={defaults.currency} className="ps-input mt-1.5 w-full">
               <option>USD</option>
               <option>EUR</option>
               <option>GBP</option>
@@ -314,10 +314,11 @@ export function ProposalEditor({
         </div>
       ) : (
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
+          <label htmlFor="proposal-blocks-json" className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.proposals.edit.blocksJson", undefined, "Blocks JSON")}
           </label>
           <textarea
+            id="proposal-blocks-json"
             value={json}
             onChange={(e) => setJson(e.target.value)}
             rows={24}

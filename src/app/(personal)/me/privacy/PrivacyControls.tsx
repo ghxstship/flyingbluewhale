@@ -72,7 +72,7 @@ export function PrivacyControls() {
         body={t(
           "me.privacy.export.body",
           undefined,
-          "Download every row in our database that belongs to you — JSON. Includes profile, memberships, conversations, expenses, time entries, and audit log entries you initiated.",
+          "Download every row in our database that belongs to you, as JSON. Includes profile, memberships, conversations, expenses, time entries, and audit log entries you initiated.",
         )}
         action={
           <Button onClick={exportData} loading={exporting} variant="secondary">

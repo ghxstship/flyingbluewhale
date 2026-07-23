@@ -63,7 +63,7 @@ export default async function CrewPage() {
 
   return (
     <>
-      <ModuleHeader eyebrow="LEG3ND · Community" title="Crew & Cohorts" subtitle="Learning crews ranked by total contribution points — climb the board together." />
+      <ModuleHeader eyebrow="LEG3ND · Community" title="Crew & Cohorts" subtitle="Learning crews ranked by total contribution points. Climb the board together." />
 
       <div className="metric-grid mb-6">
         <MetricCard label="Crews" value={crews.length} />

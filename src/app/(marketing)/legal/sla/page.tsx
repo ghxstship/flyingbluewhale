@@ -4,7 +4,7 @@ import { buildMetadata } from "@/lib/seo";
 export const metadata = buildMetadata({
   title: "Service Level Agreement",
   description:
-    "The ATLVS Technologies SLA for the Enterprise tier — 99.9% monthly uptime target, service credits, and incident reporting.",
+    "The ATLVS Technologies SLA for the Enterprise tier: 99.9% monthly uptime target, service credits, and incident reporting.",
   path: "/legal/sla",
 });
 
@@ -29,7 +29,7 @@ export default async function SlaPage() {
           {t(
             "marketing.legal.sla.credits",
             undefined,
-            "Service credits for missed SLA: 10% (99.0–99.9%), 25% (98.0–99.0%), 50% (below 98.0%).",
+            "Service credits for a missed SLA: 10% (99.0% to 99.9%), 25% (98.0% to 99.0%), 50% (below 98.0%).",
           )}
         </p>
         <p>

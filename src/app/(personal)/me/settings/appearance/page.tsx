@@ -50,7 +50,7 @@ export default async function AppearancePage() {
             {t(
               "me.appearance.density.hint",
               undefined,
-              "Tightens tables, forms, and the sidebar for power users — or loosens them for tablet + accessibility.",
+              "Tightens tables, forms, and the sidebar for power users, or loosens them for tablet + accessibility.",
             )}
           </p>
         </div>

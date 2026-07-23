@@ -20,7 +20,7 @@ async function postHandler(req: NextRequest) {
   // rate-limit it like every other unauthenticated POST, or one script
   // floods an org's guide threads with spoofed author names.
   const rl = await ratelimit({ key: keyFromRequest(req, "guide-comments"), ...RATE_BUDGETS.write });
-  if (!rl.ok) return apiError("rate_limited", "Too many comments — slow down.");
+  if (!rl.ok) return apiError("rate_limited", "Too many comments. Slow down.");
 
   const parsed = await parseJson(req, Schema);
   if (parsed instanceof NextResponse) return parsed;
@@ -81,7 +81,7 @@ export async function GET(req: NextRequest) {
   // Same IP budget as the POST — unauthenticated enumeration of 100-row
   // pages is otherwise free.
   const rl = await ratelimit({ key: keyFromRequest(req, "guide-comments-read"), ...RATE_BUDGETS.default });
-  if (!rl.ok) return apiError("rate_limited", "Too many requests — slow down.");
+  if (!rl.ok) return apiError("rate_limited", "Too many requests. Slow down.");
 
   const supabase = await createClient();
   const { data: guide } = await supabase

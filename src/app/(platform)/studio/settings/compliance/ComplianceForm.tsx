@@ -72,10 +72,10 @@ export function ComplianceForm({ initial }: { initial: Initial }) {
         </div>
       </div>
       <div>
-        <label className="text-xs font-medium text-[var(--p-text-2)]">
+        <label htmlFor="data_residency" className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.settings.compliance.dataResidencyLabel", undefined, "Data Residency")}
         </label>
-        <select name="data_residency" defaultValue={initial.data_residency ?? "us"} className="ps-input mt-1.5 w-full">
+        <select id="data_residency" name="data_residency" defaultValue={initial.data_residency ?? "us"} className="ps-input mt-1.5 w-full">
           <option value="us">{t("console.settings.compliance.residencyUs", undefined, "United States")}</option>
           <option value="eu">{t("console.settings.compliance.residencyEu", undefined, "European Union")}</option>
           <option value="global">

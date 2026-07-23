@@ -4,7 +4,7 @@ import { buildMetadata } from "@/lib/seo";
 export const metadata = buildMetadata({
   title: "Data Processing Addendum",
   description:
-    "The ATLVS Technologies DPA — controller and processor roles, subprocessors, breach notification, and international data transfers under SCCs and UK IDTA.",
+    "The ATLVS Technologies DPA: controller and processor roles, subprocessors, breach notification, and international data transfers under SCCs and UK IDTA.",
   path: "/legal/dpa",
 });
 

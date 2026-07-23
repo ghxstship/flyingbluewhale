@@ -97,7 +97,7 @@ export default async function MyLearningPage() {
       <ModuleHeader
         eyebrow="LEG3ND · Learn"
         title="My Learning"
-        subtitle="Courses you're enrolled in — pick up where you left off."
+        subtitle="Courses you're enrolled in. Pick up where you left off."
       />
 
       <div className="metric-grid mb-6">

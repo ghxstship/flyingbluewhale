@@ -4,7 +4,7 @@ import { useState, type CSSProperties } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 
-import { KIcon, RoseCard, SheetHead, TOOLS } from "@/components/mobile/kit";
+import { KIcon, RoseCard, Sheet, TOOLS } from "@/components/mobile/kit";
 import { useToast } from "@/lib/hooks/useToast";
 import { useUserPreferences } from "@/lib/hooks/useUserPreferences";
 import { QUICK_ACTIONS, QUICK_ACTION_IDS, type QuickActionId } from "@/lib/mobile/quick-actions";
@@ -270,21 +270,11 @@ export function HomeShell({
         </button>
       </div>
 
+      {/* Kit 32 drawer canon: the kit Sheet shell carries the scrim, the
+          SheetHead (icon + title + explicit ✕) and the ESC / focus-trap /
+          focus-restore semantics via useDismissable. */}
       {qaEdit && (
-        <div className="sheet" role="dialog" aria-modal="true" aria-label={L.qaCustomize}>
-          <button
-            type="button"
-            className="sheet-bg"
-            aria-label={L.qaCustomizeClose}
-            tabIndex={-1}
-            style={{ border: "none", padding: 0, cursor: "default" }}
-            onClick={() => setQaEdit(false)}
-          />
-          <div className="sheet-panel">
-            <div className="sheet-grip" />
-            {/* Kit 31 (live-test resolution #8): every sheet carries the
-                canonical SheetHead — icon + title + explicit ✕ close. */}
-            <SheetHead icon="LayoutGrid" title={L.qaCustomize} closeLabel={L.qaCustomizeClose} onClose={() => setQaEdit(false)} />
+        <Sheet icon="LayoutGrid" title={L.qaCustomize} closeLabel={L.qaCustomizeClose} onClose={() => setQaEdit(false)}>
             <p className="form-intro" style={{ margin: "0 0 12px" }}>{L.qaCustomizeHint}</p>
 
             {/* Active set — reorder (▲▼) + remove (−). Persists on every change. */}
@@ -365,8 +355,7 @@ export function HomeShell({
             >
               {L.qaCustomizeClose}
             </button>
-          </div>
-        </div>
+        </Sheet>
       )}
 
       {/* Toolbox — field utilities (unit/ops/OSHA/weather/radio/checklists) in a

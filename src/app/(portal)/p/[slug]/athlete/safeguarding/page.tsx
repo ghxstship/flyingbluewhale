@@ -159,7 +159,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
           {t(
             "p.athlete.safeguarding.emergencyNote",
             undefined,
-            "If someone is in immediate danger, contact local emergency services first, then file a report. Anonymous reports are accepted — leave the subject blank if needed.",
+            "If someone is in immediate danger, contact local emergency services first, then file a report. Anonymous reports are accepted. Leave the subject blank if needed.",
           )}
         </p>
       </div>

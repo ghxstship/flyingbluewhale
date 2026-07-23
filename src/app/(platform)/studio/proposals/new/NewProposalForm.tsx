@@ -65,10 +65,10 @@ export function NewProposalForm({
         <Input label={t("console.proposals.new.expires", undefined, "Expires")} name="expires_at" type="date" />
       </div>
       <div>
-        <label className="text-xs font-medium text-[var(--p-text-2)]">
+        <label htmlFor="notes" className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.proposals.new.notes", undefined, "Notes / scope")}
         </label>
-        <textarea name="notes" rows={5} className="ps-input mt-1.5 w-full" />
+        <textarea id="notes" name="notes" rows={5} className="ps-input mt-1.5 w-full" />
       </div>
     </FormShell>
   );

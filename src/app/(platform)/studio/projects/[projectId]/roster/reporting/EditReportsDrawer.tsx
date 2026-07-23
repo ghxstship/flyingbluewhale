@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { X } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { FormShell } from "@/components/FormShell";
 import { LabeledCheckbox } from "@/components/ui/Checkbox";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/Sheet";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { setReportsAction } from "./actions";
 
@@ -29,39 +29,22 @@ export function EditReportsDrawer({
   people: RosterPerson[];
 }) {
   const t = useT();
+  const router = useRouter();
   const [managerId, setManagerId] = useState("");
 
   return (
-    <div className="fixed inset-0 z-[var(--p-z-overlay)]">
-      <Link
-        href={closeHref}
-        aria-label={t("console.projects.roster.reporting.close", undefined, "Close")}
-        className="absolute inset-0 bg-[var(--overlay-backdrop)] backdrop-blur-sm"
-      />
-      <aside
-        role="dialog"
-        aria-modal="true"
-        aria-label={t("console.projects.roster.reporting.editTitle", undefined, "Edit Reports")}
-        className="absolute inset-y-0 right-0 z-[var(--p-z-modal)] flex w-full max-w-md flex-col overflow-y-auto border-l border-[var(--p-border)] bg-[var(--p-bg)] shadow-[var(--p-elev-2xl)]"
-      >
-        <div className="flex items-center justify-between border-b border-[var(--p-border)] px-5 py-4">
-          <div>
-            <div className="eyebrow">
-              {t("console.projects.roster.reporting.eyebrow", undefined, "Reporting Structure")}
-            </div>
-            <h2 className="text-lg font-bold text-[var(--p-text-1)]">
-              {t("console.projects.roster.reporting.editTitle", undefined, "Edit Reports")}
-            </h2>
+    /* W6 a11y refit — the shared Radix Sheet primitive supplies the scrim,
+       Escape-to-close, focus trap + restore, and the ✕ control; closing
+       navigates back to the reporting URL (the drawer mounts off `?edit=1`). */
+    <Sheet open onOpenChange={(o) => (!o ? router.push(closeHref) : null)}>
+      <SheetContent side="right" aria-label={t("console.projects.roster.reporting.editTitle", undefined, "Edit Reports")}>
+        <SheetHeader>
+          <div className="eyebrow">
+            {t("console.projects.roster.reporting.eyebrow", undefined, "Reporting Structure")}
           </div>
-          <Link
-            href={closeHref}
-            aria-label={t("console.projects.roster.reporting.close", undefined, "Close")}
-            className="grid size-8 place-items-center rounded-md text-[var(--p-text-3)] hover:bg-[var(--p-surface-2,var(--p-surface))] hover:text-[var(--p-text-1)]"
-          >
-            <X size={16} />
-          </Link>
-        </div>
-        <div className="flex-1 px-5 py-4">
+          <SheetTitle>{t("console.projects.roster.reporting.editTitle", undefined, "Edit Reports")}</SheetTitle>
+        </SheetHeader>
+        <div className="flex-1">
           <FormShell
             action={setReportsAction.bind(null, projectId)}
             submitLabel={t("console.projects.roster.reporting.save", undefined, "Update Reports")}
@@ -111,7 +94,7 @@ export function EditReportsDrawer({
             </fieldset>
           </FormShell>
         </div>
-      </aside>
-    </div>
+      </SheetContent>
+    </Sheet>
   );
 }

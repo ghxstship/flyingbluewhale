@@ -116,7 +116,7 @@ export async function POST(req: NextRequest) {
 
     if (error) return apiError("internal", error.message);
     if (!data) {
-      return apiError("conflict", "Shift attendance changed concurrently — refresh and retry");
+      return apiError("conflict", "Shift attendance changed concurrently. Refresh and retry.");
     }
 
     // Time-entries side-effect — open on check_in, close on check_out.

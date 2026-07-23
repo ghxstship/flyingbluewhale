@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: { params: Promise<{ module: s
       description: t(
         "marketing.features.detail.fallbackDescription",
         undefined,
-        "ATLVS Technologies — one platform for the whole production.",
+        "ATLVS Technologies is one platform for experience production. Four apps, one single source of truth.",
       ),
       path: `/features/${module}`,
     });
@@ -78,7 +78,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
       <JsonLd
         data={[
           softwareApplicationSchema({
-            name: `ATLVS Technologies — ${config.name}`,
+            name: `ATLVS Technologies · ${config.name}`,
             description: config.blurb,
             url: urlFor("marketing", `/features/${config.slug}`),
           }),
@@ -87,7 +87,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
           ...(config.quote
             ? [
                 reviewSchema({
-                  itemName: `ATLVS Technologies — ${config.name}`,
+                  itemName: `ATLVS Technologies · ${config.name}`,
                   rating: config.quote.rating ?? 5,
                   reviewBody: config.quote.text,
                   authorName: config.quote.attribution,
@@ -200,7 +200,7 @@ export default async function FeatureDetail({ params }: { params: Promise<{ modu
               &ldquo;{config.quote.text}&rdquo;
             </blockquote>
             <figcaption className="eyebrow mt-4">
-              — {config.quote.attribution}
+              {config.quote.attribution}
             </figcaption>
           </figure>
         </section>

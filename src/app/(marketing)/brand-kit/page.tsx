@@ -362,7 +362,7 @@ export default async function BrandKitPage() {
             <img src="/brand/skull-bone.svg" alt="" />
           </div>
           <div>
-            <h1 className="bk-h1" aria-label="GHXSTSHIP — home">
+            <h1 className="bk-h1" aria-label="GHXSTSHIP home">
               G H X S T S H I P
             </h1>
             <p className="bk-tag">Brand &amp; Product System · Venture Beyond</p>
@@ -371,7 +371,7 @@ export default async function BrandKitPage() {
         <div className={wrap}>
           <p className="bk-def">
             GHXSTSHIP is a full-service experiential production, operations, and technology company headquartered in
-            Miami, with offices in New York, Chicago, and Los Angeles. This is the complete brand kit — foundations,
+            Miami, with offices in New York, Chicago, and Los Angeles. This is the complete brand kit: foundations,
             marketing site, product UI, documents, and handoff. Every tile is live; click to open.
           </p>
           <div className="bk-chips">

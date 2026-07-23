@@ -98,10 +98,10 @@ export function NewExpenseForm({
       </div>
       {projects.length > 0 && (
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
+          <label htmlFor="project_id" className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.finance.expenses.new.projectOptional", undefined, "Project · Optional")}
           </label>
-          <select
+          <select id="project_id"
             name="project_id"
             className="ps-input mt-1.5 w-full"
             value={projectId}

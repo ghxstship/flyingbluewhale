@@ -110,7 +110,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               {t(
                 "p.delegation.ratecard.orders.empty",
                 undefined,
-                "No orders yet. The rate-card service catalogue is published in /studio/programs/rate-card — your attaché will place orders against it.",
+                "No orders yet. The rate-card service catalogue is published in /studio/programs/rate-card. Your attaché will place orders against it.",
               )}
             </p>
           ) : (

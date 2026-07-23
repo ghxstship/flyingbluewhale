@@ -120,7 +120,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               {t(
                 "p.volunteer.uniform.sizing.applyFirst",
                 undefined,
-                "Submit your volunteer application first — sizing data lives on your workforce profile.",
+                "Submit your volunteer application first. Sizing data lives on your workforce profile.",
               )}
             </p>
           ) : (
@@ -155,7 +155,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               {t(
                 "p.volunteer.uniform.pickup.notBooked",
                 undefined,
-                "Slot not yet booked — your team lead will assign one based on your shift schedule.",
+                "Slot not yet booked. Your team lead will assign one based on your shift schedule.",
               )}
             </p>
           )}

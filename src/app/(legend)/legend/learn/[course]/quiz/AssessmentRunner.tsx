@@ -41,7 +41,7 @@ export function AssessmentRunner({
         <p className="text-3xl font-bold" style={{ color: passed ? "var(--p-success)" : "var(--p-danger)" }}>
           {result.scorePct}%
         </p>
-        <p className="text-sm text-[var(--p-text-2)]">{passed ? `Passed — needed ${passPct}%.` : `Not yet — needed ${passPct}%. Try again.`}</p>
+        <p className="text-sm text-[var(--p-text-2)]">{passed ? `Passed. Needed ${passPct}%.` : `Not yet. Needed ${passPct}%. Try again.`}</p>
         <Link href={`/legend/learn/${courseId}`} className="ps-btn ps-btn--cta ps-btn--lg" style={{ minHeight: 44 }}>
           Back to course
         </Link>

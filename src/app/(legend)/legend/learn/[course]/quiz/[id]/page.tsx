@@ -36,7 +36,7 @@ export default async function QuizPage({ params }: { params: Promise<{ course: s
           </Link>{" "}
           / <span className="text-[var(--p-text-1)]">{sample.title}</span> / Quiz
         </nav>
-        <h1 className="text-[var(--p-text-1)]">{sample.title} — Quiz</h1>
+        <h1 className="text-[var(--p-text-1)]">{sample.title} · Quiz</h1>
         <QuizRunner items={sample.quiz} startIndex={startIndex} />
       </div>
     );

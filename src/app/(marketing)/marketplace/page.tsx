@@ -27,7 +27,7 @@ export default async function Page() {
       blurb: t(
         "marketing.pages.marketplace.sections.workOrders.blurb",
         undefined,
-        "Open subcontractor jobs — bid on trade work posted by producers.",
+        "Open subcontractor jobs: bid on trade work posted by producers.",
       ),
     },
     {

@@ -101,7 +101,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ runId: string }
   if (missing.length > 0) {
     return apiError(
       "unprocessable",
-      `This filing needs your ${missing.map((k) => LABEL[k]).join(" and ")}. Add ${missing.length === 1 ? "it" : "them"} in Settings before exporting — an agency filing with a blank identifier is rejected or, worse, accepted and non-compliant.`,
+      `This filing needs your ${missing.map((k) => LABEL[k]).join(" and ")}. Add ${missing.length === 1 ? "it" : "them"} in Settings before exporting. An agency filing with a blank identifier is rejected or, worse, accepted and non-compliant.`,
       { code: "missing_contractor_identifiers", missing },
     );
   }

@@ -69,7 +69,7 @@ export default async function UnlockPage({
         subtitle={t(
           "p.shared.guide.unlock.subtitle",
           { personaLabel },
-          `Required for the ${personaLabel} guide — issued by your production lead.`,
+          `Required for the ${personaLabel} guide, issued by your production lead.`,
         )}
       />
       <div className="page-content max-w-md">
@@ -81,7 +81,7 @@ export default async function UnlockPage({
             {t(
               "p.shared.guide.unlock.body",
               undefined,
-              "This guide is internal. If you were sent a code, paste it below. Codes are 10 characters and case-insensitive — formatting like dashes is optional.",
+              "This guide is internal. If you were sent a code, paste it below. Codes are 10 characters and case-insensitive. Formatting like dashes is optional.",
             )}
           </p>
           <UnlockForm slug={slug} persona={persona} from={from} />

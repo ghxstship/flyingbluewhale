@@ -25,7 +25,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string;
           {t(
             "p.client.proposals.activity.description",
             undefined,
-            "Every gate check, change order decision, revision round, approval, and file upload — chronological.",
+            "Every gate check, change order decision, revision round, approval, and file upload, in chronological order.",
           )}
         </p>
       </header>

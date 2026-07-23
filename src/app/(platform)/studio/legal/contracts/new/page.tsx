@@ -56,10 +56,10 @@ export default async function Page() {
             hint={t("console.legal.contracts.new.numberHint", undefined, "Your internal contract reference.")}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="kind" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.legal.contracts.new.kindLabel", undefined, "Kind")}
             </label>
-            <select name="kind" required className="ps-input mt-1.5 w-full" defaultValue="sponsor_deal">
+            <select id="kind" name="kind" required className="ps-input mt-1.5 w-full" defaultValue="sponsor_deal">
               {CONTRACT_KINDS.map((k) => (
                 <option key={k} value={k}>
                   {contractKindLabel(k)}
@@ -68,10 +68,10 @@ export default async function Page() {
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="project_id" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.legal.contracts.new.projectLabel", undefined, "Project")}
             </label>
-            <select name="project_id" required className="ps-input mt-1.5 w-full" defaultValue="">
+            <select id="project_id" name="project_id" required className="ps-input mt-1.5 w-full" defaultValue="">
               <option value="" disabled>
                 {t("console.legal.contracts.new.projectPlaceholder", undefined, "Select a project…")}
               </option>
@@ -124,10 +124,10 @@ export default async function Page() {
             {t("console.legal.contracts.new.autoRenewLabel", undefined, "Auto-renew at term end")}
           </label>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="notes" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.legal.contracts.new.notesLabel", undefined, "Notes")}
             </label>
-            <textarea name="notes" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
+            <textarea id="notes" name="notes" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
           </div>
         </FormShell>
       </div>

@@ -55,10 +55,10 @@ export default async function Page() {
           submitLabel={t("common.create", undefined, "Create")}
         >
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="delegatee_user_id" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.governance.approvals.delegations.new.delegateeLabel", undefined, "Delegatee")}
             </label>
-            <select name="delegatee_user_id" required className="ps-input mt-1.5 w-full" defaultValue="">
+            <select id="delegatee_user_id" name="delegatee_user_id" required className="ps-input mt-1.5 w-full" defaultValue="">
               <option value="" disabled>
                 {t("console.governance.approvals.delegations.new.delegateePlaceholder", undefined, "Select a member…")}
               </option>
@@ -77,10 +77,10 @@ export default async function Page() {
             </p>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="scope" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.governance.approvals.delegations.new.scopeLabel", undefined, "Scope")}
             </label>
-            <select name="scope" required className="ps-input mt-1.5 w-full" defaultValue="all">
+            <select id="scope" name="scope" required className="ps-input mt-1.5 w-full" defaultValue="all">
               {DELEGATION_SCOPES.map((s) => (
                 <option key={s} value={s}>
                   {t(`console.governance.approvals.scope.${s}`, undefined, DELEGATION_SCOPE_LABEL[s])}

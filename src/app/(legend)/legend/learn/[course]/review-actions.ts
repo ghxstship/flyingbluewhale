@@ -22,7 +22,7 @@ export async function submitReviewAction(_: State, fd: FormData): Promise<State>
       body: z.string().max(2000).optional().or(z.literal("")),
     })
     .safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: "Pick a rating (1–5)" };
+  if (!parsed.success) return { error: "Pick a rating (1 to 5)" };
   const db = (await createClient()) as unknown as LooseSupabase;
 
   const { error } = await db.from("legend_course_reviews").upsert(
@@ -38,5 +38,5 @@ export async function submitReviewAction(_: State, fd: FormData): Promise<State>
   );
   if (error) return { error: error.message };
   revalidatePath(`/legend/learn/${parsed.data.course_id}`);
-  return { ok: "Thanks — your review is posted" };
+  return { ok: "Thanks, your review is posted" };
 }

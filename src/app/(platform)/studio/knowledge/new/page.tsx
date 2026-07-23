@@ -41,10 +41,10 @@ export default async function Page() {
             maxLength={200}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="body_markdown" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.knowledge.new.bodyLabel", undefined, "Body (Markdown)")}
             </label>
-            <textarea
+            <textarea id="body_markdown"
               name="body_markdown"
               rows={18}
               required

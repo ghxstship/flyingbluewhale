@@ -112,7 +112,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
                 <blockquote key={i} className="border-s-2 border-[var(--p-accent)] ps-4 italic">
                   {block.text}
                   {block.cite && (
-                    <cite className="mt-1 block text-xs text-[var(--p-text-2)] not-italic">— {block.cite}</cite>
+                    <cite className="mt-1 block text-xs text-[var(--p-text-2)] not-italic">{block.cite}</cite>
                   )}
                 </blockquote>
               );

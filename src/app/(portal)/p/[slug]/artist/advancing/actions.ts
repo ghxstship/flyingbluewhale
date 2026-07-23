@@ -182,7 +182,7 @@ export async function setDeliverableStatusAction(deliverableId: string, nextStat
     .select("id");
   if (error) return { error: error.message };
   if (!updated || updated.length === 0) {
-    return { error: "Deliverable state changed concurrently — refresh and retry" };
+    return { error: "Deliverable state changed concurrently. Refresh and retry." };
   }
   if (nextState === "submitted" || nextState === "approved") {
     const { notify } = await import("@/lib/notify");

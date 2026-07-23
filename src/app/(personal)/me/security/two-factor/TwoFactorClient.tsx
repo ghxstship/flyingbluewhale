@@ -169,7 +169,7 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
             </div>
           ) : (
             <div className="surface-inset flex h-[252px] w-[252px] items-center justify-center text-xs text-[var(--p-text-2)]">
-              {t("me.security.twoFactor.enroll.qrUnavailable", undefined, "QR unavailable — paste the secret below")}
+              {t("me.security.twoFactor.enroll.qrUnavailable", undefined, "QR unavailable. Paste the secret below.")}
             </div>
           )}
 
@@ -325,7 +325,7 @@ export function TwoFactorClient({ initialFactors }: { initialFactors: FactorRow[
           {t(
             "me.security.twoFactor.recovery.hashedNotice",
             undefined,
-            "Recovery codes are stored hashed — we can show them to you exactly once. Save them in a password manager before leaving this page.",
+            "Recovery codes are stored hashed, so we can show them to you exactly once. Save them in a password manager before leaving this page.",
           )}
         </span>
       </Alert>
@@ -415,7 +415,7 @@ function RecoveryCodesPanel({ codes, onDone }: { codes: string[]; onDone: () => 
         {t(
           "me.security.twoFactor.recovery.panelBlurb",
           undefined,
-          "Store these somewhere safe. Each code works once — for example, if you lose your authenticator. We hash codes on save, so this is the only time you'll see them.",
+          "Store these somewhere safe. Each code works once, for example if you lose your authenticator. We hash codes on save, so this is the only time you'll see them.",
         )}
       </p>
 

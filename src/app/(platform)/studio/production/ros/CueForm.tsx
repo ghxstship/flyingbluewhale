@@ -5,7 +5,8 @@ import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
-import { createCueAction, setCueStatus, deleteCue, type State } from "./actions";
+import { DeleteForm } from "@/components/DeleteForm";
+import { createCueAction, setCueStatus, deleteCueById, type State } from "./actions";
 import type { Cue } from "@/lib/supabase/types";
 import { toTitle } from "@/lib/format";
 import { useFormatters, useT } from "@/lib/i18n/LocaleProvider";
@@ -22,10 +23,10 @@ export function CueForm() {
         required
       />
       <div>
-        <label className="text-xs font-medium text-[var(--p-text-2)]">
+        <label htmlFor="lane" className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.production.ros.cueForm.laneLabel", undefined, "Lane")}
         </label>
-        <select name="lane" defaultValue="show" className="ps-input mt-1.5 w-full">
+        <select id="lane" name="lane" defaultValue="show" className="ps-input mt-1.5 w-full">
           <option value="show">{t("console.production.ros.cueForm.lane.show", undefined, "Show")}</option>
           <option value="lights">{t("console.production.ros.cueForm.lane.lights", undefined, "Lights")}</option>
           <option value="audio">{t("console.production.ros.cueForm.lane.audio", undefined, "Audio")}</option>
@@ -53,10 +54,10 @@ export function CueForm() {
         placeholder={t("console.production.ros.cueForm.optional", undefined, "optional")}
       />
       <div className="md:col-span-2">
-        <label className="text-xs font-medium text-[var(--p-text-2)]">
+        <label htmlFor="description" className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.production.ros.cueForm.description", undefined, "Description")}
         </label>
-        <textarea name="description" rows={2} maxLength={2000} className="ps-input mt-1.5 w-full" />
+        <textarea id="description" name="description" rows={2} maxLength={2000} className="ps-input mt-1.5 w-full" />
       </div>
       {state?.error && <p className="text-xs text-[var(--p-danger)] md:col-span-2">{state.error}</p>}
       <div className="flex justify-end md:col-span-2">
@@ -142,15 +143,14 @@ export function CueRow({ cue }: { cue: Cue }) {
               />
             </form>
           ))}
-          <form action={deleteCue} className="inline">
-            <input type="hidden" name="id" value={cue.id} />
-            <button
-              type="submit"
-              className="rounded px-2 py-0.5 text-[11px] text-[color:var(--p-danger)] hover:bg-[color:var(--p-danger)]/10"
-            >
-              {t("common.delete", undefined, "Delete")}
-            </button>
-          </form>
+          <DeleteForm
+            action={deleteCueById.bind(null, cue.id)}
+            confirm={t(
+              "console.production.ros.cueForm.deleteConfirm",
+              { label: cue.label },
+              `Delete the cue "${cue.label}"? It disappears from every operator's run of show.`,
+            )}
+          />
         </div>
       </td>
     </tr>

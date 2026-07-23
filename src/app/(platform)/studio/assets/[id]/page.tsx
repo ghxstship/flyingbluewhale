@@ -347,10 +347,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             <input type="hidden" name="asset_id" value={asset.id} />
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-xs font-medium text-[var(--p-text-2)]">
+                <label htmlFor="method" className="text-xs font-medium text-[var(--p-text-2)]">
                   {t("console.assets.detail.dep.method", undefined, "Method")}
                 </label>
-                <select name="method" required className="ps-input mt-1.5 w-full" defaultValue="straight_line">
+                <select id="method" name="method" required className="ps-input mt-1.5 w-full" defaultValue="straight_line">
                   <option value="straight_line">
                     {t("console.assets.detail.dep.straightLine", undefined, "Straight line")}
                   </option>
@@ -441,10 +441,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               />
             </div>
             <div>
-              <label className="text-xs font-medium text-[var(--p-text-2)]">
+              <label htmlFor="outcome" className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.assets.detail.maint.outcome", undefined, "Outcome")}
               </label>
-              <select name="outcome" required className="ps-input mt-1.5 w-full" defaultValue="completed">
+              <select id="outcome" name="outcome" required className="ps-input mt-1.5 w-full" defaultValue="completed">
                 <option value="completed">
                   {t("console.assets.detail.maint.outcomeCompleted", undefined, "Completed")}
                 </option>
@@ -455,10 +455,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               </select>
             </div>
             <div>
-              <label className="text-xs font-medium text-[var(--p-text-2)]">
+              <label htmlFor="notes" className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.assets.detail.maint.notes", undefined, "Notes")}
               </label>
-              <textarea
+              <textarea id="notes"
                 name="notes"
                 rows={3}
                 maxLength={2000}

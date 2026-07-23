@@ -207,7 +207,7 @@ export default async function ApiDocsPage() {
               <code>X-RateLimit-Reset</code>
             </li>
             <li>
-              <code>Retry-After</code> — {t("apiDocs.retryAfterNote", undefined, "only on 429")}
+              <code>Retry-After</code> ({t("apiDocs.retryAfterNote", undefined, "only on 429")})
             </li>
           </ul>
         </div>

@@ -11,7 +11,7 @@ import { PrintTrigger } from "./PrintTrigger";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Engagement Letter — Print",
+  title: "Engagement Letter · Print",
   robots: { index: false, follow: false },
 };
 

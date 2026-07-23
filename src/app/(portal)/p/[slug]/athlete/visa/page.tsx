@@ -116,7 +116,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               {t(
                 "p.athlete.visa.empty",
                 undefined,
-                "No cases on file. Your delegation lead opens these on your behalf — they'll request your passport details directly.",
+                "No cases on file. Your delegation lead opens these on your behalf. They'll request your passport details directly.",
               )}
             </p>
           ) : (

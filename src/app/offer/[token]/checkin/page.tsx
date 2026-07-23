@@ -24,7 +24,7 @@ export default async function CheckInPage({ params }: { params: Promise<{ token:
       <div className="space-y-4">
         <h1>{t("legal.offerCheckin.title", undefined, "Check-in")}</h1>
         <p>
-          {t("legal.offerCheckin.lockedPrefix", undefined, "Open your engagement letter first to unlock check-in —")}{" "}
+          {t("legal.offerCheckin.lockedPrefix", undefined, "Open your engagement letter first to unlock check-in:")}{" "}
           <Link href={`/offer/${token}`} className="underline">
             {t("legal.offerCheckin.returnToLetter", undefined, "return to letter")}
           </Link>

@@ -62,10 +62,10 @@ export async function generateMetadata({ params }: { params: Promise<{ handle: s
     });
   }
   return buildMetadata({
-    title: `${c.name} — Crew on ATLVS`,
+    title: `${c.name} · Crew on ATLVS`,
     description: metaDescription(
       c.tagline ?? c.bio,
-      `Hire ${c.name} through the ATLVS marketplace — roles, day rate, unions, and certifications in one profile.`,
+      `Hire ${c.name} through the ATLVS marketplace: roles, day rate, unions, and certifications in one profile.`,
     ),
     path: `/marketplace/crew/${c.public_handle}`,
     ogImageEyebrow: "ATLVS Marketplace",

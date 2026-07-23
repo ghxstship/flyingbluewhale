@@ -41,10 +41,10 @@ export default async function Page({ params }: { params: Promise<{ alertId: stri
             required
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="body" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.crisis.edit.bodyLabel", undefined, "Body")}
             </label>
-            <textarea
+            <textarea id="body"
               name="body"
               rows={5}
               maxLength={5000}
@@ -54,10 +54,10 @@ export default async function Page({ params }: { params: Promise<{ alertId: stri
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="severity" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.crisis.edit.severityLabel", undefined, "Severity")}
             </label>
-            <select
+            <select id="severity"
               name="severity"
               defaultValue={(r.severity as string | undefined) ?? "info"}
               className="ps-input mt-1.5 w-full"

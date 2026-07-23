@@ -144,10 +144,10 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
           >
             <input type="hidden" name="submission_id" value={s.id} />
             <div>
-              <label className="text-xs font-medium text-[var(--p-text-2)]">
+              <label htmlFor="status" className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.marketplace.calls.submissions.detail.statusLabel", undefined, "Status")}
               </label>
-              <select name="status" className="ps-input mt-1.5 w-full" defaultValue={s.submission_state}>
+              <select id="status" name="status" className="ps-input mt-1.5 w-full" defaultValue={s.submission_state}>
                 {SUBMISSION_STATUSES.map((st) => (
                   <option key={st} value={st}>
                     {st}
@@ -164,10 +164,10 @@ export default async function Page({ params }: { params: Promise<{ callId: strin
               defaultValue={s.score ?? ""}
             />
             <div>
-              <label className="text-xs font-medium text-[var(--p-text-2)]">
+              <label htmlFor="internal_notes" className="text-xs font-medium text-[var(--p-text-2)]">
                 {t("console.marketplace.calls.submissions.detail.internalNotes", undefined, "Internal Notes")}
               </label>
-              <textarea
+              <textarea id="internal_notes"
                 name="internal_notes"
                 rows={4}
                 maxLength={4000}

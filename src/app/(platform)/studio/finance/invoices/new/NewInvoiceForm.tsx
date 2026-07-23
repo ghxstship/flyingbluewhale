@@ -56,10 +56,10 @@ export function NewInvoiceForm({
           required
         />
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
+          <label htmlFor="currency" className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.finance.invoices.new.currency", undefined, "Currency")}
           </label>
-          <select name="currency" defaultValue="USD" className="ps-input mt-1.5 w-full">
+          <select id="currency" name="currency" defaultValue="USD" className="ps-input mt-1.5 w-full">
             <option>USD</option>
             <option>EUR</option>
             <option>GBP</option>
@@ -70,10 +70,10 @@ export function NewInvoiceForm({
       </div>
       <Input label={t("console.finance.invoices.new.issued", undefined, "Issued")} name="issued_at" type="date" />
       <div>
-        <label className="text-xs font-medium text-[var(--p-text-2)]">
+        <label htmlFor="notes" className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.finance.invoices.new.notes", undefined, "Notes")}
         </label>
-        <textarea name="notes" rows={3} className="ps-input mt-1.5 w-full" />
+        <textarea id="notes" name="notes" rows={3} className="ps-input mt-1.5 w-full" />
       </div>
     </FormShell>
   );

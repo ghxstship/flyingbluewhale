@@ -32,10 +32,10 @@ export default async function Page() {
             maxLength={200}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="description" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.ops.toc.problems.new.descriptionLabel", undefined, "Description")}
             </label>
-            <textarea
+            <textarea id="description"
               name="description"
               rows={3}
               maxLength={4000}
@@ -48,10 +48,10 @@ export default async function Page() {
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="priority" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.ops.toc.problems.new.priorityLabel", undefined, "Priority")}
             </label>
-            <select name="priority" defaultValue="P3" className="ps-input mt-1.5 w-full">
+            <select id="priority" name="priority" defaultValue="P3" className="ps-input mt-1.5 w-full">
               <option value="P1">{t("console.ops.toc.problems.new.priorityP1", undefined, "P1 (Critical)")}</option>
               <option value="P2">{t("console.ops.toc.problems.new.priorityP2", undefined, "P2 (High)")}</option>
               <option value="P3">{t("console.ops.toc.problems.new.priorityP3", undefined, "P3 (Medium)")}</option>
@@ -59,10 +59,10 @@ export default async function Page() {
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="workaround" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.ops.toc.problems.new.workaroundLabel", undefined, "Workaround")}
             </label>
-            <textarea
+            <textarea id="workaround"
               name="workaround"
               rows={3}
               maxLength={4000}

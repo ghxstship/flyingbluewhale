@@ -148,10 +148,10 @@ export default async function Page({
             )}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="party_user_id" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.projects.advancing.assignments.new.assignee", undefined, "Assignee")}
             </label>
-            <select name="party_user_id" required defaultValue={prefillParty} className="ps-input mt-1.5 w-full">
+            <select id="party_user_id" name="party_user_id" required defaultValue={prefillParty} className="ps-input mt-1.5 w-full">
               {memberList.map((m) => (
                 <option key={m.id} value={m.id}>
                   {m.name ?? m.email}
@@ -179,10 +179,10 @@ export default async function Page({
             )}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="notes" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.projects.advancing.assignments.new.notes", undefined, "Notes · Optional")}
             </label>
-            <textarea name="notes" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
+            <textarea id="notes" name="notes" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
           </div>
         </FormShell>
       </div>

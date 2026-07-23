@@ -21,12 +21,12 @@ export function NewEventForm({
     >
       <Input label={t("console.events.new.nameLabel", undefined, "Name")} name="name" required />
       <div>
-        <label className="text-xs font-medium text-[var(--p-text-2)]">
+        <label htmlFor="event_kind" className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.events.new.typeLabel", undefined, "Type")}
         </label>
         {/* Meetings enter through /studio/meetings/new so the details sibling
             (MTG code, agenda, meeting URL) is always created alongside. */}
-        <select name="event_kind" defaultValue="general" className="ps-input mt-1.5 w-full">
+        <select id="event_kind" name="event_kind" defaultValue="general" className="ps-input mt-1.5 w-full">
           {SCHEDULE_EVENT_KINDS.filter((k) => k !== "meeting").map((k) => (
             <option key={k} value={k}>
               {SCHEDULE_EVENT_KIND_LABELS[k]}
@@ -50,10 +50,10 @@ export function NewEventForm({
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
+          <label htmlFor="project_id" className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.events.new.projectLabel", undefined, "Project")}
           </label>
-          <select name="project_id" className="ps-input mt-1.5 w-full">
+          <select id="project_id" name="project_id" className="ps-input mt-1.5 w-full">
             <option value="">{t("console.events.new.noProject", undefined, "No project")}</option>
             {projects.map((p) => (
               <option key={p.id} value={p.id}>
@@ -63,10 +63,10 @@ export function NewEventForm({
           </select>
         </div>
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
+          <label htmlFor="location_id" className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.events.new.locationLabel", undefined, "Location")}
           </label>
-          <select name="location_id" className="ps-input mt-1.5 w-full">
+          <select id="location_id" name="location_id" className="ps-input mt-1.5 w-full">
             <option value="">{t("console.events.new.noLocation", undefined, "No location")}</option>
             {locations.map((l) => (
               <option key={l.id} value={l.id}>
@@ -77,10 +77,10 @@ export function NewEventForm({
         </div>
       </div>
       <div>
-        <label className="text-xs font-medium text-[var(--p-text-2)]">
+        <label htmlFor="description" className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.events.new.descriptionLabel", undefined, "Description")}
         </label>
-        <textarea name="description" rows={3} className="ps-input mt-1.5 w-full" />
+        <textarea id="description" name="description" rows={3} className="ps-input mt-1.5 w-full" />
       </div>
     </FormShell>
   );

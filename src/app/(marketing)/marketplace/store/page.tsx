@@ -14,7 +14,7 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
     title: "Store",
-    description: "Browse and buy from GVTEWAY producers — official merch, gear, and event goods.",
+    description: "Browse and buy from GVTEWAY producers: official merch, gear, and event goods.",
     path: "/marketplace/store",
   });
 }

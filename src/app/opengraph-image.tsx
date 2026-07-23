@@ -22,7 +22,7 @@ import { BRAND, PRODUCT_ACCENTS } from "@/lib/brand";
 // is currently slow to bundle the edge runtime + satori; Node is plenty
 // fast for OG generation and is bit-identical at the output. Prod can
 // promote to edge by re-adding `export const runtime = "edge"`.
-export const alt = "ATLVS Technologies — the platform for production.";
+export const alt = "ATLVS Technologies: the platform for production.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -119,7 +119,7 @@ export default async function OpenGraphImage() {
           The engine behind new worlds.
         </div>
         <div style={{ fontSize: "28px", color: INK_2, lineHeight: 1.4 }}>
-          ATLVS · COMPVSS · GVTEWAY · LEG3ND — develop, build, operate, and experience live productions on one source of
+          ATLVS · COMPVSS · GVTEWAY · LEG3ND: develop, build, operate, and experience live productions on one source of
           truth.
         </div>
       </div>

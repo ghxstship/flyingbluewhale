@@ -9,7 +9,7 @@ import { PrintTrigger } from "@/app/offer/[token]/print/PrintTrigger";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Master Services Agreement — Print",
+  title: "Master Services Agreement · Print",
   robots: { index: false, follow: false },
 };
 

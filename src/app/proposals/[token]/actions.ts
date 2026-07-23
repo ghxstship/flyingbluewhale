@@ -50,7 +50,7 @@ export async function signProposalAction(_: SignState, fd: FormData): Promise<Si
     ...RATE_BUDGETS.auth,
   });
   if (!rate.ok) {
-    return { error: "Too many signing attempts — wait a moment and try again." };
+    return { error: "Too many signing attempts. Wait a moment and try again." };
   }
 
   // HMAC-verify (with legacy fallback) before touching the proposal row.

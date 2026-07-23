@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getRequestT();
   return buildMetadata({
-    title: t("marketing.marketplace.calendar.meta.title", undefined, "Event Calendar — On-sales + Announces"),
+    title: t("marketing.marketplace.calendar.meta.title", undefined, "Event Calendar: On-sales + Announces"),
     description: t(
       "marketing.marketplace.calendar.meta.description",
       undefined,

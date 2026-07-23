@@ -19,10 +19,10 @@ export default async function Page() {
           submitLabel={t("console.safety.safeguarding.new.submitLabel", undefined, "File Report")}
         >
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="narrative" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.safeguarding.new.narrativeLabel", undefined, "Narrative")}
             </label>
-            <textarea name="narrative" rows={6} maxLength={5000} className="ps-input mt-1.5 w-full" required />
+            <textarea id="narrative" name="narrative" rows={6} maxLength={5000} className="ps-input mt-1.5 w-full" required />
           </div>
           <Input
             label={t("console.safety.safeguarding.new.subjectRefLabel", undefined, "Subject Reference")}
@@ -31,10 +31,10 @@ export default async function Page() {
             placeholder={t("console.safety.safeguarding.new.subjectRefPlaceholder", undefined, "Pseudonymous ID")}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="status" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.safeguarding.new.statusLabel", undefined, "Status")}
             </label>
-            <select name="status" defaultValue="received" className="ps-input mt-1.5 w-full">
+            <select id="status" name="status" defaultValue="received" className="ps-input mt-1.5 w-full">
               <option value="received">
                 {t("console.safety.safeguarding.new.statusReceived", undefined, "Received")}
               </option>

@@ -19,10 +19,10 @@ export function NewRentalForm({
       submitLabel={t("console.production.rentals.new.submit", undefined, "Reserve")}
     >
       <div>
-        <label className="text-xs font-medium text-[var(--p-text-2)]">
+        <label htmlFor="asset_id" className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.production.rentals.new.assetLabel", undefined, "Asset")}
         </label>
-        <select name="asset_id" className="ps-input mt-1.5 w-full" required>
+        <select id="asset_id" name="asset_id" className="ps-input mt-1.5 w-full" required>
           <option value="">{t("console.production.rentals.new.assetPlaceholder", undefined, "Select asset")}</option>
           {assets.map((a) => (
             <option key={a.id} value={a.id}>
@@ -47,10 +47,10 @@ export function NewRentalForm({
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-xs font-medium text-[var(--p-text-2)]">
+          <label htmlFor="project_id" className="text-xs font-medium text-[var(--p-text-2)]">
             {t("console.production.rentals.new.projectLabel", undefined, "Project")}
           </label>
-          <select name="project_id" className="ps-input mt-1.5 w-full">
+          <select id="project_id" name="project_id" className="ps-input mt-1.5 w-full">
             <option value="">{t("console.production.rentals.new.projectNone", undefined, "No project")}</option>
             {projects.map((p) => (
               <option key={p.id} value={p.id}>

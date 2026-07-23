@@ -36,10 +36,10 @@ export function CommitteeForm() {
             maxLength={120}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="cadence" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.settings.governance.forms.committee.cadenceLabel", undefined, "Cadence")}
             </label>
-            <select name="cadence" defaultValue="monthly" className="ps-input mt-1.5 w-full">
+            <select id="cadence" name="cadence" defaultValue="monthly" className="ps-input mt-1.5 w-full">
               <option value="weekly">
                 {t("console.settings.governance.forms.committee.cadence.weekly", undefined, "Weekly")}
               </option>
@@ -55,10 +55,10 @@ export function CommitteeForm() {
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="charter" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.settings.governance.forms.committee.charter", undefined, "Charter")}
             </label>
-            <textarea name="charter" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
+            <textarea id="charter" name="charter" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
           </div>
           {state?.error && <p className="text-xs text-[var(--p-danger)]">{state.error}</p>}
           <div className="flex justify-end">
@@ -98,10 +98,10 @@ export function PolicyForm() {
             maxLength={160}
           />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="category" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.settings.governance.forms.policy.categoryLabel", undefined, "Category")}
             </label>
-            <select name="category" defaultValue="operations" className="ps-input mt-1.5 w-full">
+            <select id="category" name="category" defaultValue="operations" className="ps-input mt-1.5 w-full">
               <option value="finance">
                 {t("console.settings.governance.forms.policy.category.finance", undefined, "Finance")}
               </option>

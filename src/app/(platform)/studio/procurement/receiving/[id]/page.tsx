@@ -195,10 +195,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </h3>
             <FormShell action={addReceiptLine.bind(null, receipt.id)} submitLabel={t("common.add", undefined, "Add")}>
               <div>
-                <label className="text-xs font-medium text-[var(--p-text-2)]">
+                <label htmlFor="po_line_item_id" className="text-xs font-medium text-[var(--p-text-2)]">
                   {t("console.procurement.receiving.detail.lineItemLabel", undefined, "PO line item")}
                 </label>
-                <select name="po_line_item_id" required className="ps-input mt-1.5 w-full" defaultValue="">
+                <select id="po_line_item_id" name="po_line_item_id" required className="ps-input mt-1.5 w-full" defaultValue="">
                   <option value="" disabled>
                     {t("console.procurement.receiving.detail.lineItemPlaceholder", undefined, "Select a line item…")}
                   </option>
@@ -226,10 +226,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 defaultValue="0"
               />
               <div>
-                <label className="text-xs font-medium text-[var(--p-text-2)]">
+                <label htmlFor="notes" className="text-xs font-medium text-[var(--p-text-2)]">
                   {t("console.procurement.receiving.detail.lineNotesLabel", undefined, "Notes")}
                 </label>
-                <textarea name="notes" rows={2} maxLength={1000} className="ps-input mt-1.5 w-full" />
+                <textarea id="notes" name="notes" rows={2} maxLength={1000} className="ps-input mt-1.5 w-full" />
               </div>
             </FormShell>
           </section>
@@ -307,10 +307,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               submitLabel={t("console.procurement.receiving.detail.recordMatchSubmit", undefined, "Match")}
             >
               <div>
-                <label className="text-xs font-medium text-[var(--p-text-2)]">
+                <label htmlFor="invoice_id" className="text-xs font-medium text-[var(--p-text-2)]">
                   {t("console.procurement.receiving.detail.matchInvoiceLabel", undefined, "Invoice")}
                 </label>
-                <select name="invoice_id" required className="ps-input mt-1.5 w-full" defaultValue="">
+                <select id="invoice_id" name="invoice_id" required className="ps-input mt-1.5 w-full" defaultValue="">
                   <option value="" disabled>
                     {t("console.procurement.receiving.detail.matchInvoicePlaceholder", undefined, "Select an invoice…")}
                   </option>

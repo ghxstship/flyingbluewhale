@@ -113,7 +113,7 @@ export function AdvancesView({ rows }: { rows: AdvanceRow[] }) {
       <EmptyState
         variant="offline"
         title={t("m.advances.offline.title", undefined, "You're offline")}
-        description={t("m.advances.offline.body", undefined, "Your advances will load — and any changes will sync — once you're back online.")}
+        description={t("m.advances.offline.body", undefined, "Your advances will load, and any changes will sync, once you're back online.")}
       />
     );
   }

@@ -49,7 +49,7 @@ export function AddToCartForm({
             {variants.map((v) => (
               <option key={v.id} value={v.id} disabled={v.inventory_qty <= 0}>
                 {v.title}
-                {v.inventory_qty <= 0 ? " — sold out" : ""}
+                {v.inventory_qty <= 0 ? " (sold out)" : ""}
               </option>
             ))}
           </select>

@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: t(
       "marketing.integrations.detail.meta.title",
       { name: i.name, short: i.short },
-      "{name} Integration — {short}",
+      "{name} Integration: {short}",
     ),
     description: i.short,
     path: `/integrations/${i.slug}`,

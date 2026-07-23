@@ -21,10 +21,10 @@ export function LinkAssetForm({
   return (
     <form action={action} className="grid gap-3 sm:grid-cols-3">
       <div className="sm:col-span-1">
-        <label className="text-xs font-medium text-[var(--p-text-2)]">
+        <label htmlFor="assignment_id" className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.people.credentials.assetLinker.form.assignmentLabel", undefined, "Credential Assignment")}
         </label>
-        <select name="assignment_id" required className="ps-input mt-1.5 w-full">
+        <select id="assignment_id" name="assignment_id" required className="ps-input mt-1.5 w-full">
           <option value="">
             {t("console.people.credentials.assetLinker.form.assignmentPlaceholder", undefined, "Select")}
           </option>
@@ -37,10 +37,10 @@ export function LinkAssetForm({
         </select>
       </div>
       <div>
-        <label className="text-xs font-medium text-[var(--p-text-2)]">
+        <label htmlFor="kind" className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.people.credentials.assetLinker.form.tokenKindLabel", undefined, "Token Kind")}
         </label>
-        <select name="kind" defaultValue="nfc" className="ps-input mt-1.5 w-full">
+        <select id="kind" name="kind" defaultValue="nfc" className="ps-input mt-1.5 w-full">
           <option value="nfc">{t("console.people.credentials.assetLinker.form.kind.nfc", undefined, "NFC tag")}</option>
           <option value="rfid">
             {t("console.people.credentials.assetLinker.form.kind.rfid", undefined, "RFID card")}

@@ -166,7 +166,7 @@ function DeclineForm({ token, onCancel }: { token: string; onCancel: () => void 
             placeholder={t(
               "legal.offer.reasonPlaceholder",
               undefined,
-              "e.g. Calendar conflict — already booked May 14–18.",
+              "e.g. Calendar conflict, already booked May 14 to 18.",
             )}
           />
         </FormField>

@@ -72,10 +72,10 @@ export default async function Page() {
           submitLabel={t("common.create", undefined, "Create")}
         >
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="portal_user_id" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.settings.accountManagers.new.portalUserLabel", undefined, "Portal user")}
             </label>
-            <select name="portal_user_id" required className="ps-input mt-1.5 w-full">
+            <select id="portal_user_id" name="portal_user_id" required className="ps-input mt-1.5 w-full">
               {memberList.map((m) => (
                 <option key={m.id} value={m.id}>
                   {m.name ?? m.email}
@@ -91,10 +91,10 @@ export default async function Page() {
             </p>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="persona" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.settings.accountManagers.new.personaLabel", undefined, "Persona")}
             </label>
-            <select name="persona" required className="ps-input mt-1.5 w-full" defaultValue="vendor">
+            <select id="persona" name="persona" required className="ps-input mt-1.5 w-full" defaultValue="vendor">
               {PERSONAS.map((p) => (
                 <option key={p} value={p}>
                   {toTitle(p)}
@@ -103,10 +103,10 @@ export default async function Page() {
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="manager_user_id" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.settings.accountManagers.new.managerLabel", undefined, "Account manager")}
             </label>
-            <select name="manager_user_id" required className="ps-input mt-1.5 w-full">
+            <select id="manager_user_id" name="manager_user_id" required className="ps-input mt-1.5 w-full">
               {memberList.map((m) => (
                 <option key={m.id} value={m.id}>
                   {m.name ?? m.email}
@@ -115,10 +115,10 @@ export default async function Page() {
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="project_id" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.settings.accountManagers.new.projectLabel", undefined, "Project · Optional")}
             </label>
-            <select name="project_id" className="ps-input mt-1.5 w-full" defaultValue="">
+            <select id="project_id" name="project_id" className="ps-input mt-1.5 w-full" defaultValue="">
               <option value="">
                 {t("console.settings.accountManagers.new.projectOrgWide", undefined, "Org-wide · Any Project")}
               </option>

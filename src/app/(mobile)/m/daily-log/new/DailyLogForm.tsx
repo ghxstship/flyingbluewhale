@@ -256,7 +256,7 @@ export function DailyLogForm({ projects }: { projects: ProjectOpt[] }) {
         pending={queued}
         syncing={syncing}
         labels={{
-          offline: t("m.offline.offline", undefined, "You're offline — this log saves to your device and syncs later."),
+          offline: t("m.offline.offline", undefined, "You're offline. This log saves to your device and syncs later."),
           queued: t("m.offline.queued", undefined, "{n} waiting to sync"),
           syncing: t("m.offline.syncing", undefined, "Syncing…"),
         }}
@@ -360,7 +360,7 @@ export function DailyLogForm({ projects }: { projects: ProjectOpt[] }) {
                     ? t("m.dailyLog.new.geoOn", undefined, "Location attached")
                     : located
                       ? t("m.dailyLog.new.geoPartial", undefined, "Location attached to some photos")
-                      : t("m.dailyLog.new.geoOff", undefined, "No location — your device didn't provide one")}
+                      : t("m.dailyLog.new.geoOff", undefined, "No location. Your device didn't provide one.")}
                 </span>
               </div>
             )}

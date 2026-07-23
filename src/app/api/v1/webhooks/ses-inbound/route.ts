@@ -137,7 +137,7 @@ export async function POST(req: Request) {
     return apiError("internal", error.message);
   }
 
-  // Kit 27 — email-ingest fallback: a reply to the advance thread from a
+  // Kit 27 email-ingest fallback: a reply to the advance thread from a
   // known packet recipient is mirrored into their submission record,
   // flagged `received_via='email_ingest'`, so attachments never escape
   // into an inbox (the LPS failure mode). The row lands on the

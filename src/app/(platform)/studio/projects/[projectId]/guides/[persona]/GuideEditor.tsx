@@ -86,10 +86,10 @@ export function GuideEditor({
         {t("console.projects.guides.editor.publishedLabel", undefined, "Published (Visible in Portal + Mobile)")}
       </label>
       <div>
-        <label className="text-xs font-medium text-[var(--p-text-2)]">
+        <label htmlFor="config" className="text-xs font-medium text-[var(--p-text-2)]">
           {t("console.projects.guides.editor.configLabel", undefined, "Config (JSON)")}
         </label>
-        <textarea
+        <textarea id="config"
           name="config"
           rows={24}
           spellCheck={false}

@@ -34,10 +34,10 @@ export default async function Page({ params }: { params: Promise<{ eventId: stri
           {/* Sea Trial FINDING-022: optimistic concurrency token. */}
           <input type="hidden" name="_updated_at" defaultValue={row.updated_at} />
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="kind" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.environmental.edit.kindLabel", undefined, "Kind")}
             </label>
-            <select
+            <select id="kind"
               name="kind"
               defaultValue={(r.kind as string | undefined) ?? "heat"}
               className="ps-input mt-1.5 w-full"
@@ -63,10 +63,10 @@ export default async function Page({ params }: { params: Promise<{ eventId: stri
             </select>
           </div>
           <div>
-            <label className="text-xs font-medium text-[var(--p-text-2)]">
+            <label htmlFor="severity" className="text-xs font-medium text-[var(--p-text-2)]">
               {t("console.safety.environmental.edit.severityLabel", undefined, "Severity")}
             </label>
-            <select
+            <select id="severity"
               name="severity"
               defaultValue={(r.severity as string | undefined) ?? "advisory"}
               className="ps-input mt-1.5 w-full"

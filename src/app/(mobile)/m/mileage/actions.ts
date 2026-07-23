@@ -44,7 +44,7 @@ function parseMiles(raw: string): { miles: number } | { error: State } {
   // A trip longer than a continent is a typo, not a drive. Catch it here
   // rather than let it reach an approver as a four-figure claim.
   if (miles > 2000) {
-    return { error: { error: "That looks like a typo — check the distance.", fieldErrors: { miles: "Over 2000 miles?" } } };
+    return { error: { error: "That looks like a typo. Check the distance.", fieldErrors: { miles: "Over 2000 miles?" } } };
   }
   return { miles };
 }

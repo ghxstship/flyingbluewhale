@@ -94,3 +94,11 @@ export async function deleteRental(formData: FormData) {
   revalidatePath("/studio/production/rentals");
   redirect("/studio/production/rentals");
 }
+
+/** W6 a11y — id-arg binding for `DeleteForm` (the confirm dialog invokes the
+ * action directly rather than posting a hidden-input form). */
+export async function deleteRentalById(id: string): Promise<void> {
+  const fd = new FormData();
+  fd.set("id", id);
+  await deleteRental(fd);
+}

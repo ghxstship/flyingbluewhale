@@ -84,7 +84,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <div className="page-content space-y-5">
         <div className="metric-grid-4">
           <MetricCard
-            label={t("console.finance.entities.detail.metric.state", undefined, "State")}
+            label={t("console.finance.entities.detail.metric.state", undefined, "Status")}
             value={toTitle(e.consolidation_state)}
             accent={e.consolidation_state === "active"}
           />

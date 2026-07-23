@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   name: z.string().min(1).max(200),
@@ -35,7 +36,7 @@ export async function updateMajorIncident(id: string, _: State, fd: FormData): P
     closed_at: parsed.data.closed_at || null,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Major Incident not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.major-incident", "Major Incident not found.") };
   }
   revalidatePath(`/studio/safety/major-incident/${id}`);
   revalidatePath("/studio/safety/major-incident");

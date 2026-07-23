@@ -44,7 +44,7 @@ export function FindingsTable({ runId, findings }: { runId: string; findings: Fi
             <th>Severity</th>
             <th>Detail</th>
             <th>Entity</th>
-            <th>State</th>
+            <th>Status</th>
             <th className="text-right">Triage</th>
           </tr>
         </thead>

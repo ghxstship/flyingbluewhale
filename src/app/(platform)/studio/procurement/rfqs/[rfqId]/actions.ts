@@ -7,6 +7,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { dollarsToCents, generateNumber } from "@/lib/format";
 import { emitAudit } from "@/lib/audit";
+import { actionErrorMessage } from "@/lib/errors";
 
 const AwardSchema = z.object({
   vendor_id: z.string().uuid(),
@@ -35,9 +36,9 @@ const AWARDABLE_STATES = ["draft", "sent", "closed"] as const;
  */
 export async function awardRfqAction(rfqId: string, _prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can award RFQs" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.award-rfqs", "Only manager+ can award RFQs") };
   const parsed = AwardSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: "Pick a vendor to award to" };
+  if (!parsed.success) return { error: actionErrorMessage("pick-a-vendor-to-award-to", "Pick a vendor to award to") };
   const supabase = await createClient();
 
   const { data: rfq } = await supabase
@@ -46,7 +47,7 @@ export async function awardRfqAction(rfqId: string, _prev: State, fd: FormData):
     .eq("org_id", session.orgId)
     .eq("id", rfqId)
     .maybeSingle();
-  if (!rfq) return { error: "RFQ not found" };
+  if (!rfq) return { error: actionErrorMessage("not-found.rfq", "RFQ not found") };
 
   // Idempotency: a PO already drafted from this RFQ wins.
   const marker = `[rfq:${rfqId}]`;
@@ -74,7 +75,7 @@ export async function awardRfqAction(rfqId: string, _prev: State, fd: FormData):
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!vendor) return { error: "Vendor not found in your organization" };
+  if (!vendor) return { error: actionErrorMessage("not-found.vendor-in-org", "Vendor not found in your organization") };
 
   // Claim the award — conditional on the observed state so a stale tab
   // or double-click can't re-award.
@@ -91,7 +92,7 @@ export async function awardRfqAction(rfqId: string, _prev: State, fd: FormData):
     .select("id");
   if (claimError) return { error: claimError.message };
   if (!claimed || claimed.length === 0) {
-    return { error: "RFQ changed concurrently. Refresh and retry" };
+    return { error: actionErrorMessage("concurrency.rfq", "RFQ changed concurrently. Refresh and retry") };
   }
 
   const { data: po, error: insertError } = await supabase

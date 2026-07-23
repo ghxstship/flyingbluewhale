@@ -6,8 +6,10 @@ import { Button } from "@/components/ui/Button";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { sendOfferAction, acceptOfferAction, declineOfferAction } from "../new/actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export function OfferControls({ offerId, status }: { offerId: string; status: string }) {
   const t = useT();
+  const resolveErr = useActionErrorResolver();
   const [pending, startTransition] = useTransition();
 
   return (
@@ -15,7 +17,7 @@ export function OfferControls({ offerId, status }: { offerId: string; status: st
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h2 className="text-sm font-semibold tracking-wide uppercase">
-            {t("console.marketplace.offers.controls.stateHeading", undefined, "State")}
+            {t("console.marketplace.offers.controls.stateHeading", undefined, "Status")}
           </h2>
           <p className="mt-1 text-xs text-[var(--p-text-2)]">
             {t(
@@ -31,7 +33,7 @@ export function OfferControls({ offerId, status }: { offerId: string; status: st
               action={(fd) => {
                 startTransition(async () => {
                   const result = await sendOfferAction(null, fd);
-                  if (result?.error) toast.error(result.error);
+                  if (result?.error) toast.error(resolveErr(result.error));
                 });
               }}
             >
@@ -47,7 +49,7 @@ export function OfferControls({ offerId, status }: { offerId: string; status: st
                 action={(fd) => {
                   startTransition(async () => {
                     const result = await acceptOfferAction(null, fd);
-                    if (result?.error) toast.error(result.error);
+                    if (result?.error) toast.error(resolveErr(result.error));
                   });
                 }}
               >
@@ -60,7 +62,7 @@ export function OfferControls({ offerId, status }: { offerId: string; status: st
                 action={(fd) => {
                   startTransition(async () => {
                     const result = await declineOfferAction(null, fd);
-                    if (result?.error) toast.error(result.error);
+                    if (result?.error) toast.error(resolveErr(result.error));
                   });
                 }}
               >

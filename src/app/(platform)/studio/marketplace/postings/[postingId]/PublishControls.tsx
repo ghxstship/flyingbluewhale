@@ -8,6 +8,7 @@ import { urlFor } from "@/lib/urls";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { publishPostingAction, closePostingAction } from "../new/actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export function PublishControls({
   postingId,
   status,
@@ -20,6 +21,7 @@ export function PublishControls({
   expiresAt: string | null;
 }) {
   const t = useT();
+  const resolveErr = useActionErrorResolver();
   const [pending, startTransition] = useTransition();
 
   return (
@@ -42,7 +44,7 @@ export function PublishControls({
               action={(fd) => {
                 startTransition(async () => {
                   const result = await publishPostingAction(null, fd);
-                  if (result?.error) toast.error(result.error);
+                  if (result?.error) toast.error(resolveErr(result.error));
                 });
               }}
               className="flex items-end gap-2"
@@ -64,7 +66,7 @@ export function PublishControls({
               action={(fd) => {
                 startTransition(async () => {
                   const result = await closePostingAction(null, fd);
-                  if (result?.error) toast.error(result.error);
+                  if (result?.error) toast.error(resolveErr(result.error));
                 });
               }}
             >

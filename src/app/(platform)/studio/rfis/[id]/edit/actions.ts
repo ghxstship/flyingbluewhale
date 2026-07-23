@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   id: z.string().uuid(),
@@ -45,7 +46,7 @@ export async function updateRfi(_: State, fd: FormData): Promise<State> {
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!project) return { error: "Project not found in your organization" };
+  if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
 
   // Sea Trial FINDING-022: optimistic concurrency.
   const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
@@ -62,7 +63,7 @@ export async function updateRfi(_: State, fd: FormData): Promise<State> {
     answered_at: patch.status === "answered" || patch.status === "closed" ? new Date().toISOString() : null,
   } as never);
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Rfi not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.rfi", "Rfi not found.") };
   }
   revalidatePath(`/studio/rfis/${id}`);
   revalidatePath("/studio/rfis");

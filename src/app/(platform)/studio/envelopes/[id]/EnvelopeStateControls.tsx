@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { setEnvelopeStateAction } from "../actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 type EnvelopeState =
   | "drafted"
   | "sent"
@@ -44,6 +45,7 @@ const TERMINAL: ReadonlySet<EnvelopeState> = new Set(["completed", "declined", "
 
 export function EnvelopeStateControls({ id, state }: { id: string; state: EnvelopeState }) {
   const t = useT();
+  const resolveErr = useActionErrorResolver();
   const [pending, start] = useTransition();
   const transition = NEXT[state];
   return (
@@ -55,7 +57,7 @@ export function EnvelopeStateControls({ id, state }: { id: string; state: Envelo
           onClick={() =>
             start(async () => {
               const res = await setEnvelopeStateAction(id, transition.next);
-              if (res?.error) toast.error(res.error);
+              if (res?.error) toast.error(resolveErr(res.error));
               else toast.success(t("console.envelopes.stateControls.toast.ok", undefined, "Envelope updated"));
             })
           }
@@ -71,7 +73,7 @@ export function EnvelopeStateControls({ id, state }: { id: string; state: Envelo
           onClick={() =>
             start(async () => {
               const res = await setEnvelopeStateAction(id, "voided");
-              if (res?.error) toast.error(res.error);
+              if (res?.error) toast.error(resolveErr(res.error));
               else toast.success(t("console.envelopes.stateControls.toast.voided", undefined, "Envelope voided"));
             })
           }

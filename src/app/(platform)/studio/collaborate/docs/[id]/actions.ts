@@ -5,6 +5,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
+import { actionErrorMessage } from "@/lib/errors";
 
 /** FormState contract shared with FormShell / the editor island. */
 export type State = { error?: string; ok?: true } | null;
@@ -21,7 +22,7 @@ const SaveSchema = z.object({
 
 export async function saveDoc(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can edit documents" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.edit-documents", "Only manager+ can edit documents") };
   const parsed = SaveSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
 
@@ -29,10 +30,10 @@ export async function saveDoc(_: State, fd: FormData): Promise<State> {
   try {
     content = JSON.parse(parsed.data.content);
   } catch {
-    return { error: "Document body was not valid JSON" };
+    return { error: actionErrorMessage("document-body-was-not-valid-json", "Document body was not valid JSON") };
   }
   if (!content || typeof content !== "object" || (content as { type?: unknown }).type !== "doc") {
-    return { error: "Document body is not a valid editor document" };
+    return { error: actionErrorMessage("document-body-is-not-a-valid-editor-document", "Document body is not a valid editor document") };
   }
 
   const supabase = await createClient();

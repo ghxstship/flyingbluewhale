@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { SHEET_STATES, sheetSavePayloadSchema } from "@/lib/sheets";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = {
   error?: string;
@@ -26,7 +27,7 @@ const CreateSchema = z.object({
 
 export async function createSheetAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create sheets" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-sheets", "Only manager+ can create sheets") };
   const parsed = CreateSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const d = parsed.data;
@@ -61,13 +62,13 @@ export async function createSheetAction(_: State, fd: FormData): Promise<State> 
 // ============================================================
 export async function saveSheetAction(sheetId: string, payloadJson: string): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can edit sheets" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.edit-sheets", "Only manager+ can edit sheets") };
 
   let raw: unknown;
   try {
     raw = JSON.parse(payloadJson);
   } catch {
-    return { error: "Malformed payload" };
+    return { error: actionErrorMessage("malformed-payload", "Malformed payload") };
   }
   const parsed = sheetSavePayloadSchema.safeParse(raw);
   if (!parsed.success) {
@@ -129,9 +130,9 @@ const StateSchema = z.object({ sheet_state: z.enum(SHEET_STATES) });
 
 export async function setSheetStateAction(sheetId: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can change sheet state" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.change-sheet-state", "Only manager+ can change sheet state") };
   const parsed = StateSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: "Invalid state" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.state", "Invalid state") };
   const db = (await createClient()) as unknown as LooseSupabase;
   const { error } = await db
     .from("sheets")
@@ -150,7 +151,7 @@ export async function setSheetStateAction(sheetId: string, _: State, fd: FormDat
 // ============================================================
 export async function deleteSheetAction(sheetId: string): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can delete sheets" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.delete-sheets", "Only manager+ can delete sheets") };
   const db = (await createClient()) as unknown as LooseSupabase;
   const { error } = await db
     .from("sheets")

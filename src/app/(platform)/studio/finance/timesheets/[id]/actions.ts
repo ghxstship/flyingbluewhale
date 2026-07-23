@@ -13,6 +13,7 @@ import {
   type TimesheetDecision,
   type TimesheetState,
 } from "@/lib/db/timesheets";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = { error?: string } | null;
 
@@ -30,10 +31,10 @@ const Schema = z.object({
  */
 export async function decideTimesheet(id: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only managers can review timesheets." };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager.review-timesheets", "Only managers can review timesheets.") };
 
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: "Pick a valid decision." };
+  if (!parsed.success) return { error: actionErrorMessage("pick-a-valid-decision", "Pick a valid decision.") };
   const { decision } = parsed.data;
   const notes = parsed.data.notes || null;
 
@@ -47,8 +48,8 @@ export async function decideTimesheet(id: string, _: State, fd: FormData): Promi
     .eq("id", id)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  if (loadErr) return { error: "Could not load timesheet." };
-  if (!sheet) return { error: "Timesheet not found." };
+  if (loadErr) return { error: actionErrorMessage("could-not-load-timesheet", "Could not load timesheet.") };
+  if (!sheet) return { error: actionErrorMessage("not-found.timesheet", "Timesheet not found.") };
 
   const currentState = sheet.state as TimesheetState;
   if (!canDecide(currentState, decision)) {
@@ -61,14 +62,14 @@ export async function decideTimesheet(id: string, _: State, fd: FormData): Promi
   // approver can fix themselves.
   const approverPartyId = await ensureMyPartyId(session.orgId, session.userId, session.email);
   if (!approverPartyId) {
-    return { error: "Your account is not linked to a party record in this organization." };
+    return { error: actionErrorMessage("your-account-is-not-linked-to-a-party-record", "Your account is not linked to a party record in this organization.") };
   }
 
   // Separation of duties: a manager cannot bless their own hours. Nothing
   // prevented this before — the manager band could approve the very sheet
   // that pays them.
   if (sheet.party_id && sheet.party_id === approverPartyId) {
-    return { error: "You can't review your own timesheet. Another manager has to decide this one." };
+    return { error: actionErrorMessage("you-can-t-review-your-own-timesheet-another-manager", "You can't review your own timesheet. Another manager has to decide this one.") };
   }
 
   // Claim the transition first, predicated on the state we validated
@@ -92,7 +93,7 @@ export async function decideTimesheet(id: string, _: State, fd: FormData): Promi
     .maybeSingle();
   if (updErr) return { error: `Could not update timesheet state: ${updErr.message}` };
   if (!moved) {
-    return { error: "This timesheet was decided by someone else. Refresh and review the current state." };
+    return { error: actionErrorMessage("this-timesheet-was-decided-by-someone-else-refresh-and", "This timesheet was decided by someone else. Refresh and review the current state.") };
   }
 
   const { error: insErr } = await supabase.from("timesheet_approvals").insert({

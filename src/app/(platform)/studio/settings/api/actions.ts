@@ -7,6 +7,7 @@ import { mintToken } from "@/lib/api-keys";
 import { createClient } from "@/lib/supabase/server";
 import { emitAudit } from "@/lib/audit";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const CreateSchema = z.object({
   name: z.string().min(1).max(120),
@@ -32,7 +33,7 @@ export type CreateState =
 export async function createApiKeyAction(_: CreateState, fd: FormData): Promise<CreateState> {
   const session = await requireSession();
   // API keys grant programmatic org access — owner/admin only.
-  if (!isAdmin(session)) return { error: "Only owners and admins can mint API keys" };
+  if (!isAdmin(session)) return { error: actionErrorMessage("auth.owner-admin.mint-api-keys", "Only owners and admins can mint API keys") };
   const parsed = CreateSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();

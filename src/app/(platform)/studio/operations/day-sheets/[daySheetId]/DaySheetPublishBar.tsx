@@ -8,6 +8,7 @@ import { useToast } from "@/lib/hooks/useToast";
 import { NEXT_DAY_SHEET_STATES, DAY_SHEET_STATE_LABELS, type DaySheetState } from "@/lib/db/day-sheets";
 import { transitionDaySheetAction, type State } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 const CTA_LABEL: Partial<Record<DaySheetState, string>> = {
   draft: "Move To Draft",
   published: "Publish To Field",
@@ -18,6 +19,7 @@ export function DaySheetPublishBar({ daySheetId, state }: { daySheetId: string; 
   const router = useRouter();
   const toast = useToast();
   const [result, formAction, pending] = useActionState<State, FormData>(transitionDaySheetAction, null);
+  const resolveErr = useActionErrorResolver();
   const next = NEXT_DAY_SHEET_STATES[state] ?? [];
 
   React.useEffect(() => {
@@ -25,7 +27,7 @@ export function DaySheetPublishBar({ daySheetId, state }: { daySheetId: string; 
       toast.success("Day sheet updated");
       router.refresh();
     } else if (result?.error) {
-      toast.error(result.error);
+      toast.error(resolveErr(result.error));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result]);

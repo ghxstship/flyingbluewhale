@@ -8,6 +8,7 @@ import { useToast } from "@/lib/hooks/useToast";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { TIMESHEET_STATE_LABEL, type TimesheetState } from "@/lib/db/timesheets";
 import { decideTimesheet } from "@/app/(platform)/studio/finance/timesheets/[id]/actions";
+import { useActionErrorResolver } from "@/lib/errors-client";
 
 /**
  * Workforce · Time Sheets (kit 34 v3.7 · §5 handoff). Manager review of REAL
@@ -41,6 +42,7 @@ export function TimeSheetsView({ rows }: { rows: TimesheetRow[] }) {
   const router = useRouter();
   const toast = useToast();
   const [pending, startTx] = useTransition();
+  const resolveErr = useActionErrorResolver();
 
   const submitted = rows.filter((r) => r.state === "submitted");
   const approved = rows.filter((r) => r.state === "approved");
@@ -54,7 +56,7 @@ export function TimeSheetsView({ rows }: { rows: TimesheetRow[] }) {
     startTx(async () => {
       const res = await decideTimesheet(r.id, null, fd);
       if (res?.error) {
-        toast.error(res.error);
+        toast.error(resolveErr(res.error));
         return;
       }
       toast.success(msg, { description: `${r.worker} · ${r.period}` });

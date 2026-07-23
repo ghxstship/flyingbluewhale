@@ -6,6 +6,7 @@ import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { emitAudit } from "@/lib/audit";
 import { GRANTABLE_CAPABILITIES, isShiftDerivable } from "@/lib/rbac/capabilities";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = { error?: string; ok?: true } | null;
 
@@ -38,7 +39,7 @@ const RoleGrant = z.object({
 
 export async function grantRoleCapability(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isAdmin(session)) return { error: "You need admin access to change capabilities" };
+  if (!isAdmin(session)) return { error: actionErrorMessage("auth.admin.change-capabilities", "You need admin access to change capabilities") };
   const parsed = RoleGrant.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid grant" };
 
@@ -62,7 +63,7 @@ export async function grantRoleCapability(_prev: State, fd: FormData): Promise<S
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!role) return { error: "Role not found" };
+  if (!role) return { error: actionErrorMessage("not-found.role", "Role not found") };
 
   const { error } = await supabase.from("role_capability_grants").insert({
     org_id: session.orgId,
@@ -100,9 +101,9 @@ const RevokeRole = z.object({ id: z.string().uuid() });
 
 export async function revokeRoleCapability(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isAdmin(session)) return { error: "You need admin access to change capabilities" };
+  if (!isAdmin(session)) return { error: actionErrorMessage("auth.admin.change-capabilities", "You need admin access to change capabilities") };
   const parsed = RevokeRole.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: "Invalid request" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.request", "Invalid request") };
 
   const supabase = await createClient();
   // Role grants are hard-deleted: there is no "revoked" state on this table,
@@ -115,7 +116,7 @@ export async function revokeRoleCapability(_prev: State, fd: FormData): Promise<
     .eq("org_id", session.orgId)
     .select("capability, crew_role_id");
   if (error) return { error: error.message };
-  if (!deleted || deleted.length === 0) return { error: "Grant not found" };
+  if (!deleted || deleted.length === 0) return { error: actionErrorMessage("not-found.grant", "Grant not found") };
 
   await emitAudit({
     actorId: session.userId,
@@ -144,14 +145,14 @@ const UserGrant = z.object({
 
 export async function grantUserCapability(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isAdmin(session)) return { error: "You need admin access to change capabilities" };
+  if (!isAdmin(session)) return { error: actionErrorMessage("auth.admin.change-capabilities", "You need admin access to change capabilities") };
   const parsed = UserGrant.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid grant" };
 
   const from = parsed.data.valid_from ? new Date(parsed.data.valid_from) : null;
   const until = parsed.data.valid_until ? new Date(parsed.data.valid_until) : null;
   if (from && until && until <= from) {
-    return { error: "The end of the window has to be after the start" };
+    return { error: actionErrorMessage("the-end-of-the-window-has-to-be-after", "The end of the window has to be after the start") };
   }
 
   const supabase = await createClient();
@@ -165,7 +166,7 @@ export async function grantUserCapability(_prev: State, fd: FormData): Promise<S
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!member) return { error: "That person isn't a member of this workspace" };
+  if (!member) return { error: actionErrorMessage("that-person-isn-t-a-member-of-this-workspace", "That person isn't a member of this workspace") };
 
   const { error } = await supabase.from("user_capability_grants").insert({
     org_id: session.orgId,
@@ -201,9 +202,9 @@ const RevokeUser = z.object({ id: z.string().uuid() });
 
 export async function revokeUserCapability(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isAdmin(session)) return { error: "You need admin access to change capabilities" };
+  if (!isAdmin(session)) return { error: actionErrorMessage("auth.admin.change-capabilities", "You need admin access to change capabilities") };
   const parsed = RevokeUser.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: "Invalid request" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.request", "Invalid request") };
 
   const supabase = await createClient();
   // Individual grants are revoked, not deleted — `revoked_at` is what
@@ -217,7 +218,7 @@ export async function revokeUserCapability(_prev: State, fd: FormData): Promise<
     .is("revoked_at", null)
     .select("capability, user_id");
   if (error) return { error: error.message };
-  if (!updated || updated.length === 0) return { error: "Grant not found, or already revoked" };
+  if (!updated || updated.length === 0) return { error: actionErrorMessage("grant-not-found-or-already-revoked", "Grant not found, or already revoked") };
 
   await emitAudit({
     actorId: session.userId,
@@ -255,9 +256,9 @@ const ShiftDerivable = z.object({
  */
 export async function setRoleGrantShiftDerivable(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isAdmin(session)) return { error: "You need admin access to change capabilities" };
+  if (!isAdmin(session)) return { error: actionErrorMessage("auth.admin.change-capabilities", "You need admin access to change capabilities") };
   const parsed = ShiftDerivable.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: "Invalid request" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.request", "Invalid request") };
 
   const supabase = await createClient();
 
@@ -272,7 +273,7 @@ export async function setRoleGrantShiftDerivable(_prev: State, fd: FormData): Pr
       .eq("id", parsed.data.id)
       .eq("org_id", session.orgId)
       .maybeSingle();
-    if (!existing) return { error: "Grant not found" };
+    if (!existing) return { error: actionErrorMessage("not-found.grant", "Grant not found") };
     if (!isShiftDerivable((existing as { capability: string }).capability)) {
       return {
         error:
@@ -288,7 +289,7 @@ export async function setRoleGrantShiftDerivable(_prev: State, fd: FormData): Pr
     .eq("org_id", session.orgId)
     .select("capability, crew_role_id");
   if (error) return { error: error.message };
-  if (!updated || updated.length === 0) return { error: "Grant not found" };
+  if (!updated || updated.length === 0) return { error: actionErrorMessage("not-found.grant", "Grant not found") };
 
   await emitAudit({
     actorId: session.userId,

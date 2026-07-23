@@ -4,6 +4,7 @@ import { useState, useRef, useTransition, type KeyboardEvent } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "@/lib/hooks/useToast";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 /**
  * EditableCell (P3.a) — click-to-edit inline text with optimistic commit and
  * a one-step undo toast (mirrors the delete-undo pattern in DeleteForm).
@@ -33,6 +34,7 @@ export function EditableCell({
   maxLength?: number;
 }) {
   const router = useRouter();
+  const resolveErr = useActionErrorResolver();
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(value);
   const [pending, startTransition] = useTransition();
@@ -52,7 +54,7 @@ export function EditableCell({
     startTransition(async () => {
       const res = await onCommit(trimmed);
       if (res && "error" in res && res.error) {
-        toast.error(res.error);
+        toast.error(resolveErr(res.error));
         return; // stay in edit mode so the user can retry
       }
       setEditing(false);

@@ -82,7 +82,7 @@ export default async function Page() {
             },
             {
               key: "publish_state",
-              header: t("console.comms.surveys.columns.state", undefined, "State"),
+              header: t("console.comms.surveys.columns.state", undefined, "Status"),
               render: (r) => (
                 <Badge
                   variant={

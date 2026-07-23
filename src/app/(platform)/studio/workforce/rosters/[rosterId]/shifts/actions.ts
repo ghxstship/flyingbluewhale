@@ -5,6 +5,7 @@ import { z } from "zod";
 import { assertCapability, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 /**
  * Rostering — put a person on a shift.
@@ -39,7 +40,7 @@ export async function addShift(rosterId: string, _: State, fd: FormData): Promis
   // Rostering decides who works — and, once shift-derived grants are live, what
   // they can do. It is a scheduling authority, not a field action.
   const denial = assertCapability(session, "schedule:write");
-  if (denial) return { error: "You do not have permission to roster shifts." };
+  if (denial) return { error: actionErrorMessage("you-do-not-have-permission-to-roster-shifts", "You do not have permission to roster shifts.") };
 
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
@@ -47,13 +48,13 @@ export async function addShift(rosterId: string, _: State, fd: FormData): Promis
   const starts = new Date(parsed.data.starts_at);
   const ends = new Date(parsed.data.ends_at);
   if (Number.isNaN(starts.getTime()) || Number.isNaN(ends.getTime())) {
-    return { error: "Those times are not valid." };
+    return { error: actionErrorMessage("those-times-are-not-valid", "Those times are not valid.") };
   }
   // A shift that ends before it starts is a typo, not a night shift — the
   // operator meant tomorrow's date. Catching it here beats a negative-length
   // shift silently reaching payroll.
   if (ends <= starts) {
-    return { error: "The shift has to end after it starts. For an overnight shift, set the end date to the next day." };
+    return { error: actionErrorMessage("the-shift-has-to-end-after-it-starts-for", "The shift has to end after it starts. For an overnight shift, set the end date to the next day.") };
   }
 
   const supabase = await createClient();
@@ -66,7 +67,7 @@ export async function addShift(rosterId: string, _: State, fd: FormData): Promis
     .eq("id", rosterId)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  if (!roster) return { error: "That roster no longer exists." };
+  if (!roster) return { error: actionErrorMessage("that-roster-no-longer-exists", "That roster no longer exists.") };
 
   // The person must be in THIS org. Without this check a crafted form could
   // roster someone from another tenant — RLS would allow the insert, since the
@@ -77,9 +78,9 @@ export async function addShift(rosterId: string, _: State, fd: FormData): Promis
     .eq("id", parsed.data.crew_member_id)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  if (!crew) return { error: "That person is not in this organization." };
+  if (!crew) return { error: actionErrorMessage("that-person-is-not-in-this-organization", "That person is not in this organization.") };
   if (crew.engagement_state === "separated") {
-    return { error: "That person has been separated. Reinstate them before rostering." };
+    return { error: actionErrorMessage("that-person-has-been-separated-reinstate-them-before-rostering", "That person has been separated. Reinstate them before rostering.") };
   }
 
   const { error } = await supabase.from("shifts").insert({

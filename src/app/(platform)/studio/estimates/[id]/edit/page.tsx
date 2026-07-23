@@ -42,7 +42,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--p-text-2)]">
-              {t("console.estimates.edit.fields.state", undefined, "State")}
+              {t("console.estimates.edit.fields.state", undefined, "Status")}
             </span>
             <select name="estimate_state" defaultValue={row.estimate_state} className="ps-input focus-ring w-full">
               {ESTIMATE_STATES.map((s) => (

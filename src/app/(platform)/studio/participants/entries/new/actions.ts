@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   delegation_id: z.string().uuid(),
@@ -35,7 +36,7 @@ export async function createEntry(_: State, fd: FormData): Promise<State> {
     .eq("id", parsed.data.delegation_id)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  if (!delegation) return { error: "Delegation not found in your organization" };
+  if (!delegation) return { error: actionErrorMessage("not-found.delegation-in-org", "Delegation not found in your organization") };
 
   const { data, error } = await supabase
     .from("delegation_entries")

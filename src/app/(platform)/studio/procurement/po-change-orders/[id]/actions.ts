@@ -7,6 +7,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { emitAudit } from "@/lib/audit";
 import { routeToApprovals } from "@/lib/approvals/route";
+import { actionErrorMessage } from "@/lib/errors";
 
 type PoChangeOrderStatus = "draft" | "submitted" | "in_review" | "approved" | "rejected" | "void";
 
@@ -117,7 +118,7 @@ export type RouteCoState = { error?: string } | null;
  */
 export async function routePoChangeOrderToApprovalsAction(id: string): Promise<RouteCoState> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can route change orders to approvals" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.route-change-orders-to-approvals", "Only manager+ can route change orders to approvals") };
 
   const supabase = await createClient();
   const { data: co } = await supabase
@@ -126,7 +127,7 @@ export async function routePoChangeOrderToApprovalsAction(id: string): Promise<R
     .eq("org_id", session.orgId)
     .eq("id", id)
     .maybeSingle();
-  if (!co) return { error: "Change order not found" };
+  if (!co) return { error: actionErrorMessage("not-found.change-order", "Change order not found") };
   // Terminal states (approved/rejected/void) are past the review window.
   if (["approved", "rejected", "void"].includes(co.change_order_state)) {
     return { error: `A ${co.change_order_state} change order cannot be routed for approval` };
@@ -166,7 +167,7 @@ export async function routePoChangeOrderToApprovalsAction(id: string): Promise<R
  */
 export async function executeCoPostToBudgetAction(id: string): Promise<RouteCoState> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can post change orders to budget" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.post-change-orders-to-budget", "Only manager+ can post change orders to budget") };
 
   const supabase = await createClient();
   const { data: co } = await supabase
@@ -175,9 +176,9 @@ export async function executeCoPostToBudgetAction(id: string): Promise<RouteCoSt
     .eq("org_id", session.orgId)
     .eq("id", id)
     .maybeSingle();
-  if (!co) return { error: "Change order not found" };
+  if (!co) return { error: actionErrorMessage("not-found.change-order", "Change order not found") };
   if (co.change_order_state !== "approved") {
-    return { error: "Only an approved change order can post to budget. Route it through approvals first" };
+    return { error: actionErrorMessage("only-an-approved-change-order-can-post-to-budget", "Only an approved change order can post to budget. Route it through approvals first") };
   }
 
   const marker = `[po_change_order:${id}]`;

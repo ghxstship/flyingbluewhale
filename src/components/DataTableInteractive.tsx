@@ -67,6 +67,7 @@ import type { SaveViewSubmit } from "@/components/views/SaveViewDialog";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { formatMoney, formatNumber } from "@/lib/i18n/format";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 // ── Keyboard-traversal instance arbitration (F-04) ───────────────────────────
 // Module scope so pages that mount several DataTableInteractive instances
 // route j/k/x/Enter to exactly one: the last hovered/focused table, falling
@@ -316,6 +317,7 @@ export function DataTableInteractive({
   // it without another props change.
   void viewType;
   const t = useT();
+  const resolveErr = useActionErrorResolver();
   const router = useRouter();
   const { prefs, setPrefs } = useUserPreferences();
   const savedView = tableId ? (prefs.table_views as Record<string, SavedView> | undefined)?.[tableId] : undefined;
@@ -883,14 +885,14 @@ export function DataTableInteractive({
     async (a: BulkAction) => {
       try {
         const res = await a.perform(Array.from(selected));
-        if (res?.error) toast.error(res.error);
+        if (res?.error) toast.error(resolveErr(res.error));
         else if (res?.message) toast.success(res.message);
       } catch (err) {
         toast.error(err instanceof Error ? err.message : t("dataTable.bulkFailed", undefined, "Bulk Action Failed"));
       }
       setSelected(new Set());
     },
-    [selected, t],
+    [selected, t, resolveErr],
   );
 
   if (rows.length === 0) {

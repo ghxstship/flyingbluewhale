@@ -7,6 +7,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getOrgScoped } from "@/lib/db/resource";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const PROVIDERS = ["docusign", "adobe_sign", "hellosign", "pandadoc", "manual"] as const;
 const TARGET_TYPES = [
@@ -42,7 +43,7 @@ export async function createEnvelopeAction(_: State, fd: FormData): Promise<Stat
   const session = await requireSession();
   // E-sign envelopes are legal instruments; manager+ only at app layer
   // (mirrors the RLS write policy on contract_envelopes).
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create envelopes" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-envelopes", "Only manager+ can create envelopes") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
 
@@ -58,7 +59,7 @@ export async function createEnvelopeAction(_: State, fd: FormData): Promise<Stat
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!project) return { error: "Project not found in your organization" };
+    if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
   }
 
   const { data, error } = await supabase
@@ -110,10 +111,10 @@ export async function setEnvelopeStateAction(
     | "expired",
 ): Promise<{ error?: string } | undefined> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can change envelope state" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.change-envelope-state", "Only manager+ can change envelope state") };
 
   const before = await getOrgScoped("contract_envelopes", session.orgId, id);
-  if (!before) return { error: "Envelope not found" };
+  if (!before) return { error: actionErrorMessage("not-found.envelope", "Envelope not found") };
 
   const allowed = ENVELOPE_TRANSITIONS[before.envelope_state] ?? [];
   if (!allowed.includes(next)) {

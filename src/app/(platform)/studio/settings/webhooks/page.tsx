@@ -99,7 +99,7 @@ export default async function WebhooksPage() {
                 <tr>
                   <th>{t("console.settings.webhooks.col.url", undefined, "URL")}</th>
                   <th>{t("console.settings.webhooks.col.events", undefined, "Events")}</th>
-                  <th>{t("console.settings.webhooks.col.state", undefined, "State")}</th>
+                  <th>{t("console.settings.webhooks.col.state", undefined, "Status")}</th>
                   <th>{t("console.settings.webhooks.col.lastDelivery", undefined, "Last delivery")}</th>
                   <th>{t("console.settings.webhooks.col.failures", undefined, "Failures")}</th>
                   <th></th>

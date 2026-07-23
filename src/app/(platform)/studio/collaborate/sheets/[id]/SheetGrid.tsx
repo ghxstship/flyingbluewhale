@@ -28,6 +28,7 @@ import {
 } from "@/lib/sheets";
 import { saveSheetAction } from "../actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 type GridRow = { id: string; cells: SheetCells };
 
 let tempCounter = 0;
@@ -58,6 +59,7 @@ export function SheetGrid({
   canEdit: boolean;
 }) {
   const fmt = useFormatters();
+  const resolveErr = useActionErrorResolver();
   const [columns, setColumns] = useState<SheetColumn[]>(initialColumns);
   const [rows, setRows] = useState<GridRow[]>(
     initialRows.map((r) => ({ id: r.id, cells: { ...r.cells } })),
@@ -118,7 +120,7 @@ export function SheetGrid({
     startTransition(async () => {
       const res = await saveSheetAction(sheetId, JSON.stringify(payload));
       if (res?.error) {
-        setError(res.error);
+        setError(resolveErr(res.error));
         return;
       }
       setDirty(false);

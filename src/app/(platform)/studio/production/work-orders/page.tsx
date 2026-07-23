@@ -64,7 +64,7 @@ export default async function WorkOrdersPage() {
     { key: "trade", header: t("console.production.workOrders.col.trade", undefined, "Trade"), render: (r) => r.trade },
     {
       key: "state",
-      header: t("console.production.workOrders.col.state", undefined, "State"),
+      header: t("console.production.workOrders.col.state", undefined, "Status"),
       render: (r) => <Badge variant={STATE_TONE[r.work_order_state]}>{WORK_ORDER_STATE_LABELS[r.work_order_state]}</Badge>,
     },
     {

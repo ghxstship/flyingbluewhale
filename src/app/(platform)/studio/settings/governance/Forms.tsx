@@ -8,9 +8,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { createCommittee, createPolicy, type CommitteeState, type PolicyState } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export function CommitteeForm() {
   const t = useT();
   const [state, action, pending] = useActionState<CommitteeState, FormData>(createCommittee, null);
+  const resolveErr = useActionErrorResolver();
   const [open, setOpen] = React.useState(false);
   React.useEffect(() => {
     if (state === null) setOpen(false);
@@ -60,7 +62,7 @@ export function CommitteeForm() {
             </label>
             <textarea id="charter" name="charter" rows={3} maxLength={2000} className="ps-input mt-1.5 w-full" />
           </div>
-          {state?.error && <p className="text-xs text-[var(--p-danger)]">{state.error}</p>}
+          {state?.error && <p className="text-xs text-[var(--p-danger)]">{resolveErr(state.error)}</p>}
           <div className="flex justify-end">
             <Button type="submit" loading={pending}>
               {t("common.create", undefined, "Create")}
@@ -75,6 +77,7 @@ export function CommitteeForm() {
 export function PolicyForm() {
   const t = useT();
   const [state, action, pending] = useActionState<PolicyState, FormData>(createPolicy, null);
+  const resolveErr = useActionErrorResolver();
   const [open, setOpen] = React.useState(false);
   React.useEffect(() => {
     if (state === null) setOpen(false);
@@ -117,7 +120,7 @@ export function PolicyForm() {
               </option>
             </select>
           </div>
-          {state?.error && <p className="text-xs text-[var(--p-danger)]">{state.error}</p>}
+          {state?.error && <p className="text-xs text-[var(--p-danger)]">{resolveErr(state.error)}</p>}
           <div className="flex justify-end">
             <Button type="submit" loading={pending}>
               {t("common.create", undefined, "Create")}

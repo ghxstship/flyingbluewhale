@@ -10,6 +10,7 @@ import { STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { emitAudit } from "@/lib/audit";
 import { PLATFORM_ROLES } from "@/lib/supabase/types";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   role: z.enum(PLATFORM_ROLES),
@@ -31,12 +32,12 @@ export async function updatePerson(userId: string, _: State, fd: FormData): Prom
   // membership table write, but a server action MUST also gate at the
   // app layer — otherwise a non-admin who bypasses RLS via any future
   // policy regression could escalate to owner with a single POST.
-  if (!isAdmin(session)) return { error: "Only owners and admins can change a member's role" };
+  if (!isAdmin(session)) return { error: actionErrorMessage("auth.owner-admin.change-a-member-s-role", "Only owners and admins can change a member's role") };
   // Reject self-edits — admins can't change their own role here; the
   // owner-transfer / leave-org flows have their own surfaces with
   // explicit confirmation. Without this, the last owner could
   // accidentally demote themselves and lock the org out of admin.
-  if (userId === session.userId) return { error: "Use the leave-org flow to change your own role" };
+  if (userId === session.userId) return { error: actionErrorMessage("use-the-leave-org-flow-to-change-your-own", "Use the leave-org flow to change your own role") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -68,7 +69,7 @@ export async function updatePerson(userId: string, _: State, fd: FormData): Prom
       .eq("role", "owner")
       .is("deleted_at", null);
     if ((ownerCount ?? 0) <= 1) {
-      return { error: "Refusing to demote the only owner. Promote someone to owner first." };
+      return { error: actionErrorMessage("refusing-to-demote-the-only-owner-promote-someone-to", "Refusing to demote the only owner. Promote someone to owner first.") };
     }
   }
 

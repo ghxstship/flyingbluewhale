@@ -34,7 +34,7 @@ export function NewTableForm() {
       <Input label={t("console.reservations.tables.new.zone", undefined, "Zone")} name="zone" maxLength={80} />
       <div>
         <label className="text-xs font-medium text-[var(--p-text-2)]" htmlFor="table-state">
-          {t("console.reservations.tables.new.state", undefined, "State")}
+          {t("console.reservations.tables.new.state", undefined, "Status")}
         </label>
         <select id="table-state" name="table_state" defaultValue="available" className="ps-input mt-1.5 w-full">
           {VENUE_TABLE_STATES.map((s) => (

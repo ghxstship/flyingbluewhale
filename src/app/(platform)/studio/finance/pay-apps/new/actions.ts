@@ -6,6 +6,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   purchase_order_id: z.string().uuid(),
@@ -25,7 +26,7 @@ export type State = {
 export async function createPayApp(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   // Pay applications draw down PO retention — manager+ only at app layer.
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create payment applications" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-payment-applications", "Only manager+ can create payment applications") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -36,7 +37,7 @@ export async function createPayApp(_: State, fd: FormData): Promise<State> {
     .eq("org_id", session.orgId)
     .eq("id", parsed.data.purchase_order_id)
     .maybeSingle();
-  if (!po || !po.project_id) return { error: "PO not found or missing project" };
+  if (!po || !po.project_id) return { error: actionErrorMessage("po-not-found-or-missing-project", "PO not found or missing project") };
 
   // Determine the next application number for this PO.
   const { count: priorCount } = await (

@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { dateRangeRefine } from "@/lib/zod/dateRange";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z
   .object({
@@ -41,7 +42,7 @@ export async function updateEvent(id: string, _: State, fd: FormData): Promise<S
     event_state: parsed.data.event_state as "draft" | "scheduled" | "live" | "complete" | "cancelled",
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Event not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.event-2", "Event not found.") };
   }
   revalidatePath(`/studio/events/${id}`);
   revalidatePath("/studio/events");

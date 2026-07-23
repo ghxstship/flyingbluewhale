@@ -71,7 +71,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
       />
       <div className="page-content space-y-6">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <Field label={t("console.projects.detail.fields.state", undefined, "State")}>
+          <Field label={t("console.projects.detail.fields.state", undefined, "Status")}>
             <Badge variant={project.project_state === "active" ? "success" : "muted"}>{project.project_state}</Badge>
           </Field>
           <Field label={t("console.projects.detail.fields.slug", undefined, "Slug")}>{project.slug}</Field>

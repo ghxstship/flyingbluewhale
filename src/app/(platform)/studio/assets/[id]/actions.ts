@@ -6,6 +6,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { getOrgScoped } from "@/lib/db/resource";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = {
   error?: string;
@@ -37,12 +38,12 @@ const DepreciationSchema = z.object({
 
 export async function addDepreciation(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can edit depreciation" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.edit-depreciation", "Only manager+ can edit depreciation") };
   const parsed = DepreciationSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
 
   const assetId = await assertOrgAsset(session.orgId, parsed.data.asset_id);
-  if (!assetId) return actionFail("Asset not found", fd);
+  if (!assetId) return actionFail(actionErrorMessage("not-found.asset", "Asset not found"), fd);
 
   const salvage = toMinor(parsed.data.salvage_value_usd) ?? 0;
   const supabase = await createClient();
@@ -74,12 +75,12 @@ const MaintenanceSchema = z.object({
 
 export async function addMaintenance(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can log maintenance" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.log-maintenance", "Only manager+ can log maintenance") };
   const parsed = MaintenanceSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
 
   const assetId = await assertOrgAsset(session.orgId, parsed.data.asset_id);
-  if (!assetId) return actionFail("Asset not found", fd);
+  if (!assetId) return actionFail(actionErrorMessage("not-found.asset", "Asset not found"), fd);
 
   const cost = toMinor(parsed.data.cost_usd);
   const supabase = await createClient();

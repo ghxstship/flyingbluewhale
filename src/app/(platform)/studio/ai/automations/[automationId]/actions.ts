@@ -7,6 +7,7 @@ import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { runAutomation } from "@/lib/automations/run";
 import { log } from "@/lib/log";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = {
   error?: string;
@@ -40,7 +41,7 @@ const TriggerKindSchema = z.enum(["manual", "schedule", "webhook", "event"]);
 export async function saveStepsAction(automationId: string, _prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const raw = fd.get("steps");
-  if (typeof raw !== "string") return { error: "missing steps payload" };
+  if (typeof raw !== "string") return { error: actionErrorMessage("missing.steps-payload", "missing steps payload") };
   let parsed: unknown;
   try {
     parsed = JSON.parse(raw);
@@ -72,7 +73,7 @@ export async function saveTriggerAction(automationId: string, _prev: State, fd: 
   const kindRaw = fd.get("kind");
   const configRaw = fd.get("config");
   const kindParsed = TriggerKindSchema.safeParse(kindRaw);
-  if (!kindParsed.success) return { error: "invalid trigger kind" };
+  if (!kindParsed.success) return { error: actionErrorMessage("invalid.trigger-kind", "invalid trigger kind") };
 
   let configParsed: unknown = {};
   if (typeof configRaw === "string" && configRaw.length > 0) {
@@ -83,7 +84,7 @@ export async function saveTriggerAction(automationId: string, _prev: State, fd: 
     }
   }
   if (typeof configParsed !== "object" || configParsed === null || Array.isArray(configParsed)) {
-    return { error: "trigger config must be an object" };
+    return { error: actionErrorMessage("trigger-config-must-be-an-object", "trigger config must be an object") };
   }
 
   const supabase = await createClient();
@@ -118,7 +119,7 @@ export async function generateWebhookSecretAction(automationId: string, _prev: S
     .eq("id", automationId)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  if (!existing) return { error: "Automation not found" };
+  if (!existing) return { error: actionErrorMessage("not-found.automation", "Automation not found") };
 
   // 32 random bytes → 64-hex string. Sufficient for HMAC-SHA256 keying.
   const bytes = new Uint8Array(32);
@@ -185,8 +186,8 @@ export async function recordManualRunAction(automationId: string, _prev: State, 
     .eq("org_id", session.orgId)
     .maybeSingle();
   if (loadErr) return { error: loadErr.message };
-  if (!automation) return { error: "Automation not found" };
-  if (!automation.enabled) return { error: "Automation is disabled" };
+  if (!automation) return { error: actionErrorMessage("not-found.automation", "Automation not found") };
+  if (!automation.enabled) return { error: actionErrorMessage("automation-is-disabled", "Automation is disabled") };
 
   // Insert pending run row via service-role (RLS blocks INSERT on the table
   // for the authenticated role — writes go through the runner code path).

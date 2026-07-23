@@ -125,7 +125,7 @@ export default async function BoardPage({ searchParams }: { searchParams: Promis
               },
               {
                 key: "state",
-                header: t("console.board.col.state", undefined, "State"),
+                header: t("console.board.col.state", undefined, "Status"),
                 render: (r) => <StatusBadge status={r.task_state} />,
                 accessor: (r) => r.task_state,
                 filterable: true,

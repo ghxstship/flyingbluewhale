@@ -167,7 +167,7 @@ export default async function Page() {
             },
             {
               key: "state",
-              header: t("console.finance.apOcr.column.state", undefined, "State"),
+              header: t("console.finance.apOcr.column.state", undefined, "Status"),
               render: (r) => <Badge variant={STATE_TONE[r.state]}>{toTitle(r.state)}</Badge>,
               accessor: (r) => r.state,
               filterable: true,

@@ -85,7 +85,7 @@ export default async function Page() {
             },
             {
               key: "doc_state",
-              header: t("console.collaborate.docs.columns.state", undefined, "State"),
+              header: t("console.collaborate.docs.columns.state", undefined, "Status"),
               render: (r) => <StatusBadge status={r.doc_state} />,
               filterable: true,
               accessor: (r) => r.doc_state,

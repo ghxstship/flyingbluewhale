@@ -93,7 +93,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 value: worker,
               },
               {
-                label: t("console.finance.timesheets.detail.fields.state", undefined, "State"),
+                label: t("console.finance.timesheets.detail.fields.state", undefined, "Status"),
                 value: <StatusBadge status={row.state} />,
               },
               {

@@ -153,7 +153,7 @@ export default async function Page() {
             },
             {
               key: "state",
-              header: t("console.finance.entities.colState", undefined, "State"),
+              header: t("console.finance.entities.colState", undefined, "Status"),
               render: (r) => (
                 <Badge variant={STATE_TONE[r.consolidation_state]}>{toTitle(r.consolidation_state)}</Badge>
               ),

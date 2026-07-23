@@ -79,7 +79,7 @@ export async function PortalDocVault({
           <th>{t("p.docVault.col.title", undefined, "Title")}</th>
           <th>{t("p.docVault.col.type", undefined, "Type")}</th>
           <th>{t("p.docVault.col.version", undefined, "v")}</th>
-          <th>{t("p.docVault.col.state", undefined, "State")}</th>
+          <th>{t("p.docVault.col.state", undefined, "Status")}</th>
           <th>{t("p.docVault.col.updated", undefined, "Updated")}</th>
           <th>
             <span className="sr-only">{t("p.docVault.col.download", undefined, "Download")}</span>

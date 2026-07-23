@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
 import { dependentsBlockMessage, isDependentsBlock } from "@/lib/db/separation";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   full_name: z.string().min(1).max(200),
@@ -41,7 +42,7 @@ export async function updateContractor(id: string, _: State, fd: FormData): Prom
     workforce_kind: parsed.data.kind as "paid_staff" | "volunteer" | "contractor" | "official",
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Workforce Member not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.workforce-member", "Workforce Member not found.") };
   }
   revalidatePath(`/studio/workforce/contractors/${id}`);
   revalidatePath("/studio/workforce/contractors");

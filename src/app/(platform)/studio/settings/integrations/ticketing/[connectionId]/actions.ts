@@ -5,6 +5,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   connection_id: z.string().uuid(),
@@ -35,7 +36,7 @@ export async function recordSalesSnapshotAction(_: State, fd: FormData): Promise
   // Sales snapshots feed revenue dashboards — manager+ can record them.
   // (Lower-priv personas like crew/viewer should never write financial
   // data; RLS likely refuses but app-layer gate is sharper.)
-  if (!isManagerPlus(session)) return { error: "Only manager+ can record sales snapshots" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.record-sales-snapshots", "Only manager+ can record sales snapshots") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -47,7 +48,7 @@ export async function recordSalesSnapshotAction(_: State, fd: FormData): Promise
     .eq("id", parsed.data.connection_id)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  if (!connection) return { error: "Ticketing connection not found in your organization" };
+  if (!connection) return { error: actionErrorMessage("not-found.ticketing-connection-in-org", "Ticketing connection not found in your organization") };
 
   const totalSold = Math.max(0, Math.round(Number(parsed.data.total_sold)));
   const totalCapacity = parsed.data.total_capacity ? Math.max(0, Math.round(Number(parsed.data.total_capacity))) : null;

@@ -441,7 +441,7 @@ async function RecentProjects({ orgId }: { orgId: string }) {
             },
             {
               key: "project_state",
-              header: t("console.dashboard.columns.state", undefined, "State"),
+              header: t("console.dashboard.columns.state", undefined, "Status"),
               render: (p) => <StatusBadge status={p.project_state} />,
               accessor: (p) => p.project_state,
               filterable: true,

@@ -110,7 +110,7 @@ export default async function Page() {
             },
             {
               key: "state",
-              header: "State",
+              header: "Status",
               render: (r) => <StatusBadge status={r.note_state} />,
               accessor: (r) => NOTE_STATE_LABEL[r.note_state],
               filterable: true,

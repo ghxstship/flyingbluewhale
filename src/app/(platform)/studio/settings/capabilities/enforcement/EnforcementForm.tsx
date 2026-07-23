@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { Button } from "@/components/ui/Button";
 import { flipEnforcement, type State } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 /**
  * The confirm form under the preview. The server action re-measures the loss
  * list at submit time regardless of what this form claims — the checkbox is
@@ -19,12 +20,13 @@ export function EnforcementForm({
   losers: number;
 }) {
   const [state, formAction, pending] = useActionState<State, FormData>(flipEnforcement, null);
+  const resolveErr = useActionErrorResolver();
 
   return (
     <form action={formAction} className="space-y-3">
       {state?.error && (
         <div className="ps-alert ps-alert--danger" role="alert">
-          {state.error}
+          {resolveErr(state.error)}
         </div>
       )}
       <input type="hidden" name="enforced" value={enabling ? "1" : ""} />

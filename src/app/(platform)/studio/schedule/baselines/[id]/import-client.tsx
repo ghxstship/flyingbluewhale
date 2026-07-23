@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { importSchedule, type ImportState } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
 
 /**
@@ -15,6 +16,7 @@ const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)
 export function ImportScheduleClient({ baselineId }: { baselineId: string }) {
   const t = useT();
   const [state, formAction, pending] = useActionState<ImportState, FormData>(importSchedule, null);
+  const resolveErr = useActionErrorResolver();
   const [fileText, setFileText] = useState<string>("");
   const [fileName, setFileName] = useState<string>("");
   const formRef = useRef<HTMLFormElement>(null);
@@ -45,7 +47,7 @@ export function ImportScheduleClient({ baselineId }: { baselineId: string }) {
           {t("console.schedule.baselines.import.kb", undefined, "KB")}
         </p>
       )}
-      {state?.error && <p className="text-xs text-[var(--p-danger)]">{state.error}</p>}
+      {state?.error && <p className="text-xs text-[var(--p-danger)]">{resolveErr(state.error)}</p>}
       {state?.success && (
         <p className="text-xs text-[var(--p-success)]">
           {t(

@@ -10,6 +10,7 @@ import type { FormState } from "@/components/FormShell";
 import { actionFail, zodFieldErrors } from "@/lib/forms/fail";
 import { LIVE_LETTER_STATES } from "../letter-state";
 import { findReportingCycle } from "./cycle";
+import { actionErrorMessage } from "@/lib/errors";
 
 const EditSchema = z.object({
   managerId: z.string().uuid("Pick a manager"),
@@ -19,7 +20,7 @@ const EditSchema = z.object({
 export async function setReportsAction(projectId: string, _prev: FormState, fd: FormData): Promise<FormState> {
   const session = await requireSession();
   if (!can(session, "people:manage")) {
-    return { error: "You need the people:manage capability to edit reporting lines." };
+    return { error: actionErrorMessage("auth.capability.people-manage-2", "You need the people:manage capability to edit reporting lines.") };
   }
 
   const parsed = EditSchema.safeParse({
@@ -27,7 +28,7 @@ export async function setReportsAction(projectId: string, _prev: FormState, fd: 
     reportIds: fd.getAll("reportIds").filter((v): v is string => typeof v === "string"),
   });
   if (!parsed.success) {
-    return { error: "Check the fields below", fieldErrors: zodFieldErrors(parsed.error) };
+    return { error: actionErrorMessage("check-the-fields-below", "Check the fields below"), fieldErrors: zodFieldErrors(parsed.error) };
   }
   const { managerId, reportIds } = parsed.data;
 
@@ -39,7 +40,7 @@ export async function setReportsAction(projectId: string, _prev: FormState, fd: 
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!project) return { error: "Project not found." };
+  if (!project) return { error: actionErrorMessage("not-found.project-3", "Project not found.") };
 
   // Everyone involved must hold a live engagement on this project — the
   // reporting edge lives on the letter, so an off-roster id has no home.
@@ -54,10 +55,10 @@ export async function setReportsAction(projectId: string, _prev: FormState, fd: 
     if (!edges.has(l.crew_member_id)) edges.set(l.crew_member_id, l.reports_to_crew_member_id);
   }
 
-  if (!edges.has(managerId)) return actionFail("The manager must be on this project's roster.", fd);
+  if (!edges.has(managerId)) return actionFail(actionErrorMessage("the-manager-must-be-on-this-project-s-roster", "The manager must be on this project's roster."), fd);
   for (const r of reportIds) {
-    if (!edges.has(r)) return actionFail("Every report must be on this project's roster.", fd);
-    if (r === managerId) return actionFail("A person can't report to themselves.", fd);
+    if (!edges.has(r)) return actionFail(actionErrorMessage("every-report-must-be-on-this-project-s-roster", "Every report must be on this project's roster."), fd);
+    if (r === managerId) return actionFail(actionErrorMessage("a-person-can-t-report-to-themselves", "A person can't report to themselves."), fd);
   }
 
   // Cycle guard — walk up from the proposed manager through the proposed
@@ -67,7 +68,7 @@ export async function setReportsAction(projectId: string, _prev: FormState, fd: 
     reportIds.map((personId) => ({ personId, managerId })),
   );
   if (offender) {
-    return actionFail("That change would create a reporting loop. Pick a different manager.", fd);
+    return actionFail(actionErrorMessage("that-change-would-create-a-reporting-loop-pick-a", "That change would create a reporting loop. Pick a different manager."), fd);
   }
 
   try {

@@ -129,7 +129,7 @@ export default async function Page() {
             },
             {
               key: "state",
-              header: t("console.autoInvoicing.column.state", undefined, "State"),
+              header: t("console.autoInvoicing.column.state", undefined, "Status"),
               render: (r) => <Badge variant={toneFor(r.proposal_state)}>{toTitle(r.proposal_state)}</Badge>,
               accessor: (r) => r.proposal_state,
               filterable: true,

@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { ensureMyPartyId, ensurePartyForMember } from "@/lib/db/parties";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { DELEGATION_SCOPES } from "@/lib/approvals/queries";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   delegatee_user_id: z.string().uuid("Pick a delegatee"),
@@ -26,7 +27,7 @@ export type State = {
 
 export async function createDelegation(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create approval delegations" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-approval-delegations", "Only manager+ can create approval delegations") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -34,9 +35,9 @@ export async function createDelegation(_: State, fd: FormData): Promise<State> {
   // Both columns hold parties.id — resolve through the party layer. The
   // delegatee must be a member of this org (org-checked in the helper).
   const delegatorPartyId = await ensureMyPartyId(session.orgId, session.userId, session.email);
-  if (!delegatorPartyId) return actionFail("Could not resolve your party record in this workspace", fd);
+  if (!delegatorPartyId) return actionFail(actionErrorMessage("could-not-resolve-your-party-record-in-this-workspace", "Could not resolve your party record in this workspace"), fd);
   const delegateePartyId = await ensurePartyForMember(session.orgId, parsed.data.delegatee_user_id);
-  if (!delegateePartyId) return actionFail("Selected delegatee is not a member of this workspace", fd);
+  if (!delegateePartyId) return actionFail(actionErrorMessage("selected-delegatee-is-not-a-member-of-this-workspace", "Selected delegatee is not a member of this workspace"), fd);
 
   const { error } = await supabase.from("approval_delegations").insert({
     org_id: session.orgId,

@@ -11,9 +11,11 @@ import type { Cue } from "@/lib/supabase/types";
 import { toTitle } from "@/lib/format";
 import { useFormatters, useT } from "@/lib/i18n/LocaleProvider";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export function CueForm() {
   const t = useT();
   const [state, action, pending] = useActionState<State, FormData>(createCueAction, null);
+  const resolveErr = useActionErrorResolver();
   return (
     <form action={action} className="grid gap-3 md:grid-cols-2">
       <Input
@@ -59,7 +61,7 @@ export function CueForm() {
         </label>
         <textarea id="description" name="description" rows={2} maxLength={2000} className="ps-input mt-1.5 w-full" />
       </div>
-      {state?.error && <p className="text-xs text-[var(--p-danger)] md:col-span-2">{state.error}</p>}
+      {state?.error && <p className="text-xs text-[var(--p-danger)] md:col-span-2">{resolveErr(state.error)}</p>}
       <div className="flex justify-end md:col-span-2">
         <Button type="submit" loading={pending}>
           {t("console.production.ros.cueForm.addCue", undefined, "Add Cue")}

@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { PRODUCTION_PHASES, transitionProductionPhase, type ProductionPhase } from "@/lib/production-phase";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   title: z.string().min(1),
@@ -36,7 +37,7 @@ export async function createFabAction(_: State, fd: FormData): Promise<State> {
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!project) return { error: "Project not found in your organization" };
+    if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
   }
 
   const { error } = await supabase.from("fabrication_orders").insert({
@@ -133,7 +134,7 @@ export async function setFabStatus(formData: FormData): Promise<void> {
  */
 export async function transitionProductionPhaseAction(orderId: string, to: ProductionPhase, reason?: string) {
   const session = await requireSession();
-  if (!PRODUCTION_PHASES.includes(to)) return { error: "Invalid target phase" };
+  if (!PRODUCTION_PHASES.includes(to)) return { error: actionErrorMessage("invalid.target-phase", "Invalid target phase") };
   const result = await transitionProductionPhase({
     orgId: session.orgId,
     fabricationOrderId: orderId,

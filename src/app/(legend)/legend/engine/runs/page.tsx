@@ -67,7 +67,7 @@ export default async function RunsPage() {
           columns={[
             {
               key: "run_state",
-              header: "State",
+              header: "Status",
               filterable: true,
               render: (r) => <StatusBadge status={r.run_state} />,
               accessor: (r) => RUN_STATE_LABELS[r.run_state],

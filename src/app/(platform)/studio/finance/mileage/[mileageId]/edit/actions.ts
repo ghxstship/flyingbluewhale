@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
 import { moneyCentsString } from "@/app/(platform)/studio/finance/money";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   origin: z.string().min(1).max(200),
@@ -41,7 +42,7 @@ export async function updateMileage(id: string, _: State, fd: FormData): Promise
     notes: parsed.data.notes || null,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Mileage Log not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.mileage-log", "Mileage Log not found.") };
   }
   revalidatePath(`/studio/finance/mileage/${id}`);
   revalidatePath("/studio/finance/mileage");

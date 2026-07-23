@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { createRole, mergeRoles, renameRole } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export type RoleRow = {
   id: string;
   name: string;
@@ -36,6 +37,7 @@ export function RolesClient({
   canMerge: boolean;
 }) {
   const router = useRouter();
+  const resolveErr = useActionErrorResolver();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [sourceId, setSourceId] = useState<string>("");
@@ -48,7 +50,7 @@ export function RolesClient({
     startTransition(async () => {
       const res = await fn(null, fd);
       if (res?.error) {
-        setError(res.error);
+        setError(resolveErr(res.error));
         return;
       }
       after?.();

@@ -29,7 +29,7 @@ export function NewPromoterForm() {
           hint="Basis points (1500 = 15%)."
         />
         <div>
-          <label htmlFor="promoter_state" className="text-xs font-medium text-[var(--p-text-2)]">State</label>
+          <label htmlFor="promoter_state" className="text-xs font-medium text-[var(--p-text-2)]">Status</label>
           <select id="promoter_state" name="promoter_state" defaultValue="active" className="ps-input mt-1.5 w-full">
             {PROMOTER_STATES.map((s) => (
               <option key={s} value={s}>

@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
 import { emitAudit } from "@/lib/audit";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   requester_email: z.string().email(),
@@ -38,7 +39,7 @@ export async function updateDsarRequest(id: string, _: State, fd: FormData): Pro
     notes: parsed.data.notes || null,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Dsar Request not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.dsar-request", "Dsar Request not found.") };
   }
   // GDPR — audit fulfilment (the Art. 15/17/20 close-out is the most
   // litigation-relevant transition); audit any other state change too.

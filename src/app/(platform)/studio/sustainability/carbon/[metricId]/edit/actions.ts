@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   period_start: z.string().min(1),
@@ -39,7 +40,7 @@ export async function updateMetric(metricId: string, _: State, fd: FormData): Pr
     method: parsed.data.method || null,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Sustainability Metric not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.sustainability-metric", "Sustainability Metric not found.") };
   }
   revalidatePath(`/studio/sustainability/carbon/${metricId}`);
   revalidatePath("/studio/sustainability/carbon");

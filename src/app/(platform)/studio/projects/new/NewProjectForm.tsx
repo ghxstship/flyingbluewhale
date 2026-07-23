@@ -7,11 +7,13 @@ import { Input } from "@/components/ui/Input";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { createProjectAction, type CreateProjectState } from "../actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 type Option = { id: string; name: string };
 
 export function NewProjectForm({ clients = [], venues = [] }: { clients?: Option[]; venues?: Option[] }) {
   const t = useT();
   const [state, formAction, pending] = useActionState<CreateProjectState, FormData>(createProjectAction, null);
+  const resolveErr = useActionErrorResolver();
 
   return (
     <form action={formAction} className="surface space-y-4 p-6">
@@ -112,7 +114,7 @@ export function NewProjectForm({ clients = [], venues = [] }: { clients?: Option
           </select>
         </div>
       </div>
-      {state?.error ? <Alert kind="error">{state.error}</Alert> : null}
+      {state?.error ? <Alert kind="error">{resolveErr(state.error)}</Alert> : null}
       <div className="flex justify-end gap-2">
         <Button href="/studio/projects" variant="ghost">
           {t("common.cancel", undefined, "Cancel")}

@@ -6,6 +6,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   title: z.string().min(1).max(200),
@@ -22,7 +23,7 @@ export type State = {
 
 export async function createRfqAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create RFQs" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-rfqs", "Only manager+ can create RFQs") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();

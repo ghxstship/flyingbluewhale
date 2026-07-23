@@ -9,6 +9,7 @@ import { ensureMyPartyId, ensurePartyForMember } from "@/lib/db/parties";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { maxVersion } from "@/lib/clm/queries";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = {
   error?: string;
@@ -26,9 +27,9 @@ type GuardResult = { error: string } | { ok: true; sb: LooseSupabase };
 
 async function guard(contractId: string): Promise<GuardResult> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can edit contracts" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.edit-contracts", "Only manager+ can edit contracts") };
   const contract = await getOrgScoped("contracts", session.orgId, contractId);
-  if (!contract) return { error: "Contract not found" };
+  if (!contract) return { error: actionErrorMessage("not-found.contract", "Contract not found") };
   const supabase = await createClient();
   return { ok: true, sb: supabase as unknown as LooseSupabase };
 }
@@ -53,7 +54,7 @@ export async function addMilestone(_: State, fd: FormData): Promise<State> {
   if (!("ok" in g)) return g;
   const d = parsed.data;
   const minor = d.payment_usd ? Math.round(Number(d.payment_usd) * 100) : null;
-  if (minor != null && !Number.isFinite(minor)) return actionFail("Bad payment amount", fd);
+  if (minor != null && !Number.isFinite(minor)) return actionFail(actionErrorMessage("bad-payment-amount", "Bad payment amount"), fd);
   const { error } = await g.sb.from("contract_milestones").insert({
     contract_id: d.contract_id,
     label: d.label,
@@ -116,7 +117,7 @@ export async function addParty(_: State, fd: FormData): Promise<State> {
   const partyId = d.party_user_id
     ? await ensurePartyForMember(session.orgId, d.party_user_id)
     : await ensureMyPartyId(session.orgId, session.userId, session.email);
-  if (!partyId) return actionFail("Selected person is not a member of this workspace", fd);
+  if (!partyId) return actionFail(actionErrorMessage("selected-person-is-not-a-member-of-this-workspace", "Selected person is not a member of this workspace"), fd);
   const { error } = await g.sb.from("contract_parties").insert({
     contract_id: d.contract_id,
     party_id: partyId,
@@ -193,7 +194,7 @@ export async function recordSignature(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   // The form selects a MEMBER (auth user); signer_party_id is a parties.id.
   const signerPartyId = await ensurePartyForMember(session.orgId, d.signer_user_id);
-  if (!signerPartyId) return actionFail("Selected signer is not a member of this workspace", fd);
+  if (!signerPartyId) return actionFail(actionErrorMessage("selected-signer-is-not-a-member-of-this-workspace", "Selected signer is not a member of this workspace"), fd);
   const { error } = await g.sb.from("contract_signatures").insert({
     contract_id: d.contract_id,
     version_id: d.version_id,

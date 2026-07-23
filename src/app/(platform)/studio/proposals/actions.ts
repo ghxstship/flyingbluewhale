@@ -9,6 +9,7 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { resolveDepositPct, PROPOSAL_DEPOSIT_PCT_DEFAULT } from "@/lib/payment-terms";
 import { getOrgPaymentDefaults } from "@/lib/payment-terms-server";
+import { actionErrorMessage } from "@/lib/errors";
 
 const slugify = (s: string) =>
   s
@@ -55,7 +56,7 @@ export type State = {
 export async function createProposalAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   // Proposals are sales documents; manager+ only at app layer.
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create proposals" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-proposals", "Only manager+ can create proposals") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
 
@@ -73,7 +74,7 @@ export async function createProposalAction(_: State, fd: FormData): Promise<Stat
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!client) return { error: "Client not found in your organization" };
+    if (!client) return { error: actionErrorMessage("not-found.client-in-org", "Client not found in your organization") };
   }
   if (projectId) {
     const { data: project } = await supabase
@@ -83,7 +84,7 @@ export async function createProposalAction(_: State, fd: FormData): Promise<Stat
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!project) return { error: "Project not found in your organization" };
+    if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
   }
 
   // Resolve the template seed iff requested. RLS guarantees the caller
@@ -146,7 +147,7 @@ export async function setProposalStatusAction(
   status: "draft" | "sent" | "approved" | "rejected" | "expired" | "signed",
 ) {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can change proposal status" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.change-proposal-status", "Only manager+ can change proposal status") };
   const supabase = await createClient();
   const { data: before } = await supabase
     .from("proposals")
@@ -154,7 +155,7 @@ export async function setProposalStatusAction(
     .eq("org_id", session.orgId)
     .eq("id", id)
     .maybeSingle();
-  if (!before) return { error: "Proposal not found" };
+  if (!before) return { error: actionErrorMessage("not-found.proposal", "Proposal not found") };
   const current = before.proposal_state as string;
   const allowed = PROPOSAL_TRANSITIONS[current] ?? [];
   if (!allowed.includes(status)) {
@@ -179,7 +180,7 @@ export async function setProposalStatusAction(
     .eq("proposal_state", current as "draft")
     .select("id");
   if (error) return { error: error.message };
-  if (!updated || updated.length === 0) return { error: "Proposal status changed concurrently. Refresh and retry" };
+  if (!updated || updated.length === 0) return { error: actionErrorMessage("concurrency.proposal-status", "Proposal status changed concurrently. Refresh and retry") };
   if (status === "sent" || status === "signed") {
     const { notify } = await import("@/lib/notify");
     await notify({
@@ -223,7 +224,7 @@ export type ConvertProposalState = { error?: string; projectId?: string } | null
 
 export async function convertProposalToProjectAction(proposalId: string): Promise<ConvertProposalState> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can convert proposals" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.convert-proposals", "Only manager+ can convert proposals") };
 
   const supabase = await createClient();
 
@@ -237,7 +238,7 @@ export async function convertProposalToProjectAction(proposalId: string): Promis
     .is("deleted_at", null)
     .maybeSingle();
   if (loadError) return { error: loadError.message };
-  if (!proposal) return { error: "Proposal not found" };
+  if (!proposal) return { error: actionErrorMessage("not-found.proposal", "Proposal not found") };
   if (proposal.proposal_state !== "signed") {
     return { error: `Proposal must be signed before conversion (currently ${proposal.proposal_state})` };
   }
@@ -293,7 +294,7 @@ export async function convertProposalToProjectAction(proposalId: string): Promis
       .maybeSingle();
     if (!clash) break;
     slug = `${baseSlug}-${suffix}`;
-    if (suffix === 99) return { error: "Could not derive a unique project slug" };
+    if (suffix === 99) return { error: actionErrorMessage("could-not-derive-a-unique-project-slug", "Could not derive a unique project slug") };
   }
 
   const { data: project, error: projectError } = await supabase
@@ -424,9 +425,9 @@ export type BulkResult = { message?: string; error?: string };
  */
 export async function bulkSendProposals(ids: string[]): Promise<BulkResult> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "You Need Manager Access To Send Proposals" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager.send-proposals", "You Need Manager Access To Send Proposals") };
   const parsed = BulkIds.safeParse(ids);
-  if (!parsed.success) return { error: "Invalid Selection" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.selection", "Invalid Selection") };
   const supabase = await createClient();
   const { data: updated, error } = await supabase
     .from("proposals")

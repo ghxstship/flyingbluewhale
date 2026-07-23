@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   vehicle_ref: z.string().max(80).optional().or(z.literal("")),
@@ -39,7 +40,7 @@ export async function updateDispatchRun(id: string, _: State, fd: FormData): Pro
     actual_arrive: parsed.data.actual_arrive || null,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Dispatch Run not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.dispatch-run", "Dispatch Run not found.") };
   }
   revalidatePath(`/studio/transport/dispatch/${id}`);
   revalidatePath("/studio/transport/dispatch");

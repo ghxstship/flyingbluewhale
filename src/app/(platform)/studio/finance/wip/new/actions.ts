@@ -6,6 +6,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { formFail, actionFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 // WIP-snapshot money fields are stored as numeric DOLLARS (the list page
 // renders them via fmt.money(Math.round(n * 100)) — i.e. they are NOT
@@ -41,7 +42,7 @@ export async function createWipSnapshot(_: State, fd: FormData): Promise<State> 
   const session = await requireSession();
   // WIP snapshots feed surety / bonding review — manager+ gate matches the
   // rest of Finance authoring.
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create WIP snapshots" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-wip-snapshots", "Only manager+ can create WIP snapshots") };
 
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
@@ -57,7 +58,7 @@ export async function createWipSnapshot(_: State, fd: FormData): Promise<State> 
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!project) return { error: "Project not found in your organization" };
+  if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
 
   // Derived totals — kept consistent with the list-page display semantics
   // (revised contract = contract + COs; EAC = costs + ETC; earned = revised ×

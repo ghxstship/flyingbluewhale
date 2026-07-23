@@ -7,6 +7,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { JOB_POSTING_TYPES, slugify } from "@/lib/marketplace";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   title: z.string().min(1).max(200),
@@ -52,7 +53,7 @@ const toArray = (v: string | undefined): string[] =>
 export async function createPostingAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   // Job postings reach the public marketplace surface — manager+ only.
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create job postings" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-job-postings", "Only manager+ can create job postings") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -107,7 +108,7 @@ const PublishSchema = z.object({
 
 export async function publishPostingAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can publish job postings" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.publish-job-postings", "Only manager+ can publish job postings") };
   const parsed = PublishSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -125,7 +126,7 @@ export async function publishPostingAction(_: State, fd: FormData): Promise<Stat
     .select("id");
 
   if (error) return { error: error.message };
-  if (!data || data.length === 0) return { error: "Only a draft posting can be published" };
+  if (!data || data.length === 0) return { error: actionErrorMessage("only-a-draft-posting-can-be-published", "Only a draft posting can be published") };
   revalidatePath("/studio/marketplace/postings");
   revalidatePath(`/studio/marketplace/postings/${parsed.data.posting_id}`);
   return { error: undefined };
@@ -133,9 +134,9 @@ export async function publishPostingAction(_: State, fd: FormData): Promise<Stat
 
 export async function closePostingAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can close job postings" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.close-job-postings", "Only manager+ can close job postings") };
   const id = String(fd.get("posting_id") ?? "");
-  if (!id) return { error: "Missing posting" };
+  if (!id) return { error: actionErrorMessage("missing.posting", "Missing posting") };
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("job_postings")
@@ -145,7 +146,7 @@ export async function closePostingAction(_: State, fd: FormData): Promise<State>
     .eq("job_posting_phase", "published")
     .select("id");
   if (error) return { error: error.message };
-  if (!data || data.length === 0) return { error: "Only a published posting can be closed" };
+  if (!data || data.length === 0) return { error: actionErrorMessage("only-a-published-posting-can-be-closed", "Only a published posting can be closed") };
   revalidatePath("/studio/marketplace/postings");
   revalidatePath(`/studio/marketplace/postings/${id}`);
   return { error: undefined };

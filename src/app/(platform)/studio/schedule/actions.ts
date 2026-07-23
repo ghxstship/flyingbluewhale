@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { actionErrorMessage } from "@/lib/errors";
 
 /**
  * Reschedule a single event by re-anchoring its `starts_at` to a new
@@ -34,12 +35,12 @@ export async function rescheduleEvent(eventId: string, newStartISO: string): Pro
     .eq("org_id", session.orgId)
     .maybeSingle();
   if (readErr || !existing) {
-    return { ok: false, error: "Event not found" };
+    return { ok: false, error: actionErrorMessage("not-found.event", "Event not found") };
   }
   const oldStart = new Date(existing.starts_at).getTime();
   const oldEnd = new Date(existing.ends_at).getTime();
   if (Number.isNaN(oldStart) || Number.isNaN(oldEnd)) {
-    return { ok: false, error: "Existing event has invalid timestamps" };
+    return { ok: false, error: actionErrorMessage("existing-event-has-invalid-timestamps", "Existing event has invalid timestamps") };
   }
   const duration = Math.max(0, oldEnd - oldStart);
   const newStart = new Date(parsed.data.newStartISO).toISOString();

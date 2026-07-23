@@ -173,7 +173,7 @@ export default async function Page() {
             },
             {
               key: "document_state",
-              header: t("console.sitePlans.columns.state", undefined, "State"),
+              header: t("console.sitePlans.columns.state", undefined, "Status"),
               render: (r) => <Badge variant={STATE_TONE[r.document_state]}>{STATE_LABEL[r.document_state]}</Badge>,
               accessor: (r) => r.document_state,
               filterable: true,

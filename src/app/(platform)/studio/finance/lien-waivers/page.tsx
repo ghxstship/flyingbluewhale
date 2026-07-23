@@ -182,7 +182,7 @@ export default async function Page() {
             },
             {
               key: "state",
-              header: t("console.finance.lienWaivers.column.state", undefined, "State"),
+              header: t("console.finance.lienWaivers.column.state", undefined, "Status"),
               render: (r) => <Badge variant={toneFor(r.waiver_state)}>{toTitle(r.waiver_state)}</Badge>,
               accessor: (r) => r.waiver_state,
               filterable: true,

@@ -7,8 +7,10 @@ import { urlFor } from "@/lib/urls";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { publishCallAction, closeCallAction } from "../new/actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export function CallControls({ callId, status, publicSlug }: { callId: string; status: string; publicSlug: string }) {
   const [pending, startTransition] = useTransition();
+  const resolveErr = useActionErrorResolver();
   const t = useT();
 
   return (
@@ -31,7 +33,7 @@ export function CallControls({ callId, status, publicSlug }: { callId: string; s
               action={(fd) => {
                 startTransition(async () => {
                   const result = await publishCallAction(null, fd);
-                  if (result?.error) toast.error(result.error);
+                  if (result?.error) toast.error(resolveErr(result.error));
                 });
               }}
             >
@@ -46,7 +48,7 @@ export function CallControls({ callId, status, publicSlug }: { callId: string; s
               action={(fd) => {
                 startTransition(async () => {
                   const result = await closeCallAction(null, fd);
-                  if (result?.error) toast.error(result.error);
+                  if (result?.error) toast.error(resolveErr(result.error));
                 });
               }}
             >

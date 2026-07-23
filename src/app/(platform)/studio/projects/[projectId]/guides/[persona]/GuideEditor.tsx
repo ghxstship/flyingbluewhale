@@ -8,6 +8,7 @@ import { upsertGuideAction } from "../actions";
 import type { GuidePersona } from "@/lib/supabase/types";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 /** Returns the parse error message for invalid JSON, or null when valid. */
 function jsonProblem(raw: string): string | null {
   if (!raw.trim()) return null;
@@ -36,6 +37,7 @@ export function GuideEditor({
   defaultValues: { title: string; subtitle: string; classification: string; published: boolean; config: string };
 }) {
   const t = useT();
+  const resolveErr = useActionErrorResolver();
   const [jsonError, setJsonError] = useState<string | null>(null);
 
   const invalidJsonMessage = (detail: string) =>
@@ -50,7 +52,7 @@ export function GuideEditor({
       return { error: invalidJsonMessage(problem) };
     }
     const res = await upsertGuideAction(projectId, prev, fd);
-    if (res?.error) toast.error(res.error);
+    if (res?.error) toast.error(resolveErr(res.error));
     else toast.success(t("console.projects.guides.editor.savedToast", undefined, "Guide saved"));
     return res;
   };

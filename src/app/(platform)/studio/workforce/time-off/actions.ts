@@ -6,6 +6,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { sendPushTo } from "@/lib/push/send";
 import { decideTimeOffRequest } from "@/lib/db/time-off";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   id: z.string().uuid(),
@@ -26,7 +27,7 @@ export type DecideState = { error?: string; ok?: true } | null;
 export async function decideTimeOff(_prev: DecideState, fd: FormData): Promise<DecideState> {
   const session = await requireSession();
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: "Invalid decision" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.decision", "Invalid decision") };
   const supabase = await createClient();
 
   // The manager+ gate, the pending guard, and the approve-via-RPC rule all
@@ -81,10 +82,10 @@ export async function bulkDecideTimeOff(
 ): Promise<BulkDecideResult> {
   const session = await requireSession();
   if (!isManagerPlus(session)) {
-    return { error: "You need manager access to decide time-off requests" };
+    return { error: actionErrorMessage("auth.manager.decide-time-off-requests", "You need manager access to decide time-off requests") };
   }
   const parsed = BulkSchema.safeParse({ decision, note, ids });
-  if (!parsed.success) return { error: "Invalid bulk decision request" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.bulk-decision-request", "Invalid bulk decision request") };
   const decisionNote = parsed.data.note || null;
   const supabase = await createClient();
 

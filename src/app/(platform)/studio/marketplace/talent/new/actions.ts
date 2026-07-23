@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { TALENT_RIDER_KINDS, slugify } from "@/lib/marketplace";
 import { DEPOSIT_PCT_DEFAULT, clampDepositPct } from "@/lib/payment-terms";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   act_name: z.string().min(1).max(200),
@@ -48,7 +49,7 @@ const toArray = (v: string | undefined): string[] =>
 
 export async function createTalentAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create talent profiles" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-talent-profiles", "Only manager+ can create talent profiles") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -88,9 +89,9 @@ export async function publishTalentAction(_: State, fd: FormData): Promise<State
   const session = await requireSession();
   // is_public makes the talent profile reachable on the public
   // marketplace — manager+ only at the app layer.
-  if (!isManagerPlus(session)) return { error: "Only manager+ can publish talent profiles" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.publish-talent-profiles", "Only manager+ can publish talent profiles") };
   const id = String(fd.get("talent_id") ?? "");
-  if (!id) return { error: "Missing talent" };
+  if (!id) return { error: actionErrorMessage("missing.talent", "Missing talent") };
   const supabase = await createClient();
   const { error } = await supabase
     .from("talent_profiles")
@@ -105,9 +106,9 @@ export async function publishTalentAction(_: State, fd: FormData): Promise<State
 
 export async function unpublishTalentAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can unpublish talent profiles" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.unpublish-talent-profiles", "Only manager+ can unpublish talent profiles") };
   const id = String(fd.get("talent_id") ?? "");
-  if (!id) return { error: "Missing talent" };
+  if (!id) return { error: actionErrorMessage("missing.talent", "Missing talent") };
   const supabase = await createClient();
   const { error } = await supabase
     .from("talent_profiles")
@@ -144,7 +145,7 @@ export async function createRiderAction(_: State, fd: FormData): Promise<State> 
     .eq("id", parsed.data.talent_id)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  if (!talent) return { error: "Talent profile not found in your organization" };
+  if (!talent) return { error: actionErrorMessage("not-found.talent-profile-in-org", "Talent profile not found in your organization") };
 
   // Demote the previous current rider of this kind.
   const { error: updateError } = await supabase

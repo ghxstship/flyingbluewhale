@@ -46,7 +46,7 @@ export default async function SubscriptionDetailPage({ params }: { params: Promi
       <div className="page-content space-y-6">
         <section className="surface space-y-4 p-6">
           <h2 className="text-sm font-semibold tracking-wide uppercase">
-            {t("console.subscriptions.detail.state", undefined, "State")}
+            {t("console.subscriptions.detail.state", undefined, "Status")}
           </h2>
           <div className="flex items-center gap-3">
             <Badge variant="default" className="text-base">

@@ -13,6 +13,7 @@ import {
   setRoleGrantShiftDerivable,
 } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export type MatrixCell = { grantId: string; shiftDerivable: boolean } | null;
 
 export type MatrixRow = {
@@ -56,6 +57,7 @@ export function CapabilitiesClient({
   userGrants: UserGrantRow[];
 }) {
   const router = useRouter();
+  const resolveErr = useActionErrorResolver();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
@@ -65,7 +67,7 @@ export function CapabilitiesClient({
     startTransition(async () => {
       const res = await fn(null, fd);
       if (res?.error) {
-        setError(res.error);
+        setError(resolveErr(res.error));
         return;
       }
       router.refresh();

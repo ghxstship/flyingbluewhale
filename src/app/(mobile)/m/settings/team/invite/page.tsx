@@ -7,6 +7,7 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 import { PLATFORM_ROLES } from "@/lib/supabase/types";
 import { createInviteAction } from "@/app/(platform)/studio/people/invites/actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 /**
  * COMPVSS · Invite Someone.
  *
@@ -26,6 +27,7 @@ import { createInviteAction } from "@/app/(platform)/studio/people/invites/actio
 export default function InvitePage() {
   const t = useT();
   const [state, formAction, pending] = useActionState(createInviteAction, null);
+  const resolveErr = useActionErrorResolver();
 
   return (
     <div className="screen screen-anim">
@@ -36,7 +38,7 @@ export default function InvitePage() {
 
       {state?.error && (
         <div className="ps-alert ps-alert--danger" role="alert" style={{ marginBottom: 12 }}>
-          {state.error}
+          {resolveErr(state.error)}
         </div>
       )}
 

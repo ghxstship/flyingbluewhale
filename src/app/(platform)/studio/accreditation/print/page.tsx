@@ -82,7 +82,7 @@ export default async function Page() {
             },
             {
               key: "state",
-              header: t("console.accreditation.print.columns.state", undefined, "State"),
+              header: t("console.accreditation.print.columns.state", undefined, "Status"),
               render: (r) => String(r.state ?? "—"),
               accessor: (r) => r.state ?? null,
               filterable: true,

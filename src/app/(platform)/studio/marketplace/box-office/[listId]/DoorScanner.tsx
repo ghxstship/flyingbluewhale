@@ -13,6 +13,7 @@ import {
 } from "@/lib/box_office";
 import { scanGuestCodeAction } from "../actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 /**
  * Door-scan affordance. Mirrors the advancing scan loop: paste/scan a code,
  * resolve it to a guest-list entry, and on `accepted` flip the entry to
@@ -21,6 +22,7 @@ import { scanGuestCodeAction } from "../actions";
  */
 export function DoorScanner({ listId }: { listId: string }) {
   const t = useT();
+  const resolveErr = useActionErrorResolver();
   const [pending, startTransition] = useTransition();
   const [last, setLast] = useState<{ result: GuestScanResult; guestName?: string } | null>(null);
 
@@ -48,7 +50,7 @@ export function DoorScanner({ listId }: { listId: string }) {
           startTransition(async () => {
             const res = await scanGuestCodeAction(null, fd);
             if (res?.error) {
-              toast.error(res.error);
+              toast.error(resolveErr(res.error));
               return;
             }
             if (res?.result) {

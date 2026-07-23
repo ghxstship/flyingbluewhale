@@ -195,7 +195,7 @@ export default async function Page() {
             },
             {
               key: "run_state",
-              header: t("console.finance.payroll.columns.runState", undefined, "State"),
+              header: t("console.finance.payroll.columns.runState", undefined, "Status"),
               render: (r) => <Badge variant={toneFor(r.run_state)}>{toTitle(r.run_state)}</Badge>,
               accessor: (r) => r.run_state,
               filterable: true,

@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import Link from "next/link";
 import { uploadPersonalDoc, type State } from "./docs-action";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 /**
  * Portal-native "Upload document" form (ADR-0008 Amendment 4).
  *
@@ -26,6 +27,7 @@ const DOC_KINDS: { value: string; label: string }[] = [
 
 export function DocUploadForm({ revalidate, backHref }: { revalidate: string; backHref: string }) {
   const [state, formAction, pending] = useActionState<State, FormData>(uploadPersonalDoc, null);
+  const resolveErr = useActionErrorResolver();
 
   return (
     <form action={formAction} encType="multipart/form-data">
@@ -34,7 +36,7 @@ export function DocUploadForm({ revalidate, backHref }: { revalidate: string; ba
 
       {state?.error && (
         <div className="ps-alert ps-alert--danger mb-4" role="alert">
-          {state.error}
+          {resolveErr(state.error)}
         </div>
       )}
 

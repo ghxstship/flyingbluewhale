@@ -7,6 +7,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import type { LooseSupabase } from "@/lib/supabase/loose";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   title: z.string().min(1).max(200),
@@ -22,7 +23,7 @@ export type State = {
 
 export async function createDoc(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create documents" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-documents", "Only manager+ can create documents") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();

@@ -137,7 +137,7 @@ export default async function ResourcesHubPage() {
                   },
                   {
                     key: "state",
-                    header: "State",
+                    header: "Status",
                     render: (r) => <StatusBadge status={r.resource_state} />,
                     accessor: (r) => r.resource_state,
                   },

@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   name: z.string().min(1).max(200),
@@ -37,12 +38,12 @@ export async function createEstimate(_: State, fd: FormData): Promise<State> {
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!project) return { error: "Project not found in your organization" };
+  if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
 
   const markup = parsed.data.default_markup_pct ? Number(parsed.data.default_markup_pct) : 0;
   const waste = parsed.data.default_waste_factor ? Number(parsed.data.default_waste_factor) : 0;
-  if (Number.isNaN(markup) || markup < 0) return { error: "Markup must be ≥ 0" };
-  if (Number.isNaN(waste) || waste < 0) return { error: "Waste factor must be ≥ 0" };
+  if (Number.isNaN(markup) || markup < 0) return { error: actionErrorMessage("markup-must-be-gte-0", "Markup must be ≥ 0") };
+  if (Number.isNaN(waste) || waste < 0) return { error: actionErrorMessage("waste-factor-must-be-gte-0", "Waste factor must be ≥ 0") };
 
   const { data: row, error } = await supabase
     .from("estimates")

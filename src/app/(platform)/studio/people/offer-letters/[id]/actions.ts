@@ -11,6 +11,7 @@ import {
 import { getOfferLetter } from "@/lib/offer-letters/queries";
 import { getActiveMsaForCrew } from "@/lib/msa/queries";
 import type { CompensationBasis, OfferLetterClassification, OfferLetterEmployer } from "@/lib/offer-letters/types";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = { error?: string; ok?: true } | null;
 
@@ -20,7 +21,7 @@ export async function saveLetter(id: string, _prev: State, fd: FormData): Promis
     // Offer letters bind the org legally — manager+ only. Lower personas
     // (crew/viewer/community) should never edit compensation, classification,
     // or engagement dates even if RLS lets them through.
-    if (!isManagerPlus(session)) return { error: "Only manager+ can edit offer letters" };
+    if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.edit-offer-letters", "Only manager+ can edit offer letters") };
     const extraInclusionsRaw = (fd.get("extra_inclusions") as string | null) ?? "";
     const extraInclusions = extraInclusionsRaw
       .split("\n")
@@ -72,13 +73,13 @@ export async function saveLetter(id: string, _prev: State, fd: FormData): Promis
 export async function sendLetter(id: string, _prev: State, _fd: FormData): Promise<State> {
   try {
     const session = await requireSession();
-    if (!isManagerPlus(session)) return { error: "Only manager+ can send offer letters" };
+    if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.send-offer-letters", "Only manager+ can send offer letters") };
     // Gate: contractor must have an Independent Contractor MSA on file (any
     // non-revoked, non-superseded state — signed, pending, or in-review).
     // The MSA carries the Nevada IC compliance language; sending an offer
     // letter without one leaves the engagement without its legal frame.
     const letterData = await getOfferLetter(session.orgId, id);
-    if (!letterData) return { error: "Offer letter not found" };
+    if (!letterData) return { error: actionErrorMessage("not-found.offer-letter", "Offer letter not found") };
     const activeMsa = await getActiveMsaForCrew(letterData.raw.crew_member_id);
     if (!activeMsa) {
       return {
@@ -98,7 +99,7 @@ export async function sendLetter(id: string, _prev: State, _fd: FormData): Promi
 export async function withdrawLetter(id: string, _prev: State, _fd: FormData): Promise<State> {
   try {
     const session = await requireSession();
-    if (!isManagerPlus(session)) return { error: "Only manager+ can withdraw offer letters" };
+    if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.withdraw-offer-letters", "Only manager+ can withdraw offer letters") };
     await withdrawOfferLetter(session.orgId, id, session.email);
     revalidatePath(`/studio/people/offer-letters/${id}`);
     revalidatePath(`/studio/people/offer-letters`);
@@ -111,7 +112,7 @@ export async function withdrawLetter(id: string, _prev: State, _fd: FormData): P
 export async function rotateLetterCode(id: string, _prev: State, _fd: FormData): Promise<State> {
   try {
     const session = await requireSession();
-    if (!isManagerPlus(session)) return { error: "Only manager+ can rotate letter access codes" };
+    if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.rotate-letter-access-codes", "Only manager+ can rotate letter access codes") };
     await rotateAccessCode(session.orgId, id, session.email);
     revalidatePath(`/studio/people/offer-letters/${id}`);
     return { ok: true };

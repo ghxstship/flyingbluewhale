@@ -15,6 +15,7 @@ import {
   type AdvanceContact,
 } from "@/lib/db/advance-packets";
 import type { LooseSupabase } from "@/lib/supabase/loose";
+import { actionErrorMessage } from "@/lib/errors";
 
 function boardPath(batchId: string): string {
   return `/studio/comms/advances/${batchId}`;
@@ -35,7 +36,7 @@ async function guardBatch(batchId: string): Promise<
   | ({ orgId: string; userId: string; supabase: Awaited<ReturnType<typeof createClient>> } & BatchContext)
 > {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can operate advance sends" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.operate-advance-sends", "Only manager+ can operate advance sends") };
   const supabase = await createClient();
   const { data } = await supabase
     .from("advance_send_batches")
@@ -44,14 +45,14 @@ async function guardBatch(batchId: string): Promise<
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!data) return { error: "Batch not found" };
+  if (!data) return { error: actionErrorMessage("not-found.batch", "Batch not found") };
   const rawPacket = data.advance_packets as unknown as {
     id: string;
     voice: string;
     support_contact: { name?: string; email?: string } | null;
     projects: { name: string; slug: string } | null;
   } | null;
-  if (!rawPacket?.projects) return { error: "Batch packet is missing its project" };
+  if (!rawPacket?.projects) return { error: actionErrorMessage("batch-packet-is-missing-its-project", "Batch packet is missing its project") };
   return {
     orgId: session.orgId,
     userId: session.userId,

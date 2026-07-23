@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
 import { ESTIMATE_STATES } from "@/lib/estimates";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   name: z.string().min(1, "Name is required").max(200),
@@ -31,8 +32,8 @@ export async function updateEstimate(id: string, _: State, fd: FormData): Promis
 
   const markup = parsed.data.default_markup_pct ? Number(parsed.data.default_markup_pct) : 0;
   const waste = parsed.data.default_waste_factor ? Number(parsed.data.default_waste_factor) : 0;
-  if (Number.isNaN(markup) || markup < 0) return { error: "Markup must be ≥ 0" };
-  if (Number.isNaN(waste) || waste < 0) return { error: "Waste factor must be ≥ 0" };
+  if (Number.isNaN(markup) || markup < 0) return { error: actionErrorMessage("markup-must-be-gte-0", "Markup must be ≥ 0") };
+  if (Number.isNaN(waste) || waste < 0) return { error: actionErrorMessage("waste-factor-must-be-gte-0", "Waste factor must be ≥ 0") };
 
   const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
   const result = await updateOrgScopedWithCheck("estimates", session.orgId, id, expectedUpdatedAt, {
@@ -43,7 +44,7 @@ export async function updateEstimate(id: string, _: State, fd: FormData): Promis
     notes: parsed.data.notes || null,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Estimate not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.estimate-2", "Estimate not found.") };
   }
   revalidatePath(`/studio/estimates/${id}`);
   revalidatePath("/studio/estimates");

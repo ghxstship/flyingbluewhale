@@ -200,7 +200,7 @@ export default async function Page() {
             },
             {
               key: "state",
-              header: t("console.reservations.columns.state", undefined, "State"),
+              header: t("console.reservations.columns.state", undefined, "Status"),
               render: (r) => (
                 <Badge variant={toneFor(r.reservation_state)}>
                   {RESERVATION_STATE_LABELS[r.reservation_state]}

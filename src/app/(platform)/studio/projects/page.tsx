@@ -130,7 +130,7 @@ async function ProjectsBody({ orgId }: { orgId: string }) {
               },
               {
                 key: "project_state",
-                header: t("console.projects.columns.state", undefined, "State"),
+                header: t("console.projects.columns.state", undefined, "Status"),
                 render: (p) => (
                   <Badge variant={p.project_state === "active" ? "success" : "muted"}>{toTitle(p.project_state)}</Badge>
                 ),

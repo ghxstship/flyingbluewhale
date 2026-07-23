@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   id: z.string().uuid(),
@@ -40,10 +41,10 @@ export async function updateBimModel(_: State, fd: FormData): Promise<State> {
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!project) return { error: "Project not found in your organization" };
+  if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
 
   const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
-  if (!expectedUpdatedAt) return { error: "Missing concurrency token. Reload the page and try again." };
+  if (!expectedUpdatedAt) return { error: actionErrorMessage("missing-concurrency-token-reload-the-page-and-try-again", "Missing concurrency token. Reload the page and try again.") };
 
   // Manual optimistic-concurrency update — gates on `updated_at == expected`.
   const { data: updated, error } = await supabase
@@ -71,7 +72,7 @@ export async function updateBimModel(_: State, fd: FormData): Promise<State> {
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    return { error: stillThere ? STALE_ROW_MESSAGE : "Model not found." };
+    return { error: stillThere ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.model", "Model not found.") };
   }
 
   revalidatePath(`/studio/bim/${id}`);

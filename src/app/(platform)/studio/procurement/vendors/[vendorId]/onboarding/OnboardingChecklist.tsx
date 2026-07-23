@@ -16,6 +16,7 @@ import {
   type OnboardingItemState,
 } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export type OnboardingItem = {
   id: string;
   label: string;
@@ -34,6 +35,7 @@ const STATE_VARIANT: Record<OnboardingItemState, "muted" | "info" | "success" | 
 
 export function OnboardingChecklist({ vendorId, items }: { vendorId: string; items: OnboardingItem[] }) {
   const router = useRouter();
+  const resolveErr = useActionErrorResolver();
   const [pending, startTransition] = useTransition();
   const [label, setLabel] = useState("");
   const [required, setRequired] = useState(true);
@@ -42,7 +44,7 @@ export function OnboardingChecklist({ vendorId, items }: { vendorId: string; ite
     startTransition(async () => {
       const res = await fn();
       if (res?.error) {
-        toast.error(res.error);
+        toast.error(resolveErr(res.error));
         return;
       }
       if (ok) toast.success(ok);

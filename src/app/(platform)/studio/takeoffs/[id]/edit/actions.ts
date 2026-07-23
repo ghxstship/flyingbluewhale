@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   name: z.string().min(1, "Name is required").max(200),
@@ -31,7 +32,7 @@ export async function updateTakeoff(id: string, _: State, fd: FormData): Promise
 
   const calibration = parsed.data.calibration_in_per_ft ? Number(parsed.data.calibration_in_per_ft) : null;
   if (calibration != null && (Number.isNaN(calibration) || calibration <= 0)) {
-    return { error: "Calibration must be a positive number" };
+    return { error: actionErrorMessage("calibration-must-be-a-positive-number", "Calibration must be a positive number") };
   }
 
   // Sea Trial FINDING-022: optimistic concurrency.
@@ -45,7 +46,7 @@ export async function updateTakeoff(id: string, _: State, fd: FormData): Promise
     notes: parsed.data.notes || null,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Takeoff not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.takeoff", "Takeoff not found.") };
   }
   revalidatePath(`/studio/takeoffs/${id}`);
   revalidatePath("/studio/takeoffs");

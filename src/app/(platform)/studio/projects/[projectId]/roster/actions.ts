@@ -12,6 +12,7 @@ import type { FormState } from "@/components/FormShell";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { wouldCreateReportingCycle } from "./reporting/cycle";
 import { CUSTOM_POSITION_SLUG, LIVE_LETTER_STATES } from "./letter-state";
+import { actionErrorMessage } from "@/lib/errors";
 
 const BASES = Object.keys(BASIS_LABEL) as [CompensationBasis, ...CompensationBasis[]];
 
@@ -68,7 +69,7 @@ async function ensureCustomPositionRole(orgId: string): Promise<string> {
 export async function assignPersonAction(projectId: string, _prev: FormState, fd: FormData): Promise<FormState> {
   const session = await requireSession();
   if (!can(session, "people:manage")) {
-    return { error: "You need the people:manage capability to assign people to a project." };
+    return { error: actionErrorMessage("auth.capability.people-manage", "You need the people:manage capability to assign people to a project.") };
   }
 
   const parsed = AssignSchema.safeParse(Object.fromEntries(fd));
@@ -83,7 +84,7 @@ export async function assignPersonAction(projectId: string, _prev: FormState, fd
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!project) return { error: "Project not found." };
+  if (!project) return { error: actionErrorMessage("not-found.project-3", "Project not found.") };
 
   // The picker could be rewritten client-side — re-verify every FK is an
   // org-scoped, still-engaged record before it lands on a letter.
@@ -93,9 +94,9 @@ export async function assignPersonAction(projectId: string, _prev: FormState, fd
     .eq("org_id", session.orgId)
     .eq("id", input.crewMemberId)
     .maybeSingle();
-  if (!person) return actionFail("That person is not in this org's directory.", fd);
+  if (!person) return actionFail(actionErrorMessage("that-person-is-not-in-this-org-s-directory", "That person is not in this org's directory."), fd);
   if (person.engagement_state === "separated") {
-    return actionFail("That person is separated. Re-engage them from People before assigning.", fd);
+    return actionFail(actionErrorMessage("that-person-is-separated-re-engage-them-from-people", "That person is separated. Re-engage them from People before assigning."), fd);
   }
 
   let roleId: string;
@@ -116,7 +117,7 @@ export async function assignPersonAction(projectId: string, _prev: FormState, fd
       .eq("org_id", session.orgId)
       .eq("id", input.roleId!)
       .maybeSingle();
-    if (!role) return actionFail("Pick a position from the org's role catalog.", fd);
+    if (!role) return actionFail(actionErrorMessage("pick-a-position-from-the-org-s-role-catalog", "Pick a position from the org's role catalog."), fd);
     roleId = role.id;
   }
 
@@ -129,14 +130,14 @@ export async function assignPersonAction(projectId: string, _prev: FormState, fd
       .eq("id", input.rateCardItemId)
       .eq("active", true)
       .maybeSingle();
-    if (!rate) return actionFail("That rate card item is not available.", fd);
+    if (!rate) return actionFail(actionErrorMessage("that-rate-card-item-is-not-available", "That rate card item is not available."), fd);
     rateCardItemId = rate.id;
   }
 
   let reportsTo: string | null = null;
   if (input.reportsTo) {
     if (input.reportsTo === input.crewMemberId) {
-      return actionFail("A person can't report to themselves.", fd);
+      return actionFail(actionErrorMessage("a-person-can-t-report-to-themselves", "A person can't report to themselves."), fd);
     }
     const { data: manager } = await supabase
       .from("crew_members")
@@ -144,7 +145,7 @@ export async function assignPersonAction(projectId: string, _prev: FormState, fd
       .eq("org_id", session.orgId)
       .eq("id", input.reportsTo)
       .maybeSingle();
-    if (!manager) return actionFail("Pick a manager from the org's directory.", fd);
+    if (!manager) return actionFail(actionErrorMessage("pick-a-manager-from-the-org-s-directory", "Pick a manager from the org's directory."), fd);
 
     // Cycle guard: walk up from the proposed manager through the project's
     // live reporting edges; refuse if the chain reaches the new hire.
@@ -161,7 +162,7 @@ export async function assignPersonAction(projectId: string, _prev: FormState, fd
       ]),
     );
     if (wouldCreateReportingCycle(edges, input.crewMemberId, input.reportsTo)) {
-      return actionFail("That reporting line would create a loop. Pick a different manager.", fd);
+      return actionFail(actionErrorMessage("that-reporting-line-would-create-a-loop-pick-a", "That reporting line would create a loop. Pick a different manager."), fd);
     }
     reportsTo = manager.id;
   }

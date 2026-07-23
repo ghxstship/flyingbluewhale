@@ -9,6 +9,7 @@ import {
   confirmAnnotation,
   replyToAnnotation,
 } from "@/lib/db/annotations";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type ActionResult = { error?: string } | undefined;
 
@@ -58,7 +59,7 @@ export async function confirmAction(id: string): Promise<ActionResult> {
 
 export async function replyAction(parentId: string, body: string): Promise<ActionResult> {
   const session = await requireSession();
-  if (!body.trim()) return { error: "Reply body is required." };
+  if (!body.trim()) return { error: actionErrorMessage("reply-body-is-required", "Reply body is required.") };
   try {
     await replyToAnnotation({ parentId, orgId: session.orgId, body, createdBy: session.userId });
   } catch (e) {

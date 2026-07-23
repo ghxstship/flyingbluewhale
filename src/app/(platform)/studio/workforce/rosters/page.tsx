@@ -94,7 +94,7 @@ export default async function Page({
             },
             {
               key: "state",
-              header: t("console.workforce.rosters.col.state", undefined, "State"),
+              header: t("console.workforce.rosters.col.state", undefined, "Status"),
               render: (r) => String(r.state ?? "—"),
               accessor: (r) => r.state ?? null,
               filterable: true,

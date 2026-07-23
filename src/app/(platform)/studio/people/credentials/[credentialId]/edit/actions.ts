@@ -7,6 +7,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   kind: z.string().min(1).max(80),
@@ -24,7 +25,7 @@ export type State = {
 
 export async function updateCredential(credentialId: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can edit credentials" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.edit-credentials", "Only manager+ can edit credentials") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   // Sea Trial FINDING-022: optimistic concurrency.
@@ -36,7 +37,7 @@ export async function updateCredential(credentialId: string, _: State, fd: FormD
     expires_on: parsed.data.expires_on || null,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Credential not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.credential", "Credential not found.") };
   }
   revalidatePath(`/studio/people/credentials/${credentialId}`);
   revalidatePath("/studio/people/credentials");

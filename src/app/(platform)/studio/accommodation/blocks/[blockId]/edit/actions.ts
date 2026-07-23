@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { dateRangeRefine } from "@/lib/zod/dateRange";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z
   .object({
@@ -47,7 +48,7 @@ export async function updateBlock(id: string, _: State, fd: FormData): Promise<S
     ends_on: parsed.data.ends_on || null,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Block not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.block", "Block not found.") };
   }
   revalidatePath(`/studio/accommodation/blocks/${id}`);
   revalidatePath("/studio/accommodation/blocks");

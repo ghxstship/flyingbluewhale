@@ -86,7 +86,7 @@ export default async function Page({ params }: { params: Promise<{ kitId: string
                 },
                 {
                   key: "gate_state",
-                  header: t("console.kits.detail.col.state", undefined, "State"),
+                  header: t("console.kits.detail.col.state", undefined, "Status"),
                   render: (r) => (
                     <Badge variant={GATE_STATE_VARIANT[r.gate_state] ?? "muted"}>{r.gate_state}</Badge>
                   ),

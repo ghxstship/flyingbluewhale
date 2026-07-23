@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
 import { Constants } from "@/lib/supabase/database.types";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   id: z.string().uuid(),
@@ -45,7 +46,7 @@ export async function updatePunchItem(_: State, fd: FormData): Promise<State> {
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!project) return { error: "Project not found in your organization" };
+  if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
   if (patch.vendor_id) {
     const { data: vendor } = await supabase
       .from("vendors")
@@ -54,7 +55,7 @@ export async function updatePunchItem(_: State, fd: FormData): Promise<State> {
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!vendor) return { error: "Vendor not found in your organization" };
+    if (!vendor) return { error: actionErrorMessage("not-found.vendor-in-org", "Vendor not found in your organization") };
   }
   if (patch.site_plan_id) {
     const { data: sitePlan } = await supabase
@@ -63,7 +64,7 @@ export async function updatePunchItem(_: State, fd: FormData): Promise<State> {
       .eq("id", patch.site_plan_id)
       .eq("org_id", session.orgId)
       .maybeSingle();
-    if (!sitePlan) return { error: "Site plan not found in your organization" };
+    if (!sitePlan) return { error: actionErrorMessage("not-found.site-plan-in-org", "Site plan not found in your organization") };
   }
 
   // Sea Trial FINDING-022: optimistic concurrency.
@@ -83,7 +84,7 @@ export async function updatePunchItem(_: State, fd: FormData): Promise<State> {
     closed_by: patch.status === "complete" ? session.userId : null,
   } as never);
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Punch Item not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.punch-item", "Punch Item not found.") };
   }
   revalidatePath(`/studio/punch/${id}`);
   revalidatePath("/studio/punch");

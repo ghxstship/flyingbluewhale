@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { emitAudit } from "@/lib/audit";
 import { computeEnforcementDiff } from "@/lib/rbac/holders";
 import { fetchCapabilityGraph } from "../data";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = { error?: string } | null;
 
@@ -37,9 +38,9 @@ const FlipSchema = z.object({
  */
 export async function flipEnforcement(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isAdmin(session)) return { error: "You need admin access to change enforcement" };
+  if (!isAdmin(session)) return { error: actionErrorMessage("auth.admin.change-enforcement", "You need admin access to change enforcement") };
   const parsed = FlipSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: "Invalid request" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.request", "Invalid request") };
 
   const supabase = await createClient();
   const graph = await fetchCapabilityGraph(supabase, session.orgId);

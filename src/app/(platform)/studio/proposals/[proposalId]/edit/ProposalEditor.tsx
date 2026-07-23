@@ -14,6 +14,7 @@ import { saveProposalAction, type EditState } from "./actions";
 import { LineagePanel, isLineageBlock } from "./LineagePanel";
 import { ProposalBrandPanel } from "./ProposalBrandPanel";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 // Give each block a stable id for sortable purposes.
 type IdentifiedBlock = ProposalBlock & { _dragId: string };
 let counter = 0;
@@ -117,10 +118,11 @@ export function ProposalEditor({
   const [json, setJson] = useState<string>(() => JSON.stringify(serializeBlocks(blocks), null, 2));
   const [mode, setMode] = useState<"outline" | "json">("outline");
 
+  const resolveErr = useActionErrorResolver();
   const [state, formAction, pending] = useActionState<EditState, FormData>(async (prev, fd) => {
     fd.set("blocks", mode === "json" ? json : JSON.stringify(serializeBlocks(blocks)));
     const res = await saveProposalAction(proposalId, prev, fd);
-    if (res?.error) toast.error(res.error);
+    if (res?.error) toast.error(resolveErr(res.error));
     else if (res?.ok) toast.success(t("console.proposals.edit.savedToast", undefined, "Proposal saved · v bumped"));
     return res;
   }, null);
@@ -328,7 +330,7 @@ export function ProposalEditor({
         </div>
       )}
 
-      {state?.error && <Alert kind="error">{state.error}</Alert>}
+      {state?.error && <Alert kind="error">{resolveErr(state.error)}</Alert>}
 
       <div className="flex items-center justify-end gap-2">
         <Button type="submit" disabled={pending}>

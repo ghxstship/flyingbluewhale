@@ -17,6 +17,7 @@ import {
   XPMS_XYZ,
 } from "@/lib/finance/xpms-budget";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 // ADR-1 — XPMS Universal Budget Template v08 fields. Edit path mirrors
 // the create schema; all XPMS columns optional, line_type defaults to
@@ -105,7 +106,7 @@ export async function updateBudget(id: string, _: State, fd: FormData): Promise<
 
   const result = await updateOrgScopedWithCheck("budgets", session.orgId, id, expectedUpdatedAt, patch);
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Budget not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.budget", "Budget not found.") };
   }
   revalidatePath(`/studio/finance/budgets/${id}`);
   revalidatePath("/studio/finance/budgets");

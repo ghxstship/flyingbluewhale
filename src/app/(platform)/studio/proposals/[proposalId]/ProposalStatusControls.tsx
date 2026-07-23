@@ -7,8 +7,10 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 import { setProposalStatusAction } from "../actions";
 import type { ProposalStatus } from "@/lib/supabase/types";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export function ProposalStatusControls({ id, status }: { id: string; status: ProposalStatus }) {
   const t = useT();
+  const resolveErr = useActionErrorResolver();
   const NEXT: Record<ProposalStatus, { next: ProposalStatus; label: string } | null> = {
     draft: { next: "sent", label: t("console.proposals.status.sendToClient", undefined, "Send to Client") },
     sent: { next: "approved", label: t("console.proposals.status.markApproved", undefined, "Mark Approved") },
@@ -28,7 +30,7 @@ export function ProposalStatusControls({ id, status }: { id: string; status: Pro
       onClick={() =>
         start(async () => {
           const res = await setProposalStatusAction(id, transition.next);
-          if (res?.error) toast.error(res.error);
+          if (res?.error) toast.error(resolveErr(res.error));
           else
             toast.success(
               t("console.proposals.status.updatedToast", { status: transition.next }, `Proposal ${transition.next}`),

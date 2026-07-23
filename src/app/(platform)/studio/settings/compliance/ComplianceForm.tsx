@@ -9,6 +9,7 @@ import { useToast } from "@/lib/hooks/useToast";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { saveComplianceSettings, type State } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 type Initial = {
   retention_audit_days?: number;
   retention_logs_days?: number;
@@ -20,12 +21,13 @@ type Initial = {
 export function ComplianceForm({ initial }: { initial: Initial }) {
   const t = useT();
   const [state, action, pending] = useActionState<State, FormData>(saveComplianceSettings, null);
+  const resolveErr = useActionErrorResolver();
   const toast = useToast();
   React.useEffect(() => {
     if (state?.saved)
       toast.success(t("console.settings.compliance.savedToast", undefined, "Compliance settings saved"));
-    if (state?.error) toast.error(state.error);
-  }, [state, toast, t]);
+    if (state?.error) toast.error(resolveErr(state.error));
+  }, [state, toast, t, resolveErr]);
 
   return (
     <form action={action} className="space-y-4">

@@ -7,6 +7,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { MARKETPLACE_KINDS } from "@/lib/marketplace";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   call_id: z.string().uuid(),
@@ -49,7 +50,7 @@ const toArray = (v: string | undefined): string[] =>
 
 export async function updateCallAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can edit open calls" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.edit-open-calls", "Only manager+ can edit open calls") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();

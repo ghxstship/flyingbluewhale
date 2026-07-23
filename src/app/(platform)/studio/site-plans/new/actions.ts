@@ -15,6 +15,7 @@ import {
 } from "@/lib/siteplan/types";
 import { getPreset } from "@/lib/siteplan/presets";
 import { echoValues as echo, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   code: z.string().min(1).max(40),
@@ -72,7 +73,7 @@ export async function createSitePlanSheet(_: State, fd: FormData): Promise<State
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!data) return { error: "Project not found in your organization", values: echo(fd) };
+    if (!data) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization"), values: echo(fd) };
   }
   if (venueId) {
     const { data } = await supabase
@@ -81,7 +82,7 @@ export async function createSitePlanSheet(_: State, fd: FormData): Promise<State
       .eq("id", venueId)
       .eq("org_id", session.orgId)
       .maybeSingle();
-    if (!data) return { error: "Venue not found in your organization", values: echo(fd) };
+    if (!data) return { error: actionErrorMessage("not-found.venue-in-org", "Venue not found in your organization"), values: echo(fd) };
   }
   if (eventId) {
     const { data } = await supabase
@@ -90,7 +91,7 @@ export async function createSitePlanSheet(_: State, fd: FormData): Promise<State
       .eq("id", eventId)
       .eq("org_id", session.orgId)
       .maybeSingle();
-    if (!data) return { error: "Event not found in your organization", values: echo(fd) };
+    if (!data) return { error: actionErrorMessage("not-found.event-in-org", "Event not found in your organization"), values: echo(fd) };
   }
 
   // Build the canonical Atom ID per protocol §3.

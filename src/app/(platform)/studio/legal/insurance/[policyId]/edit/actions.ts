@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   carrier: z.string().min(1).max(160),
@@ -37,7 +38,7 @@ export async function updatePolicy(policyId: string, _: State, fd: FormData): Pr
     expires_on: parsed.data.expires_on || null,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Insurance Policie not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.insurance-policie", "Insurance Policie not found.") };
   }
   revalidatePath(`/studio/legal/insurance/${policyId}`);
   revalidatePath("/studio/legal/insurance");

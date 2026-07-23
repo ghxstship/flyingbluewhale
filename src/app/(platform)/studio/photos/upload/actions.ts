@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { log } from "@/lib/log";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const BUCKET = "procore-parity";
 const MAX_BYTES = 25 * 1024 * 1024; // 25 MB per file
@@ -45,8 +46,8 @@ export async function uploadPhotosAction(_: State, fd: FormData): Promise<State>
   if (!parsed.success) return formFail(parsed.error, fd);
 
   const files = fd.getAll("files").filter((v): v is File => v instanceof File && v.size > 0);
-  if (files.length === 0) return { error: "Pick at least one photo" };
-  if (files.length > 20) return { error: "Maximum 20 photos per upload" };
+  if (files.length === 0) return { error: actionErrorMessage("pick-at-least-one-photo", "Pick at least one photo") };
+  if (files.length > 20) return { error: actionErrorMessage("maximum-20-photos-per-upload", "Maximum 20 photos per upload") };
   for (const f of files) {
     if (f.size > MAX_BYTES) return { error: `${f.name} exceeds 25 MB` };
     if (f.type && !ALLOWED_MIME.has(f.type)) return { error: `${f.name}: unsupported type ${f.type}` };
@@ -66,7 +67,7 @@ export async function uploadPhotosAction(_: State, fd: FormData): Promise<State>
     .is("deleted_at", null)
     .maybeSingle();
   if (projErr) return { error: projErr.message };
-  if (!project) return { error: "Project not found" };
+  if (!project) return { error: actionErrorMessage("not-found.project-2", "Project not found") };
 
   const stamp = Date.now();
   const rows: Array<{

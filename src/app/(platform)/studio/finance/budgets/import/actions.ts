@@ -14,6 +14,7 @@ import {
   XPMS_TIERS,
   XPMS_XYZ,
 } from "@/lib/finance/xpms-budget";
+import { actionErrorMessage } from "@/lib/errors";
 
 /**
  * CSV / TSV import for the XPMS Budget sheet.
@@ -163,13 +164,13 @@ function parseBool(v: string): boolean {
 
 export async function importBudgetCsv(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can import budgets" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.import-budgets", "Only manager+ can import budgets") };
 
   const raw = String(fd.get("csv") ?? "").trim();
-  if (!raw) return { error: "Paste CSV or TSV from the XPMS Budget tab." };
+  if (!raw) return { error: actionErrorMessage("paste-csv-or-tsv-from-the-xpms-budget-tab", "Paste CSV or TSV from the XPMS Budget tab.") };
 
   const lines = raw.split(/\r?\n/).filter((l) => l.trim().length > 0);
-  if (lines.length < 2) return { error: "Need at least a header row plus one data row." };
+  if (lines.length < 2) return { error: actionErrorMessage("need-at-least-a-header-row-plus-one-data", "Need at least a header row plus one data row.") };
 
   // lines.length >= 2 checked above.
   const delimiter = detectDelimiter(lines[0]!);

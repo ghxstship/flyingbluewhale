@@ -123,7 +123,7 @@ export default async function Page({ params }: { params: Promise<{ runId: string
                 value: row.project?.name ?? "—",
               },
               {
-                label: t("console.finance.payroll.detail.fields.runState", undefined, "State"),
+                label: t("console.finance.payroll.detail.fields.runState", undefined, "Status"),
                 value: <StatusBadge status={row.run_state} />,
               },
               {

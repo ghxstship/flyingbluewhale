@@ -5,6 +5,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   assignment_id: z.string().uuid(),
@@ -28,7 +29,7 @@ export type State = {
  */
 export async function linkAssetAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can bind scan codes" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.bind-scan-codes", "Only manager+ can bind scan codes") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -40,7 +41,7 @@ export async function linkAssetAction(_: State, fd: FormData): Promise<State> {
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!a) return { error: "Assignment not found in your organization" };
+  if (!a) return { error: actionErrorMessage("not-found.assignment-in-org", "Assignment not found in your organization") };
 
   const { error } = await supabase.from("assignment_scan_codes").insert({
     assignment_id: parsed.data.assignment_id,
@@ -50,7 +51,7 @@ export async function linkAssetAction(_: State, fd: FormData): Promise<State> {
   });
   if (error) {
     // Most likely a unique-violation on (org_id, code) WHERE active.
-    return { error: "That code is already active on another assignment. Void it before re-issuing." };
+    return { error: actionErrorMessage("that-code-is-already-active-on-another-assignment-void", "That code is already active on another assignment. Void it before re-issuing.") };
   }
   revalidatePath("/studio/people/credentials/asset-linker");
   return null;

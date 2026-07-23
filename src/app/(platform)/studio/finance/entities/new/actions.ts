@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   legal_name: z.string().min(1).max(200),
@@ -47,12 +48,12 @@ export async function createOrgEntity(_: State, fd: FormData): Promise<State> {
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!parent) return { error: "Parent entity not found in your organization" };
+    if (!parent) return { error: actionErrorMessage("not-found.parent-entity-in-org", "Parent entity not found in your organization") };
   }
 
   const ownership = parsed.data.ownership_pct ? Number(parsed.data.ownership_pct) : 100;
   if (Number.isNaN(ownership) || ownership < 0 || ownership > 100) {
-    return { error: "Ownership % must be between 0 and 100" };
+    return { error: actionErrorMessage("ownership-pct-must-be-between-0-and-100", "Ownership % must be between 0 and 100") };
   }
 
   const { data: row, error } = await supabase

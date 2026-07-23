@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   name: z.string().min(1, "Name is required").max(200),
@@ -37,7 +38,7 @@ export async function updateClient(id: string, _: State, fd: FormData): Promise<
     notes: parsed.data.notes || null,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Client not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.client", "Client not found.") };
   }
   revalidatePath(`/studio/clients/${id}`);
   revalidatePath("/studio/clients");

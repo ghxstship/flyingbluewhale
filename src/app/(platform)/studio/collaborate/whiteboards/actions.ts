@@ -9,6 +9,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { WHITEBOARD_STATES } from "@/lib/whiteboards";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = {
   error?: string;
@@ -24,7 +25,7 @@ const CreateSchema = z.object({
 /** Create a board from the /new form, then open its canvas. */
 export async function createWhiteboardAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create whiteboards" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-whiteboards", "Only manager+ can create whiteboards") };
   const parsed = CreateSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
 
@@ -58,7 +59,7 @@ const SnapshotSchema = z.object({
 
 export async function saveWhiteboardSnapshotAction(id: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can edit whiteboards" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.edit-whiteboards", "Only manager+ can edit whiteboards") };
 
   const parsed = SnapshotSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
@@ -67,7 +68,7 @@ export async function saveWhiteboardSnapshotAction(id: string, _: State, fd: For
   try {
     snapshot = JSON.parse(parsed.data.snapshot);
   } catch {
-    return { error: "Snapshot is not valid JSON" };
+    return { error: actionErrorMessage("snapshot-is-not-valid-json", "Snapshot is not valid JSON") };
   }
 
   const db = (await createClient()) as unknown as LooseSupabase;

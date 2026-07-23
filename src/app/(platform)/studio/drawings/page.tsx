@@ -167,7 +167,7 @@ export default async function Page() {
             },
             {
               key: "state",
-              header: t("console.drawings.col.state", undefined, "State"),
+              header: t("console.drawings.col.state", undefined, "Status"),
               render: (r) =>
                 r.current_version ? (
                   <Badge variant={toneFor(r.current_version.set_state)}>{toTitle(r.current_version.set_state)}</Badge>

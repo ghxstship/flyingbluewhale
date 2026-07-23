@@ -76,7 +76,7 @@ export default async function Page() {
             },
             {
               key: "sheet_state",
-              header: "State",
+              header: "Status",
               render: (r) => <StatusBadge status={r.sheet_state} />,
               accessor: (r) => r.sheet_state,
               filterable: true,

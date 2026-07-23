@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { KIcon } from "@/components/mobile/kit";
 import { PLATFORM_ROLES } from "@/lib/supabase/types";
 import { updatePerson } from "@/app/(platform)/studio/people/[personId]/edit/actions";
+import { useActionErrorResolver } from "@/lib/errors-client";
 
 export type MemberRow = {
   userId: string;
@@ -58,6 +59,7 @@ export function TeamAdmin({
   const [role, setRole] = useState<string>("member");
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  const resolveErr = useActionErrorResolver();
 
   const save = (m: MemberRow) => {
     if (pending) return;
@@ -72,7 +74,7 @@ export function TeamAdmin({
     startTransition(async () => {
       const res = await updatePerson(m.userId, null, fd);
       if (res?.error) {
-        setError(res.error);
+        setError(resolveErr(res.error));
         return;
       }
       setOpenId(null);

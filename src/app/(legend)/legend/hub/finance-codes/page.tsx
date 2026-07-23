@@ -97,7 +97,7 @@ export default async function FinanceCodesPage() {
               },
               {
                 key: "active",
-                header: "State",
+                header: "Status",
                 render: (c) =>
                   c.active ? <Badge variant="success">Active</Badge> : <Badge variant="muted">Inactive</Badge>,
                 accessor: (c) => (c.active ? "active" : "inactive"),

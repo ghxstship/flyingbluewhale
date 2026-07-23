@@ -117,7 +117,7 @@ export default async function GoalsHubPage() {
               },
               {
                 key: "state",
-                header: "State",
+                header: "Status",
                 render: (g) => <StatusBadge status={g.goal_state} />,
                 accessor: (g) => g.goal_state,
               },

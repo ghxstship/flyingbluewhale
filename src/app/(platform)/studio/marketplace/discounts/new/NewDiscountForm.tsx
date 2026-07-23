@@ -45,7 +45,7 @@ export function NewDiscountForm() {
           hint="Leave blank for unlimited."
         />
         <div>
-          <label htmlFor="discount_state" className="text-xs font-medium text-[var(--p-text-2)]">State</label>
+          <label htmlFor="discount_state" className="text-xs font-medium text-[var(--p-text-2)]">Status</label>
           <select id="discount_state" name="discount_state" defaultValue="active" className="ps-input mt-1.5 w-full">
             {DISCOUNT_STATES.map((s) => (
               <option key={s} value={s}>

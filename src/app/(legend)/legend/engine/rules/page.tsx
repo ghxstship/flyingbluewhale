@@ -83,7 +83,7 @@ export default async function RulesPage() {
             },
             {
               key: "rule_state",
-              header: "State",
+              header: "Status",
               filterable: true,
               render: (r) => <StatusBadge status={r.rule_state} />,
               accessor: (r) => r.rule_state,

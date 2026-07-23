@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   title: z.string().min(1).max(200),
@@ -35,7 +36,7 @@ export async function updateRequisition(id: string, _: State, fd: FormData): Pro
     requisition_state: parsed.data.requisition_state as "draft" | "submitted" | "approved" | "rejected" | "converted",
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Requisition not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.requisition-2", "Requisition not found.") };
   }
   revalidatePath(`/studio/procurement/requisitions/${id}`);
   revalidatePath("/studio/procurement/requisitions");

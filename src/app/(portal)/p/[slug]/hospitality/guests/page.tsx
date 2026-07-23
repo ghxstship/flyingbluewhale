@@ -181,7 +181,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             },
             {
               key: "state",
-              header: t("p.hospitality.guests.column.state", undefined, "State"),
+              header: t("p.hospitality.guests.column.state", undefined, "Status"),
               render: (r) => <Badge variant={toneFor(r.fulfillment_state)}>{toTitle(r.fulfillment_state)}</Badge>,
               accessor: (r) => r.fulfillment_state,
               filterable: true,

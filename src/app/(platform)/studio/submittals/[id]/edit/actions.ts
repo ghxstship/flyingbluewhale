@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   id: z.string().uuid(),
@@ -51,7 +52,7 @@ export async function updateSubmittal(_: State, fd: FormData): Promise<State> {
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!project) return { error: "Project not found in your organization" };
+  if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
   if (patch.vendor_id) {
     const { data: vendor } = await supabase
       .from("vendors")
@@ -60,7 +61,7 @@ export async function updateSubmittal(_: State, fd: FormData): Promise<State> {
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!vendor) return { error: "Vendor not found in your organization" };
+    if (!vendor) return { error: actionErrorMessage("not-found.vendor-in-org", "Vendor not found in your organization") };
   }
 
   // Sea Trial FINDING-022: optimistic concurrency.
@@ -75,7 +76,7 @@ export async function updateSubmittal(_: State, fd: FormData): Promise<State> {
     due_at: patch.due_at || null,
   } as never);
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Submittal not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.submittal", "Submittal not found.") };
   }
   revalidatePath(`/studio/submittals/${id}`);
   revalidatePath("/studio/submittals");

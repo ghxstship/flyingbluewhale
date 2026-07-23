@@ -207,7 +207,7 @@ export default async function EventTypePage({ params }: { params: Promise<{ even
                   <tr>
                     <th>{t("console.scheduler.detail.columns.invitee", undefined, "Invitee")}</th>
                     <th>{t("console.scheduler.detail.columns.when", undefined, "When")}</th>
-                    <th>{t("console.scheduler.detail.columns.state", undefined, "State")}</th>
+                    <th>{t("console.scheduler.detail.columns.state", undefined, "Status")}</th>
                     <th className="text-end">{t("console.scheduler.detail.columns.actions", undefined, "Actions")}</th>
                   </tr>
                 </thead>

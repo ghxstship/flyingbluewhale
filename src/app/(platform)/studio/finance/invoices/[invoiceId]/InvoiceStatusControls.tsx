@@ -7,6 +7,7 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 import { setInvoiceStatusAction } from "../actions";
 import type { InvoiceStatus } from "@/lib/supabase/types";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 const NEXT: Record<InvoiceStatus, { next: InvoiceStatus; labelKey: string; labelFallback: string } | null> = {
   draft: {
     next: "sent",
@@ -34,6 +35,7 @@ const NEXT: Record<InvoiceStatus, { next: InvoiceStatus; labelKey: string; label
 
 export function InvoiceStatusControls({ id, status }: { id: string; status: InvoiceStatus }) {
   const t = useT();
+  const resolveErr = useActionErrorResolver();
   const [pending, start] = useTransition();
   const transition = NEXT[status];
   return (
@@ -45,7 +47,7 @@ export function InvoiceStatusControls({ id, status }: { id: string; status: Invo
           onClick={() =>
             start(async () => {
               const res = await setInvoiceStatusAction(id, transition.next);
-              if (res?.error) toast.error(res.error);
+              if (res?.error) toast.error(resolveErr(res.error));
               else
                 toast.success(
                   t(
@@ -68,7 +70,7 @@ export function InvoiceStatusControls({ id, status }: { id: string; status: Invo
           onClick={() =>
             start(async () => {
               const res = await setInvoiceStatusAction(id, "voided");
-              if (res?.error) toast.error(res.error);
+              if (res?.error) toast.error(resolveErr(res.error));
               else
                 toast.success(t("console.finance.invoices.statusControls.toast.voided", undefined, "Invoice voided"));
             })

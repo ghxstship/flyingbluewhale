@@ -61,7 +61,7 @@ export default async function Page({ params }: { params: Promise<{ clientId: str
             },
             {
               key: "project_state",
-              header: t("console.clients.projects.columns.state", undefined, "State"),
+              header: t("console.clients.projects.columns.state", undefined, "Status"),
               render: (r) => (
                 <Badge variant={r.project_state === "active" ? "success" : "muted"}>{toTitle(r.project_state)}</Badge>
               ),

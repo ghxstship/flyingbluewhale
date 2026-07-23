@@ -143,7 +143,7 @@ export default async function RfqResponsesPage({ params }: { params: Promise<{ r
             },
             {
               key: "response_state",
-              header: t("console.procurement.rfqs.responses.colState", undefined, "State"),
+              header: t("console.procurement.rfqs.responses.colState", undefined, "Status"),
               render: (r) => <Badge variant={toneFor(r.response_state)}>{toTitle(r.response_state)}</Badge>,
               accessor: (r) => r.response_state,
               filterable: true,

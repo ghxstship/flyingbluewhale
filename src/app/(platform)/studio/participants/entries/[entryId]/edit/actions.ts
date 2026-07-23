@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   participant_name: z.string().min(1).max(200),
@@ -35,7 +36,7 @@ export async function updateEntry(entryId: string, _: State, fd: FormData): Prom
     entry_state: parsed.data.entry_state || "nominated",
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Delegation Entrie not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.delegation-entrie", "Delegation Entrie not found.") };
   }
   revalidatePath(`/studio/participants/entries/${entryId}`);
   revalidatePath("/studio/participants/entries");

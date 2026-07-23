@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { nextOrgCode } from "@/lib/codes";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 // Kit 20 Phase A: a meeting is an events row (event_kind = 'meeting') plus a
 // meeting_event_details sibling carrying the meeting-shaped fields.
@@ -55,7 +56,7 @@ export async function createMeeting(_: State, fd: FormData): Promise<State> {
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!project) return { error: "Project not found in your organization" };
+    if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
   }
 
   const code = await nextOrgCode("meeting_event_details", session.orgId, "MTG");

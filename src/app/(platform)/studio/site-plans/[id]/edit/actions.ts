@@ -9,6 +9,7 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { SITEPLAN_SHEET_TYPES, SITEPLAN_SHELL_TYPES } from "@/lib/siteplan/types";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const DISCIPLINES = [
   "site",
@@ -79,7 +80,7 @@ export async function updateSitePlanSheet(_: State, fd: FormData): Promise<State
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!project) return { error: "Project not found in your organization" };
+    if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
   }
   if (patch.venue_id) {
     const { data: venue } = await supabase
@@ -88,7 +89,7 @@ export async function updateSitePlanSheet(_: State, fd: FormData): Promise<State
       .eq("id", patch.venue_id)
       .eq("org_id", session.orgId)
       .maybeSingle();
-    if (!venue) return { error: "Venue not found in your organization" };
+    if (!venue) return { error: actionErrorMessage("not-found.venue-in-org", "Venue not found in your organization") };
   }
   if (patch.event_id) {
     const { data: event } = await supabase
@@ -97,11 +98,11 @@ export async function updateSitePlanSheet(_: State, fd: FormData): Promise<State
       .eq("id", patch.event_id)
       .eq("org_id", session.orgId)
       .maybeSingle();
-    if (!event) return { error: "Event not found in your organization" };
+    if (!event) return { error: actionErrorMessage("not-found.event-in-org", "Event not found in your organization") };
   }
 
   const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
-  if (!expectedUpdatedAt) return { error: "Missing concurrency token. Reload the page and try again." };
+  if (!expectedUpdatedAt) return { error: actionErrorMessage("missing-concurrency-token-reload-the-page-and-try-again", "Missing concurrency token. Reload the page and try again.") };
 
   const shellDims =
     patch.shell_length_in && patch.shell_width_in
@@ -152,7 +153,7 @@ export async function updateSitePlanSheet(_: State, fd: FormData): Promise<State
       .eq("id", id)
       .eq("org_id", session.orgId)
       .maybeSingle();
-    return { error: stillThere ? STALE_ROW_MESSAGE : "Sheet not found." };
+    return { error: stillThere ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.sheet", "Sheet not found.") };
   }
 
   revalidatePath(`/studio/site-plans/${id}`);

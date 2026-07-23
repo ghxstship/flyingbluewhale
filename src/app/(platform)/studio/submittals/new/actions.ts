@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { nextOrgCode } from "@/lib/codes";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   title: z.string().min(1).max(200),
@@ -38,7 +39,7 @@ export async function createSubmittal(_: State, fd: FormData): Promise<State> {
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!project) return { error: "Project not found in your organization" };
+  if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
 
   if (parsed.data.vendor_id) {
     const { data: vendor } = await supabase
@@ -48,7 +49,7 @@ export async function createSubmittal(_: State, fd: FormData): Promise<State> {
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!vendor) return { error: "Vendor not found in your organization" };
+    if (!vendor) return { error: actionErrorMessage("not-found.vendor-in-org", "Vendor not found in your organization") };
   }
 
   const code = await nextOrgCode("submittals", session.orgId, "SUB");

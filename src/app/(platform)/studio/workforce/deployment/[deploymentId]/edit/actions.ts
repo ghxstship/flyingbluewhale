@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   functional_area: z.string().max(120).optional(),
@@ -39,7 +40,7 @@ export async function updateDeployment(deploymentId: string, _: State, fd: FormD
     },
   );
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Workforce Deployment not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.workforce-deployment", "Workforce Deployment not found.") };
   }
   revalidatePath(`/studio/workforce/deployment/${deploymentId}`);
   revalidatePath("/studio/workforce/deployment");

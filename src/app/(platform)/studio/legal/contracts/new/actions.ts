@@ -7,6 +7,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { CONTRACT_KINDS } from "@/lib/clm/queries";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = {
   error?: string;
@@ -31,13 +32,13 @@ const Schema = z.object({
 
 export async function createContract(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create contracts" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-contracts", "Only manager+ can create contracts") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const d = parsed.data;
 
   const minor = d.total_value_usd ? Math.round(Number(d.total_value_usd) * 100) : null;
-  if (minor != null && !Number.isFinite(minor)) return actionFail("Bad total value", fd);
+  if (minor != null && !Number.isFinite(minor)) return actionFail(actionErrorMessage("bad-total-value", "Bad total value"), fd);
 
   const supabase = await createClient();
   const { data, error } = await supabase

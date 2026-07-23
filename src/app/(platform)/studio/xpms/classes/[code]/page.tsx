@@ -138,7 +138,7 @@ export default async function Page({ params }: { params: Promise<{ code: string 
               },
               {
                 key: "state",
-                header: t("console.xpms.classes.detail.column.state", undefined, "State"),
+                header: t("console.xpms.classes.detail.column.state", undefined, "Status"),
                 render: (a) => <Badge variant={STATE_TONE[a.state]}>{a.state.toUpperCase()}</Badge>,
                 accessor: (a) => a.state,
                 filterable: true,

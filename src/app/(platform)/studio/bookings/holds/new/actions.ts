@@ -6,6 +6,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   tier: z.string().regex(/^[1-5]$/),
@@ -28,7 +29,7 @@ export async function createTieredHoldAction(_: State, fd: FormData): Promise<St
   const session = await requireSession();
   // Tiered holds block calendar availability for venues + talent —
   // manager+ at the app layer.
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create tiered holds" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-tiered-holds", "Only manager+ can create tiered holds") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -43,7 +44,7 @@ export async function createTieredHoldAction(_: State, fd: FormData): Promise<St
       .eq("id", venueId)
       .eq("org_id", session.orgId)
       .maybeSingle();
-    if (!venue) return { error: "Venue not found in your organization" };
+    if (!venue) return { error: actionErrorMessage("not-found.venue-in-org", "Venue not found in your organization") };
   }
   if (talentId) {
     const { data: talent } = await supabase
@@ -53,7 +54,7 @@ export async function createTieredHoldAction(_: State, fd: FormData): Promise<St
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!talent) return { error: "Talent profile not found in your organization" };
+    if (!talent) return { error: actionErrorMessage("not-found.talent-profile-in-org", "Talent profile not found in your organization") };
   }
 
   const { error } = await supabase.from("availability_slots").insert({
@@ -75,9 +76,9 @@ export async function createTieredHoldAction(_: State, fd: FormData): Promise<St
 
 export async function releaseHoldAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can release tiered holds" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.release-tiered-holds", "Only manager+ can release tiered holds") };
   const id = String(fd.get("hold_id") ?? "");
-  if (!id) return { error: "Missing hold" };
+  if (!id) return { error: actionErrorMessage("missing.hold", "Missing hold") };
   const supabase = await createClient();
   const { error } = await supabase.from("availability_slots").delete().eq("id", id).eq("org_id", session.orgId);
   if (error) return { error: error.message };

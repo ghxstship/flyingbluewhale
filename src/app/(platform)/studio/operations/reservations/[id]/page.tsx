@@ -91,7 +91,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       />
       <div className="page-content space-y-8">
         <div className="metric-grid">
-          <Field label={t("console.reservations.detail.field.state", undefined, "State")}>
+          <Field label={t("console.reservations.detail.field.state", undefined, "Status")}>
             <Badge variant={toneFor(res.reservation_state)}>{RESERVATION_STATE_LABELS[res.reservation_state]}</Badge>
           </Field>
           <Field label={t("console.reservations.detail.field.party", undefined, "Party size")}>

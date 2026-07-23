@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   name: z.string().min(1).max(200),
@@ -37,7 +38,7 @@ export async function updateHospitalityPackage(id: string, _: State, fd: FormDat
     currency: parsed.data.currency,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Rate Card Item not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.rate-card-item", "Rate Card Item not found.") };
   }
   revalidatePath(`/studio/commercial/hospitality/${id}`);
   revalidatePath("/studio/commercial/hospitality");

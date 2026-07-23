@@ -7,9 +7,11 @@ import { Button } from "@/components/ui/Button";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { addDomainAction, type State } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export function AddDomainForm() {
   const t = useT();
   const [state, formAction, pending] = useActionState<State, FormData>(addDomainAction, null);
+  const resolveErr = useActionErrorResolver();
   return (
     <form action={formAction} className="flex flex-wrap items-end gap-2">
       <div className="min-w-[220px] flex-1">
@@ -36,7 +38,7 @@ export function AddDomainForm() {
         {t("common.add", undefined, "Add")}
       </Button>
       {state && "error" in state && state.error && (
-        <p className="basis-full text-xs text-[var(--p-danger)]">{state.error}</p>
+        <p className="basis-full text-xs text-[var(--p-danger)]">{resolveErr(state.error)}</p>
       )}
     </form>
   );

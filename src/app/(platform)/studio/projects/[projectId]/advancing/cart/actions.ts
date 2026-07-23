@@ -6,6 +6,7 @@ import { z } from "zod";
 import { can, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { MEAL_PERIODS, type CatalogKind } from "@/lib/db/assignments";
+import { actionErrorMessage } from "@/lib/errors";
 
 /**
  * Review & Submit — the ONE server action behind the Advance Cart. The cart
@@ -36,25 +37,25 @@ export type CartSubmitState = { error?: string } | null;
 export async function submitAdvanceCart(projectId: string, _prev: CartSubmitState, fd: FormData): Promise<CartSubmitState> {
   const session = await requireSession();
   if (!can(session, "advance:request")) {
-    return { error: "Submitting An Advance Requires advance:request" };
+    return { error: actionErrorMessage("submitting-an-advance-requires-advance-request", "Submitting An Advance Requires advance:request") };
   }
 
   let raw: unknown;
   try {
     raw = JSON.parse(String(fd.get("payload") ?? ""));
   } catch {
-    return { error: "Invalid Cart Payload" };
+    return { error: actionErrorMessage("invalid.cart-payload", "Invalid Cart Payload") };
   }
   const parsed = PayloadSchema.safeParse(raw);
-  if (!parsed.success) return { error: "Invalid Cart Payload" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.cart-payload", "Invalid Cart Payload") };
 
   for (const line of parsed.data.lines) {
     // Kit 31 (live-test resolution #4): Start Date is required on every line.
     if (!line.starts_on) {
-      return { error: "Every Line Needs A Start Date" };
+      return { error: actionErrorMessage("every-line-needs-a-start-date", "Every Line Needs A Start Date") };
     }
     if (line.starts_on && line.ends_on && line.ends_on < line.starts_on) {
-      return { error: "A Line's End Date Precedes Its Start Date" };
+      return { error: actionErrorMessage("a-line-s-end-date-precedes-its-start-date", "A Line's End Date Precedes Its Start Date") };
     }
   }
 
@@ -67,7 +68,7 @@ export async function submitAdvanceCart(projectId: string, _prev: CartSubmitStat
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!project) return { error: "Project Not Found" };
+  if (!project) return { error: actionErrorMessage("not-found.project", "Project Not Found") };
 
   const { data: crew } = await supabase
     .from("crew_members")
@@ -75,7 +76,7 @@ export async function submitAdvanceCart(projectId: string, _prev: CartSubmitStat
     .eq("id", parsed.data.crew_member_id)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  if (!crew) return { error: "Person Not Found In Your Organization" };
+  if (!crew) return { error: actionErrorMessage("not-found.person-in-org", "Person Not Found In Your Organization") };
 
   const itemIds = [...new Set(parsed.data.lines.map((l) => l.catalog_item_id))];
   const { data: catalogRows } = await supabase
@@ -88,7 +89,7 @@ export async function submitAdvanceCart(projectId: string, _prev: CartSubmitStat
   const itemById = new Map(
     ((catalogRows ?? []) as Array<{ id: string; kind: CatalogKind; name: string }>).map((c) => [c.id, c]),
   );
-  if (itemById.size !== itemIds.length) return { error: "A Catalog Item Is No Longer Available" };
+  if (itemById.size !== itemIds.length) return { error: actionErrorMessage("a-catalog-item-is-no-longer-available", "A Catalog Item Is No Longer Available") };
 
   // Sequential inserts: each catering line needs its assignment id for the
   // sibling detail row, and a cart tops out at 50 lines.

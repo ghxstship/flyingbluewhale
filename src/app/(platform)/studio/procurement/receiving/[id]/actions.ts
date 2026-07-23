@@ -6,6 +6,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { emitAudit } from "@/lib/audit";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   po_line_item_id: z.string().uuid(),
@@ -23,15 +24,15 @@ export type State = {
 
 export async function addReceiptLine(receiptId: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can record received lines" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.record-received-lines", "Only manager+ can record received lines") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
 
   const received = Number(parsed.data.qty_received);
   const rejected = parsed.data.qty_rejected ? Number(parsed.data.qty_rejected) : 0;
-  if (!Number.isFinite(received) || received < 0) return { error: "Bad received quantity" };
-  if (!Number.isFinite(rejected) || rejected < 0) return { error: "Bad rejected quantity" };
+  if (!Number.isFinite(received) || received < 0) return { error: actionErrorMessage("bad-received-quantity", "Bad received quantity") };
+  if (!Number.isFinite(rejected) || rejected < 0) return { error: actionErrorMessage("bad-rejected-quantity", "Bad rejected quantity") };
 
   // Confirm the receipt is org-scoped + resolve its PO so we can verify the
   // chosen line item actually belongs to the same PO (no cross-PO lines).
@@ -41,7 +42,7 @@ export async function addReceiptLine(receiptId: string, _: State, fd: FormData):
     .eq("id", receiptId)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  if (!receipt) return { error: "Receipt not found" };
+  if (!receipt) return { error: actionErrorMessage("not-found.receipt", "Receipt not found") };
 
   const { data: line } = await supabase
     .from("po_line_items")
@@ -49,7 +50,7 @@ export async function addReceiptLine(receiptId: string, _: State, fd: FormData):
     .eq("id", parsed.data.po_line_item_id)
     .eq("purchase_order_id", receipt.po_id)
     .maybeSingle();
-  if (!line) return { error: "That line item does not belong to this receipt's purchase order" };
+  if (!line) return { error: actionErrorMessage("that-line-item-does-not-belong-to-this-receipt", "That line item does not belong to this receipt's purchase order") };
 
   const { error } = await supabase.from("goods_receipt_lines").insert({
     receipt_id: receipt.id,
@@ -82,7 +83,7 @@ const MatchSchema = z.object({
  */
 export async function matchReceiptToPoAction(receiptId: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can record a 3-way match" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.record-a-3-way-match", "Only manager+ can record a 3-way match") };
   const parsed = MatchSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();

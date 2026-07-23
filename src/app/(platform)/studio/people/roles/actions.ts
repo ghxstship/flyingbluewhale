@@ -6,6 +6,7 @@ import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { emitAudit } from "@/lib/audit";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   slug: z
@@ -32,7 +33,7 @@ export async function createCustomRole(_: State, fd: FormData): Promise<State> {
   // role with arbitrary `permissions[]` and then have an admin assign
   // it to them later (or themselves, if memberships.role is also
   // mutable from a different surface — see updatePerson).
-  if (!isAdmin(session)) return { error: "Only owners and admins can create custom roles" };
+  if (!isAdmin(session)) return { error: actionErrorMessage("auth.owner-admin.create-custom-roles", "Only owners and admins can create custom roles") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();

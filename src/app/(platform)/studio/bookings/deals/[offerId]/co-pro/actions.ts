@@ -5,6 +5,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   offer_id: z.string().uuid(),
@@ -25,12 +26,12 @@ export type State = {
 export async function addCoProPartnerAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   // Co-pro splits divide deal revenue between orgs — manager+ only.
-  if (!isManagerPlus(session)) return { error: "Only manager+ can edit co-pro partnerships" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.edit-co-pro-partnerships", "Only manager+ can edit co-pro partnerships") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
   const split = Math.min(100, Math.max(0, Number(parsed.data.split_pct)));
-  if (!Number.isFinite(split)) return { error: "Invalid split %" };
+  if (!Number.isFinite(split)) return { error: actionErrorMessage("invalid.split-pct", "Invalid split %") };
 
   // Cross-tenant FK guard on offer_id (talent_offers is org-scoped).
   // partner_org_id is intentionally a different org (cross-org partnership)
@@ -41,7 +42,7 @@ export async function addCoProPartnerAction(_: State, fd: FormData): Promise<Sta
     .eq("id", parsed.data.offer_id)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  if (!offer) return { error: "Deal not found in your organization" };
+  if (!offer) return { error: actionErrorMessage("not-found.deal-in-org", "Deal not found in your organization") };
 
   // Total split sanity — reject if cumulative > 100%.
   const existingResp = await supabase
@@ -73,10 +74,10 @@ export async function addCoProPartnerAction(_: State, fd: FormData): Promise<Sta
 
 export async function removeCoProPartnerAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can edit co-pro partnerships" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.edit-co-pro-partnerships", "Only manager+ can edit co-pro partnerships") };
   const id = String(fd.get("partnership_id") ?? "");
   const offerId = String(fd.get("offer_id") ?? "");
-  if (!id) return { error: "Missing partnership" };
+  if (!id) return { error: actionErrorMessage("missing.partnership", "Missing partnership") };
   const supabase = await createClient();
   const { error } = await supabase.from("co_pro_partnerships").delete().eq("id", id).eq("org_id", session.orgId);
   if (error) return { error: error.message };

@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = { error?: string; ok?: true } | null;
 
@@ -35,12 +36,12 @@ const SaveSchema = z.object({
 
 export async function saveNoteAction(_: State, fd: FormData): Promise<State> {
   const parsed = SaveSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: "Invalid note." };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.note", "Invalid note.") };
   const session = await requireSession();
   const supabase = await db();
   const { id, ...patch } = parsed.data;
   const { error } = await supabase.from("notes").update(patch).eq("id", id).eq("org_id", session.orgId);
-  if (error) return { error: "Could not save the note." };
+  if (error) return { error: actionErrorMessage("could-not-save-the-note", "Could not save the note.") };
   revalidatePath(`/studio/notes/${id}`);
   revalidatePath("/studio/notes");
   return { ok: true };

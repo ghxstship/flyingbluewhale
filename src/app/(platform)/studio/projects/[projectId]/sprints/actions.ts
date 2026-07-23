@@ -9,6 +9,7 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { SPRINT_STATES, STORY_STATES, remainingPoints } from "@/lib/sprints";
 import type { SprintStory } from "@/lib/sprints";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = {
   error?: string;
@@ -36,7 +37,7 @@ const StorySchema = z.object({
 /** Create a sprint under the given project. */
 export async function createSprintAction(projectId: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create sprints" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-sprints", "Only manager+ can create sprints") };
   const parsed = SprintSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = (await createClient()) as unknown as LooseSupabase;
@@ -58,7 +59,7 @@ export async function createSprintAction(projectId: string, _: State, fd: FormDa
 /** Add a backlog story to a sprint. */
 export async function createStoryAction(projectId: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can add stories" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.add-stories", "Only manager+ can add stories") };
   const parsed = StorySchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = (await createClient()) as unknown as LooseSupabase;

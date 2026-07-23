@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getOrgScoped } from "@/lib/db/resource";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   journal_entry_id: z.string().uuid(),
@@ -25,21 +26,21 @@ export type State = {
 
 export async function addJournalLine(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can edit journal entries" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.edit-journal-entries", "Only manager+ can edit journal entries") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
 
   // Confirm the parent entry belongs to this org before touching its lines
   // (journal_entry_lines carries no org_id, so this is the scope gate).
   const entry = await getOrgScoped("journal_entries", session.orgId, parsed.data.journal_entry_id);
-  if (!entry) return { error: "Journal entry not found" };
+  if (!entry) return { error: actionErrorMessage("not-found.journal-entry", "Journal entry not found") };
 
   // Confirm the account is in this org too.
   const account = await getOrgScoped("chart_of_accounts", session.orgId, parsed.data.account_id);
-  if (!account) return { error: "Account not found in this org" };
+  if (!account) return { error: actionErrorMessage("not-found.account-in-org", "Account not found in this org") };
 
   const minor = Math.round(Number(parsed.data.amount_usd) * 100);
-  if (!Number.isFinite(minor) || minor <= 0) return { error: "Bad amount" };
+  if (!Number.isFinite(minor) || minor <= 0) return { error: actionErrorMessage("bad-amount", "Bad amount") };
 
   const supabase = await createClient();
   const loose = supabase as unknown as LooseSupabase;

@@ -6,6 +6,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   entry_number: z.string().min(1).max(64),
@@ -22,7 +23,7 @@ export type State = {
 
 export async function createJournalEntry(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can post journal entries" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.post-journal-entries", "Only manager+ can post journal entries") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();

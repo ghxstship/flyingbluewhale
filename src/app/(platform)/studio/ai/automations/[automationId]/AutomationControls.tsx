@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { Button } from "@/components/ui/Button";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { resolveActionError } from "@/lib/errors";
 import { recordManualRunAction, toggleAutomationAction, type State } from "./actions";
 
 export function AutomationControls({
@@ -21,7 +22,8 @@ export function AutomationControls({
   const [toggleState, toggleSubmit, togglePending] = useActionState<State, FormData>(toggleAction, null);
   const [runState, runSubmit, runPending] = useActionState<State, FormData>(runAction, null);
 
-  const error = toggleState?.error ?? runState?.error;
+  const rawError = toggleState?.error ?? runState?.error;
+  const error = rawError ? resolveActionError(rawError, t) : undefined;
 
   return (
     <div className="flex flex-col gap-2">

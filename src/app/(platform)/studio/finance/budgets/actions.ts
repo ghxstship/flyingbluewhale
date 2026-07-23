@@ -15,6 +15,7 @@ import {
   XPMS_XYZ,
 } from "@/lib/finance/xpms-budget";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 // ADR-1 — XPMS Universal Budget Template v08 fields, mirrors migration
 // 0070. All XPMS columns optional except line_type (defaults to Scope).
@@ -53,7 +54,7 @@ export type State = {
 
 export async function createBudgetAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create budgets" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-budgets", "Only manager+ can create budgets") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -68,7 +69,7 @@ export async function createBudgetAction(_: State, fd: FormData): Promise<State>
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!project) return { error: "Project not found in your organization" };
+    if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
   }
 
   // Quantity is a plain number; rate/amount arrive as integer cents

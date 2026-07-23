@@ -9,6 +9,7 @@ import { type FormSchema, type PublicFormField, isFieldVisible, isSectionVisible
 import type { SubmitState } from "@/app/forms/[slug]/actions";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 type Translator = (key: string, vars?: Record<string, string | number>, fallback?: string) => string;
 
 /**
@@ -51,6 +52,7 @@ export function PublicFormRenderer({
     async (prev, fd) => submitAction(slug, prev, fd),
     null,
   );
+  const resolveErr = useActionErrorResolver();
 
   const initialValues = useMemo<Record<string, unknown>>(() => {
     const out: Record<string, unknown> = {};
@@ -193,7 +195,7 @@ export function PublicFormRenderer({
 
       {state?.error && (
         <div id={errId}>
-          <Alert kind="error">{state.error}</Alert>
+          <Alert kind="error">{resolveErr(state.error)}</Alert>
         </div>
       )}
 

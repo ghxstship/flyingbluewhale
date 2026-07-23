@@ -11,6 +11,7 @@ import {
   updateDashboardMeta,
 } from "@/lib/db/dashboards";
 import { isDashboardLayout, type DashboardWidget } from "@/lib/dashboards/types";
+import { actionErrorMessage } from "@/lib/errors";
 
 /**
  * Server actions for the dashboard editor — Phase 3.6c.
@@ -80,14 +81,14 @@ const LayoutSchema = z.object({
  */
 export async function saveLayoutAction(id: string, rawLayout: unknown): Promise<State> {
   const session = await requireSession();
-  if (!id) return { error: "Missing dashboard id" };
+  if (!id) return { error: actionErrorMessage("missing.dashboard-id", "Missing dashboard id") };
 
   const parsed = LayoutSchema.safeParse(rawLayout);
   if (!parsed.success) {
     return { error: parsed.error.issues[0]?.message ?? "Invalid layout" };
   }
   if (!isDashboardLayout(parsed.data)) {
-    return { error: "Invalid layout shape" };
+    return { error: actionErrorMessage("invalid.layout-shape", "Invalid layout shape") };
   }
 
   await updateDashboardLayout({ id, orgId: session.orgId, layout: parsed.data });
@@ -102,7 +103,7 @@ export async function saveLayoutAction(id: string, rawLayout: unknown): Promise<
  */
 export async function addWidgetAction(id: string, rawWidget: unknown): Promise<State> {
   const session = await requireSession();
-  if (!id) return { error: "Missing dashboard id" };
+  if (!id) return { error: actionErrorMessage("missing.dashboard-id", "Missing dashboard id") };
 
   const parsed = WidgetSchema.safeParse(rawWidget);
   if (!parsed.success) {
@@ -118,7 +119,7 @@ export async function addWidgetAction(id: string, rawWidget: unknown): Promise<S
 /** Remove a widget by id. */
 export async function removeWidgetAction(id: string, widgetId: string): Promise<State> {
   const session = await requireSession();
-  if (!id || !widgetId) return { error: "Missing id" };
+  if (!id || !widgetId) return { error: actionErrorMessage("missing.id", "Missing id") };
 
   await removeWidgetFromDashboard({ id, orgId: session.orgId, widgetId });
   revalidatePath(`/studio/dashboards/${id}`);
@@ -130,14 +131,14 @@ export async function removeWidgetAction(id: string, widgetId: string): Promise<
 export async function updateMetaAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const id = String(fd.get("id") ?? "");
-  if (!id) return { error: "Missing dashboard id" };
+  if (!id) return { error: actionErrorMessage("missing.dashboard-id", "Missing dashboard id") };
 
   const name = String(fd.get("name") ?? "").trim();
   const description = String(fd.get("description") ?? "").trim();
   const scopeRaw = String(fd.get("scope") ?? "private");
   const scope = ScopeSchema.safeParse(scopeRaw);
-  if (!scope.success) return { error: "Invalid scope" };
-  if (!name) return { error: "Name is required" };
+  if (!scope.success) return { error: actionErrorMessage("invalid.scope", "Invalid scope") };
+  if (!name) return { error: actionErrorMessage("name-is-required", "Name is required") };
 
   await updateDashboardMeta({
     id,

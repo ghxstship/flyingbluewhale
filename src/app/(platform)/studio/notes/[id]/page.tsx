@@ -57,7 +57,7 @@ export default async function NoteDetailPage({ params }: { params: Promise<{ id:
           labels={{
             titleLabel: t("console.notes.titleLabel", undefined, "Title"),
             titlePlaceholder: t("console.notes.titlePlaceholder", undefined, "Untitled note"),
-            stateLabel: t("console.notes.stateLabel", undefined, "State"),
+            stateLabel: t("console.notes.stateLabel", undefined, "Status"),
             stateDraft: t("console.notes.stateDraft", undefined, "Draft"),
             statePublished: t("console.notes.statePublished", undefined, "Published"),
             stateArchived: t("console.notes.stateArchived", undefined, "Archived"),

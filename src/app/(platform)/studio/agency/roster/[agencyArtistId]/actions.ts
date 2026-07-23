@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { clampRateBps } from "@/lib/rates";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   agency_artist_id: z.string().uuid(),
@@ -45,7 +46,7 @@ export async function updateAgencyArtistAction(_: State, fd: FormData): Promise<
 export async function endAgencyArtistAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const id = String(fd.get("agency_artist_id") ?? "");
-  if (!id) return { error: "Missing roster entry" };
+  if (!id) return { error: actionErrorMessage("missing.roster-entry", "Missing roster entry") };
   const supabase = await createClient();
   const { error } = await supabase
     .from("agency_artists")

@@ -96,7 +96,7 @@ export function EditBookingForm({
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="booking_state" className="text-xs font-medium text-[var(--p-text-2)]">
-            {t("console.diary.field.state", undefined, "State")}
+            {t("console.diary.field.state", undefined, "Status")}
           </label>
           <select id="booking_state" name="booking_state" defaultValue={initial.booking_state} className="ps-input mt-1.5 w-full">
             {BOOKING_STATES.map((s) => (

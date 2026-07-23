@@ -7,6 +7,7 @@ import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { TICKETING_PROVIDERS } from "@/lib/marketplace";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   provider: z.enum(TICKETING_PROVIDERS),
@@ -27,7 +28,7 @@ export async function createTicketingConnectionAction(_: State, fd: FormData): P
   // Connecting a ticketing provider stores an upstream API key — must
   // stay owner/admin-only at the app layer (matches the
   // /studio/settings/integrations install/uninstall gate).
-  if (!isAdmin(session)) return { error: "Only owners and admins can connect ticketing providers" };
+  if (!isAdmin(session)) return { error: actionErrorMessage("auth.owner-admin.connect-ticketing-providers", "Only owners and admins can connect ticketing providers") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -52,9 +53,9 @@ export async function createTicketingConnectionAction(_: State, fd: FormData): P
 
 export async function deactivateTicketingConnectionAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isAdmin(session)) return { error: "Only owners and admins can disconnect ticketing providers" };
+  if (!isAdmin(session)) return { error: actionErrorMessage("auth.owner-admin.disconnect-ticketing-providers", "Only owners and admins can disconnect ticketing providers") };
   const id = String(fd.get("connection_id") ?? "");
-  if (!id) return { error: "Missing connection" };
+  if (!id) return { error: actionErrorMessage("missing.connection", "Missing connection") };
   const supabase = await createClient();
   const { error } = await supabase
     .from("ticketing_connections")

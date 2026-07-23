@@ -5,6 +5,7 @@ import { z } from "zod";
 import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const CommitteeSchema = z.object({
   name: z.string().min(1).max(120),
@@ -30,7 +31,7 @@ export type PolicyState = {
 
 export async function createCommittee(_: CommitteeState, fd: FormData): Promise<CommitteeState> {
   const session = await requireSession();
-  if (!isAdmin(session)) return { error: "Only owners and admins can create committees" };
+  if (!isAdmin(session)) return { error: actionErrorMessage("auth.owner-admin.create-committees", "Only owners and admins can create committees") };
   const parsed = CommitteeSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -47,7 +48,7 @@ export async function createCommittee(_: CommitteeState, fd: FormData): Promise<
 
 export async function createPolicy(_: PolicyState, fd: FormData): Promise<PolicyState> {
   const session = await requireSession();
-  if (!isAdmin(session)) return { error: "Only owners and admins can create policies" };
+  if (!isAdmin(session)) return { error: actionErrorMessage("auth.owner-admin.create-policies", "Only owners and admins can create policies") };
   const parsed = PolicySchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();

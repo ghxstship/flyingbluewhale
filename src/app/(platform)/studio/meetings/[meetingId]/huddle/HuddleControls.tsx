@@ -6,6 +6,7 @@ import { Alert } from "@/components/ui/Alert";
 import type { VideoCallState } from "@/lib/video";
 import { ensureCall, transitionCall, joinCall, leaveCall, type State } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 /**
  * Client island for the huddle's join/leave + lifecycle controls. The page
  * is a server component; these are the only interactive bits, so they live
@@ -51,13 +52,14 @@ export function HuddleControls(props: Props) {
 
 function EnsureForm({ meetingId }: { meetingId: string }) {
   const [state, action, pending] = useActionState<State, FormData>(ensureCall, null);
+  const resolveErr = useActionErrorResolver();
   return (
     <form action={action} className="flex flex-col items-center gap-2">
       <input type="hidden" name="meetingId" value={meetingId} />
       <Button type="submit" size="sm" disabled={pending}>
         {pending ? "Starting…" : "Start huddle"}
       </Button>
-      {state?.error && <Alert kind="error">{state.error}</Alert>}
+      {state?.error && <Alert kind="error">{resolveErr(state.error)}</Alert>}
     </form>
   );
 }
@@ -75,6 +77,7 @@ function JoinLeave({
 }) {
   const [joinState, joinAction, joining] = useActionState<State, FormData>(joinCall, null);
   const [leaveState, leaveAction, leaving] = useActionState<State, FormData>(leaveCall, null);
+  const resolveErr = useActionErrorResolver();
   const ended = callState === "ended";
 
   return (
@@ -96,8 +99,8 @@ function JoinLeave({
           </Button>
         </form>
       )}
-      {joinState?.error && <Alert kind="error">{joinState.error}</Alert>}
-      {leaveState?.error && <Alert kind="error">{leaveState.error}</Alert>}
+      {joinState?.error && <Alert kind="error">{resolveErr(joinState.error)}</Alert>}
+      {leaveState?.error && <Alert kind="error">{resolveErr(leaveState.error)}</Alert>}
     </div>
   );
 }
@@ -112,6 +115,7 @@ function LifecycleControls({
   callState: VideoCallState;
 }) {
   const [state, action, pending] = useActionState<State, FormData>(transitionCall, null);
+  const resolveErr = useActionErrorResolver();
   return (
     <div className="flex items-center gap-2">
       {callState === "scheduled" && (
@@ -134,7 +138,7 @@ function LifecycleControls({
           </Button>
         </form>
       )}
-      {state?.error && <Alert kind="error">{state.error}</Alert>}
+      {state?.error && <Alert kind="error">{resolveErr(state.error)}</Alert>}
     </div>
   );
 }

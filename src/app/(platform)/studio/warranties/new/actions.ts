@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   name: z.string().min(1).max(200),
@@ -40,11 +41,11 @@ export async function createWarranty(_: State, fd: FormData): Promise<State> {
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!project) return { error: "Project not found in your organization" };
+  if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
 
   const duration = parsed.data.duration_months ? Number(parsed.data.duration_months) : null;
   if (duration != null && (Number.isNaN(duration) || duration < 1)) {
-    return { error: "Duration must be ≥ 1 month" };
+    return { error: actionErrorMessage("duration-must-be-gte-1-month", "Duration must be ≥ 1 month") };
   }
 
   const { data: row, error } = await supabase

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { BEO_STATE_LABELS, NEXT_BEO_STATES, type BeoState } from "@/lib/beos";
 import { setBeoStateAction } from "../actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 // Human label for the transition button per target state.
 const ACTION_LABELS: Record<BeoState, string> = {
   draft: "Re-draft",
@@ -17,6 +18,7 @@ const ACTION_LABELS: Record<BeoState, string> = {
 
 export function BeoStateControls({ id, state }: { id: string; state: BeoState }) {
   const [pending, start] = useTransition();
+  const resolveErr = useActionErrorResolver();
   const nexts = NEXT_BEO_STATES[state] ?? [];
   if (nexts.length === 0) return null;
 
@@ -31,7 +33,7 @@ export function BeoStateControls({ id, state }: { id: string; state: BeoState })
           onClick={() =>
             start(async () => {
               const res = await setBeoStateAction(id, next);
-              if (res?.error) toast.error(res.error);
+              if (res?.error) toast.error(resolveErr(res.error));
               else toast.success(`BEO ${BEO_STATE_LABELS[next].toLowerCase()}`);
             })
           }

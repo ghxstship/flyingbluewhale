@@ -666,7 +666,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
         {allowed.length > 0 && (
           <section className="surface p-4">
             <h2 className="text-sm font-semibold">
-              {t("console.projects.assignments.detail.advanceState.title", undefined, "Advance State")}
+              {t("console.projects.assignments.detail.advanceState.title", undefined, "Advance Status")}
             </h2>
             <p className="mt-1 text-xs text-[var(--p-text-2)]">
               {t(

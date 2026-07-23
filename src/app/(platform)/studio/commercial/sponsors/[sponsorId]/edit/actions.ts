@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   title: z.string().min(1).max(200),
@@ -37,7 +38,7 @@ export async function updateSponsorEntitlement(id: string, _: State, fd: FormDat
     due_by: parsed.data.due_by || null,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Sponsor Entitlement not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.sponsor-entitlement", "Sponsor Entitlement not found.") };
   }
   revalidatePath(`/studio/commercial/sponsors/${id}`);
   revalidatePath("/studio/commercial/sponsors");

@@ -87,7 +87,7 @@ export default async function AnnouncementsPage() {
             },
             {
               key: "publish_state",
-              header: t("console.comms.announcements.columns.state", undefined, "State"),
+              header: t("console.comms.announcements.columns.state", undefined, "Status"),
               render: (r) => (
                 <Badge
                   variant={

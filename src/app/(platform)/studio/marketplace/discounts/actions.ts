@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { DISCOUNT_KINDS, DISCOUNT_STATES, normalizeCode } from "@/lib/discounts_promoters";
+import { actionErrorMessage } from "@/lib/errors";
 
 const CreateSchema = z.object({
   code: z.string().min(1, "Code is required").max(60),
@@ -30,7 +31,7 @@ export type State = {
 
 export async function createDiscountAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create discount codes" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-discount-codes", "Only manager+ can create discount codes") };
   const parsed = CreateSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const d = parsed.data;
@@ -52,7 +53,7 @@ export async function createDiscountAction(_: State, fd: FormData): Promise<Stat
     .select()
     .single();
   if (error) {
-    if (error.code === "23505") return actionFail("A code with that name already exists.", fd);
+    if (error.code === "23505") return actionFail(actionErrorMessage("a-code-with-that-name-already-exists", "A code with that name already exists."), fd);
     return actionFail(error.message, fd);
   }
   revalidatePath("/studio/marketplace/discounts");

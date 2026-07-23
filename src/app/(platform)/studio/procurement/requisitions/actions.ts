@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { dollarsToCents, generateNumber } from "@/lib/format";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { emitAudit } from "@/lib/audit";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   title: z.string().min(1),
@@ -51,7 +52,7 @@ export type ConvertReqState = { error?: string } | null;
  */
 export async function convertRequisitionToPoAction(reqId: string): Promise<ConvertReqState> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can convert requisitions" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.convert-requisitions", "Only manager+ can convert requisitions") };
   const supabase = await createClient();
 
   const { data: req } = await supabase
@@ -60,7 +61,7 @@ export async function convertRequisitionToPoAction(reqId: string): Promise<Conve
     .eq("org_id", session.orgId)
     .eq("id", reqId)
     .maybeSingle();
-  if (!req) return { error: "Requisition not found" };
+  if (!req) return { error: actionErrorMessage("not-found.requisition", "Requisition not found") };
 
   // Idempotency: a PO already citing this requisition wins.
   const { data: existing } = await supabase
@@ -89,7 +90,7 @@ export async function convertRequisitionToPoAction(reqId: string): Promise<Conve
     .select("id");
   if (claimError) return { error: claimError.message };
   if (!claimed || claimed.length === 0) {
-    return { error: "Requisition changed concurrently. Refresh and retry" };
+    return { error: actionErrorMessage("concurrency.requisition", "Requisition changed concurrently. Refresh and retry") };
   }
 
   const { data: po, error: insertError } = await supabase
@@ -143,7 +144,7 @@ export async function convertRequisitionToPoAction(reqId: string): Promise<Conve
  */
 export async function convertRequisitionToRfqAction(reqId: string): Promise<ConvertReqState> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can convert requisitions" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.convert-requisitions", "Only manager+ can convert requisitions") };
   const supabase = await createClient();
 
   const { data: req } = await supabase
@@ -152,7 +153,7 @@ export async function convertRequisitionToRfqAction(reqId: string): Promise<Conv
     .eq("org_id", session.orgId)
     .eq("id", reqId)
     .maybeSingle();
-  if (!req) return { error: "Requisition not found" };
+  if (!req) return { error: actionErrorMessage("not-found.requisition", "Requisition not found") };
 
   const marker = `[req:${reqId}]`;
   const { data: existing } = await supabase
@@ -213,9 +214,9 @@ export type BulkResult = { message?: string; error?: string };
  */
 async function bulkSetRequisitionState(ids: string[], next: "approved" | "rejected"): Promise<BulkResult> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "You Need Manager Access To Review Requisitions" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager.review-requisitions", "You Need Manager Access To Review Requisitions") };
   const parsed = BulkIds.safeParse(ids);
-  if (!parsed.success) return { error: "Invalid Selection" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.selection", "Invalid Selection") };
   const supabase = await createClient();
   const { data: updated, error } = await supabase
     .from("requisitions")

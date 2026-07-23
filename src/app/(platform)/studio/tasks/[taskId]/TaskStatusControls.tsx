@@ -7,6 +7,7 @@ import type { TaskStatus } from "@/lib/supabase/types";
 import { toTitle } from "@/lib/format";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 const NEXT: Partial<Record<TaskStatus, TaskStatus>> = {
   todo: "in_progress",
   in_progress: "review",
@@ -16,6 +17,7 @@ const NEXT: Partial<Record<TaskStatus, TaskStatus>> = {
 
 export function TaskStatusControls({ id, status }: { id: string; status: TaskStatus }) {
   const t = useT();
+  const resolveErr = useActionErrorResolver();
   const [pending, start] = useTransition();
   const next = NEXT[status];
   return (
@@ -27,7 +29,7 @@ export function TaskStatusControls({ id, status }: { id: string; status: TaskSta
           onClick={() =>
             start(async () => {
               const r = await setTaskStatusAction(id, next);
-              if (r?.error) toast.error(r.error);
+              if (r?.error) toast.error(resolveErr(r.error));
               else toast.success(t("console.tasks.status.movedToast", { status: next }, `Moved to ${next}`));
             })
           }
@@ -43,7 +45,7 @@ export function TaskStatusControls({ id, status }: { id: string; status: TaskSta
           onClick={() =>
             start(async () => {
               const r = await setTaskStatusAction(id, "blocked");
-              if (r?.error) toast.error(r.error);
+              if (r?.error) toast.error(resolveErr(r.error));
               else toast.success(t("console.tasks.status.blockedToast", undefined, "Blocked"));
             })
           }

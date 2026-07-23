@@ -6,6 +6,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const TIME = /^([01]\d|2[0-3]):[0-5]\d$/;
 
@@ -30,7 +31,7 @@ export type State = {
 
 export async function createDaySheetAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create day sheets" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-day-sheets", "Only manager+ can create day sheets") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -44,7 +45,7 @@ export async function createDaySheetAction(_: State, fd: FormData): Promise<Stat
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!tour) return { error: "Tour not found in your organization" };
+    if (!tour) return { error: actionErrorMessage("not-found.tour-in-org", "Tour not found in your organization") };
   }
   if (parsed.data.project_id) {
     const { data: project } = await supabase
@@ -53,7 +54,7 @@ export async function createDaySheetAction(_: State, fd: FormData): Promise<Stat
       .eq("id", parsed.data.project_id)
       .eq("org_id", session.orgId)
       .maybeSingle();
-    if (!project) return { error: "Project not found in your organization" };
+    if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
   }
 
   const { data, error } = await supabase

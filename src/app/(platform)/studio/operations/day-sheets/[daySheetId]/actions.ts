@@ -6,6 +6,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { canTransitionDaySheet, DAY_SHEET_STATES, type DaySheetState } from "@/lib/db/day-sheets";
 import { sendPushBulk } from "@/lib/push/send";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = { error?: string; ok?: true } | null;
 
@@ -22,9 +23,9 @@ const Schema = z.object({
  */
 export async function transitionDaySheetAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can publish day sheets" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.publish-day-sheets", "Only manager+ can publish day sheets") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: "Invalid transition" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.transition", "Invalid transition") };
   const supabase = await createClient();
 
   const { data: sheet } = await supabase
@@ -34,7 +35,7 @@ export async function transitionDaySheetAction(_: State, fd: FormData): Promise<
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!sheet) return { error: "Day sheet not found" };
+  if (!sheet) return { error: actionErrorMessage("not-found.day-sheet", "Day sheet not found") };
 
   const from = (sheet as { sheet_state: DaySheetState }).sheet_state;
   const to = parsed.data.to;

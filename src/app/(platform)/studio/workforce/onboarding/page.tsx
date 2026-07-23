@@ -80,7 +80,7 @@ export default async function Page() {
             },
             {
               key: "publish_state",
-              header: t("console.workforce.onboarding.col.state", undefined, "State"),
+              header: t("console.workforce.onboarding.col.state", undefined, "Status"),
               render: (r) => (
                 <Badge
                   variant={

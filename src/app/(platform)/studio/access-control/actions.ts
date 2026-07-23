@@ -2,6 +2,7 @@
 
 import { requireSession } from "@/lib/auth";
 import { scanAssignment, type ScanResult } from "@/lib/db/assignments";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type VerifyAccessResult = { ok: true; result: ScanResult } | { ok: false; error: string };
 
@@ -14,7 +15,7 @@ export type VerifyAccessResult = { ok: true; result: ScanResult } | { ok: false;
 export async function verifyAccessCode(code: string): Promise<VerifyAccessResult> {
   const session = await requireSession();
   const trimmed = code.trim();
-  if (!trimmed) return { ok: false, error: "Empty code." };
+  if (!trimmed) return { ok: false, error: actionErrorMessage("empty-code", "Empty code.") };
   try {
     const result = await scanAssignment({
       orgId: session.orgId,

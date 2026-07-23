@@ -19,6 +19,7 @@ import { PROJECT_ROLES, type ProjectRole } from "@/lib/supabase/types";
 import type { FormState } from "@/components/FormShell";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export type Candidate = { user_id: string; email: string; name: string | null };
 export type MemberRowData = {
   user_id: string;
@@ -32,15 +33,16 @@ export function AddMemberForm({ projectId, candidates }: { projectId: string; ca
   const t = useT();
   const action = addProjectMemberAction.bind(null, projectId);
   const [state, formAction, pending] = useActionState<FormState, FormData>(action, null);
+  const resolveErr = useActionErrorResolver();
 
   useEffect(() => {
     if (state?.ok) {
       toast.success(t("console.projects.members.addedToast", undefined, "Member added"));
       router.refresh();
     } else if (state?.error) {
-      toast.error(state.error);
+      toast.error(resolveErr(state.error));
     }
-  }, [state, router, t]);
+  }, [state, router, t, resolveErr]);
 
   if (candidates.length === 0) {
     return (
@@ -105,7 +107,7 @@ export function AddMemberForm({ projectId, candidates }: { projectId: string; ca
           </Button>
         </div>
       </div>
-      {state?.error && !state?.ok && <Alert kind="error">{state.error}</Alert>}
+      {state?.error && !state?.ok && <Alert kind="error">{resolveErr(state.error)}</Alert>}
     </form>
   );
 }

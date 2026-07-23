@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   mark: z.string().min(1).max(200),
@@ -39,7 +40,7 @@ export async function updateTrademark(id: string, _: State, fd: FormData): Promi
     expires_on: parsed.data.expires_on || null,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Trademark not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.trademark", "Trademark not found.") };
   }
   revalidatePath(`/studio/legal/ip/${id}`);
   revalidatePath("/studio/legal/ip");

@@ -218,7 +218,7 @@ export default async function Page() {
             },
             {
               key: "state",
-              header: t("console.envelopes.column.state", undefined, "State"),
+              header: t("console.envelopes.column.state", undefined, "Status"),
               render: (r) => <Badge variant={toneFor(r.envelope_state)}>{toTitle(r.envelope_state)}</Badge>,
               accessor: (r) => r.envelope_state,
               filterable: true,

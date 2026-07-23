@@ -94,7 +94,7 @@ export default async function EstimateDetail({ params }: { params: Promise<{ id:
       />
       <div className="page-content space-y-8">
         <div className="metric-grid">
-          <Field label={t("console.estimates.detail.field.state", undefined, "State")}>
+          <Field label={t("console.estimates.detail.field.state", undefined, "Status")}>
             <Badge variant={toneFor(estimate.estimate_state)}>{toTitle(estimate.estimate_state)}</Badge>
           </Field>
           <Field label={t("console.estimates.detail.field.markup", undefined, "Markup")}>

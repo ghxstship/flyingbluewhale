@@ -7,6 +7,7 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 import { acknowledgeAction, confirmAction, dismissAction, resolveAction, replyAction } from "./actions";
 import type { Annotation } from "@/lib/db/annotations";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export function AnnotationActions({
   id,
   annotation_state,
@@ -19,6 +20,7 @@ export function AnnotationActions({
   confirmedAt: string | null;
 }) {
   const t = useT();
+  const resolveErr = useActionErrorResolver();
   const [pending, start] = useTransition();
   const isOpen = annotation_state === "open";
   const isClosed = annotation_state === "resolved" || annotation_state === "dismissed";
@@ -27,7 +29,7 @@ export function AnnotationActions({
   const run = (label: string, fn: () => Promise<{ error?: string } | undefined>) => () =>
     start(async () => {
       const r = await fn();
-      if (r?.error) toast.error(r.error);
+      if (r?.error) toast.error(resolveErr(r.error));
       else toast.success(label);
     });
 
@@ -79,6 +81,7 @@ function ResolveButton({
   start: (cb: () => Promise<void> | void) => void;
 }) {
   const t = useT();
+  const resolveErr = useActionErrorResolver();
   return (
     <Button
       size="sm"
@@ -89,7 +92,7 @@ function ResolveButton({
             window.prompt(t("console.annotations.resolutionNotePrompt", undefined, "Resolution note (optional):")) ??
             undefined;
           const r = await resolveAction(id, note);
-          if (r?.error) toast.error(r.error);
+          if (r?.error) toast.error(resolveErr(r.error));
           else toast.success(t("console.annotations.resolvedToast", undefined, "Resolved"));
         })
       }
@@ -101,6 +104,7 @@ function ResolveButton({
 
 export function ReplyForm({ parentId }: { parentId: string }) {
   const t = useT();
+  const resolveErr = useActionErrorResolver();
   const [body, setBody] = useState("");
   const [pending, start] = useTransition();
   return (
@@ -110,7 +114,7 @@ export function ReplyForm({ parentId }: { parentId: string }) {
         if (!body.trim()) return;
         start(async () => {
           const r = await replyAction(parentId, body);
-          if (r?.error) toast.error(r.error);
+          if (r?.error) toast.error(resolveErr(r.error));
           else {
             toast.success(t("console.annotations.replyPostedToast", undefined, "Reply posted"));
             setBody("");

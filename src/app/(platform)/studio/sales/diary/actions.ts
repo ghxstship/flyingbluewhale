@@ -14,6 +14,7 @@ import {
   isBlockingBooking,
   type BookingState,
 } from "@/lib/function_diary";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = {
   error?: string;
@@ -46,7 +47,7 @@ function normHeadcount(v: number | "" | undefined): number | null {
 
 export async function createBookingAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create bookings" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-bookings", "Only manager+ can create bookings") };
   const parsed = BookingSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -99,7 +100,7 @@ const UpdateBookingSchema = BookingSchema;
 
 export async function updateBookingAction(id: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can edit bookings" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.edit-bookings", "Only manager+ can edit bookings") };
   const parsed = UpdateBookingSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -180,7 +181,7 @@ const SpaceSchema = z.object({
 
 export async function createSpaceAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create spaces" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-spaces", "Only manager+ can create spaces") };
   const parsed = SpaceSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();

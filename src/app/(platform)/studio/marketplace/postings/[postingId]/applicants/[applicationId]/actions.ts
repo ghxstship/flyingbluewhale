@@ -6,6 +6,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { JOB_APPLICATION_STATUSES, type JobApplicationStatus } from "@/lib/marketplace";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Transition = z.object({
   application_id: z.string().uuid(),
@@ -39,7 +40,7 @@ export async function transitionApplicationAction(_: State, fd: FormData): Promi
   const session = await requireSession();
   // Reviewer-side ATS transitions — manager+ only. Applicant-initiated
   // withdrawal lives on /me/applications (per-user RLS).
-  if (!isManagerPlus(session)) return { error: "Only manager+ can decide applications" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.decide-applications", "Only manager+ can decide applications") };
   const parsed = Transition.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -51,7 +52,7 @@ export async function transitionApplicationAction(_: State, fd: FormData): Promi
     .eq("id", parsed.data.application_id)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  if (!row) return { error: "Application not found" };
+  if (!row) return { error: actionErrorMessage("not-found.application", "Application not found") };
   const current = (row as { job_application_state: JobApplicationStatus }).job_application_state;
   const allowed = APPLICATION_TRANSITIONS[current] ?? [];
   if (current !== parsed.data.status && !allowed.includes(parsed.data.status)) {
@@ -73,7 +74,7 @@ export async function transitionApplicationAction(_: State, fd: FormData): Promi
     .select("id");
   if (error) return { error: error.message };
   if (!updated || updated.length === 0) {
-    return { error: "Application was updated concurrently. Refresh and retry" };
+    return { error: actionErrorMessage("concurrency.application", "Application was updated concurrently. Refresh and retry") };
   }
   revalidatePath(`/studio/marketplace/postings`);
   return { ok: true };

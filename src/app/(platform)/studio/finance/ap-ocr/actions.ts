@@ -9,6 +9,7 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { extractApInvoice } from "@/lib/ai/extract-ap-invoice";
 import { log } from "@/lib/log";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   file_name: z.string().max(400),
@@ -35,7 +36,7 @@ export async function uploadAndExtract(_: UploadState, fd: FormData): Promise<Up
 
   const sizeBytes = Number(parsed.data.size_bytes);
   if (!Number.isFinite(sizeBytes) || sizeBytes <= 0 || sizeBytes > 25 * 1024 * 1024) {
-    return { error: "File must be 1 byte to 25 MB" };
+    return { error: actionErrorMessage("file-must-be-1-byte-to-25-mb", "File must be 1 byte to 25 MB") };
   }
 
   // Decode base64 → Uint8Array for upload + Vision input.
@@ -44,7 +45,7 @@ export async function uploadAndExtract(_: UploadState, fd: FormData): Promise<Up
     const buf = Buffer.from(parsed.data.file_base64, "base64");
     pdfBytes = new Uint8Array(buf);
   } catch {
-    return { error: "Could not decode file" };
+    return { error: actionErrorMessage("could-not-decode-file", "Could not decode file") };
   }
 
   // Use the service client for storage uploads (admin scope).

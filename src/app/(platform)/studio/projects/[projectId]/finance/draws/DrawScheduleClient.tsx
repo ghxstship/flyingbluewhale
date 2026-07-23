@@ -8,6 +8,7 @@ import { createDraw, deleteDraw, seedDefaultDraws, toggleDrawn, type State } fro
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { formatMoney } from "@/lib/i18n/format";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 type DrawRow = {
   id: string;
   draw_name: string;
@@ -50,6 +51,7 @@ export function DrawScheduleClient({
   const drop = deleteDraw.bind(null, projectId) as (drawId: string) => Promise<void>;
 
   const [createState, createAction] = useFormState(create, null);
+  const resolveErr = useActionErrorResolver();
   const [pending, startTransition] = React.useTransition();
 
   const totalPct = rows.reduce((acc, r) => acc + (r.percentage ?? 0), 0);
@@ -112,7 +114,7 @@ export function DrawScheduleClient({
                 <th className="px-3 py-2 text-left">{t("console.draws.colTrigger", undefined, "Trigger")}</th>
                 <th className="px-3 py-2 text-right">{t("console.draws.colPct", undefined, "%")}</th>
                 <th className="px-3 py-2 text-right">{t("console.draws.colAmount", undefined, "Amount")}</th>
-                <th className="px-3 py-2 text-center">{t("console.draws.colState", undefined, "State")}</th>
+                <th className="px-3 py-2 text-center">{t("console.draws.colState", undefined, "Status")}</th>
                 <th className="px-3 py-2 text-right">{t("console.draws.colActions", undefined, "Actions")}</th>
               </tr>
             </thead>
@@ -233,7 +235,7 @@ export function DrawScheduleClient({
               <input name="sort_order" type="number" defaultValue={rows.length + 1} className={INPUT_CLASS} />
             </label>
           </div>
-          {createState?.error && <p className="text-xs text-[var(--p-danger)]">{createState.error}</p>}
+          {createState?.error && <p className="text-xs text-[var(--p-danger)]">{resolveErr(createState.error)}</p>}
           <div className="flex justify-end">
             <Button type="submit" disabled={pending}>
               {t("console.draws.addDraw", undefined, "Add draw")}

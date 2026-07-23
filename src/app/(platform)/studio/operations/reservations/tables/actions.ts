@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { VENUE_TABLE_STATES } from "@/lib/reservations";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = {
   error?: string;
@@ -28,7 +29,7 @@ const CreateTableSchema = z.object({
 
 export async function createVenueTable(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create tables" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-tables", "Only manager+ can create tables") };
   const parsed = CreateTableSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = (await createClient()) as unknown as LooseSupabase;

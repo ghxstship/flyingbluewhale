@@ -7,6 +7,7 @@ import { ADMIN_BAND_ROLES, isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { writeInbox, writeInboxBulk } from "@/lib/inbox";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   title: z.string().min(1).max(200),
@@ -28,7 +29,7 @@ export type State = {
 export async function createAnnouncementAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   // Org-wide announcements broadcast — manager+ only.
-  if (!isManagerPlus(session)) return { error: "Only manager+ can publish announcements" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.publish-announcements", "Only manager+ can publish announcements") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -46,7 +47,7 @@ export async function createAnnouncementAction(_: State, fd: FormData): Promise<
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!project) return { error: "Project not found in your organization" };
+    if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
   }
   if (teamId) {
     const { data: team } = await supabase
@@ -55,7 +56,7 @@ export async function createAnnouncementAction(_: State, fd: FormData): Promise<
       .eq("id", teamId)
       .eq("org_id", session.orgId)
       .maybeSingle();
-    if (!team) return { error: "Team not found in your organization" };
+    if (!team) return { error: actionErrorMessage("not-found.team-in-org", "Team not found in your organization") };
   }
 
   const { data, error } = await supabase

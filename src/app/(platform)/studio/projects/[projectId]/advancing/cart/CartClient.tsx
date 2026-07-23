@@ -14,6 +14,7 @@ import {
 } from "@/lib/db/catering-summary";
 import { submitAdvanceCart, type CartSubmitState } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export type CartCatalogItem = {
   id: string;
   kind: string;
@@ -62,6 +63,7 @@ export function CartClient({
     submitAdvanceCart.bind(null, projectId),
     null,
   );
+  const resolveErr = useActionErrorResolver();
 
   const person = people.find((p) => p.crewMemberId === personId) ?? null;
 
@@ -298,7 +300,7 @@ export function CartClient({
           <div className="flex items-center gap-3">
             {state?.error && (
               <span role="alert" className="text-xs text-[var(--p-danger-text,var(--p-danger))]">
-                {state.error}
+                {resolveErr(state.error)}
               </span>
             )}
             {/* Kit 31 #4: a line without a Start Date can't submit — the date

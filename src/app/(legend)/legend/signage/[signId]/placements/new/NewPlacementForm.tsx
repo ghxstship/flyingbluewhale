@@ -23,7 +23,7 @@ export function NewPlacementForm({
       <div className="grid gap-4 sm:grid-cols-2">
         <Input label="Quantity" name="quantity" type="number" min={0} defaultValue={1} />
         <label className="block">
-          <span className="text-xs font-medium text-[var(--p-text-2)]">State</span>
+          <span className="text-xs font-medium text-[var(--p-text-2)]">Status</span>
           <select name="placement_state" defaultValue="planned" className="ps-input mt-1.5 w-full">
             {PLACEMENT_STATES.map((s) => (
               <option key={s} value={s}>

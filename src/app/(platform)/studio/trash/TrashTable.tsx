@@ -8,6 +8,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { timeAgo } from "@/lib/format";
 import { restoreOrgScoped } from "@/app/(platform)/studio/actions/restore";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export type TrashRow = { id: string; label: string; deletedAt: string | null };
 
 /**
@@ -19,6 +20,7 @@ export type TrashRow = { id: string; label: string; deletedAt: string | null };
  */
 export function TrashTable({ table, rows }: { table: string; rows: TrashRow[] }) {
   const router = useRouter();
+  const resolveErr = useActionErrorResolver();
   const [items, setItems] = useState(rows);
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [, startTransition] = useTransition();
@@ -28,7 +30,7 @@ export function TrashTable({ table, rows }: { table: string; rows: TrashRow[] })
     startTransition(async () => {
       const res = await restoreOrgScoped(table, id, "/studio/trash");
       if (res?.error) {
-        toast.error(res.error);
+        toast.error(resolveErr(res.error));
         setPendingId(null);
         return;
       }

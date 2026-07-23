@@ -104,7 +104,7 @@ export default async function CollectionDetail({ params }: { params: Promise<{ c
               },
               {
                 key: "state",
-                header: "State",
+                header: "Status",
                 render: (r) => <StatusBadge status={r.resource_state} />,
                 accessor: (r) => r.resource_state,
               },

@@ -35,7 +35,7 @@ export function TransitionControl({
   return (
     <FormShell
       action={transitionReservation}
-      submitLabel={t("console.reservations.detail.advance", undefined, "Update state")}
+      submitLabel={t("console.reservations.detail.advance", undefined, "Update status")}
       dirtyGuard={false}
       className="space-y-3"
     >

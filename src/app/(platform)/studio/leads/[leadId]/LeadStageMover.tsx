@@ -8,11 +8,13 @@ import { moveLeadStageAction } from "../actions";
 import type { LeadStage } from "@/lib/supabase/types";
 import { Constants } from "@/lib/supabase/database.types";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 // Progression order comes from the `lead_stage` enum SSOT (declared order).
 const ORDER = Constants.public.Enums.lead_stage;
 
 export function LeadStageMover({ leadId, stage }: { leadId: string; stage: LeadStage }) {
   const t = useT();
+  const resolveErr = useActionErrorResolver();
   const [pending, start] = useTransition();
   const idx = ORDER.indexOf(stage);
   const next = idx >= 0 && idx < ORDER.length - 2 ? ORDER[idx + 1] : null;
@@ -24,7 +26,7 @@ export function LeadStageMover({ leadId, stage }: { leadId: string; stage: LeadS
       onClick={() =>
         start(async () => {
           const res = await moveLeadStageAction(leadId, next);
-          if (res?.error) toast.error(res.error);
+          if (res?.error) toast.error(resolveErr(res.error));
           else
             // F-22 action-undo pattern — the success toast carries the
             // inverse commit (move back to the pre-advance stage).
@@ -33,7 +35,7 @@ export function LeadStageMover({ leadId, stage }: { leadId: string; stage: LeadS
                 label: t("console.leads.stageMover.undo", undefined, "Undo"),
                 onClick: () => {
                   void moveLeadStageAction(leadId, stage).then((r) => {
-                    if (r?.error) toast.error(r.error);
+                    if (r?.error) toast.error(resolveErr(r.error));
                   });
                 },
               },

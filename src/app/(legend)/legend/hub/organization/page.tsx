@@ -124,7 +124,7 @@ export default async function OrganizationPillarPage() {
                   },
                   {
                     key: "active",
-                    header: "State",
+                    header: "Status",
                     render: (p) =>
                       p.active ? <Badge variant="success">Active</Badge> : <Badge variant="muted">Archived</Badge>,
                     accessor: (p) => (p.active ? "active" : "archived"),

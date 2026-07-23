@@ -96,7 +96,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </dt>
             <dd className="font-mono text-xs">{conn.tenant_id ?? "—"}</dd>
             <dt className="text-[var(--p-text-2)]">
-              {t("console.settings.integrations.accounting.detail.state", undefined, "State")}
+              {t("console.settings.integrations.accounting.detail.state", undefined, "Status")}
             </dt>
             <dd>
               <StatusBadge status={conn.connection_state} />

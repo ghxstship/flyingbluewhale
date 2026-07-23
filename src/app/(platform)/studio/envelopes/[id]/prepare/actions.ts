@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = { error?: string; ok?: true } | null;
 
@@ -25,7 +26,7 @@ const ApplySchema = z.object({
 /** Apply the operator's own signature to one signer row on the envelope. */
 export async function applySignatureAction(_: State, fd: FormData): Promise<State> {
   const parsed = ApplySchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: "Add your name and a signature first." };
+  if (!parsed.success) return { error: actionErrorMessage("add-your-name-and-a-signature-first", "Add your name and a signature first.") };
   const session = await requireSession();
   const supabase = await db();
   const { envelope_id, signer_id, signed_name, signed_title, signature_image } = parsed.data;
@@ -41,7 +42,7 @@ export async function applySignatureAction(_: State, fd: FormData): Promise<Stat
     .eq("id", signer_id)
     .eq("envelope_id", envelope_id)
     .eq("org_id", session.orgId);
-  if (error) return { error: "Could not save the signature." };
+  if (error) return { error: actionErrorMessage("could-not-save-the-signature", "Could not save the signature.") };
   revalidatePath(`/studio/envelopes/${envelope_id}/prepare`);
   revalidatePath(`/studio/envelopes/${envelope_id}`);
   return { ok: true };

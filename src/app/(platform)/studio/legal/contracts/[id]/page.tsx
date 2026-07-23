@@ -150,7 +150,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   <th>{t("console.legal.contracts.detail.col.trigger", undefined, "Trigger")}</th>
                   <th>{t("console.legal.contracts.detail.col.due", undefined, "Due")}</th>
                   <th>{t("console.legal.contracts.detail.col.payment", undefined, "Payment")}</th>
-                  <th>{t("console.legal.contracts.detail.col.state", undefined, "State")}</th>
+                  <th>{t("console.legal.contracts.detail.col.state", undefined, "Status")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -215,7 +215,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   <th>{t("console.legal.contracts.detail.col.description", undefined, "Description")}</th>
                   <th>{t("console.legal.contracts.detail.col.recurring", undefined, "Recurring")}</th>
                   <th>{t("console.legal.contracts.detail.col.due", undefined, "Due")}</th>
-                  <th>{t("console.legal.contracts.detail.col.state", undefined, "State")}</th>
+                  <th>{t("console.legal.contracts.detail.col.state", undefined, "Status")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -435,7 +435,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   <th>{t("console.legal.contracts.detail.col.version", undefined, "Version")}</th>
                   <th>{t("console.legal.contracts.detail.col.signingRole", undefined, "Role")}</th>
                   <th>{t("console.legal.contracts.detail.col.method", undefined, "Method")}</th>
-                  <th>{t("console.legal.contracts.detail.col.state", undefined, "State")}</th>
+                  <th>{t("console.legal.contracts.detail.col.state", undefined, "Status")}</th>
                   <th>{t("console.legal.contracts.detail.col.signedAt", undefined, "Signed")}</th>
                 </tr>
               </thead>

@@ -102,7 +102,7 @@ export default async function Page() {
               <thead>
                 <tr>
                   <th className="text-start">{t("console.assets.warranties.columns.name", undefined, "Name")}</th>
-                  <th className="text-start">{t("console.assets.warranties.columns.state", undefined, "State")}</th>
+                  <th className="text-start">{t("console.assets.warranties.columns.state", undefined, "Status")}</th>
                   <th className="text-start">
                     {t("console.assets.warranties.columns.warrantor", undefined, "Warrantor")}
                   </th>

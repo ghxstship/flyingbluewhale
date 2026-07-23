@@ -85,7 +85,7 @@ export default async function ResourceDetail({ params }: { params: Promise<{ id:
       />
       <div className="page-content space-y-8">
         <div className="metric-grid">
-          <Field label="State">
+          <Field label="Status">
             <StatusBadge status={resource.resource_state} />
           </Field>
           <Field label="Kind">{RESOURCE_KIND_LABELS[resource.kind]}</Field>

@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { dateRangeRefine } from "@/lib/zod/dateRange";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const UUID = z.string().uuid();
 const OPT_UUID = z.union([UUID, z.literal("")]).optional();
@@ -61,7 +62,7 @@ export async function updateProject(id: string, _: State, fd: FormData): Promise
     production_style: (parsed.data.production_style || null) as ProductionStyle | null,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Project not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.project-3", "Project not found.") };
   }
   revalidatePath(`/studio/projects/${id}`);
   revalidatePath("/studio/projects");

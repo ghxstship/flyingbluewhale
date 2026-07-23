@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   title: z.string().min(1).max(200),
@@ -32,7 +33,7 @@ export async function updateFabrication(id: string, _: State, fd: FormData): Pro
     due_at: parsed.data.due_at || null,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Fabrication Order not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.fabrication-order", "Fabrication Order not found.") };
   }
   revalidatePath(`/studio/production/fabrication/${id}`);
   revalidatePath("/studio/production/fabrication");

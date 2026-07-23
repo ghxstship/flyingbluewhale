@@ -93,7 +93,7 @@ export default async function Page() {
             },
             {
               key: "lifecycle_state",
-              header: t("console.settings.timeClockZones.col.state", undefined, "State"),
+              header: t("console.settings.timeClockZones.col.state", undefined, "Status"),
               render: (r) => (
                 <Badge variant={r.lifecycle_state === "active" ? "success" : "muted"}>
                   {toTitle(r.lifecycle_state)}

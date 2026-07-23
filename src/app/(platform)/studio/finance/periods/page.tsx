@@ -66,7 +66,7 @@ export default async function FinancePeriodsPage() {
             },
             {
               key: "state",
-              header: t("console.finance.periods.cols.state", undefined, "State"),
+              header: t("console.finance.periods.cols.state", undefined, "Status"),
               render: (r) => <Badge variant={badgeVariantForState(r.state)}>{toTitle(r.state)}</Badge>,
               accessor: (r) => r.state,
             },

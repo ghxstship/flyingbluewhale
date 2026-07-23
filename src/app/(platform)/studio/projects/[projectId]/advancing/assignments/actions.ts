@@ -15,6 +15,7 @@ import {
   type CatalogKind,
   type FulfillmentState,
 } from "@/lib/db/assignments";
+import { actionErrorMessage } from "@/lib/errors";
 
 /** E-06 — externally-meaningful states; email is an external holder's only channel. */
 const EXTERNAL_HOLDER_EMAIL_STATES: readonly FulfillmentState[] = ["issued", "transferred", "voided"] as const;
@@ -47,10 +48,10 @@ export async function bulkAdvanceAssignments(
 ): Promise<BulkTransitionResult> {
   const session = await requireSession();
   if (!isManagerPlus(session)) {
-    return { error: "You Need Manager Access To Transition Assignments" };
+    return { error: actionErrorMessage("auth.manager.transition-assignments", "You Need Manager Access To Transition Assignments") };
   }
   const parsed = BulkSchema.safeParse({ projectId, nextState, ids });
-  if (!parsed.success) return { error: "Invalid Bulk Transition Request" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.bulk-transition-request", "Invalid Bulk Transition Request") };
 
   const supabase = await createClient();
   const { data: rows, error: readErr } = await supabase

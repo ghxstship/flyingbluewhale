@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getOrgScoped } from "@/lib/db/resource";
 import { ensureMyPartyId } from "@/lib/db/parties";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   channel_id: z.string().uuid(),
@@ -29,11 +30,11 @@ export async function postMessage(_: State, fd: FormData): Promise<State> {
   // `messages` has no org_id; scope through the channel. Verify the channel
   // belongs to the caller's org before writing into it.
   const channel = await getOrgScoped("message_channels", session.orgId, parsed.data.channel_id);
-  if (!channel) return actionFail("Channel not found", fd);
+  if (!channel) return actionFail(actionErrorMessage("not-found.channel", "Channel not found"), fd);
 
   // author_party_id is a parties.id, not an auth uid — the FK rejects raw uids.
   const authorPartyId = await ensureMyPartyId(session.orgId, session.userId, session.email);
-  if (!authorPartyId) return actionFail("Could not resolve your party record in this workspace", fd);
+  if (!authorPartyId) return actionFail(actionErrorMessage("could-not-resolve-your-party-record-in-this-workspace", "Could not resolve your party record in this workspace"), fd);
 
   const supabase = await createClient();
   const { error } = await supabase.from("messages").insert({

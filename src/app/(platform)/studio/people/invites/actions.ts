@@ -14,6 +14,7 @@ import { PORTAL_PERSONAS } from "@/lib/nav";
 import type { FormState } from "@/components/FormShell";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { SCOPABLE_MODULES } from "./scopable-modules";
+import { actionErrorMessage } from "@/lib/errors";
 
 const CreateSchema = z
   .object({
@@ -45,7 +46,7 @@ const CreateSchema = z
 
 export async function createInviteAction(_: FormState, fd: FormData): Promise<FormState> {
   const session = await requireSession();
-  if (!isAdmin(session)) return { error: "Only owners and admins can invite." };
+  if (!isAdmin(session)) return { error: actionErrorMessage("auth.owner-admin.invite", "Only owners and admins can invite.") };
 
   const parsed = CreateSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
@@ -56,7 +57,7 @@ export async function createInviteAction(_: FormState, fd: FormData): Promise<Fo
   const rawModules = fd.getAll("moduleScope").map(String).filter(Boolean);
   const moduleScope = rawModules.filter((m) => SCOPABLE_MODULES.includes(m));
   if (rawModules.length > 0 && moduleScope.length === 0) {
-    return { error: "Pick at least one module the subcontractor can reach." };
+    return { error: actionErrorMessage("pick-at-least-one-module-the-subcontractor-can-reach", "Pick at least one module the subcontractor can reach.") };
   }
   const expiresRaw = Number(fd.get("expiresInDays") ?? "");
   const expiresInDays = Number.isFinite(expiresRaw) && expiresRaw > 0 ? Math.min(365, Math.floor(expiresRaw)) : null;
@@ -74,7 +75,7 @@ export async function createInviteAction(_: FormState, fd: FormData): Promise<Fo
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!proj) return { error: "That project doesn't belong to your org." };
+    if (!proj) return { error: actionErrorMessage("that-project-doesn-t-belong-to-your-org", "That project doesn't belong to your org.") };
   }
 
   const { data: invite, error } = await supabase
@@ -98,12 +99,12 @@ export async function createInviteAction(_: FormState, fd: FormData): Promise<Fo
 
   if (error) {
     if (error.code === "23505") {
-      return { error: "A pending invite already exists for this email." };
+      return { error: actionErrorMessage("a-pending-invite-already-exists-for-this-email", "A pending invite already exists for this email.") };
     }
     return actionFail(error.message, fd);
   }
 
-  if (!invite) return { error: "Failed to create invite" };
+  if (!invite) return { error: actionErrorMessage("failed-to-create-invite", "Failed to create invite") };
 
   // Send the invitation email and remember whether it landed; failure to
   // send doesn't undo the row — the table is the source of truth and the
@@ -166,7 +167,7 @@ function inviteEmailHtml(inviterEmail: string, role: string, acceptUrl: string):
  */
 export async function resendInviteAction(id: string): Promise<FormState> {
   const session = await requireSession();
-  if (!isAdmin(session)) return { error: "Only owners and admins can resend." };
+  if (!isAdmin(session)) return { error: actionErrorMessage("auth.owner-admin.resend", "Only owners and admins can resend.") };
 
   const supabase = await createClient();
   const { data: invite, error: readErr } = await supabase
@@ -177,7 +178,7 @@ export async function resendInviteAction(id: string): Promise<FormState> {
     .maybeSingle();
   if (readErr) return { error: readErr.message };
   if (!invite || invite.invite_state !== "pending") {
-    return { error: "Only a pending invite can be resent" };
+    return { error: actionErrorMessage("only-a-pending-invite-can-be-resent", "Only a pending invite can be resent") };
   }
 
   if (new Date(invite.expires_at).getTime() < Date.now()) {
@@ -214,7 +215,7 @@ export async function resendInviteAction(id: string): Promise<FormState> {
 
 export async function revokeInviteAction(id: string): Promise<FormState> {
   const session = await requireSession();
-  if (!isAdmin(session)) return { error: "Only owners and admins can revoke." };
+  if (!isAdmin(session)) return { error: actionErrorMessage("auth.owner-admin.revoke", "Only owners and admins can revoke.") };
 
   const supabase = await createClient();
   // Only pending invites can be revoked. Without the .eq("invite_state",
@@ -229,7 +230,7 @@ export async function revokeInviteAction(id: string): Promise<FormState> {
     .eq("invite_state", "pending")
     .select("id");
   if (error) return { error: error.message };
-  if (!data || data.length === 0) return { error: "Only a pending invite can be revoked" };
+  if (!data || data.length === 0) return { error: actionErrorMessage("only-a-pending-invite-can-be-revoked", "Only a pending invite can be revoked") };
 
   await emitAudit({
     actorId: session.userId,

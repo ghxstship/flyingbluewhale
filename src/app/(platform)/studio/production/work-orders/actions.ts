@@ -12,6 +12,7 @@ import {
   canTransitionWorkOrder,
   type WorkOrderState,
 } from "@/lib/subcontractor";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = {
   error?: string;
@@ -60,7 +61,7 @@ export async function createWorkOrderAction(_: State, fd: FormData): Promise<Sta
 
 export async function transitionWorkOrderAction(id: string, to: WorkOrderState): Promise<State> {
   const session = await requireSession();
-  if (!WORK_ORDER_STATES.includes(to)) return { error: "Unknown state" };
+  if (!WORK_ORDER_STATES.includes(to)) return { error: actionErrorMessage("unknown-state", "Unknown state") };
   const supabase = await createClient();
   const { data: current } = await supabase
     .from("work_orders")
@@ -68,7 +69,7 @@ export async function transitionWorkOrderAction(id: string, to: WorkOrderState):
     .eq("id", id)
     .eq("org_id", session.orgId)
     .single();
-  if (!current) return { error: "Work order not found" };
+  if (!current) return { error: actionErrorMessage("not-found.work-order", "Work order not found") };
   const from = current.work_order_state as WorkOrderState;
   if (!canTransitionWorkOrder(from, to)) {
     return { error: `Illegal transition ${from} → ${to}` };
@@ -98,7 +99,7 @@ export async function awardWorkOrderAction(workOrderId: string, vendorId: string
     .eq("id", workOrderId)
     .eq("org_id", session.orgId)
     .single();
-  if (!wo) return { error: "Work order not found" };
+  if (!wo) return { error: actionErrorMessage("not-found.work-order", "Work order not found") };
 
   const { data: elig } = await supabase
     .from("v_sub_eligibility")
@@ -108,7 +109,7 @@ export async function awardWorkOrderAction(workOrderId: string, vendorId: string
     .eq("trade", wo.trade)
     .maybeSingle();
   if (elig?.verdict === "blocked") {
-    return { error: "This subcontractor is blocked: required compliance documents are missing or expired." };
+    return { error: actionErrorMessage("this-subcontractor-is-blocked-required-compliance-documents-are-missing", "This subcontractor is blocked: required compliance documents are missing or expired.") };
   }
 
   const { error } = await supabase

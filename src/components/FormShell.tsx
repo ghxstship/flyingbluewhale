@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/Dialog";
 import { useAnnounce } from "@/components/ui/LiveRegion";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { resolveActionError } from "@/lib/errors";
 
 /** Sentinel `blockedUrl` value: the guard intercepted a browser Back
  *  (popstate) rather than a link click. Not a routable path, so it can
@@ -139,12 +140,17 @@ export function FormShell({
     return () => document.removeEventListener("click", onClick, true);
   }, [dirtyGuard, pending]);
 
+  // Server actions return stable error CODES ("@err:<code>") — map them to
+  // the operator's locale here; plain strings (unmigrated / dynamic
+  // messages) pass through untouched.
+  const resolvedError = state?.error ? resolveActionError(state.error, t) : null;
+
   // Announce error/success
   useEffect(() => {
-    if (state?.error) announce(state.error, "assertive");
+    if (resolvedError) announce(resolvedError, "assertive");
     if (state?.ok) announce(t("common.savedToast", undefined, "Saved"), "polite");
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state, announce]);
+  }, [state, resolvedError, announce]);
 
   // Restore submitted values after a validation failure. React server-actions
   // reset uncontrolled inputs once the action settles; when the action returns
@@ -190,14 +196,14 @@ export function FormShell({
         aria-busy={pending || undefined}
       >
         {children}
-        {state?.error && (
+        {resolvedError && (
           <div id={errorId}>
             <Alert kind="error">
-              {state.error}
+              {resolvedError}
               {/* FE-1 — enumerate per-field errors beneath the summary so
                   forms built from raw `ps-input` elements (which don't read
                   FormErrorContext) still tell the user WHICH field failed. */}
-              {state.fieldErrors && Object.keys(state.fieldErrors).length > 0 && (
+              {state?.fieldErrors && Object.keys(state.fieldErrors).length > 0 && (
                 <ul className="mt-1.5 list-disc space-y-0.5 ps-4 text-xs">
                   {Object.entries(state.fieldErrors).map(([field, message]) => (
                     <li key={field}>

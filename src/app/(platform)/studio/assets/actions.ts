@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { transitionAssetState } from "@/lib/db/asset-transition";
 import { UAL_STATES, CHECK_IN, CHECK_OUT } from "@/lib/db/assets";
 import type { UalState } from "@/lib/supabase/types";
+import { actionErrorMessage } from "@/lib/errors";
 
 const StateEnum = z.enum(UAL_STATES);
 
@@ -81,9 +82,9 @@ export type BulkResult = { message?: string; error?: string };
 /** Bulk soft-delete — the list-table counterpart to `deleteAsset`. */
 export async function bulkDeleteAssets(ids: string[]): Promise<BulkResult> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "You Need Manager Access To Delete Assets" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager.delete-assets", "You Need Manager Access To Delete Assets") };
   const parsed = BulkIds.safeParse(ids);
-  if (!parsed.success) return { error: "Invalid Selection" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.selection", "Invalid Selection") };
   const supabase = await createClient();
 
   const { data: updated, error } = await supabase

@@ -6,6 +6,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = {
   error?: string;
@@ -38,14 +39,14 @@ function toMinor(usd: string | undefined): number | null {
 
 export async function createAsset(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create assets" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-assets", "Only manager+ can create assets") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
 
   const acquisitionCost = toMinor(parsed.data.acquisition_cost_usd);
   const dailyRate = toMinor(parsed.data.daily_rate_usd);
-  if (parsed.data.acquisition_cost_usd && acquisitionCost == null) return actionFail("Bad acquisition cost", fd);
-  if (parsed.data.daily_rate_usd && dailyRate == null) return actionFail("Bad daily rate", fd);
+  if (parsed.data.acquisition_cost_usd && acquisitionCost == null) return actionFail(actionErrorMessage("bad-acquisition-cost", "Bad acquisition cost"), fd);
+  if (parsed.data.daily_rate_usd && dailyRate == null) return actionFail(actionErrorMessage("bad-daily-rate", "Bad daily rate"), fd);
 
   const supabase = await createClient();
   // state (ual_state) defaults to 'acquired' in the DB; omit and let the

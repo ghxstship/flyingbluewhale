@@ -3,6 +3,7 @@
 import { useFormState } from "react-dom";
 import { Button } from "@/components/ui/Button";
 import { importBudgetCsv, type State } from "./actions";
+import { useActionErrorResolver } from "@/lib/errors-client";
 
 const TEMPLATE_HEADER = [
   "RECORD ID",
@@ -37,6 +38,7 @@ const TEMPLATE_HEADER = [
 
 export function ImportBudgetForm() {
   const [state, action] = useFormState(importBudgetCsv, null as State);
+  const resolveErr = useActionErrorResolver();
   return (
     <form action={action} className="space-y-4">
       <div className="surface p-4">
@@ -56,7 +58,7 @@ export function ImportBudgetForm() {
       </div>
 
       {state && "error" in state && state.error && (
-        <div className="surface border-[var(--p-danger)]/20 p-3 text-sm text-[var(--p-danger)]">{state.error}</div>
+        <div className="surface border-[var(--p-danger)]/20 p-3 text-sm text-[var(--p-danger)]">{resolveErr(state.error)}</div>
       )}
       {state && "ok" in state && state.ok && (
         <div className="surface p-3 text-sm">

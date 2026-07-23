@@ -169,7 +169,7 @@ export default async function Page() {
             },
             {
               key: "state",
-              header: t("console.transmittals.columns.state", undefined, "State"),
+              header: t("console.transmittals.columns.state", undefined, "Status"),
               render: (r) => <Badge variant={toneFor(r.transmittal_state)}>{toTitle(r.transmittal_state)}</Badge>,
               accessor: (r) => r.transmittal_state,
               filterable: true,

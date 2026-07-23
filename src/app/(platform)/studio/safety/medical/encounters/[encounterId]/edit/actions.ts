@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   triage: z.string().max(40).optional(),
@@ -35,7 +36,7 @@ export async function updateEncounter(encounterId: string, _: State, fd: FormDat
     patient_ref: parsed.data.patient_ref || null,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Medical Encounter not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.medical-encounter", "Medical Encounter not found.") };
   }
   revalidatePath(`/studio/safety/medical/encounters/${encounterId}`);
   revalidatePath("/studio/safety/medical/encounters");

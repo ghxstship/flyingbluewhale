@@ -207,7 +207,7 @@ export default async function Page() {
             },
             {
               key: "state",
-              header: t("console.workforce.shiftSwaps.column.state", undefined, "State"),
+              header: t("console.workforce.shiftSwaps.column.state", undefined, "Status"),
               render: (r) => <Badge variant={toneFor(r.swap_state)}>{toTitle(r.swap_state)}</Badge>,
               accessor: (r) => r.swap_state,
               filterable: true,

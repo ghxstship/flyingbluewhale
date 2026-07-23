@@ -222,7 +222,7 @@ export default async function Page({ params }: { params: Promise<{ broadcastId: 
                     {t("console.procurement.woBroadcasts.detail.vendor", undefined, "Vendor")}
                   </th>
                   <th className="text-start">
-                    {t("console.procurement.woBroadcasts.detail.state", undefined, "State")}
+                    {t("console.procurement.woBroadcasts.detail.state", undefined, "Status")}
                   </th>
                   <th className="text-start">
                     {t("console.procurement.woBroadcasts.detail.responded", undefined, "Responded")}

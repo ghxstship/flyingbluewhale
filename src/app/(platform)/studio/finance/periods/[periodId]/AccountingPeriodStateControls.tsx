@@ -7,6 +7,7 @@ import { useToast } from "@/lib/hooks/useToast";
 import { transitionAccountingPeriodAction } from "../actions";
 import type { AccountingPeriodState } from "@/lib/accounting-periods";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export function AccountingPeriodStateControls({
   periodId,
   currentState,
@@ -17,6 +18,7 @@ export function AccountingPeriodStateControls({
   allowedNext: readonly AccountingPeriodState[];
 }) {
   const t = useT();
+  const resolveErr = useActionErrorResolver();
   const toast = useToast();
   const [pending, startTransition] = useTransition();
 
@@ -38,7 +40,7 @@ export function AccountingPeriodStateControls({
               const r = await transitionAccountingPeriodAction(periodId, target);
               if ("error" in r && r.error) {
                 console.error(r.error);
-                toast.error(r.error);
+                toast.error(resolveErr(r.error));
               }
             });
           }}

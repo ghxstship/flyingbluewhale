@@ -7,6 +7,7 @@ import { can, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   project_id: z.string().uuid(),
@@ -41,7 +42,7 @@ export type State = {
 export async function createPayrollRun(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   if (!can(session, "payroll:post")) {
-    return { error: "Only owners and admins can open a payroll run." };
+    return { error: actionErrorMessage("auth.owner-admin.open-a-payroll-run", "Only owners and admins can open a payroll run.") };
   }
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
@@ -54,7 +55,7 @@ export async function createPayrollRun(_: State, fd: FormData): Promise<State> {
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!project) return { error: "Project not found in your organization" };
+  if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
 
   // Derive pay-period if user only entered week_ending.
   const we = parsed.data.week_ending;

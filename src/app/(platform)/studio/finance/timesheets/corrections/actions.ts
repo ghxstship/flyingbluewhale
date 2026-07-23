@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { notify } from "@/lib/notify";
 import { CORRECTION_DECISIONS } from "@/lib/time/corrections";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = { error?: string; ok?: string } | null;
 
@@ -33,11 +34,11 @@ const Schema = z.object({
 export async function decideCorrection(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   if (!isManagerPlus(session) || !can(session, "time:approve")) {
-    return { error: "Only managers can decide a time correction." };
+    return { error: actionErrorMessage("auth.manager.decide-a-time-correction", "Only managers can decide a time correction.") };
   }
 
   const parsed = Schema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: "Pick a valid decision." };
+  if (!parsed.success) return { error: actionErrorMessage("pick-a-valid-decision", "Pick a valid decision.") };
   const { correctionId, decision } = parsed.data;
   const notes = parsed.data.notes || null;
 
@@ -62,8 +63,8 @@ export async function decideCorrection(_: State, fd: FormData): Promise<State> {
     // 42501 covers both "not a manager" and the separation-of-duties
     // refusal; the RPC's message names which.
     if (error.code === "42501") return { error: error.message };
-    if (error.code === "55000") return { error: "Someone else already decided this one. Refresh." };
-    if (error.code === "P0002") return { error: "That request no longer exists." };
+    if (error.code === "55000") return { error: actionErrorMessage("someone-else-already-decided-this-one-refresh", "Someone else already decided this one. Refresh.") };
+    if (error.code === "P0002") return { error: actionErrorMessage("that-request-no-longer-exists", "That request no longer exists.") };
     return { error: `Could not apply the decision: ${error.message}` };
   }
 

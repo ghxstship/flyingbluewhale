@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { PROMOTER_STATES, normalizeCode } from "@/lib/discounts_promoters";
+import { actionErrorMessage } from "@/lib/errors";
 
 const CreateSchema = z.object({
   name: z.string().min(1, "Name is required").max(160),
@@ -27,7 +28,7 @@ export type State = {
 
 export async function createPromoterAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create promoters" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-promoters", "Only manager+ can create promoters") };
   const parsed = CreateSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const d = parsed.data;
@@ -47,7 +48,7 @@ export async function createPromoterAction(_: State, fd: FormData): Promise<Stat
     .select()
     .single();
   if (error) {
-    if (error.code === "23505") return actionFail("A promoter with that ref code already exists.", fd);
+    if (error.code === "23505") return actionFail(actionErrorMessage("a-promoter-with-that-ref-code-already-exists", "A promoter with that ref code already exists."), fd);
     return actionFail(error.message, fd);
   }
   revalidatePath("/studio/marketplace/discounts/promoters");
@@ -98,7 +99,7 @@ const AttributionSchema = z.object({
 
 export async function createAttributionAction(promoterId: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can record attributions" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.record-attributions", "Only manager+ can record attributions") };
   const parsed = AttributionSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const d = parsed.data;
@@ -114,7 +115,7 @@ export async function createAttributionAction(promoterId: string, _: State, fd: 
     .is("deleted_at", null)
     .maybeSingle();
   if (pErr) return actionFail(pErr.message, fd);
-  if (!promoter) return { error: "Promoter not found." };
+  if (!promoter) return { error: actionErrorMessage("not-found.promoter", "Promoter not found.") };
 
   const commission = Math.round((d.amount_cents * (promoter.commission_bps as number)) / 10000);
   const { error } = await db.from("promoter_attributions").insert({

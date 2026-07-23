@@ -7,6 +7,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { transitionIncident } from "@/lib/db/incident-fsm";
 import { emitAudit } from "@/lib/audit";
+import { actionErrorMessage } from "@/lib/errors";
 
 const StatusSchema = z.enum(["open", "investigating", "resolved", "closed"]);
 
@@ -33,7 +34,7 @@ export type CorrectiveTaskState = { error?: string } | null;
 
 export async function createCorrectiveTaskAction(incidentId: string): Promise<CorrectiveTaskState> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create corrective tasks" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-corrective-tasks", "Only manager+ can create corrective tasks") };
   const supabase = await createClient();
 
   const { data: incident } = await supabase
@@ -43,9 +44,9 @@ export async function createCorrectiveTaskAction(incidentId: string): Promise<Co
     .eq("id", incidentId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!incident) return { error: "Incident not found" };
+  if (!incident) return { error: actionErrorMessage("not-found.incident", "Incident not found") };
   if (incident.incident_state === "closed") {
-    return { error: "Incident is closed. Reopen it before adding corrective work" };
+    return { error: actionErrorMessage("incident-is-closed-reopen-it-before-adding-corrective-work", "Incident is closed. Reopen it before adding corrective work") };
   }
 
   // Idempotency: the lineage marker is unique per incident.

@@ -119,7 +119,7 @@ export default async function SchedulerPage() {
             },
             {
               key: "is_active",
-              header: t("console.scheduler.columns.state", undefined, "State"),
+              header: t("console.scheduler.columns.state", undefined, "Status"),
               render: (r) => (
                 <Badge variant={r.is_active ? "success" : "muted"}>
                   {r.is_active

@@ -11,6 +11,7 @@ import {
   type CredentialInput,
   type ScheduleActivityInput,
 } from "@/lib/schedule/guardrails";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = { error?: string; warning?: string } | null;
 
@@ -131,10 +132,10 @@ export async function createActivity(_prev: State, fd: FormData): Promise<State>
     startsAt = iso(d.starts_at);
     endsAt = iso(d.ends_at);
   } catch {
-    return { error: "Invalid start or end time" };
+    return { error: actionErrorMessage("invalid.start-or-end-time", "Invalid start or end time") };
   }
   if (new Date(endsAt).getTime() <= new Date(startsAt).getTime()) {
-    return { error: "End must be after start" };
+    return { error: actionErrorMessage("end-must-be-after-start", "End must be after start") };
   }
 
   const supabase = await createClient();
@@ -188,10 +189,10 @@ export async function rescheduleActivity(_prev: State, fd: FormData): Promise<St
     startsAt = iso(d.starts_at);
     endsAt = iso(d.ends_at);
   } catch {
-    return { error: "Invalid start or end time" };
+    return { error: actionErrorMessage("invalid.start-or-end-time", "Invalid start or end time") };
   }
   if (new Date(endsAt).getTime() <= new Date(startsAt).getTime()) {
-    return { error: "End must be after start" };
+    return { error: actionErrorMessage("end-must-be-after-start", "End must be after start") };
   }
 
   const supabase = await createClient();

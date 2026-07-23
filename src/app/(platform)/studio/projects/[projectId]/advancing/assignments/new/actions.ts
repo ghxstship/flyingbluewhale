@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { writeInbox } from "@/lib/inbox";
 import { CATALOG_KIND_LABEL_SINGULAR, type CatalogKind } from "@/lib/db/assignments";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 /**
  * Author a new assignment from a master_catalog_items row + an assignee.
@@ -33,7 +34,7 @@ export type State = {
 
 export async function createAssignmentAction(projectId: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can assign catalog items" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.assign-catalog-items", "Only manager+ can assign catalog items") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -45,7 +46,7 @@ export async function createAssignmentAction(projectId: string, _: State, fd: Fo
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!project) return { error: "Project not found" };
+  if (!project) return { error: actionErrorMessage("not-found.project-2", "Project not found") };
 
   const { data: member } = await supabase
     .from("memberships")
@@ -54,7 +55,7 @@ export async function createAssignmentAction(projectId: string, _: State, fd: Fo
     .eq("user_id", parsed.data.party_user_id)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!member) return { error: "Assignee is not in your organization" };
+  if (!member) return { error: actionErrorMessage("assignee-is-not-in-your-organization", "Assignee is not in your organization") };
 
   // catalog_kind is set by the BEFORE INSERT trigger from
   // master_catalog_items.kind — we pass it on insert for the NOT NULL
@@ -65,7 +66,7 @@ export async function createAssignmentAction(projectId: string, _: State, fd: Fo
     .eq("id", parsed.data.catalog_item_id)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  if (!catalogItem) return { error: "Catalog item not found in your organization" };
+  if (!catalogItem) return { error: actionErrorMessage("not-found.catalog-item-in-org", "Catalog item not found in your organization") };
 
   if (parsed.data.atom_id) {
     const { data: atom } = await supabase
@@ -74,7 +75,7 @@ export async function createAssignmentAction(projectId: string, _: State, fd: Fo
       .eq("id", parsed.data.atom_id)
       .eq("org_id", session.orgId)
       .maybeSingle();
-    if (!atom) return { error: "Atom not found in your organization" };
+    if (!atom) return { error: actionErrorMessage("not-found.atom-in-org", "Atom not found in your organization") };
   }
 
   const { data: created, error } = await supabase

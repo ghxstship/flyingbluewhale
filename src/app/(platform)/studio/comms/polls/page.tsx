@@ -81,7 +81,7 @@ export default async function Page() {
             },
             {
               key: "publish_state",
-              header: t("console.comms.polls.col.state", undefined, "State"),
+              header: t("console.comms.polls.col.state", undefined, "Status"),
               render: (r) => (
                 <Badge
                   variant={r.publish_state === "live" ? "success" : r.publish_state === "closed" ? "muted" : "info"}

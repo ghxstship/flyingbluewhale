@@ -155,7 +155,7 @@ export default async function Page() {
             },
             {
               key: "state",
-              header: t("console.specs.column.state", undefined, "State"),
+              header: t("console.specs.column.state", undefined, "Status"),
               render: (r) => <Badge variant={toneFor(r.section_state)}>{toTitle(r.section_state)}</Badge>,
               accessor: (r) => r.section_state,
               filterable: true,

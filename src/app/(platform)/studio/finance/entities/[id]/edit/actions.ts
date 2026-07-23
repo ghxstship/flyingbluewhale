@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 // Edit for a legal/ledger entity (workflow audit confirm-intent pass). The
 // detail was create+read only; these fields (tax_id, currency, ownership,
@@ -46,7 +47,7 @@ export async function updateOrgEntity(id: string, _: State, fd: FormData): Promi
   // An entity may not be its own / a descendant's parent; cheap self-check
   // here (full cycle detection is out of scope), plus parent-in-org.
   if (parsed.data.parent_entity_id) {
-    if (parsed.data.parent_entity_id === id) return { error: "An entity can't consolidate into itself" };
+    if (parsed.data.parent_entity_id === id) return { error: actionErrorMessage("an-entity-can-t-consolidate-into-itself", "An entity can't consolidate into itself") };
     const { data: parent } = await supabase
       .from("org_entities")
       .select("id")
@@ -54,12 +55,12 @@ export async function updateOrgEntity(id: string, _: State, fd: FormData): Promi
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!parent) return { error: "Parent entity not found in your organization" };
+    if (!parent) return { error: actionErrorMessage("not-found.parent-entity-in-org", "Parent entity not found in your organization") };
   }
 
   const ownership = parsed.data.ownership_pct ? Number(parsed.data.ownership_pct) : 100;
   if (Number.isNaN(ownership) || ownership < 0 || ownership > 100) {
-    return { error: "Ownership % must be between 0 and 100" };
+    return { error: actionErrorMessage("ownership-pct-must-be-between-0-and-100", "Ownership % must be between 0 and 100") };
   }
 
   const { error } = await supabase

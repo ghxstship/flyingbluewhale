@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   title: z.string().min(1).max(200),
@@ -35,7 +36,7 @@ export async function updateAlert(alertId: string, _: State, fd: FormData): Prom
     scheduled_at: parsed.data.scheduled_at || null,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Crisis Alert not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.crisis-alert", "Crisis Alert not found.") };
   }
   revalidatePath(`/studio/safety/crisis/${alertId}`);
   revalidatePath("/studio/safety/crisis");

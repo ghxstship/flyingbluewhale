@@ -10,6 +10,7 @@ import { dollarsToCents } from "@/lib/format";
 import { moneyDollarsString } from "@/lib/zod/money";
 import { formFail } from "@/lib/forms/fail";
 import { emitAudit } from "@/lib/audit";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Transition = z.object({
   submission_id: z.string().uuid(),
@@ -42,7 +43,7 @@ export async function transitionSubmissionAction(_: State, fd: FormData): Promis
   // Shortlist / award / reject are reviewer-initiated decisions —
   // manager+ only. Submitter-initiated withdrawal lives on the
   // /me/applications surface (per-user RLS).
-  if (!isManagerPlus(session)) return { error: "Only manager+ can decide submission outcomes" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.decide-submission-outcomes", "Only manager+ can decide submission outcomes") };
   const parsed = Transition.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -54,7 +55,7 @@ export async function transitionSubmissionAction(_: State, fd: FormData): Promis
     .eq("id", parsed.data.submission_id)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  if (!row) return { error: "Submission not found" };
+  if (!row) return { error: actionErrorMessage("not-found.submission", "Submission not found") };
   const current = (row as { submission_state: SubmissionStatus }).submission_state;
   const allowed = SUBMISSION_TRANSITIONS[current] ?? [];
   if (current !== parsed.data.status && !allowed.includes(parsed.data.status)) {
@@ -76,7 +77,7 @@ export async function transitionSubmissionAction(_: State, fd: FormData): Promis
     .select("id");
   if (error) return { error: error.message };
   if (!updated || updated.length === 0) {
-    return { error: "Submission was updated concurrently. Refresh and retry" };
+    return { error: actionErrorMessage("concurrency.submission", "Submission was updated concurrently. Refresh and retry") };
   }
   revalidatePath(`/studio/marketplace/calls`);
   return { ok: true };
@@ -101,7 +102,7 @@ const BOOKABLE_STATES = ["submitted", "shortlisted"] as const;
  */
 export async function bookSubmissionAction(submissionId: string, _prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can book submissions" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.book-submissions", "Only manager+ can book submissions") };
   const parsed = Book.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
 
@@ -113,7 +114,7 @@ export async function bookSubmissionAction(submissionId: string, _prev: State, f
     .eq("id", submissionId)
     .maybeSingle();
   if (loadError) return { error: loadError.message };
-  if (!submission) return { error: "Submission not found" };
+  if (!submission) return { error: actionErrorMessage("not-found.submission", "Submission not found") };
 
   // Idempotency: an offer already drafted from this submission wins.
   const { data: existing } = await supabase
@@ -131,7 +132,7 @@ export async function bookSubmissionAction(submissionId: string, _prev: State, f
     return { error: `Submission cannot be booked from its current state (${submission.submission_state})` };
   }
   if (!submission.talent_profile_id) {
-    return { error: "Submission has no talent profile to book" };
+    return { error: actionErrorMessage("submission-has-no-talent-profile-to-book", "Submission has no talent profile to book") };
   }
 
   const { data: call } = await supabase

@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/Dialog";
 import { restoreOrgScoped } from "@/app/(platform)/studio/actions/restore";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { useActionErrorResolver } from "@/lib/errors-client";
 
 type DeleteFormProps = {
   /** Server action bound to the resource id. */
@@ -59,6 +60,7 @@ export function DeleteForm({ action, confirm, title, label, size = "sm", undo }:
   const [open, setOpen] = useState(false);
   const [pending, startTransition] = useTransition();
   const router = useRouter();
+  const resolveErr = useActionErrorResolver();
 
   const resolvedTitle = title ?? t("deleteForm.title", undefined, "Confirm delete");
   const resolvedLabel = label ?? t("deleteForm.delete", undefined, "Delete");
@@ -79,7 +81,7 @@ export function DeleteForm({ action, confirm, title, label, size = "sm", undo }:
           label: t("deleteForm.undo", undefined, "Undo"),
           onClick: () => {
             void restoreOrgScoped(table, id, redirectTo).then((res) => {
-              if (res?.error) toast.error(res.error);
+              if (res?.error) toast.error(resolveErr(res.error));
               else {
                 toast.success(t("deleteForm.restored", undefined, "Restored"));
                 router.refresh();

@@ -99,7 +99,7 @@ export function NewSignForm({
         />
       </div>
       <label className="block">
-        <span className="text-xs font-medium text-[var(--p-text-2)]">State</span>
+        <span className="text-xs font-medium text-[var(--p-text-2)]">Status</span>
         <select
           name="sign_state"
           defaultValue={sign?.sign_state ?? "draft"}

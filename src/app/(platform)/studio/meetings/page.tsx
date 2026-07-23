@@ -248,7 +248,7 @@ export default async function Page() {
             },
             {
               key: "state",
-              header: t("console.meetings.columns.state", undefined, "State"),
+              header: t("console.meetings.columns.state", undefined, "Status"),
               render: (r) => (
                 <Badge variant={toneFor(r.event_state)}>{toTitle(r.event_state.replace(/_/g, " "))}</Badge>
               ),

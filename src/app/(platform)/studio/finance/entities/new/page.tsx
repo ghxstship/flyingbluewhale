@@ -141,7 +141,7 @@ export default async function Page() {
             </label>
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                {t("console.finance.entities.new.fields.consolidationState", undefined, "Consolidation State")}
+                {t("console.finance.entities.new.fields.consolidationState", undefined, "Consolidation Status")}
               </span>
               <select name="consolidation_state" defaultValue="active" className={INPUT}>
                 {["active", "pending", "dormant", "divested"].map((s) => (

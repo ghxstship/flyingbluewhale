@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { safeBranding } from "@/lib/branding";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type ClientBrandingState = { error?: string; ok?: true } | null;
 
@@ -19,7 +20,7 @@ export async function updateClientBrandingAction(
   fd: FormData,
 ): Promise<ClientBrandingState> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can edit client branding" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.edit-client-branding", "Only manager+ can edit client branding") };
 
   const branding = safeBranding({
     accentColor: (fd.get("accentColor") as string) || undefined,
@@ -38,7 +39,7 @@ export async function updateClientBrandingAction(
     .select("id")
     .maybeSingle();
   if (error) return { error: error.message };
-  if (!data) return { error: "Client not found in your organization" };
+  if (!data) return { error: actionErrorMessage("not-found.client-in-org", "Client not found in your organization") };
   revalidatePath(`/studio/clients/${clientId}/branding`);
   return { ok: true };
 }

@@ -14,6 +14,7 @@ import {
 } from "@/lib/box_office";
 import { checkInEntryAction, denyEntryAction, resetEntryAction } from "../actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 type Entry = {
   id: string;
   guest_name: string;
@@ -30,6 +31,7 @@ type Entry = {
  */
 export function GuestRoster({ listId, entries }: { listId: string; entries: Entry[] }) {
   const t = useT();
+  const resolveErr = useActionErrorResolver();
   const [pending, startTransition] = useTransition();
 
   function run(action: (prev: null, fd: FormData) => Promise<{ error?: string } | null>, entryId: string) {
@@ -38,7 +40,7 @@ export function GuestRoster({ listId, entries }: { listId: string; entries: Entr
     fd.set("guest_list_id", listId);
     startTransition(async () => {
       const res = await action(null, fd);
-      if (res?.error) toast.error(res.error);
+      if (res?.error) toast.error(resolveErr(res.error));
     });
   }
 
@@ -60,7 +62,7 @@ export function GuestRoster({ listId, entries }: { listId: string; entries: Entr
                 <th className="text-left">{t("console.boxOffice.roster.guest", undefined, "Guest")}</th>
                 <th className="text-left">{t("console.boxOffice.roster.heads", undefined, "Heads")}</th>
                 <th className="text-left">{t("console.boxOffice.roster.code", undefined, "Code")}</th>
-                <th className="text-left">{t("console.boxOffice.roster.state", undefined, "State")}</th>
+                <th className="text-left">{t("console.boxOffice.roster.state", undefined, "Status")}</th>
                 <th className="text-right">{t("console.boxOffice.roster.door", undefined, "Door")}</th>
               </tr>
             </thead>

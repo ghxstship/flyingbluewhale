@@ -96,7 +96,7 @@ export default async function DiscountDetail({ params }: { params: Promise<{ dis
         </div>
 
         <div className="metric-grid">
-          <Field label="State">
+          <Field label="Status">
             <StatusBadge status={code.discount_state} />
           </Field>
           <Field label="Value">{formatDiscountValue(code.kind, code.value)}</Field>

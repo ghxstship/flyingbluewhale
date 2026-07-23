@@ -6,6 +6,7 @@ import { requireSession, isManagerPlus } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { canTransitionCall, type VideoCallState } from "@/lib/video";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = { error?: string } | null;
 
@@ -23,9 +24,9 @@ function huddlePath(meetingId: string) {
  */
 export async function ensureCall(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Manager role required" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("manager-role-required", "Manager role required") };
   const meetingId = String(fd.get("meetingId") ?? "");
-  if (!z.string().uuid().safeParse(meetingId).success) return { error: "Invalid meeting" };
+  if (!z.string().uuid().safeParse(meetingId).success) return { error: actionErrorMessage("invalid.meeting", "Invalid meeting") };
   const supabase = (await createClient()) as unknown as LooseSupabase;
 
   // Confirm the meeting event belongs to the caller's org.
@@ -35,7 +36,7 @@ export async function ensureCall(_: State, fd: FormData): Promise<State> {
     .eq("id", meetingId)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  if (!meeting) return { error: "Meeting not found in your organization" };
+  if (!meeting) return { error: actionErrorMessage("not-found.meeting-in-org", "Meeting not found in your organization") };
 
   const { data: existing } = await supabase
     .from("video_calls")
@@ -65,11 +66,11 @@ export async function ensureCall(_: State, fd: FormData): Promise<State> {
 /** Move a call along its lifecycle (scheduled → live → ended), guarded by NEXT_VIDEO_CALL_STATES. */
 export async function transitionCall(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Manager role required" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("manager-role-required", "Manager role required") };
   const parsed = IdSchema.safeParse({ meetingId: fd.get("meetingId"), callId: fd.get("callId") });
-  if (!parsed.success) return { error: "Invalid request" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.request", "Invalid request") };
   const to = String(fd.get("to") ?? "") as VideoCallState;
-  if (!(["scheduled", "live", "ended"] as const).includes(to)) return { error: "Invalid state" };
+  if (!(["scheduled", "live", "ended"] as const).includes(to)) return { error: actionErrorMessage("invalid.state", "Invalid state") };
   const supabase = (await createClient()) as unknown as LooseSupabase;
 
   const { data: call } = await supabase
@@ -79,7 +80,7 @@ export async function transitionCall(_: State, fd: FormData): Promise<State> {
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!call) return { error: "Call not found" };
+  if (!call) return { error: actionErrorMessage("not-found.call", "Call not found") };
   const from = (call as { call_state: VideoCallState }).call_state;
   if (!canTransitionCall(from, to)) return { error: `Cannot move from ${from} to ${to}` };
 
@@ -102,7 +103,7 @@ export async function transitionCall(_: State, fd: FormData): Promise<State> {
 export async function joinCall(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = IdSchema.safeParse({ meetingId: fd.get("meetingId"), callId: fd.get("callId") });
-  if (!parsed.success) return { error: "Invalid request" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.request", "Invalid request") };
   const supabase = (await createClient()) as unknown as LooseSupabase;
 
   const { data: call } = await supabase
@@ -112,8 +113,8 @@ export async function joinCall(_: State, fd: FormData): Promise<State> {
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!call) return { error: "Call not found" };
-  if ((call as { call_state: VideoCallState }).call_state === "ended") return { error: "This call has ended" };
+  if (!call) return { error: actionErrorMessage("not-found.call", "Call not found") };
+  if ((call as { call_state: VideoCallState }).call_state === "ended") return { error: actionErrorMessage("this-call-has-ended", "This call has ended") };
 
   const role = (call as { created_by: string | null }).created_by === session.userId ? "host" : "participant";
 
@@ -138,7 +139,7 @@ export async function joinCall(_: State, fd: FormData): Promise<State> {
 export async function leaveCall(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = IdSchema.safeParse({ meetingId: fd.get("meetingId"), callId: fd.get("callId") });
-  if (!parsed.success) return { error: "Invalid request" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.request", "Invalid request") };
   const supabase = (await createClient()) as unknown as LooseSupabase;
 
   const { error } = await supabase

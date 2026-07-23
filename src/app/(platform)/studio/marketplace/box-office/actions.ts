@@ -7,6 +7,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { classifyScan, generateScanCode, type GuestEntryState, type GuestScanResult } from "@/lib/box_office";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = {
   error?: string;
@@ -24,7 +25,7 @@ const ListSchema = z.object({
 
 export async function createGuestListAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create guest lists" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-guest-lists", "Only manager+ can create guest lists") };
   const parsed = ListSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -56,7 +57,7 @@ const EntrySchema = z.object({
 
 export async function addGuestEntryAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can edit guest lists" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.edit-guest-lists", "Only manager+ can edit guest lists") };
   const parsed = EntrySchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -69,7 +70,7 @@ export async function addGuestEntryAction(_: State, fd: FormData): Promise<State
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!list) return { error: "Guest list not found" };
+  if (!list) return { error: actionErrorMessage("not-found.guest-list", "Guest list not found") };
 
   const { error } = await supabase.from("guest_list_entries" as never).insert({
     org_id: session.orgId,
@@ -92,10 +93,10 @@ export async function addGuestEntryAction(_: State, fd: FormData): Promise<State
 // not jump the rails because the conditional update matches on entry_state.
 export async function checkInEntryAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can work the door" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.work-the-door", "Only manager+ can work the door") };
   const entryId = String(fd.get("entry_id") ?? "");
   const listId = String(fd.get("guest_list_id") ?? "");
-  if (!entryId) return { error: "Missing entry" };
+  if (!entryId) return { error: actionErrorMessage("missing.entry", "Missing entry") };
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -110,7 +111,7 @@ export async function checkInEntryAction(_: State, fd: FormData): Promise<State>
     .eq("entry_state", "pending")
     .select("id");
   if (error) return { error: error.message };
-  if (!data || (data as unknown[]).length === 0) return { error: "Only a pending guest can be checked in" };
+  if (!data || (data as unknown[]).length === 0) return { error: actionErrorMessage("only-a-pending-guest-can-be-checked-in", "Only a pending guest can be checked in") };
   if (listId) revalidatePath(`/studio/marketplace/box-office/${listId}`);
   return { ok: true };
 }
@@ -118,10 +119,10 @@ export async function checkInEntryAction(_: State, fd: FormData): Promise<State>
 // ── deny entry ──────────────────────────────────────────────────────
 export async function denyEntryAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can work the door" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.work-the-door", "Only manager+ can work the door") };
   const entryId = String(fd.get("entry_id") ?? "");
   const listId = String(fd.get("guest_list_id") ?? "");
-  if (!entryId) return { error: "Missing entry" };
+  if (!entryId) return { error: actionErrorMessage("missing.entry", "Missing entry") };
   const supabase = await createClient();
 
   const { error } = await supabase
@@ -137,10 +138,10 @@ export async function denyEntryAction(_: State, fd: FormData): Promise<State> {
 // ── reset entry to pending (re-scan) ────────────────────────────────
 export async function resetEntryAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can work the door" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.work-the-door", "Only manager+ can work the door") };
   const entryId = String(fd.get("entry_id") ?? "");
   const listId = String(fd.get("guest_list_id") ?? "");
-  if (!entryId) return { error: "Missing entry" };
+  if (!entryId) return { error: actionErrorMessage("missing.entry", "Missing entry") };
   const supabase = await createClient();
 
   const { error } = await supabase
@@ -169,9 +170,9 @@ const ScanSchema = z.object({
 
 export async function scanGuestCodeAction(_: ScanState, fd: FormData): Promise<ScanState> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can work the door" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.work-the-door", "Only manager+ can work the door") };
   const parsed = ScanSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: "Enter a scan code" };
+  if (!parsed.success) return { error: actionErrorMessage("enter-a-scan-code", "Enter a scan code") };
   const supabase = await createClient();
 
   const code = parsed.data.scan_code.trim();

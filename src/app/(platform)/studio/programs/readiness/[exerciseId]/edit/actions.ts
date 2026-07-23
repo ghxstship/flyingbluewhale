@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   name: z.string().min(1).max(200),
@@ -33,7 +34,7 @@ export async function updateReadinessExercise(id: string, _: State, fd: FormData
     scheduled_at: parsed.data.scheduled_at || null,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Readiness Exercise not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.readiness-exercise", "Readiness Exercise not found.") };
   }
   revalidatePath(`/studio/programs/readiness/${id}`);
   revalidatePath("/studio/programs/readiness");

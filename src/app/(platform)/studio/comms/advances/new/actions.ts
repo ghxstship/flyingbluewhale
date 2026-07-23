@@ -7,6 +7,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import type { AdvanceContact } from "@/lib/db/advance-packets";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   packet_id: z.string().uuid(),
@@ -29,7 +30,7 @@ export type State = {
  */
 export async function createBatchAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can prepare advance sends" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.prepare-advance-sends", "Only manager+ can prepare advance sends") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -41,8 +42,8 @@ export async function createBatchAction(_: State, fd: FormData): Promise<State> 
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!packet) return { error: "Packet not found in your organization" };
-  if (packet.packet_state !== "live") return { error: "Only a live packet can be sent. Go live from the packet composer first" };
+  if (!packet) return { error: actionErrorMessage("not-found.packet-in-org", "Packet not found in your organization") };
+  if (packet.packet_state !== "live") return { error: actionErrorMessage("only-a-live-packet-can-be-sent-go-live", "Only a live packet can be sent. Go live from the packet composer first") };
 
   const { data: audiences } = await supabase
     .from("advance_audiences")
@@ -52,7 +53,7 @@ export async function createBatchAction(_: State, fd: FormData): Promise<State> 
     .limit(500);
   const audienceRows = (audiences ?? []) as Array<{ id: string; contacts: AdvanceContact[] }>;
   const totalContacts = audienceRows.reduce((n, a) => n + (a.contacts?.length ?? 0), 0);
-  if (totalContacts === 0) return { error: "The packet has no audience contacts to send to" };
+  if (totalContacts === 0) return { error: actionErrorMessage("the-packet-has-no-audience-contacts-to-send-to", "The packet has no audience contacts to send to") };
 
   const scheduledAt = parsed.data.scheduled_at ? new Date(parsed.data.scheduled_at).toISOString() : null;
   // soft-delete-exempt: insert returning id, not a read

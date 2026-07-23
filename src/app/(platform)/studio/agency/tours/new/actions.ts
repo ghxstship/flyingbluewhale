@@ -6,6 +6,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   talent_profile_id: z.string().uuid(),
@@ -25,7 +26,7 @@ export type State = {
 
 export async function createTourAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create tours" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-tours", "Only manager+ can create tours") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -38,7 +39,7 @@ export async function createTourAction(_: State, fd: FormData): Promise<State> {
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!talent) return { error: "Talent profile not found in your organization" };
+  if (!talent) return { error: actionErrorMessage("not-found.talent-profile-in-org", "Talent profile not found in your organization") };
 
   if (parsed.data.agency_id) {
     const { data: agency } = await supabase
@@ -47,7 +48,7 @@ export async function createTourAction(_: State, fd: FormData): Promise<State> {
       .eq("id", parsed.data.agency_id)
       .eq("org_id", session.orgId)
       .maybeSingle();
-    if (!agency) return { error: "Agency not found in your organization" };
+    if (!agency) return { error: actionErrorMessage("not-found.agency-in-org", "Agency not found in your organization") };
   }
 
   const { data, error } = await supabase

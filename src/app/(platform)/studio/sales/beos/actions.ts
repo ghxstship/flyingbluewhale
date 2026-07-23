@@ -9,6 +9,7 @@ import { dollarsToCents, generateNumber } from "@/lib/format";
 import { moneyDollarsString } from "@/lib/zod/money";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { BEO_LINE_SECTIONS, BEO_STATES, canTransitionBeo, type BeoState } from "@/lib/beos";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = {
   error?: string;
@@ -35,7 +36,7 @@ const CreateSchema = z.object({
 
 export async function createBeoAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create BEOs" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-beos", "Only manager+ can create BEOs") };
   const parsed = CreateSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
 
@@ -52,7 +53,7 @@ export async function createBeoAction(_: State, fd: FormData): Promise<State> {
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!client) return { error: "Client not found in your organization" };
+    if (!client) return { error: actionErrorMessage("not-found.client-in-org", "Client not found in your organization") };
   }
   if (projectId) {
     const { data: project } = await supabase
@@ -62,7 +63,7 @@ export async function createBeoAction(_: State, fd: FormData): Promise<State> {
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!project) return { error: "Project not found in your organization" };
+    if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
   }
 
   const { data, error } = await supabase
@@ -103,7 +104,7 @@ const LineSchema = z.object({
 
 export async function addBeoLineAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can edit BEOs" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.edit-beos", "Only manager+ can edit BEOs") };
   const parsed = LineSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
 
@@ -116,7 +117,7 @@ export async function addBeoLineAction(_: State, fd: FormData): Promise<State> {
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!beo) return { error: "BEO not found in your organization" };
+  if (!beo) return { error: actionErrorMessage("not-found.beo-in-org", "BEO not found in your organization") };
 
   const { error } = await supabase.from("beo_line_items").insert({
     org_id: session.orgId,
@@ -135,7 +136,7 @@ export async function addBeoLineAction(_: State, fd: FormData): Promise<State> {
 // ── Delete a line item ───────────────────────────────────────────────
 export async function deleteBeoLineAction(lineId: string, beoId: string) {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can edit BEOs" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.edit-beos", "Only manager+ can edit BEOs") };
   const supabase = await createClient();
   const { error } = await supabase
     .from("beo_line_items")
@@ -151,8 +152,8 @@ export async function deleteBeoLineAction(lineId: string, beoId: string) {
 // ── BEO FSM transition ───────────────────────────────────────────────
 export async function setBeoStateAction(id: string, next: BeoState) {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can change BEO status" };
-  if (!BEO_STATES.includes(next)) return { error: "Invalid state" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.change-beo-status", "Only manager+ can change BEO status") };
+  if (!BEO_STATES.includes(next)) return { error: actionErrorMessage("invalid.state", "Invalid state") };
   const supabase = await createClient();
 
   const { data: before } = await supabase
@@ -162,7 +163,7 @@ export async function setBeoStateAction(id: string, next: BeoState) {
     .eq("id", id)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!before) return { error: "BEO not found" };
+  if (!before) return { error: actionErrorMessage("not-found.beo", "BEO not found") };
   const current = before.beo_state as BeoState;
   if (!canTransitionBeo(current, next)) {
     return { error: `Cannot move ${current} → ${next}` };
@@ -186,7 +187,7 @@ export async function setBeoStateAction(id: string, next: BeoState) {
     .eq("beo_state", current)
     .select("id");
   if (error) return { error: error.message };
-  if (!updated || updated.length === 0) return { error: "BEO changed concurrently. Refresh and retry" };
+  if (!updated || updated.length === 0) return { error: actionErrorMessage("concurrency.beo", "BEO changed concurrently. Refresh and retry") };
 
   revalidatePath(`/studio/sales/beos/${id}`);
   revalidatePath("/studio/sales/beos");

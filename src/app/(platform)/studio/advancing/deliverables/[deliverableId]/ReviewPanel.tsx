@@ -6,6 +6,7 @@ import { Check, X, Clock, CircleDot } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { assignReviewer, removeReviewer, submitVerdict, type ReviewState } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export type Reviewer = {
   reviewerId: string;
   name: string;
@@ -49,6 +50,7 @@ export function ReviewPanel({
   };
 }) {
   const [state, formAction, pending] = useActionState<ReviewState, FormData>(assignReviewer, null);
+  const resolveErr = useActionErrorResolver();
   const assignedIds = new Set(reviewers.map((r) => r.reviewerId));
   const available = people.filter((p) => !assignedIds.has(p.id));
 
@@ -136,7 +138,7 @@ export function ReviewPanel({
       )}
       {state?.error && (
         <p role="alert" className="mt-2 text-xs text-[var(--p-danger-text)]">
-          {state.error}
+          {resolveErr(state.error)}
         </p>
       )}
     </section>

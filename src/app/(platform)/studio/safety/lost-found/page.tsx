@@ -132,7 +132,7 @@ export default async function Page() {
             },
             {
               key: "state",
-              header: t("console.lostFound.column.state", undefined, "State"),
+              header: t("console.lostFound.column.state", undefined, "Status"),
               render: (r) => <Badge variant={toneFor(r.incident_state)}>{toTitle(r.incident_state)}</Badge>,
               accessor: (r) => r.incident_state,
               filterable: true,

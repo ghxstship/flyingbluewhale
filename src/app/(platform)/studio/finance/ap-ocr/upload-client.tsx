@@ -5,11 +5,13 @@ import { Button } from "@/components/ui/Button";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { uploadAndExtract, type UploadState } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
 
 export function UploadInvoiceClient() {
   const t = useT();
   const [state, formAction, pending] = useActionState<UploadState, FormData>(uploadAndExtract, null);
+  const resolveErr = useActionErrorResolver();
   const [fileBase64, setFileBase64] = useState<string>("");
   const [fileName, setFileName] = useState<string>("");
   const [fileSize, setFileSize] = useState<number>(0);
@@ -49,7 +51,7 @@ export function UploadInvoiceClient() {
           {t("console.finance.apOcr.upload.kb", undefined, "KB")}
         </p>
       )}
-      {state?.error && <p className="text-xs text-[var(--p-danger)]">{state.error}</p>}
+      {state?.error && <p className="text-xs text-[var(--p-danger)]">{resolveErr(state.error)}</p>}
       {state?.success && (
         <p className="text-xs text-[var(--p-success)]">
           {t(

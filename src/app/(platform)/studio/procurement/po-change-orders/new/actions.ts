@@ -6,6 +6,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   purchase_order_id: z.string().uuid(),
@@ -26,7 +27,7 @@ export async function createPoChangeOrder(_: State, fd: FormData): Promise<State
   const session = await requireSession();
   // PO change orders modify committed money on an existing PO —
   // manager+ only.
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create PO change orders" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-po-change-orders", "Only manager+ can create PO change orders") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -41,7 +42,7 @@ export async function createPoChangeOrder(_: State, fd: FormData): Promise<State
     .eq("id", parsed.data.purchase_order_id)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!po) return { error: "Purchase order not found in your organization" };
+  if (!po) return { error: actionErrorMessage("not-found.purchase-order-in-org", "Purchase order not found in your organization") };
 
   // Next CO number for this PO.
   const { count } = await (

@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { nextOrgCode } from "@/lib/codes";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   name: z.string().min(1).max(200),
@@ -39,7 +40,7 @@ export async function createInspection(_: State, fd: FormData): Promise<State> {
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!project) return { error: "Project not found in your organization" };
+    if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
   }
 
   const code = await nextOrgCode("inspections", session.orgId, "INSP");
@@ -65,7 +66,7 @@ export async function createInspection(_: State, fd: FormData): Promise<State> {
         .eq("org_id", session.orgId)
         .order("position"),
     ]);
-    if (!tpl) return { error: "Template not found in your organization" };
+    if (!tpl) return { error: actionErrorMessage("not-found.template-in-org", "Template not found in your organization") };
     category = (tpl.category as string | undefined) ?? null;
     templateItems = (items ?? []) as never;
   }

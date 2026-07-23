@@ -3,6 +3,7 @@
 import { useTransition, useState } from "react";
 import { Alert } from "@/components/ui/Alert";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 /**
  * Single-button form helper for status-change mutations on detail pages.
  *
@@ -37,6 +38,7 @@ export function StatusForm({
   className?: string;
 }) {
   const [pending, startTransition] = useTransition();
+  const resolveErr = useActionErrorResolver();
   const [error, setError] = useState<string | null>(null);
 
   const tone =
@@ -55,7 +57,7 @@ export function StatusForm({
             try {
               const result = await action(fd);
               if (result && "error" in result && result.error) {
-                setError(result.error);
+                setError(resolveErr(result.error));
               }
             } catch (e) {
               // Server action threw (e.g., a redirect counts as throw — those are intentional)

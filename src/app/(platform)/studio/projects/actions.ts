@@ -7,6 +7,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createProject, updateProject } from "@/lib/db/projects";
 import { createClient } from "@/lib/supabase/server";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const slugify = (s: string) =>
   s
@@ -48,7 +49,7 @@ export type CreateProjectState = {
 
 export async function createProjectAction(_: CreateProjectState, formData: FormData): Promise<CreateProjectState> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create projects" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-projects", "Only manager+ can create projects") };
   const parsed = CreateSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return formFail(parsed.error, formData);
 
@@ -102,7 +103,7 @@ const UpdateSchema = z.object({
 
 export async function updateProjectAction(projectId: string, formData: FormData) {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can change project state" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.change-project-state", "Only manager+ can change project state") };
   const parsed = UpdateSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return formFail(parsed.error, formData);
 
@@ -125,9 +126,9 @@ export type BulkResult = { message?: string; error?: string };
  */
 export async function bulkArchiveProjects(ids: string[]): Promise<BulkResult> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "You Need Manager Access To Archive Projects" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager.archive-projects", "You Need Manager Access To Archive Projects") };
   const parsed = BulkIds.safeParse(ids);
-  if (!parsed.success) return { error: "Invalid Selection" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.selection", "Invalid Selection") };
   const supabase = await createClient();
 
   const { data: updated, error } = await supabase

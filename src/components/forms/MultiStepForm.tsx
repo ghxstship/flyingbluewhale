@@ -4,6 +4,7 @@ import { useActionState, useRef, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/Button";
 import type { FormState } from "@/components/FormShell";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 /**
  * MultiStepForm (P1.c) — paginated public/intake form with a progress
  * indicator and an optional review-before-submit step. SmartSuite "Forms:
@@ -37,6 +38,7 @@ export function MultiStepForm({
   review?: boolean;
 }) {
   const [state, formAction, pending] = useActionState<FormState, FormData>(action, null);
+  const resolveErr = useActionErrorResolver();
   const formRef = useRef<HTMLFormElement>(null);
   const stepRefs = useRef<Array<HTMLDivElement | null>>([]);
   const [active, setActive] = useState(0);
@@ -116,7 +118,7 @@ export function MultiStepForm({
 
       {state?.error ? (
         <p role="alert" className="rounded-md bg-[var(--p-danger)]/10 px-3 py-2 text-sm text-[var(--p-danger)]">
-          {state.error}
+          {resolveErr(state.error)}
         </p>
       ) : null}
 

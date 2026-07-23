@@ -327,7 +327,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               },
               {
                 key: "doc_state",
-                header: t("console.drawings.detail.columnDocState", undefined, "Doc State"),
+                header: t("console.drawings.detail.columnDocState", undefined, "Doc Status"),
                 render: (m) =>
                   m.site_plan ? <Badge variant="muted">{toTitle(m.site_plan.document_state)}</Badge> : "—",
                 accessor: (m) => m.site_plan?.document_state ?? null,

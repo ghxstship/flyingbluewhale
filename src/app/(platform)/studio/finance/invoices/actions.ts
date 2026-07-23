@@ -10,6 +10,7 @@ import { dateRangeRefine } from "@/lib/zod/dateRange";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { moneyCentsString } from "@/app/(platform)/studio/finance/money";
 import { INVOICE_TITLE_MAX_LENGTH } from "@/lib/validation/constraints";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z
   .object({
@@ -42,7 +43,7 @@ export async function createInvoiceAction(_: State, fd: FormData): Promise<State
   // Invoices are revenue documents that flow to Stripe + AR aging.
   // manager+ is the documented gate (matches the billing:write
   // capability that gates the Stripe checkout/portal endpoints).
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create invoices" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-invoices", "Only manager+ can create invoices") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
 
@@ -60,7 +61,7 @@ export async function createInvoiceAction(_: State, fd: FormData): Promise<State
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!client) return { error: "Client not found in your organization" };
+    if (!client) return { error: actionErrorMessage("not-found.client-in-org", "Client not found in your organization") };
   }
   if (projectId) {
     const { data: project } = await supabase
@@ -70,7 +71,7 @@ export async function createInvoiceAction(_: State, fd: FormData): Promise<State
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!project) return { error: "Project not found in your organization" };
+    if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
   }
 
   const { data, error } = await supabase
@@ -101,7 +102,7 @@ export async function setInvoiceStatusAction(
   status: "draft" | "sent" | "paid" | "overdue" | "voided" | "submitted" | "approved" | "rejected",
 ) {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can change invoice status" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.change-invoice-status", "Only manager+ can change invoice status") };
   const supabase = await createClient();
   const patch: { invoice_state: typeof status; paid_at?: string; approved_at?: string } = { invoice_state: status };
   if (status === "paid") patch.paid_at = new Date().toISOString();
@@ -112,7 +113,7 @@ export async function setInvoiceStatusAction(
     .eq("id", id)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  if (!before) return { error: "Invoice not found in your organization" };
+  if (!before) return { error: actionErrorMessage("not-found.invoice-in-org", "Invoice not found in your organization") };
   const { error } = await supabase.from("invoices").update(patch).eq("org_id", session.orgId).eq("id", id);
   if (error) return { error: error.message };
   // Lifecycle emit → notification + webhook fan-out + optional email.
@@ -149,9 +150,9 @@ export type BulkResult = { message?: string; error?: string };
  */
 export async function bulkVoidInvoices(ids: string[]): Promise<BulkResult> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "You Need Manager Access To Void Invoices" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager.void-invoices", "You Need Manager Access To Void Invoices") };
   const parsed = BulkIds.safeParse(ids);
-  if (!parsed.success) return { error: "Invalid Selection" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.selection", "Invalid Selection") };
   const supabase = await createClient();
 
   const { data: updated, error } = await supabase

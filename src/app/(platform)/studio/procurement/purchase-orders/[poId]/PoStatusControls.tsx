@@ -6,6 +6,7 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 import { setPoStatusAction } from "../actions";
 import type { POStatus } from "@/lib/supabase/types";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 const NEXT: Record<POStatus, { next: POStatus; labelKey: string; labelFallback: string } | null> = {
   draft: { next: "sent", labelKey: "console.procurement.purchaseOrders.status.sendPo", labelFallback: "Send PO" },
   sent: {
@@ -24,6 +25,7 @@ const NEXT: Record<POStatus, { next: POStatus; labelKey: string; labelFallback: 
 
 export function PoStatusControls({ id, status }: { id: string; status: POStatus }) {
   const t = useT();
+  const resolveErr = useActionErrorResolver();
   const [pending, start] = useTransition();
   const next = NEXT[status];
   return (
@@ -35,7 +37,7 @@ export function PoStatusControls({ id, status }: { id: string; status: POStatus 
           onClick={() =>
             start(async () => {
               const r = await setPoStatusAction(id, next.next);
-              if (r?.error) toast.error(r.error);
+              if (r?.error) toast.error(resolveErr(r.error));
               else
                 toast.success(
                   t("console.procurement.purchaseOrders.statusToast", { status: next.next }, `PO ${next.next}`),
@@ -54,7 +56,7 @@ export function PoStatusControls({ id, status }: { id: string; status: POStatus 
           onClick={() =>
             start(async () => {
               const r = await setPoStatusAction(id, "cancelled");
-              if (r?.error) toast.error(r.error);
+              if (r?.error) toast.error(resolveErr(r.error));
               else toast.success(t("console.procurement.purchaseOrders.cancelledToast", undefined, "PO cancelled"));
             })
           }

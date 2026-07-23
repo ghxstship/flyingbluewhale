@@ -16,9 +16,11 @@ import { useToast } from "@/lib/hooks/useToast";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { createApiKeyAction, type CreateState } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export function CreateApiKeyForm() {
   const t = useT();
   const [state, formAction, pending] = useActionState<CreateState, FormData>(createApiKeyAction, null);
+  const resolveErr = useActionErrorResolver();
   const [open, setOpen] = React.useState(false);
   const toast = useToast();
 
@@ -113,7 +115,7 @@ export function CreateApiKeyForm() {
               </ul>
             </details>
             {state && "error" in state && state.error && (
-              <p className="text-xs text-[var(--p-danger)]">{state.error}</p>
+              <p className="text-xs text-[var(--p-danger)]">{resolveErr(state.error)}</p>
             )}
             <div className="flex justify-end gap-2">
               <Button type="button" variant="ghost" onClick={() => setOpen(false)}>

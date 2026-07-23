@@ -5,6 +5,7 @@ import type { SitePlanTransition } from "@/lib/siteplan/types";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { transitionSheet, type State } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 type Props = {
   sheetId: string;
   transitions: SitePlanTransition[];
@@ -44,6 +45,7 @@ function TransitionButton({
   label: string;
 }) {
   const [state, action, pending] = useActionState<State, FormData>(transitionSheet, null);
+  const resolveErr = useActionErrorResolver();
   const tone =
     transition === "issue"
       ? "border-[var(--p-success)] text-[var(--p-success)]"
@@ -65,7 +67,7 @@ function TransitionButton({
       </button>
       {state?.error && (
         <span className="text-[11px] text-[var(--p-danger)]" role="alert">
-          {state.error}
+          {resolveErr(state.error)}
         </span>
       )}
     </form>

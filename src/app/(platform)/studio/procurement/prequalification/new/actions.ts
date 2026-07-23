@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   vendor_id: z.string().uuid(),
@@ -34,14 +35,14 @@ export async function invitePrequalification(_: State, fd: FormData): Promise<St
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!vendor) return { error: "Vendor not found in your organization" };
+  if (!vendor) return { error: actionErrorMessage("not-found.vendor-in-org", "Vendor not found in your organization") };
   const { data: questionnaire } = await supabase
     .from("prequalification_questionnaires")
     .select("id")
     .eq("id", parsed.data.questionnaire_id)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  if (!questionnaire) return { error: "Questionnaire not found in your organization" };
+  if (!questionnaire) return { error: actionErrorMessage("not-found.questionnaire-in-org", "Questionnaire not found in your organization") };
 
   const { data, error } = await supabase
     .from("vendor_prequalifications")
@@ -54,7 +55,7 @@ export async function invitePrequalification(_: State, fd: FormData): Promise<St
     .select("id")
     .single();
   if (error) {
-    if (error.code === "23505") return { error: "Vendor already invited to this questionnaire." };
+    if (error.code === "23505") return { error: actionErrorMessage("vendor-already-invited-to-this-questionnaire", "Vendor already invited to this questionnaire.") };
     return { error: error.message };
   }
   revalidatePath("/studio/procurement/prequalification");

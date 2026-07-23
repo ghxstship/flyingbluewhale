@@ -23,6 +23,7 @@ import {
   type State,
 } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 /**
  * Client-side form wrappers for team detail. Each one binds an action with
  * the specific teamId / userId so the server action signature stays
@@ -102,6 +103,7 @@ export function UpdateMemberRole({
   const t = useT();
   const bound = updateMemberRoleAction.bind(null, teamId);
   const [state, formAction, pending] = useActionState<State, FormData>(bound, null);
+  const resolveErr = useActionErrorResolver();
   return (
     <form action={formAction} className="flex items-center gap-2">
       <input type="hidden" name="user_id" value={userId} />
@@ -117,7 +119,7 @@ export function UpdateMemberRole({
       </select>
       {state?.error && (
         <span role="alert" className="text-[11px] text-[var(--p-danger)]">
-          {state.error}
+          {resolveErr(state.error)}
         </span>
       )}
     </form>

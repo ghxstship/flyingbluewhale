@@ -163,7 +163,7 @@ export default async function TimesheetsPage() {
             },
             {
               key: "state",
-              header: t("console.finance.timesheets.columns.state", undefined, "State"),
+              header: t("console.finance.timesheets.columns.state", undefined, "Status"),
               render: (r) => <StatusBadge status={r.state} />,
               accessor: (r) => r.state,
               filterable: true,

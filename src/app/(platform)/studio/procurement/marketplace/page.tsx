@@ -50,7 +50,7 @@ export default async function MarketplacePage() {
     },
     {
       key: "state",
-      header: t("console.procurement.marketplace.col.state", undefined, "State"),
+      header: t("console.procurement.marketplace.col.state", undefined, "Status"),
       render: (r) => <span className="text-[var(--p-text-2)]">{WORK_ORDER_STATE_LABELS[r.work_order_state]}</span>,
     },
     {

@@ -6,6 +6,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { addTeamMember, createTeam, deleteTeam, removeTeamMember, updateTeam, updateTeamMember } from "@/lib/db/teams";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = {
   error?: string;
@@ -39,7 +40,7 @@ const UpdateMemberRoleSchema = z.object({
 
 export async function createTeamAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only managers and above can create teams." };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager.create-teams", "Only managers and above can create teams.") };
 
   const parsed = CreateSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
@@ -59,7 +60,7 @@ export async function createTeamAction(_: State, fd: FormData): Promise<State> {
     if (err instanceof Error && err.message.includes("NEXT_REDIRECT")) throw err;
     const msg = err instanceof Error ? err.message : "Failed to create team";
     if (/duplicate|23505/.test(msg)) {
-      return { error: "A team with that slug already exists in this org." };
+      return { error: actionErrorMessage("a-team-with-that-slug-already-exists-in-this", "A team with that slug already exists in this org.") };
     }
     return { error: msg };
   }
@@ -67,7 +68,7 @@ export async function createTeamAction(_: State, fd: FormData): Promise<State> {
 
 export async function updateTeamAction(teamId: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only managers and above can edit teams." };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager.edit-teams", "Only managers and above can edit teams.") };
 
   const parsed = UpdateSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
@@ -96,7 +97,7 @@ export async function deleteTeamAction(teamId: string): Promise<void> {
 
 export async function addMemberAction(teamId: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only managers and above can add members." };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager.add-members", "Only managers and above can add members.") };
 
   const parsed = AddMemberSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
@@ -107,14 +108,14 @@ export async function addMemberAction(teamId: string, _: State, fd: FormData): P
     return { ok: true } as unknown as State;
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Failed to add member";
-    if (/duplicate|23505/.test(msg)) return { error: "That user is already on this team." };
+    if (/duplicate|23505/.test(msg)) return { error: actionErrorMessage("that-user-is-already-on-this-team", "That user is already on this team.") };
     return { error: msg };
   }
 }
 
 export async function updateMemberRoleAction(teamId: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only managers and above can change roles." };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager.change-roles", "Only managers and above can change roles.") };
 
   const parsed = UpdateMemberRoleSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);

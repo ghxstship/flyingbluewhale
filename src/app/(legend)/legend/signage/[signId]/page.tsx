@@ -143,7 +143,7 @@ export default async function SignDetail({ params }: { params: Promise<{ signId:
               },
               {
                 key: "placement_state",
-                header: "State",
+                header: "Status",
                 render: (r) => <StatusBadge status={r.placement_state} />,
                 accessor: (r) => r.placement_state,
               },

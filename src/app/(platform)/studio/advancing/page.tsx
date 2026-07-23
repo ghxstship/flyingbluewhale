@@ -189,7 +189,7 @@ export default async function Page() {
               },
               {
                 key: "state",
-                header: t("console.advancing.column.state", undefined, "State"),
+                header: t("console.advancing.column.state", undefined, "Status"),
                 render: (r) => <StatusBadge status={r.fulfillment_state} />,
                 accessor: (r) => r.fulfillment_state,
                 filterable: true,
@@ -277,7 +277,7 @@ export default async function Page() {
               },
               {
                 key: "state",
-                header: t("console.advancing.column.state", undefined, "State"),
+                header: t("console.advancing.column.state", undefined, "Status"),
                 render: (r) => <StatusBadge status={r.fulfillment_state} />,
                 accessor: (r) => r.fulfillment_state,
                 filterable: true,

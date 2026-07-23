@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = {
   error?: string;
@@ -21,7 +22,7 @@ export async function toggleAgentAction(
   _form: FormData,
 ): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Not authorized" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("not-authorized", "Not authorized") };
   const supabase = await createClient();
   const { error } = await supabase
     .from("ai_agents")

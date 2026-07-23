@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   kind: z.string(),
@@ -43,7 +44,7 @@ export async function updateAdManifest(id: string, _: State, fd: FormData): Prom
     notes: parsed.data.notes || null,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Ad Manifest not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.ad-manifest", "Ad Manifest not found.") };
   }
   revalidatePath(`/studio/transport/ad/${id}`);
   revalidatePath("/studio/transport/ad");

@@ -6,6 +6,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { ADVANCE_SECTION_KEYS, ADVANCE_REQUIREMENTS } from "@/lib/db/advance-packets";
+import { actionErrorMessage } from "@/lib/errors";
 
 const PATH = "/studio/settings/advancing";
 
@@ -34,7 +35,7 @@ export type State = {
 
 export async function addPresetAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can edit advancing presets" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.edit-advancing-presets", "Only manager+ can edit advancing presets") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();

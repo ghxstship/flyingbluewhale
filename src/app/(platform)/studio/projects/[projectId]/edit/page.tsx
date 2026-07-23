@@ -53,7 +53,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
           />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--p-text-2)]">
-              {t("console.projects.edit.fields.state", undefined, "State")}
+              {t("console.projects.edit.fields.state", undefined, "Status")}
             </span>
             <select
               name="project_state"

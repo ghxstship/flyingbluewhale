@@ -6,6 +6,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { dollarsToCents } from "@/lib/format";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = {
   error?: string;
@@ -25,7 +26,7 @@ const TicketTypeSchema = z.object({
 
 export async function createTicketTypeAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can add ticket types" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.add-ticket-types", "Only manager+ can add ticket types") };
   const parsed = TicketTypeSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -38,7 +39,7 @@ export async function createTicketTypeAction(_: State, fd: FormData): Promise<St
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!listing) return { error: "Event listing not found" };
+  if (!listing) return { error: actionErrorMessage("not-found.event-listing", "Event listing not found") };
 
   const { error } = await supabase.from("event_ticket_types").insert({
     org_id: session.orgId,

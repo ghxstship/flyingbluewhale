@@ -6,6 +6,7 @@ import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { clampRateBps } from "@/lib/rates";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   marketplace_enabled: z.string().optional(),
@@ -25,7 +26,7 @@ export async function updateMarketplaceSettingsAction(_: State, fd: FormData): P
   // owner/admin should be able to flip the marketplace on or change
   // the bps. RLS likely enforces this, but a clear error at the
   // app boundary beats a silent 0-row update.
-  if (!isAdmin(session)) return { error: "Only owners and admins can change marketplace settings" };
+  if (!isAdmin(session)) return { error: actionErrorMessage("auth.owner-admin.change-marketplace-settings", "Only owners and admins can change marketplace settings") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -42,7 +43,7 @@ export async function updateMarketplaceSettingsAction(_: State, fd: FormData): P
     .maybeSingle();
 
   if (error) return actionFail(error.message, fd);
-  if (!data) return { error: "Org not found in your session" };
+  if (!data) return { error: actionErrorMessage("not-found.org-in-session", "Org not found in your session") };
   revalidatePath("/studio/marketplace/settings");
   return { ok: true };
 }

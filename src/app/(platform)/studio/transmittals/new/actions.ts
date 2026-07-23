@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { nextOrgCode } from "@/lib/codes";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   subject: z.string().min(1).max(200),
@@ -36,7 +37,7 @@ export async function createTransmittal(_: State, fd: FormData): Promise<State> 
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!project) return { error: "Project not found in your organization" };
+  if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
 
   const code = await nextOrgCode("transmittals", session.orgId, "TXM");
 

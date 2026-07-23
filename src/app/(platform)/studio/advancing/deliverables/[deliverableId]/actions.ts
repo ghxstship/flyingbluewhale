@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { actionErrorMessage } from "@/lib/errors";
 
 /**
  * Deliverable reviewer actions (kit 21 W2, Frame.io canon). Managers assign or
@@ -28,11 +29,11 @@ const AssignSchema = z.object({ deliverableId: z.string().uuid(), reviewerId: z.
 
 export async function assignReviewer(_prev: ReviewState, fd: FormData): Promise<ReviewState> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only managers can assign reviewers." };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager.assign-reviewers", "Only managers can assign reviewers.") };
   const parsed = AssignSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: "Pick a reviewer." };
+  if (!parsed.success) return { error: actionErrorMessage("pick-a-reviewer", "Pick a reviewer.") };
   if (!(await guardDeliverable(session.orgId, parsed.data.deliverableId)))
-    return { error: "Deliverable not found." };
+    return { error: actionErrorMessage("not-found.deliverable", "Deliverable not found.") };
 
   const supabase = await createClient();
   const { error } = await supabase.from("deliverable_reviewers").insert({

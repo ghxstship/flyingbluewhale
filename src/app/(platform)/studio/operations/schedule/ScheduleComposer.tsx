@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/Button";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { createActivity, type State } from "./actions";
 
+import { resolveActionError } from "@/lib/errors";
 type Option = { id: string; label: string };
 
 const ACTIVITY_KINDS: Array<{ value: string; label: string }> = [
@@ -61,7 +62,7 @@ export function ScheduleComposer({
   const [open, setOpen] = React.useState(false);
   const [state, formAction, pending] = useActionState<State, FormData>(createActivity, null);
   const warning = state && "warning" in state ? state.warning : undefined;
-  const error = state && "error" in state ? state.error : undefined;
+  const error = state && "error" in state && state.error ? resolveActionError(state.error, t) : undefined;
 
   // Close + reset on a clean success (no error, no warning, after a submit).
   const submitted = React.useRef(false);

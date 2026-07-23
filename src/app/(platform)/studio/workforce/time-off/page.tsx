@@ -237,7 +237,7 @@ export default async function TimeOffAdminPage({ searchParams }: { searchParams:
             },
             {
               key: "state",
-              header: t("console.workforce.timeOff.column.state", undefined, "State"),
+              header: t("console.workforce.timeOff.column.state", undefined, "Status"),
               render: (r) => <Badge variant={toneFor(r.request_state)}>{toTitle(r.request_state)}</Badge>,
               accessor: (r) => r.request_state,
               filterable: true,

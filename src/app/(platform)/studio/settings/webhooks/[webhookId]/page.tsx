@@ -85,7 +85,7 @@ export default async function Page({ params }: { params: Promise<{ webhookId: st
                 <tr>
                   <th>{t("console.settings.webhooks.detail.col.when", undefined, "When")}</th>
                   <th>{t("console.settings.webhooks.detail.col.event", undefined, "Event")}</th>
-                  <th>{t("console.settings.webhooks.detail.col.state", undefined, "State")}</th>
+                  <th>{t("console.settings.webhooks.detail.col.state", undefined, "Status")}</th>
                   <th>{t("console.settings.webhooks.detail.col.http", undefined, "HTTP")}</th>
                   <th>{t("console.settings.webhooks.detail.col.attempts", undefined, "Attempts")}</th>
                   <th>{t("console.settings.webhooks.detail.col.error", undefined, "Error")}</th>

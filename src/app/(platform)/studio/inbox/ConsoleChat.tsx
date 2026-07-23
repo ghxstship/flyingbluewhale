@@ -8,6 +8,7 @@ import { RealtimeRefresh } from "@/components/RealtimeRefresh";
 import { CHAT_URL_PATTERN, type RecordRefMap } from "./record-ref-types";
 import { loadEarlierMessages, markRoomRead, sendConsoleMessage, toggleReaction, type State } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export type MessageReaction = { emoji: string; count: number; mine: boolean };
 
 export type ConsoleMessage = {
@@ -76,6 +77,7 @@ export function ConsoleChat({
 }) {
   const [draft, setDraft] = React.useState("");
   const [state, formAction, pending] = useActionState<State, FormData>(sendConsoleMessage, null);
+  const resolveErr = useActionErrorResolver();
   const [optimistic, addOptimistic] = useOptimistic(messages, (cur, next: ConsoleMessage) => [...cur, next]);
   const formRef = React.useRef<HTMLFormElement>(null);
   const endRef = React.useRef<HTMLDivElement>(null);
@@ -274,7 +276,7 @@ export function ConsoleChat({
       </div>
       {state?.error ? (
         <p role="alert" className="pt-2 text-xs text-[var(--p-danger-text)]">
-          {state.error}
+          {resolveErr(state.error)}
         </p>
       ) : null}
       <form

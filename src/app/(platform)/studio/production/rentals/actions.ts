@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { dollarsToCents } from "@/lib/format";
 import { dateRangeRefine } from "@/lib/zod/dateRange";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z
   .object({
@@ -40,7 +41,7 @@ export async function createRentalAction(_: State, fd: FormData): Promise<State>
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!asset) return { error: "Asset not found in your organization" };
+  if (!asset) return { error: actionErrorMessage("not-found.asset-in-org", "Asset not found in your organization") };
   if (parsed.data.project_id) {
     const { data: project } = await supabase
       .from("projects")
@@ -49,7 +50,7 @@ export async function createRentalAction(_: State, fd: FormData): Promise<State>
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!project) return { error: "Project not found in your organization" };
+    if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
   }
 
   const { error } = await supabase.from("rentals").insert({

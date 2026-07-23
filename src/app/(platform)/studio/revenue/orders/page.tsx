@@ -101,7 +101,7 @@ export default async function RevenueOrdersPage() {
               },
               {
                 key: "state",
-                header: t("console.revenue.orders.col.state", undefined, "State"),
+                header: t("console.revenue.orders.col.state", undefined, "Status"),
                 render: (r) => <StatusBadge status={r.order_state} />,
                 accessor: (r) => r.order_state,
                 filterable: true,

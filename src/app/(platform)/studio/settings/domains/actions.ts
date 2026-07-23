@@ -6,6 +6,7 @@ import { promises as dns } from "node:dns";
 import { isAdmin, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const HOSTNAME = /^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}$/i;
 
@@ -26,7 +27,7 @@ export async function addDomainAction(_: State, fd: FormData): Promise<State> {
   // Custom domains drive auto-membership-claim on signup (a verified
   // domain gets new users with that email auto-joined). Only owner/
   // admin can extend the org boundary.
-  if (!isAdmin(session)) return { error: "Only owners and admins can manage domains" };
+  if (!isAdmin(session)) return { error: actionErrorMessage("auth.owner-admin.manage-domains", "Only owners and admins can manage domains") };
   const parsed = AddSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();

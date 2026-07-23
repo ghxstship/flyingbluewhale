@@ -158,7 +158,7 @@ export default async function Page() {
             },
             {
               key: "state",
-              header: t("console.bim.columns.state", undefined, "State"),
+              header: t("console.bim.columns.state", undefined, "Status"),
               render: (r) => <Badge variant={toneFor(r.model_state)}>{toTitle(r.model_state)}</Badge>,
               accessor: (r) => r.model_state,
               filterable: true,

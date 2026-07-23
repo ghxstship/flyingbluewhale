@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   description: z.string().max(500).optional().or(z.literal("")),
@@ -37,7 +38,7 @@ export async function updateTimeEntry(id: string, _: State, fd: FormData): Promi
     billable: parsed.data.billable === "on" || parsed.data.billable === "true",
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Time Entrie not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.time-entrie", "Time Entrie not found.") };
   }
   revalidatePath(`/studio/finance/time/${id}`);
   revalidatePath("/studio/finance/time");

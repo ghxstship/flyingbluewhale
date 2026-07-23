@@ -150,7 +150,7 @@ export default async function Page() {
             },
             {
               key: "state",
-              header: t("console.schedule.baselines.colState", undefined, "State"),
+              header: t("console.schedule.baselines.colState", undefined, "Status"),
               render: (r) => <Badge variant={toneFor(r.baseline_state)}>{toTitle(r.baseline_state)}</Badge>,
               accessor: (r) => r.baseline_state,
               filterable: true,

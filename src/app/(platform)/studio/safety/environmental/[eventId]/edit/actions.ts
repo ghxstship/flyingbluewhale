@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   kind: z.string().min(1).max(60),
@@ -35,7 +36,7 @@ export async function updateEnvEvent(eventId: string, _: State, fd: FormData): P
     ended_at: parsed.data.ended_at || null,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Environmental Event not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.environmental-event", "Environmental Event not found.") };
   }
   revalidatePath(`/studio/safety/environmental/${eventId}`);
   revalidatePath("/studio/safety/environmental");

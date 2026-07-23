@@ -13,6 +13,7 @@ import {
   DialogTitle,
 } from "@/components/ui/Dialog";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 /**
  * RecordActionButton (P0.4) — a declarative action affordance for record
  * detail pages. Two modes:
@@ -57,6 +58,7 @@ type ActionMode = Common & {
 
 export function RecordActionButton(props: LinkMode | ActionMode) {
   const router = useRouter();
+  const resolveErr = useActionErrorResolver();
   const [open, setOpen] = useState(false);
   const [pending, startTransition] = useTransition();
 
@@ -75,7 +77,7 @@ export function RecordActionButton(props: LinkMode | ActionMode) {
       try {
         const res = await action();
         if (res && "error" in res && res.error) {
-          toast.error(res.error);
+          toast.error(resolveErr(res.error));
           return;
         }
         if (successMessage !== null) toast.success(successMessage ?? "Done");

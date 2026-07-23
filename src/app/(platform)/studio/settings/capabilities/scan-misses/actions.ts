@@ -5,6 +5,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { emitAudit } from "@/lib/audit";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = { error?: string; ok?: true } | null;
 
@@ -22,9 +23,9 @@ const ResolveSchema = z.object({ id: z.string().uuid() });
  */
 export async function resolveScanMiss(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "You need manager access to resolve scan misses" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager.resolve-scan-misses", "You need manager access to resolve scan misses") };
   const parsed = ResolveSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: "Invalid request" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.request", "Invalid request") };
 
   const supabase = await createClient();
   const { data: updated, error } = await supabase
@@ -35,7 +36,7 @@ export async function resolveScanMiss(_prev: State, fd: FormData): Promise<State
     .is("resolved_at", null)
     .select("code, seen_count");
   if (error) return { error: error.message };
-  if (!updated || updated.length === 0) return { error: "Miss not found, or already resolved" };
+  if (!updated || updated.length === 0) return { error: actionErrorMessage("miss-not-found-or-already-resolved", "Miss not found, or already resolved") };
 
   await emitAudit({
     actorId: session.userId,

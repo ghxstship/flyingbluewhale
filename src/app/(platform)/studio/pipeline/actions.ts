@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { actionErrorMessage } from "@/lib/errors";
 
 /**
  * Stage transition for the pipeline board (audit A-23) — the server half
@@ -20,7 +21,7 @@ export async function moveOpportunityStage(
     opp: opportunityId,
     stage: stageId,
   });
-  if (!ids.success) return { error: "Invalid ids" };
+  if (!ids.success) return { error: actionErrorMessage("invalid.ids", "Invalid ids") };
   const supabase = await createClient();
 
   const { data: opp } = await supabase
@@ -30,7 +31,7 @@ export async function moveOpportunityStage(
     .eq("kind", "deal")
     .eq("id", ids.data.opp)
     .maybeSingle();
-  if (!opp) return { error: "Deal not found" };
+  if (!opp) return { error: actionErrorMessage("not-found.deal", "Deal not found") };
 
   const { data: stage } = await supabase
     .from("pipeline_stages")
@@ -38,7 +39,7 @@ export async function moveOpportunityStage(
     .eq("id", ids.data.stage)
     .maybeSingle();
   if (!stage || stage.pipeline_id !== opp.pipeline_id) {
-    return { error: "Stage does not belong to this pipeline" };
+    return { error: actionErrorMessage("stage-does-not-belong-to-this-pipeline", "Stage does not belong to this pipeline") };
   }
 
   const { error } = await supabase

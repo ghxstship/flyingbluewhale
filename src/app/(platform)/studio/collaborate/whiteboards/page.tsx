@@ -54,7 +54,7 @@ export default async function WhiteboardsPage() {
             },
             {
               key: "whiteboard_state",
-              header: "State",
+              header: "Status",
               render: (b) => <StatusBadge status={WHITEBOARD_STATE_LABELS[b.whiteboard_state]} />,
               accessor: (b) => b.whiteboard_state,
               sortable: true,

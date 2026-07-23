@@ -19,6 +19,7 @@ import { createCodeAction, revokeCodeAction, type CreateState } from "./actions"
 import type { GuideAccessCode } from "@/lib/db/guide-access";
 import type { GuidePersona } from "@/lib/supabase/types";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 type Redemption = {
   id: string;
   code_id: string;
@@ -46,6 +47,7 @@ export function AccessCodeManager({
     fd.set("persona", persona);
     return createCodeAction(projectId, prev, fd);
   }, null);
+  const resolveErr = useActionErrorResolver();
 
   const [revokeBusy, startRevoke] = useTransition();
   // CN-9 — accessible confirm dialog replaces native confirm(). Holds the
@@ -109,7 +111,7 @@ export function AccessCodeManager({
           </div>
         </div>
         {state && "error" in state && state.error && (
-          <div className="text-sm text-[var(--p-danger)]">{state.error}</div>
+          <div className="text-sm text-[var(--p-danger)]">{resolveErr(state.error)}</div>
         )}
         {state && "ok" in state && state.ok && (
           <div className="surface-raised space-y-2 border border-[var(--p-accent)]/40 p-4">

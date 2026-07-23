@@ -72,7 +72,7 @@ export default async function Page({ params }: { params: Promise<{ venueId: stri
           />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--p-text-2)]">
-              {t("console.venues.edit.fields.handoverState", undefined, "Handover state")}
+              {t("console.venues.edit.fields.handoverState", undefined, "Handover status")}
             </span>
             <select
               name="handover_state"

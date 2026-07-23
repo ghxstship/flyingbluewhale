@@ -9,6 +9,7 @@ import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrenc
 import { XPMS_DEPARTMENTS, XPMS_DISCIPLINES, XPMS_PHASES } from "@/lib/finance/xpms-budget";
 import { formFail } from "@/lib/forms/fail";
 import { moneyCentsString } from "@/app/(platform)/studio/finance/money";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   description: z.string().min(1).max(500),
@@ -51,7 +52,7 @@ export async function updateExpense(id: string, _: State, fd: FormData): Promise
     vendor: parsed.data.vendor || null,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Expense not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.expense", "Expense not found.") };
   }
   revalidatePath(`/studio/finance/expenses/${id}`);
   revalidatePath("/studio/finance/expenses");

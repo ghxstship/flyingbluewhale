@@ -7,6 +7,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { DEPOSIT_PCT_DEFAULT, clampDepositPct } from "@/lib/payment-terms";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   talent_id: z.string().uuid(),
@@ -48,7 +49,7 @@ const toArray = (v: string | undefined): string[] =>
 
 export async function updateTalentAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can edit talent profiles" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.edit-talent-profiles", "Only manager+ can edit talent profiles") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();

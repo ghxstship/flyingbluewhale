@@ -4,6 +4,7 @@ import { useActionState, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { bindGtinToCatalogItem, type BindGtinState } from "@/app/(mobile)/m/check-in/actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 /**
  * Bind a GTIN-shaped miss to a catalog item, right from the queue (kit 30).
  * Reuses the field surface's `bindGtinToCatalogItem` action — one write path
@@ -19,6 +20,7 @@ export function BindMissButton({
   catalogItems: Array<{ id: string; label: string }>;
 }) {
   const [state, formAction, pending] = useActionState<BindGtinState, FormData>(bindGtinToCatalogItem, null);
+  const resolveErr = useActionErrorResolver();
   const [open, setOpen] = useState(false);
 
   if (state?.ok) {
@@ -42,7 +44,7 @@ export function BindMissButton({
       <input type="hidden" name="code" value={code} />
       {state?.error && (
         <span className="text-xs text-[var(--p-danger-text)]" role="alert">
-          {state.error}
+          {resolveErr(state.error)}
         </span>
       )}
       <select name="catalogItemId" className="ps-input ps-input--sm" defaultValue="" required>

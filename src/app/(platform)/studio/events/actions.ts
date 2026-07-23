@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { dateRangeRefine } from "@/lib/zod/dateRange";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { SCHEDULE_EVENT_KINDS } from "@/lib/schedule/kinds";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z
   .object({
@@ -42,7 +43,7 @@ export async function createEventAction(_: State, fd: FormData): Promise<State> 
       .eq("id", parsed.data.location_id)
       .eq("org_id", session.orgId)
       .maybeSingle();
-    if (!location) return { error: "Location not found in your organization" };
+    if (!location) return { error: actionErrorMessage("not-found.location-in-org", "Location not found in your organization") };
   }
   if (parsed.data.project_id) {
     const { data: project } = await supabase
@@ -52,7 +53,7 @@ export async function createEventAction(_: State, fd: FormData): Promise<State> 
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!project) return { error: "Project not found in your organization" };
+    if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
   }
 
   // Sea Trial FINDING-017: stamp `created_by` so the audit panel + ROS
@@ -89,9 +90,9 @@ export type BulkResult = { message?: string; error?: string };
  */
 export async function bulkCancelEvents(ids: string[]): Promise<BulkResult> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "You Need Manager Access To Cancel Events" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager.cancel-events", "You Need Manager Access To Cancel Events") };
   const parsed = BulkIds.safeParse(ids);
-  if (!parsed.success) return { error: "Invalid Selection" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.selection", "Invalid Selection") };
   const supabase = await createClient();
 
   const { data: updated, error } = await supabase

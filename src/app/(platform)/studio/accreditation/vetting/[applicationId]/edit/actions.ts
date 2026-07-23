@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   person_name: z.string().min(1).max(200),
@@ -37,7 +38,7 @@ export async function updateVettingApp(id: string, _: State, fd: FormData): Prom
     valid_to: parsed.data.valid_to || null,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Accreditation not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.accreditation", "Accreditation not found.") };
   }
   revalidatePath(`/studio/accreditation/vetting/${id}`);
   revalidatePath("/studio/accreditation/vetting");

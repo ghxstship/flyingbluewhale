@@ -95,7 +95,7 @@ export function AdvanceDetail({
 
   const fields: RecordField[] = [
     { k: t("m.advances.detail.type", undefined, "Type"), v: data.catalogKindLabel },
-    { k: t("m.advances.detail.state", undefined, "State"), v: stateLabel(data.fulfillmentState) },
+    { k: t("m.advances.detail.state", undefined, "Status"), v: stateLabel(data.fulfillmentState) },
   ];
   if (data.project) fields.push({ k: t("m.advances.detail.project", undefined, "Project"), v: data.project });
   if (data.qty != null) fields.push({ k: t("m.advances.detail.qty", undefined, "Quantity"), v: String(data.qty) });

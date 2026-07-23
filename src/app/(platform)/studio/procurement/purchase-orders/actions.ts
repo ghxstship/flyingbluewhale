@@ -8,6 +8,7 @@ import { dollarsToCents, generateNumber } from "@/lib/format";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { emitAudit } from "@/lib/audit";
 import { routeToApprovals } from "@/lib/approvals/route";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   title: z.string().min(1),
@@ -26,7 +27,7 @@ export type State = {
 export async function createPoAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   // POs commit money to vendors — manager+ only at the app layer.
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create purchase orders" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-purchase-orders", "Only manager+ can create purchase orders") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -44,7 +45,7 @@ export async function createPoAction(_: State, fd: FormData): Promise<State> {
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!project) return { error: "Project not found in your organization" };
+    if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
   }
   if (vendorId) {
     const { data: vendor } = await supabase
@@ -54,7 +55,7 @@ export async function createPoAction(_: State, fd: FormData): Promise<State> {
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!vendor) return { error: "Vendor not found in your organization" };
+    if (!vendor) return { error: actionErrorMessage("not-found.vendor-in-org", "Vendor not found in your organization") };
   }
 
   const { data, error } = await supabase
@@ -90,7 +91,7 @@ export async function setPoStatusAction(
   status: "draft" | "sent" | "acknowledged" | "fulfilled" | "cancelled",
 ) {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can change PO status" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.change-po-status", "Only manager+ can change PO status") };
   const supabase = await createClient();
   // Read current status so we can validate the transition + scope the
   // conditional update — without it a stale UI could move fulfilled
@@ -101,7 +102,7 @@ export async function setPoStatusAction(
     .eq("org_id", session.orgId)
     .eq("id", id)
     .maybeSingle();
-  if (!row) return { error: "Purchase order not found" };
+  if (!row) return { error: actionErrorMessage("not-found.purchase-order", "Purchase order not found") };
   const current = row.po_state as string;
   const allowed = PO_TRANSITIONS[current] ?? [];
   if (!allowed.includes(status)) {
@@ -115,7 +116,7 @@ export async function setPoStatusAction(
     .eq("po_state", current as "draft")
     .select("id");
   if (error) return { error: error.message };
-  if (!updated || updated.length === 0) return { error: "PO status changed concurrently. Refresh and retry" };
+  if (!updated || updated.length === 0) return { error: actionErrorMessage("concurrency.po-status", "PO status changed concurrently. Refresh and retry") };
   revalidatePath(`/studio/procurement/purchase-orders/${id}`);
   revalidatePath("/studio/procurement/purchase-orders");
   return { ok: true as const };
@@ -131,7 +132,7 @@ export type RoutePoState = { error?: string } | null;
  */
 export async function routePoToApprovalsAction(poId: string): Promise<RoutePoState> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can route purchase orders to approvals" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.route-purchase-orders-to-approvals", "Only manager+ can route purchase orders to approvals") };
 
   const supabase = await createClient();
   const { data: po } = await supabase
@@ -141,7 +142,7 @@ export async function routePoToApprovalsAction(poId: string): Promise<RoutePoSta
     .eq("id", poId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!po) return { error: "Purchase order not found" };
+  if (!po) return { error: actionErrorMessage("not-found.purchase-order", "Purchase order not found") };
   if (po.po_state !== "draft" && po.po_state !== "sent") {
     return { error: `Only draft or sent purchase orders can be routed (currently ${po.po_state})` };
   }
@@ -181,9 +182,9 @@ export type BulkResult = { message?: string; error?: string };
  */
 export async function bulkSendPos(ids: string[]): Promise<BulkResult> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "You Need Manager Access To Send Purchase Orders" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager.send-purchase-orders", "You Need Manager Access To Send Purchase Orders") };
   const parsed = BulkIds.safeParse(ids);
-  if (!parsed.success) return { error: "Invalid Selection" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.selection", "Invalid Selection") };
   const supabase = await createClient();
   const { data: updated, error } = await supabase
     .from("purchase_orders")
@@ -207,9 +208,9 @@ export async function bulkSendPos(ids: string[]): Promise<BulkResult> {
  */
 export async function bulkCancelPos(ids: string[]): Promise<BulkResult> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "You Need Manager Access To Cancel Purchase Orders" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager.cancel-purchase-orders", "You Need Manager Access To Cancel Purchase Orders") };
   const parsed = BulkIds.safeParse(ids);
-  if (!parsed.success) return { error: "Invalid Selection" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.selection", "Invalid Selection") };
   const supabase = await createClient();
   const { data: updated, error } = await supabase
     .from("purchase_orders")

@@ -5,6 +5,7 @@ import { useActionState } from "react";
 import { toast } from "@/lib/hooks/useToast";
 import { decideTimeOff, type DecideState } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 /**
  * Approve / Deny pair for a pending time-off row. Client island so RPC
  * failures (e.g. insufficient balance) surface as a toast instead of
@@ -30,11 +31,12 @@ export function DecideTimeOffButtons({
   cancelLabel?: string;
 }) {
   const [state, formAction, pending] = useActionState<DecideState, FormData>(decideTimeOff, null);
+  const resolveErr = useActionErrorResolver();
   const [denying, setDenying] = React.useState(false);
 
   React.useEffect(() => {
-    if (state?.error) toast.error(state.error);
-  }, [state]);
+    if (state?.error) toast.error(resolveErr(state.error));
+  }, [state, resolveErr]);
 
   if (denying) {
     return (

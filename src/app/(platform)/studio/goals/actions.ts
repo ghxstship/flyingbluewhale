@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { GOAL_STATES, KR_STATES } from "@/lib/goals";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = {
   error?: string;
@@ -29,7 +30,7 @@ const GoalSchema = z.object({
 
 export async function createGoalAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create goals" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-goals", "Only manager+ can create goals") };
   const parsed = GoalSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const d = parsed.data;
@@ -54,7 +55,7 @@ export async function createGoalAction(_: State, fd: FormData): Promise<State> {
 
 export async function updateGoalAction(id: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can edit goals" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.edit-goals", "Only manager+ can edit goals") };
   const parsed = GoalSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const d = parsed.data;
@@ -125,7 +126,7 @@ const KeyResultSchema = z.object({
 
 export async function createKeyResultAction(goalId: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can add key results" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.add-key-results", "Only manager+ can add key results") };
   const parsed = KeyResultSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const d = parsed.data;
@@ -138,7 +139,7 @@ export async function createKeyResultAction(goalId: string, _: State, fd: FormDa
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!goal) return { error: "Goal not found" };
+  if (!goal) return { error: actionErrorMessage("not-found.goal", "Goal not found") };
   const { error } = await db.from("key_results").insert({
     org_id: session.orgId,
     goal_id: goalId,
@@ -162,7 +163,7 @@ export async function updateKeyResultAction(
   fd: FormData,
 ): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can update key results" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.update-key-results", "Only manager+ can update key results") };
   const parsed = KeyResultSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const d = parsed.data;

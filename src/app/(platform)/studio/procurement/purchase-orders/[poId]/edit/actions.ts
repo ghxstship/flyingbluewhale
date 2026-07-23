@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   title: z.string().min(1).max(200),
@@ -35,7 +36,7 @@ export async function updatePurchaseOrder(id: string, _: State, fd: FormData): P
     currency: parsed.data.currency,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Purchase Order not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.purchase-order-2", "Purchase Order not found.") };
   }
   revalidatePath(`/studio/procurement/purchase-orders/${id}`);
   revalidatePath("/studio/procurement/purchase-orders");

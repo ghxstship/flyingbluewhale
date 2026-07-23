@@ -6,6 +6,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { computeEstimateTotals } from "@/lib/db/estimates";
 import { emitAudit } from "@/lib/audit";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type ConvertEstimateState = { error?: string } | null;
 
@@ -20,7 +21,7 @@ export type ConvertEstimateState = { error?: string } | null;
  */
 export async function convertEstimateToBudgetAction(estimateId: string): Promise<ConvertEstimateState> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can convert estimates" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.convert-estimates", "Only manager+ can convert estimates") };
 
   const supabase = await createClient();
   const { data: estimate, error: loadError } = await supabase
@@ -31,7 +32,7 @@ export async function convertEstimateToBudgetAction(estimateId: string): Promise
     .is("deleted_at", null)
     .maybeSingle();
   if (loadError) return { error: loadError.message };
-  if (!estimate) return { error: "Estimate not found" };
+  if (!estimate) return { error: actionErrorMessage("not-found.estimate", "Estimate not found") };
   if (estimate.estimate_state !== "won") {
     return { error: `Estimate must be won before conversion (currently ${estimate.estimate_state})` };
   }

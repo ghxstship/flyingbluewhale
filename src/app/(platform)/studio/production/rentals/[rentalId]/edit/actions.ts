@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { dateRangeRefine } from "@/lib/zod/dateRange";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z
   .object({
@@ -38,7 +39,7 @@ export async function updateRental(id: string, _: State, fd: FormData): Promise<
     notes: parsed.data.notes || null,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Rental not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.rental", "Rental not found.") };
   }
   revalidatePath(`/studio/production/rentals/${id}`);
   revalidatePath("/studio/production/rentals");

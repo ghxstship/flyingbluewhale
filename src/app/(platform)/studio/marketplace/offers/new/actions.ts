@@ -9,6 +9,7 @@ import { actionFail, formFail } from "@/lib/forms/fail";
 import { writeInbox } from "@/lib/inbox";
 import { log } from "@/lib/log";
 import { DEPOSIT_PCT_DEFAULT, BALANCE_TERMS_DEFAULT, clampDepositPct } from "@/lib/payment-terms";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   talent_profile_id: z.string().uuid(),
@@ -36,12 +37,12 @@ export async function createOfferAction(_: State, fd: FormData): Promise<State> 
   const session = await requireSession();
   // Booking offers commit a fee + appear on the recipient's portal —
   // manager+ at the app layer.
-  if (!isManagerPlus(session)) return { error: "Only manager+ can send booking offers" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.send-booking-offers", "Only manager+ can send booking offers") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
   const feeCents = Math.round(Number(parsed.data.fee.replace(/[$,]/g, "")) * 100);
-  if (!Number.isFinite(feeCents) || feeCents <= 0) return { error: "Invalid fee" };
+  if (!Number.isFinite(feeCents) || feeCents <= 0) return { error: actionErrorMessage("invalid.fee", "Invalid fee") };
 
   // Cross-tenant FK guards on talent_profile_id (required) +
   // project_id (optional). The talent profile is the load-bearing
@@ -54,7 +55,7 @@ export async function createOfferAction(_: State, fd: FormData): Promise<State> 
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!talent) return { error: "Talent profile not found in your organization" };
+  if (!talent) return { error: actionErrorMessage("not-found.talent-profile-in-org", "Talent profile not found in your organization") };
 
   const projectId = parsed.data.project_id || null;
   if (projectId) {
@@ -65,7 +66,7 @@ export async function createOfferAction(_: State, fd: FormData): Promise<State> 
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!project) return { error: "Project not found in your organization" };
+    if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
   }
 
   const { data, error } = await supabase
@@ -155,7 +156,7 @@ async function notifyTalentOfTransition(args: {
 export async function sendOfferAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Transition.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: "Missing offer" };
+  if (!parsed.success) return { error: actionErrorMessage("missing.offer", "Missing offer") };
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("talent_offers")
@@ -165,7 +166,7 @@ export async function sendOfferAction(_: State, fd: FormData): Promise<State> {
     .eq("talent_offer_state", "draft")
     .select("id");
   if (error) return { error: error.message };
-  if (!data || data.length === 0) return { error: "Offer can't be sent from its current state" };
+  if (!data || data.length === 0) return { error: actionErrorMessage("offer-can-t-be-sent-from-its-current-state", "Offer can't be sent from its current state") };
   await notifyTalentOfTransition({
     offerId: parsed.data.offer_id,
     orgId: session.orgId,
@@ -180,7 +181,7 @@ export async function sendOfferAction(_: State, fd: FormData): Promise<State> {
 export async function acceptOfferAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Transition.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: "Missing offer" };
+  if (!parsed.success) return { error: actionErrorMessage("missing.offer", "Missing offer") };
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("talent_offers")
@@ -190,7 +191,7 @@ export async function acceptOfferAction(_: State, fd: FormData): Promise<State> 
     .in("talent_offer_state", ["sent", "countered"])
     .select("id");
   if (error) return { error: error.message };
-  if (!data || data.length === 0) return { error: "Offer can only be accepted from sent or countered" };
+  if (!data || data.length === 0) return { error: actionErrorMessage("offer-can-only-be-accepted-from-sent-or-countered", "Offer can only be accepted from sent or countered") };
   await notifyTalentOfTransition({
     offerId: parsed.data.offer_id,
     orgId: session.orgId,
@@ -205,7 +206,7 @@ export async function acceptOfferAction(_: State, fd: FormData): Promise<State> 
 export async function declineOfferAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const parsed = Transition.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: "Missing offer" };
+  if (!parsed.success) return { error: actionErrorMessage("missing.offer", "Missing offer") };
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("talent_offers")
@@ -215,7 +216,7 @@ export async function declineOfferAction(_: State, fd: FormData): Promise<State>
     .in("talent_offer_state", ["sent", "countered"])
     .select("id");
   if (error) return { error: error.message };
-  if (!data || data.length === 0) return { error: "Only a sent or countered offer can be declined" };
+  if (!data || data.length === 0) return { error: actionErrorMessage("only-a-sent-or-countered-offer-can-be-declined", "Only a sent or countered offer can be declined") };
   await notifyTalentOfTransition({
     offerId: parsed.data.offer_id,
     orgId: session.orgId,

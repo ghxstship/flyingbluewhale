@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { env } from "@/lib/env";
 import { httpFetch } from "@/lib/http";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const NumStr = z.string().optional().or(z.literal(""));
 const toCents = (v: string | undefined): number => {
@@ -49,7 +50,7 @@ export type State = {
 export async function upsertSettlementAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   // Show settlement records BO numbers + payouts — manager+ only.
-  if (!isManagerPlus(session)) return { error: "Only manager+ can edit settlement records" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.edit-settlement-records", "Only manager+ can edit settlement records") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -61,7 +62,7 @@ export async function upsertSettlementAction(_: State, fd: FormData): Promise<St
     .eq("id", parsed.data.offer_id)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  if (!offer) return { error: "Deal not found in your organization" };
+  if (!offer) return { error: actionErrorMessage("not-found.deal-in-org", "Deal not found in your organization") };
 
   const payload = {
     org_id: session.orgId,
@@ -101,9 +102,9 @@ export async function upsertSettlementAction(_: State, fd: FormData): Promise<St
 export async function finalizeSettlementAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   // Finalize fires the Stripe transfer — manager+ only.
-  if (!isManagerPlus(session)) return { error: "Only manager+ can finalize settlements" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.finalize-settlements", "Only manager+ can finalize settlements") };
   const offerId = String(fd.get("offer_id") ?? "");
-  if (!offerId) return { error: "Missing deal" };
+  if (!offerId) return { error: actionErrorMessage("missing.deal", "Missing deal") };
   const supabase = await createClient();
 
   // Read settlement to inspect payout destination + balance + currency.
@@ -116,7 +117,7 @@ export async function finalizeSettlementAction(_: State, fd: FormData): Promise<
     .eq("talent_offer_id", offerId)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  if (!settlementResp.data) return { error: "Settlement not found" };
+  if (!settlementResp.data) return { error: actionErrorMessage("not-found.settlement", "Settlement not found") };
   const s = settlementResp.data as {
     id: string;
     settlement_state: string;
@@ -125,7 +126,7 @@ export async function finalizeSettlementAction(_: State, fd: FormData): Promise<
     currency: string;
     stripe_transfer_id: string | null;
   };
-  if (s.settlement_state === "final") return { error: "Settlement already final" };
+  if (s.settlement_state === "final") return { error: actionErrorMessage("settlement-already-final", "Settlement already final") };
 
   // Stripe Connect transfer — only fire when:
   //   1. STRIPE_SECRET_KEY is configured (graceful no-op locally)
@@ -175,7 +176,7 @@ export async function finalizeSettlementAction(_: State, fd: FormData): Promise<
     .select("id");
   if (error) return { error: error.message };
   if (!updated || updated.length === 0) {
-    return { error: "Settlement was finalized concurrently. Refresh and retry" };
+    return { error: actionErrorMessage("concurrency.settlement", "Settlement was finalized concurrently. Refresh and retry") };
   }
   revalidatePath(`/studio/bookings/deals/${offerId}/settlement`);
   return { ok: true };

@@ -87,7 +87,7 @@ export default async function PromotersPage() {
             },
             {
               key: "state",
-              header: "State",
+              header: "Status",
               render: (r) => <StatusBadge status={r.promoter_state} />,
               accessor: (r) => r.promoter_state,
             },

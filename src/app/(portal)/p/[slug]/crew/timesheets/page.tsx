@@ -78,7 +78,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               <th>{t("p.crew.timesheets.col.period", undefined, "Period")}</th>
               <th>{t("p.crew.timesheets.col.hours", undefined, "Hours")}</th>
               <th>{t("p.crew.timesheets.col.billable", undefined, "Billable")}</th>
-              <th>{t("p.crew.timesheets.col.state", undefined, "State")}</th>
+              <th>{t("p.crew.timesheets.col.state", undefined, "Status")}</th>
             </tr>
           </thead>
           <tbody>

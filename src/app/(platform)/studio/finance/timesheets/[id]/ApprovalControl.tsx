@@ -7,6 +7,7 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 import { TIMESHEET_DECISION_LABEL, type TimesheetDecision } from "@/lib/db/timesheets";
 import { decideTimesheet, type State } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 /**
  * Manager-only approval state-machine control. Renders one decision per
  * allowed transition for the timesheet's current state; submitting writes a
@@ -22,6 +23,7 @@ export function ApprovalControl({
   const t = useT();
   const action = decideTimesheet.bind(null, timesheetId);
   const [state, formAction, pending] = useActionState<State, FormData>(action, null);
+  const resolveErr = useActionErrorResolver();
 
   if (decisions.length === 0) {
     return (
@@ -57,7 +59,7 @@ export function ApprovalControl({
           placeholder={t("console.finance.timesheets.review.notesPlaceholder", undefined, "Reason or context…")}
         />
       </div>
-      {state && "error" in state && state.error && <Alert kind="error">{state.error}</Alert>}
+      {state && "error" in state && state.error && <Alert kind="error">{resolveErr(state.error)}</Alert>}
       <div className="flex justify-end">
         <Button type="submit" loading={pending}>
           {t("console.finance.timesheets.review.submit", undefined, "Record decision")}

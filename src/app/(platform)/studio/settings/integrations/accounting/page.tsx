@@ -175,7 +175,7 @@ export default async function Page() {
             },
             {
               key: "state",
-              header: t("console.settings.integrations.accounting.column.state", undefined, "State"),
+              header: t("console.settings.integrations.accounting.column.state", undefined, "Status"),
               render: (r) => <Badge variant={STATE_TONE[r.connection_state]}>{toTitle(r.connection_state)}</Badge>,
               accessor: (r) => r.connection_state,
               filterable: true,

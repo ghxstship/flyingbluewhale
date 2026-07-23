@@ -9,6 +9,7 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { parseActionItems, type ActionItem } from "@/lib/meeting-notes";
 import { summarizeTranscript } from "@/lib/ai/meeting-summary";
+import { actionErrorMessage } from "@/lib/errors";
 
 const CreateSchema = z.object({
   title: z.string().min(1).max(200),
@@ -44,7 +45,7 @@ async function loadNote(supabase: LooseSupabase, orgId: string, id: string): Pro
 
 export async function createNote(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "You do not have permission to create meeting notes." };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("you-do-not-have-permission-to-create-meeting-notes", "You do not have permission to create meeting notes.") };
   const parsed = CreateSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = (await createClient()) as unknown as LooseSupabase;
@@ -57,7 +58,7 @@ export async function createNote(_: State, fd: FormData): Promise<State> {
       .eq("org_id", session.orgId)
       .eq("event_kind", "meeting")
       .maybeSingle();
-    if (!meeting) return { error: "Meeting not found in your organization" };
+    if (!meeting) return { error: actionErrorMessage("not-found.meeting-in-org", "Meeting not found in your organization") };
   }
 
   const { data: row, error } = await supabase

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { generateWebhookSecretAction, type State } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 /**
  * Inbound-webhook configuration block — Phase 4.3.
  *
@@ -28,6 +29,7 @@ export function WebhookSection({
     generateWebhookSecretAction.bind(null, automationId),
     null,
   );
+  const resolveErr = useActionErrorResolver();
   const [pending, startTransition] = useTransition();
   const t = useT();
 
@@ -77,7 +79,7 @@ export function WebhookSection({
         </form>
       </div>
 
-      {state?.error && <p className="mt-2 text-xs text-[var(--p-danger)]">{state.error}</p>}
+      {state?.error && <p className="mt-2 text-xs text-[var(--p-danger)]">{resolveErr(state.error)}</p>}
       {state?.ok && (
         <p className="mt-2 text-xs text-[var(--p-success)]">
           {t(

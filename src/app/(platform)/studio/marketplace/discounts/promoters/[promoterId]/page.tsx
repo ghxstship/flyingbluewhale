@@ -114,7 +114,7 @@ export default async function PromoterDetail({ params }: { params: Promise<{ pro
         </div>
 
         <div className="metric-grid">
-          <Field label="State">
+          <Field label="Status">
             <StatusBadge status={promoter.promoter_state} />
           </Field>
           <Field label="Email">{promoter.email ?? "—"}</Field>

@@ -6859,7 +6859,7 @@
    },
    "detail": {
     "type": "Type",
-    "state": "State",
+    "state": "Status",
     "project": "Project",
     "qty": "Quantity",
     "due": "Due",
@@ -8885,7 +8885,7 @@
    "empty": "No tickets yet",
    "columns": {
     "tier": "Tier",
-    "state": "State",
+    "state": "Status",
     "issued": "Issued",
     "redeemed": "Redeemed"
    }
@@ -9088,7 +9088,7 @@
     "columns": {
      "person": "Person",
      "barcode": "Barcode",
-     "state": "State"
+     "state": "Status"
     },
     "sheet": {
      "title": "Print Sheet",
@@ -9143,7 +9143,7 @@
      "eyebrow": "Vetting Application",
      "personName": "Person Name",
      "email": "Email",
-     "vettingState": "Vetting state",
+     "vettingState": "Vetting status",
      "validFrom": "Valid From",
      "validTo": "Valid To"
     },
@@ -9209,7 +9209,7 @@
    "noRecentProjects": "No Recent Projects",
    "columns": {
     "name": "Name",
-    "state": "State",
+    "state": "Status",
     "start": "Start",
     "end": "End"
    }
@@ -9702,7 +9702,7 @@
     "discipline": "Discipline",
     "size": "Size",
     "version": "Version",
-    "state": "State"
+    "state": "Status"
    },
    "edit": {
     "eyebrow": "Creative · BIM",
@@ -10047,7 +10047,7 @@
     "captured": "Captured",
     "panos": "Panos",
     "sqft": "Sq Ft",
-    "state": "State"
+    "state": "Status"
    }
   },
   "clients": {
@@ -10110,7 +10110,7 @@
     "emptyLabel": "No Projects",
     "columns": {
      "name": "Name",
-     "state": "State",
+     "state": "Status",
      "start": "Start",
      "end": "End",
      "budget": "Budget"
@@ -10379,7 +10379,7 @@
     "emptyLabel": "No announcements yet",
     "columns": {
      "title": "Title",
-     "state": "State",
+     "state": "Status",
      "audience": "Audience",
      "pinned": "Pinned"
     },
@@ -10416,7 +10416,7 @@
     "emptyLabel": "No polls yet",
     "col": {
      "question": "Question",
-     "state": "State",
+     "state": "Status",
      "audience": "Audience"
     }
    },
@@ -10463,7 +10463,7 @@
     "emptyLabel": "No surveys yet",
     "columns": {
      "title": "Title",
-     "state": "State",
+     "state": "Status",
      "audience": "Audience",
      "anon": "Anon"
     }
@@ -10593,7 +10593,7 @@
     "columnTitle": "Title",
     "columnType": "Type",
     "columnRev": "Rev at Publish",
-    "columnDocState": "Doc State",
+    "columnDocState": "Doc Status",
     "selectSheet": "Select a sheet…",
     "addSheet": "+ Add Sheet",
     "edit": "Edit",
@@ -10632,7 +10632,7 @@
     "discipline": "Discipline",
     "currentVersion": "Current Version",
     "sheets": "Sheets",
-    "state": "State"
+    "state": "Status"
    },
    "none": "none",
    "edit": {
@@ -10714,7 +10714,7 @@
     "provider": "Provider",
     "signers": "Signers",
     "sent": "Sent",
-    "state": "State"
+    "state": "Status"
    },
    "stateControls": {
     "toast": {
@@ -10805,7 +10805,7 @@
     "markup": "Markup",
     "subtotal": "Subtotal",
     "total": "Total",
-    "state": "State"
+    "state": "Status"
    },
    "edit": {
     "eyebrow": "Creative",
@@ -10813,7 +10813,7 @@
     "submit": "Save Changes",
     "fields": {
      "name": "Name",
-     "state": "State",
+     "state": "Status",
      "defaultMarkupPct": "Default markup %",
      "defaultMarkupHint": "Stored as a fraction (0.07 = 7%).",
      "defaultWasteFactor": "Default waste factor",
@@ -10828,7 +10828,7 @@
      "estimates": "Estimates"
     },
     "field": {
-     "state": "State",
+     "state": "Status",
      "markup": "Markup",
      "waste": "Waste factor",
      "subtotal": "Subtotal",
@@ -10929,7 +10929,7 @@
      "date": "Date",
      "amount": "Amount",
      "confidence": "Conf",
-     "state": "State"
+     "state": "Status"
     },
     "detail": {
      "untitled": "Extraction",
@@ -11143,7 +11143,7 @@
     "detail": {
      "eyebrow": "Finance · Entity",
      "metric": {
-      "state": "State",
+      "state": "Status",
       "method": "Method",
       "ownership": "Ownership",
       "invoices": "Invoices",
@@ -11171,7 +11171,7 @@
       "taxId": "Tax ID / EIN",
       "parentEntity": "Parent Entity (Consolidates Into)",
       "consolidationMethod": "Consolidation Method",
-      "consolidationState": "Consolidation State",
+      "consolidationState": "Consolidation Status",
       "effectiveFrom": "Effective From",
       "effectiveTo": "Effective To",
       "ownershipPct": "Ownership % of This Entity in Parent"
@@ -11200,7 +11200,7 @@
     "colJurisdiction": "Jurisdiction",
     "colMethod": "Method",
     "colOwnership": "Ownership",
-    "colState": "State",
+    "colState": "Status",
     "edit": {
      "eyebrow": "Finance",
      "title": "Edit Legal Entity"
@@ -11485,7 +11485,7 @@
      "project": "Project",
      "amount": "Amount",
      "through": "Through",
-     "state": "State"
+     "state": "Status"
     }
    },
    "mileage": {
@@ -11663,7 +11663,7 @@
      "state": "State",
      "hours": "Hours",
      "gross": "Gross",
-     "runState": "State",
+     "runState": "Status",
      "export": "Export"
     },
     "exportPdf": "PDF",
@@ -11676,7 +11676,7 @@
     },
     "detail": {
      "eyebrow": "Accounting Period",
-     "stateHeading": "State",
+     "stateHeading": "Status",
      "frozenLabel": "Period frozen.",
      "fullLogLink": "Full log →",
      "noTransitions": "No transitions logged yet.",
@@ -11709,7 +11709,7 @@
     "cols": {
      "label": "Label",
      "range": "Range",
-     "state": "State",
+     "state": "Status",
      "closed": "Closed"
     },
     "empty": {
@@ -11899,7 +11899,7 @@
      "eyebrow": "Finance",
      "fields": {
       "worker": "Worker",
-      "state": "State",
+      "state": "Status",
       "period": "Period",
       "totalHours": "Total hours",
       "billableHours": "Billable hours",
@@ -11924,7 +11924,7 @@
      "period": "Period",
      "hours": "Hours",
      "amount": "Amount",
-     "state": "State"
+     "state": "Status"
     }
    },
    "accounts": {
@@ -12705,7 +12705,7 @@
       "trigger": "Trigger",
       "due": "Due",
       "payment": "Payment",
-      "state": "State",
+      "state": "Status",
       "paymentUsd": "Payment (USD)",
       "kind": "Kind",
       "description": "Description",
@@ -12770,7 +12770,7 @@
      "number": "Number",
      "title": "Title",
      "kind": "Kind",
-     "state": "State",
+     "state": "Status",
      "counterparty": "Counterparty",
      "value": "Value",
      "endAt": "Ends"
@@ -13173,7 +13173,7 @@
    },
    "offers": {
     "controls": {
-     "stateHeading": "State",
+     "stateHeading": "Status",
      "sendOffer": "Send Offer",
      "markAccepted": "Mark Accepted",
      "decline": "Decline"
@@ -13642,7 +13642,7 @@
     "when": "When",
     "people": "People",
     "openActs": "Open Acts",
-    "state": "State"
+    "state": "Status"
    },
    "description": "A lens over the master schedule: every event with type Meeting. Action items added to a meeting auto-create a task for the assignee. Closure is bidirectional via meeting_action_items.task_id.",
    "fullSchedule": "Full Schedule"
@@ -14992,7 +14992,7 @@
      "emptyLabel": "No Bid Responses",
      "columns": {
       "vendor": "Vendor",
-      "state": "State",
+      "state": "Status",
       "total": "Total",
       "delta": "Δ vs lowest",
       "submitted": "Submitted"
@@ -15105,7 +15105,7 @@
      "metricAvgBid": "Avg Bid",
      "emptyLabel": "No Responses Yet",
      "colVendor": "Vendor",
-     "colState": "State",
+     "colState": "Status",
      "colTotal": "Total",
      "colSubmitted": "Submitted",
      "colAwarded": "Awarded",
@@ -15331,7 +15331,7 @@
      "awarded": "Awarded",
      "invitees": "Invitees",
      "vendor": "Vendor",
-     "state": "State",
+     "state": "Status",
      "notes": "Notes",
      "award": "Award",
      "addVendorPlaceholder": "Add vendor",
@@ -16093,7 +16093,7 @@
      "columns": {
       "title": "Title",
       "party": "Party",
-      "state": "State",
+      "state": "Status",
       "due": "Due",
       "updated": "Updated",
       "kind": "Kind"
@@ -16203,7 +16203,7 @@
       "save": "Save Vehicle Details"
      },
      "advanceState": {
-      "title": "Advance State"
+      "title": "Advance Status"
      },
      "reassign": {
       "title": "Reassign"
@@ -16282,7 +16282,7 @@
     "submit": "Save Changes",
     "fields": {
      "name": "Name",
-     "state": "State",
+     "state": "Status",
      "startDate": "Start Date",
      "endDate": "End Date",
      "client": "Client",
@@ -16520,7 +16520,7 @@
     },
     "archive": "Archive",
     "fields": {
-     "state": "State",
+     "state": "Status",
      "slug": "Slug",
      "start": "Start",
      "end": "End",
@@ -16727,7 +16727,7 @@
    "columns": {
     "name": "Name",
     "slug": "Slug",
-    "state": "State",
+    "state": "Status",
     "start": "Start",
     "end": "End",
     "updated": "Updated"
@@ -17788,7 +17788,7 @@
     "colActivities": "Activities",
     "colSource": "Source",
     "sourceNative": "Native",
-    "colState": "State"
+    "colState": "Status"
    },
    "title": "Schedule",
    "configureSupabase": "Configure Supabase.",
@@ -18335,7 +18335,7 @@
       "displayName": "Display Name",
       "tenant": "Tenant",
       "lastSync": "Last Sync",
-      "state": "State"
+      "state": "Status"
      },
      "detail": {
       "eyebrow": "Accounting · {system}",
@@ -18344,7 +18344,7 @@
       "system": "System",
       "displayName": "Display Name",
       "tenant": "Tenant",
-      "state": "State",
+      "state": "Status",
       "lastSyncLabel": "Last Sync",
       "created": "Created",
       "lastError": "Last Error",
@@ -18629,7 +18629,7 @@
      "protocol": "Protocol",
      "emailDomains": "Email domains",
      "supabaseId": "Supabase ID",
-     "state": "State"
+     "state": "Status"
     },
     "unlinked": "unlinked",
     "enabled": "Enabled",
@@ -18667,7 +18667,7 @@
      "name": "Name",
      "center": "Center",
      "radius": "Radius",
-     "state": "State"
+     "state": "Status"
     }
    },
    "webhooks": {
@@ -18696,7 +18696,7 @@
      "col": {
       "when": "When",
       "event": "Event",
-      "state": "State",
+      "state": "Status",
       "http": "HTTP",
       "attempts": "Attempts",
       "error": "Error"
@@ -18737,7 +18737,7 @@
     "col": {
      "url": "URL",
      "events": "Events",
-     "state": "State",
+     "state": "Status",
      "lastDelivery": "Last delivery",
      "failures": "Failures"
     },
@@ -18932,7 +18932,7 @@
     "title": "Title",
     "type": "Type",
     "class": "Class",
-    "state": "State",
+    "state": "Status",
     "rev": "Rev",
     "venueProject": "Venue / Project"
    },
@@ -19013,7 +19013,7 @@
     "division": "Division",
     "project": "Project",
     "format": "Format",
-    "state": "State"
+    "state": "Status"
    },
    "edit": {
     "eyebrow": "Creative · Specs",
@@ -19116,7 +19116,7 @@
    "detail": {
     "noCadence": "No cadence",
     "eyebrow": "Subscription",
-    "state": "State",
+    "state": "Status",
     "allowedNext": "Allowed next:",
     "lifecycleTimeline": "Lifecycle Timeline",
     "fullTransitionsLog": "Full transitions log →",
@@ -19151,7 +19151,7 @@
     "party": "Party (optional UUID)",
     "renewalCadence": "Renewal Cadence (months)",
     "renewalCadencePlaceholder": "e.g. 12",
-    "trialDays": "Trial Days · Optional · Starts as TRIAL State",
+    "trialDays": "Trial Days · Optional · Starts as TRIAL Status",
     "trialDaysPlaceholder": "e.g. 14",
     "submit": "Create Subscription"
    },
@@ -19162,7 +19162,7 @@
    "columns": {
     "label": "Label",
     "kind": "Kind",
-    "state": "State",
+    "state": "Status",
     "cadence": "Cadence",
     "started": "Started"
    },
@@ -19485,7 +19485,7 @@
     "project": "Project",
     "sent": "Sent",
     "due": "Due",
-    "state": "State"
+    "state": "Status"
    }
   },
   "transport": {
@@ -19751,7 +19751,7 @@
      "kind": "Kind",
      "cluster": "Cluster",
      "capacity": "Capacity",
-     "handoverState": "Handover state"
+     "handoverState": "Handover status"
     }
    },
    "handover": {
@@ -19915,7 +19915,7 @@
     "start": "Start",
     "end": "End",
     "months": "Months",
-    "state": "State"
+    "state": "Status"
    }
   },
   "workforce": {
@@ -20107,7 +20107,7 @@
     "emptyLabel": "No flows yet",
     "col": {
      "name": "Name",
-     "state": "State",
+     "state": "Status",
      "role": "Role"
     }
    },
@@ -20211,7 +20211,7 @@
      "fields": {
       "name": "Name",
       "dayOf": "Day Of",
-      "state": "State"
+      "state": "Status"
      },
      "state": {
       "draft": "draft",
@@ -20238,7 +20238,7 @@
       "label": "Day Of"
      },
      "state": {
-      "label": "State",
+      "label": "Status",
       "draft": "Draft",
       "published": "Published",
       "locked": "Locked"
@@ -20255,7 +20255,7 @@
     "col": {
      "name": "Name",
      "day": "Day",
-     "state": "State"
+     "state": "Status"
     }
    },
    "services": {
@@ -20291,7 +20291,7 @@
      "role": "Role",
      "venue": "Venue",
      "reason": "Reason",
-     "state": "State",
+     "state": "Status",
      "action": "Action"
     },
     "action": {
@@ -20356,7 +20356,7 @@
      "window": "Window",
      "hours": "Hours",
      "reason": "Reason",
-     "state": "State",
+     "state": "Status",
      "action": "Action"
     },
     "action": {
@@ -20487,7 +20487,7 @@
      "class": "Class",
      "xtc": "XTC",
      "phase": "Phase",
-     "state": "State",
+     "state": "Status",
      "qty": "Qty"
     },
     "filter": {
@@ -20518,7 +20518,7 @@
       "identifier": "Identifier",
       "name": "Name",
       "phase": "Phase",
-      "state": "State"
+      "state": "Status"
      }
     },
     "title": "Classes",
@@ -20663,7 +20663,7 @@
    "colTrigger": "Trigger",
    "colPct": "%",
    "colAmount": "Amount",
-   "colState": "State",
+   "colState": "Status",
    "colActions": "Actions",
    "empty": "No draws scheduled yet. Seed the 50 / 30 / 20 default or add a custom draw below.",
    "drawn": "Drawn",
@@ -20691,7 +20691,7 @@
      "eyebrow": "Pages",
      "title": "New Document",
      "titleLabel": "Title",
-     "stateLabel": "State"
+     "stateLabel": "Status"
     },
     "eyebrow": "Collaborate",
     "title": "Pages",
@@ -20699,7 +20699,7 @@
     "emptyLabel": "No documents yet",
     "columns": {
      "title": "Title",
-     "state": "State",
+     "state": "Status",
      "updated": "Updated"
     },
     "newLabel": "+ New Document"
@@ -20773,7 +20773,7 @@
     "guest": "Guest",
     "heads": "Heads",
     "code": "Code",
-    "state": "State",
+    "state": "Status",
     "door": "Door",
     "checkIn": "Check In",
     "deny": "Deny",
@@ -20832,11 +20832,11 @@
   "reservations": {
    "detail": {
     "terminal": "This reservation is in a final state.",
-    "advance": "Update state",
+    "advance": "Update status",
     "moveTo": "Move to",
     "eyebrow": "Reservation",
     "field": {
-     "state": "State",
+     "state": "Status",
      "party": "Party size",
      "table": "Table",
      "phone": "Phone",
@@ -20878,7 +20878,7 @@
     "party": "Party",
     "table": "Table",
     "reservedFor": "Reserved for",
-    "state": "State"
+    "state": "Status"
    },
    "tables": {
     "new": {
@@ -20886,7 +20886,7 @@
      "tableNo": "Table number",
      "seats": "Seats",
      "zone": "Zone",
-     "state": "State",
+     "state": "Status",
      "x": "Floor-plan X (0 to 100)",
      "y": "Floor-plan Y (0 to 60)",
      "notes": "Notes",
@@ -20906,7 +20906,7 @@
     "title": "Title",
     "startsAt": "Starts at",
     "endsAt": "Ends at",
-    "state": "State",
+    "state": "Status",
     "headcount": "Headcount",
     "project": "Project (optional)",
     "none": "None",
@@ -20967,7 +20967,7 @@
      "name": "Name",
      "venue": "Venue",
      "capacity": "Capacity",
-     "state": "State",
+     "state": "Status",
      "notes": "Notes"
     },
     "title": "Spaces",
@@ -20980,7 +20980,7 @@
      "name": "Name",
      "venue": "Venue",
      "capacity": "Capacity",
-     "state": "State"
+     "state": "Status"
     },
     "newLabel": "+ New Space"
    }
@@ -21055,7 +21055,7 @@
    "configureSupabase": "Configure Supabase.",
    "columns": {
     "kind": "Kind",
-    "state": "State"
+    "state": "Status"
    },
    "warranties": {
     "new": {
@@ -21079,7 +21079,7 @@
     "emptyTitle": "No warranties yet",
     "columns": {
      "name": "Name",
-     "state": "State",
+     "state": "Status",
      "warrantor": "Warrantor",
      "end": "Expires",
      "reminders": "Reminders"
@@ -21100,7 +21100,7 @@
    "col": {
     "title": "Task",
     "due": "Due",
-    "state": "State"
+    "state": "Status"
    }
   },
   "calendar": {
@@ -21166,7 +21166,7 @@
     "columns": {
      "policy": "Policy",
      "subject": "Subject",
-     "state": "State",
+     "state": "Status",
      "initiated": "Initiated"
     },
     "policies": {
@@ -21220,7 +21220,7 @@
      "phase": "Phase",
      "objective": "Objective",
      "owner": "Owner",
-     "state": "State",
+     "state": "Status",
      "code": "Code",
      "name": "Name",
      "dimensions": "Dimensions",
@@ -21261,7 +21261,7 @@
    "deleteConfirm": "Delete this note?",
    "titleLabel": "Title",
    "titlePlaceholder": "Untitled note",
-   "stateLabel": "State",
+   "stateLabel": "Status",
    "stateDraft": "Draft",
    "statePublished": "Published",
    "stateArchived": "Archived",
@@ -21274,7 +21274,7 @@
    "emptyTitle": "No notes yet",
    "col": {
     "title": "Title",
-    "state": "State",
+    "state": "Status",
     "updated": "Updated"
    }
   },
@@ -21315,7 +21315,7 @@
      "source": "Source",
      "buyer": "Buyer",
      "total": "Total",
-     "state": "State",
+     "state": "Status",
      "placed": "Placed"
     }
    },
@@ -21327,7 +21327,7 @@
      "kind": "Kind",
      "amount": "Amount",
      "processor": "Processor",
-     "state": "State",
+     "state": "Status",
      "occurred": "When"
     }
    }
@@ -22095,7 +22095,7 @@
      "period": "Period",
      "hours": "Hours",
      "billable": "Billable",
-     "state": "State"
+     "state": "Status"
     }
    }
   },
@@ -22401,7 +22401,7 @@
      "tier": "Tier",
      "code": "Code",
      "checkedIn": "Checked in",
-     "state": "State"
+     "state": "Status"
     }
    },
    "itinerary": {
@@ -24846,5 +24846,525 @@
    "products": "Products",
    "extensions": "Extensions"
   }
+ },
+ "errors": {
+  "a-catalog-item-is-no-longer-available": "A Catalog Item Is No Longer Available",
+  "a-code-with-that-name-already-exists": "A code with that name already exists.",
+  "a-daily-log-already-exists-for-this-project-on": "A daily log already exists for this project on that date. Open it to edit.",
+  "a-line-s-end-date-precedes-its-start-date": "A Line's End Date Precedes Its Start Date",
+  "a-pending-invite-already-exists-for-this-email": "A pending invite already exists for this email.",
+  "a-person-can-t-report-to-themselves": "A person can't report to themselves.",
+  "a-promoter-with-that-ref-code-already-exists": "A promoter with that ref code already exists.",
+  "a-role-with-that-name-already-exists": "A role with that name already exists",
+  "a-team-with-that-slug-already-exists-in-this": "A team with that slug already exists in this org.",
+  "add-at-least-one-contact-one-per-line-name": "Add at least one contact, one per line: Name <email> or a bare email",
+  "add-your-name-and-a-signature-first": "Add your name and a signature first.",
+  "an-entity-can-t-consolidate-into-itself": "An entity can't consolidate into itself",
+  "assignee-is-not-in-your-organization": "Assignee is not in your organization",
+  "atom-belongs-to-a-different-project": "Atom belongs to a different project",
+  "auth": {
+   "admin": {
+    "change-capabilities": "You need admin access to change capabilities",
+    "change-enforcement": "You need admin access to change enforcement"
+   },
+   "capability": {
+    "people-manage": "You need the people:manage capability to assign people to a project.",
+    "people-manage-2": "You need the people:manage capability to edit reporting lines."
+   },
+   "manager-plus": {
+    "add-key-results": "Only manager+ can add key results",
+    "add-stories": "Only manager+ can add stories",
+    "add-ticket-types": "Only manager+ can add ticket types",
+    "assign-catalog-items": "Only manager+ can assign catalog items",
+    "author-advance-packets": "Only manager+ can author advance packets",
+    "author-onboarding-flows": "Only manager+ can author onboarding flows",
+    "award-rfqs": "Only manager+ can award RFQs",
+    "bind-scan-codes": "Only manager+ can bind scan codes",
+    "book-submissions": "Only manager+ can book submissions",
+    "broadcast-work-orders": "Only manager+ can broadcast work orders",
+    "change-beo-status": "Only manager+ can change BEO status",
+    "change-envelope-state": "Only manager+ can change envelope state",
+    "change-invoice-status": "Only manager+ can change invoice status",
+    "change-po-status": "Only manager+ can change PO status",
+    "change-project-state": "Only manager+ can change project state",
+    "change-proposal-status": "Only manager+ can change proposal status",
+    "change-sheet-state": "Only manager+ can change sheet state",
+    "close-job-postings": "Only manager+ can close job postings",
+    "convert-estimates": "Only manager+ can convert estimates",
+    "convert-proposals": "Only manager+ can convert proposals",
+    "convert-requisitions": "Only manager+ can convert requisitions",
+    "create-approval-delegations": "Only manager+ can create approval delegations",
+    "create-approval-policies": "Only manager+ can create approval policies",
+    "create-assets": "Only manager+ can create assets",
+    "create-beos": "Only manager+ can create BEOs",
+    "create-bookings": "Only manager+ can create bookings",
+    "create-budgets": "Only manager+ can create budgets",
+    "create-channels": "Only manager+ can create channels",
+    "create-clients": "Only manager+ can create clients",
+    "create-contracts": "Only manager+ can create contracts",
+    "create-corrective-tasks": "Only manager+ can create corrective tasks",
+    "create-day-sheets": "Only manager+ can create day sheets",
+    "create-discount-codes": "Only manager+ can create discount codes",
+    "create-documents": "Only manager+ can create documents",
+    "create-draws": "Only manager+ can create draws",
+    "create-envelopes": "Only manager+ can create envelopes",
+    "create-event-types": "Only manager+ can create event types",
+    "create-events": "Only manager+ can create events",
+    "create-goals": "Only manager+ can create goals",
+    "create-guest-lists": "Only manager+ can create guest lists",
+    "create-invoices": "Only manager+ can create invoices",
+    "create-job-postings": "Only manager+ can create job postings",
+    "create-payment-applications": "Only manager+ can create payment applications",
+    "create-po-change-orders": "Only manager+ can create PO change orders",
+    "create-projects": "Only manager+ can create projects",
+    "create-promoters": "Only manager+ can create promoters",
+    "create-proposals": "Only manager+ can create proposals",
+    "create-purchase-orders": "Only manager+ can create purchase orders",
+    "create-reservations": "Only manager+ can create reservations",
+    "create-rfqs": "Only manager+ can create RFQs",
+    "create-sheets": "Only manager+ can create sheets",
+    "create-spaces": "Only manager+ can create spaces",
+    "create-sprints": "Only manager+ can create sprints",
+    "create-tables": "Only manager+ can create tables",
+    "create-talent-profiles": "Only manager+ can create talent profiles",
+    "create-tiered-holds": "Only manager+ can create tiered holds",
+    "create-tours": "Only manager+ can create tours",
+    "create-vendors": "Only manager+ can create vendors",
+    "create-warranties": "Only manager+ can create warranties",
+    "create-whiteboards": "Only manager+ can create whiteboards",
+    "create-wip-snapshots": "Only manager+ can create WIP snapshots",
+    "decide-applications": "Only manager+ can decide applications",
+    "decide-submission-outcomes": "Only manager+ can decide submission outcomes",
+    "define-badges": "Only manager+ can define badges",
+    "delete-sheets": "Only manager+ can delete sheets",
+    "edit-advancing-presets": "Only manager+ can edit advancing presets",
+    "edit-announcements": "Only manager+ can edit announcements",
+    "edit-approval-policies": "Only manager+ can edit approval policies",
+    "edit-beos": "Only manager+ can edit BEOs",
+    "edit-bookings": "Only manager+ can edit bookings",
+    "edit-client-branding": "Only manager+ can edit client branding",
+    "edit-co-pro-partnerships": "Only manager+ can edit co-pro partnerships",
+    "edit-contracts": "Only manager+ can edit contracts",
+    "edit-credentials": "Only manager+ can edit credentials",
+    "edit-depreciation": "Only manager+ can edit depreciation",
+    "edit-documents": "Only manager+ can edit documents",
+    "edit-goals": "Only manager+ can edit goals",
+    "edit-guest-lists": "Only manager+ can edit guest lists",
+    "edit-invoices": "Only manager+ can edit invoices",
+    "edit-job-postings": "Only manager+ can edit job postings",
+    "edit-journal-entries": "Only manager+ can edit journal entries",
+    "edit-offer-letters": "Only manager+ can edit offer letters",
+    "edit-open-calls": "Only manager+ can edit open calls",
+    "edit-settlement-records": "Only manager+ can edit settlement records",
+    "edit-sheets": "Only manager+ can edit sheets",
+    "edit-talent-profiles": "Only manager+ can edit talent profiles",
+    "edit-the-chart-of-accounts": "Only manager+ can edit the chart of accounts",
+    "edit-whiteboards": "Only manager+ can edit whiteboards",
+    "finalize-settlements": "Only manager+ can finalize settlements",
+    "import-budgets": "Only manager+ can import budgets",
+    "log-maintenance": "Only manager+ can log maintenance",
+    "manage-time-clock-zones": "Only manager+ can manage time-clock zones",
+    "operate-advance-sends": "Only manager+ can operate advance sends",
+    "pair-account-managers": "Only manager+ can pair account managers",
+    "post-change-orders-to-budget": "Only manager+ can post change orders to budget",
+    "post-journal-entries": "Only manager+ can post journal entries",
+    "post-open-calls": "Only manager+ can post open calls",
+    "prepare-advance-sends": "Only manager+ can prepare advance sends",
+    "publish-announcements": "Only manager+ can publish announcements",
+    "publish-day-sheets": "Only manager+ can publish day sheets",
+    "publish-job-postings": "Only manager+ can publish job postings",
+    "publish-polls": "Only manager+ can publish polls",
+    "publish-rfqs": "Only manager+ can publish RFQs",
+    "publish-surveys": "Only manager+ can publish surveys",
+    "publish-talent-profiles": "Only manager+ can publish talent profiles",
+    "record-a-3-way-match": "Only manager+ can record a 3-way match",
+    "record-approval-decisions": "Only manager+ can record approval decisions",
+    "record-attributions": "Only manager+ can record attributions",
+    "record-credentials": "Only manager+ can record credentials",
+    "record-goods-receipts": "Only manager+ can record goods receipts",
+    "record-received-lines": "Only manager+ can record received lines",
+    "record-sales-snapshots": "Only manager+ can record sales snapshots",
+    "release-tiered-holds": "Only manager+ can release tiered holds",
+    "rotate-letter-access-codes": "Only manager+ can rotate letter access codes",
+    "route-change-orders-to-approvals": "Only manager+ can route change orders to approvals",
+    "route-purchase-orders-to-approvals": "Only manager+ can route purchase orders to approvals",
+    "seed-draw-schedules": "Only manager+ can seed draw schedules",
+    "send-booking-offers": "Only manager+ can send booking offers",
+    "send-offer-letters": "Only manager+ can send offer letters",
+    "unpublish-talent-profiles": "Only manager+ can unpublish talent profiles",
+    "update-key-results": "Only manager+ can update key results",
+    "update-reservations": "Only manager+ can update reservations",
+    "withdraw-offer-letters": "Only manager+ can withdraw offer letters",
+    "work-the-door": "Only manager+ can work the door"
+   },
+   "manager": {
+    "add-members": "Only managers and above can add members.",
+    "archive-projects": "You Need Manager Access To Archive Projects",
+    "assign-reviewers": "Only managers can assign reviewers.",
+    "cancel-events": "You Need Manager Access To Cancel Events",
+    "cancel-purchase-orders": "You Need Manager Access To Cancel Purchase Orders",
+    "change-roles": "Only managers and above can change roles.",
+    "create-teams": "Only managers and above can create teams.",
+    "decide-a-time-correction": "Only managers can decide a time correction.",
+    "decide-time-off-requests": "You need manager access to decide time-off requests",
+    "delete-assets": "You Need Manager Access To Delete Assets",
+    "delete-clients": "You Need Manager Access To Delete Clients",
+    "delete-vendors": "You Need Manager Access To Delete Vendors",
+    "edit-teams": "Only managers and above can edit teams.",
+    "edit-the-role-catalog": "You need manager access to edit the role catalog",
+    "import-a-schedule": "Only owners, admins, and managers can import a schedule.",
+    "resolve-scan-misses": "You need manager access to resolve scan misses",
+    "review-expenses": "You Need Manager Access To Review Expenses",
+    "review-requisitions": "You Need Manager Access To Review Requisitions",
+    "review-timesheets": "Only managers can review timesheets.",
+    "send-proposals": "You Need Manager Access To Send Proposals",
+    "send-purchase-orders": "You Need Manager Access To Send Purchase Orders",
+    "transition-assignments": "You Need Manager Access To Transition Assignments",
+    "void-invoices": "You Need Manager Access To Void Invoices"
+   },
+   "owner-admin": {
+    "change-a-member-s-role": "Only owners and admins can change a member's role",
+    "change-compliance-settings": "Only owners and admins can change compliance settings",
+    "change-marketplace-settings": "Only owners and admins can change marketplace settings",
+    "connect-ticketing-providers": "Only owners and admins can connect ticketing providers",
+    "create-committees": "Only owners and admins can create committees",
+    "create-custom-roles": "Only owners and admins can create custom roles",
+    "create-policies": "Only owners and admins can create policies",
+    "disconnect-ticketing-providers": "Only owners and admins can disconnect ticketing providers",
+    "invite": "Only owners and admins can invite.",
+    "manage-accounting-periods": "Only owners and admins can manage accounting periods",
+    "manage-domains": "Only owners and admins can manage domains",
+    "mint-api-keys": "Only owners and admins can mint API keys",
+    "open-a-payroll-run": "Only owners and admins can open a payroll run.",
+    "resend": "Only owners and admins can resend.",
+    "revoke": "Only owners and admins can revoke.",
+    "transition-accounting-periods": "Only owners and admins can transition accounting periods"
+   }
+  },
+  "automation-is-disabled": "Automation is disabled",
+  "bad-acquisition-cost": "Bad acquisition cost",
+  "bad-amount": "Bad amount",
+  "bad-daily-rate": "Bad daily rate",
+  "bad-duration": "Bad duration",
+  "bad-payment-amount": "Bad payment amount",
+  "bad-received-quantity": "Bad received quantity",
+  "bad-rejected-quantity": "Bad rejected quantity",
+  "bad-sla-hours": "Bad SLA hours",
+  "bad-threshold": "Bad threshold",
+  "bad-total-value": "Bad total value",
+  "batch-packet-is-missing-its-project": "Batch packet is missing its project",
+  "blocks-json-is-invalid": "Blocks JSON is invalid",
+  "calibration-must-be-a-positive-number": "Calibration must be a positive number",
+  "check-the-fields-below": "Check the fields below",
+  "checklist-already-started": "Checklist already started",
+  "concurrency": {
+   "application": "Application was updated concurrently. Refresh and retry",
+   "beo": "BEO changed concurrently. Refresh and retry",
+   "po-status": "PO status changed concurrently. Refresh and retry",
+   "proposal-status": "Proposal status changed concurrently. Refresh and retry",
+   "requisition": "Requisition changed concurrently. Refresh and retry",
+   "rfq": "RFQ changed concurrently. Refresh and retry",
+   "settlement": "Settlement was finalized concurrently. Refresh and retry",
+   "submission": "Submission was updated concurrently. Refresh and retry"
+  },
+  "config-is-not-valid-json": "Config is not valid JSON",
+  "confirm-that-you-have-reviewed-both-roles-permissions-before": "Confirm that you have reviewed both roles' permissions before merging",
+  "could-not-decode-file": "Could not decode file",
+  "could-not-derive-a-unique-event-slug": "Could not derive a unique event slug",
+  "could-not-derive-a-unique-project-slug": "Could not derive a unique project slug",
+  "could-not-enumerate-corpus-sources": "Could not enumerate corpus sources.",
+  "could-not-load-timesheet": "Could not load timesheet.",
+  "could-not-resolve-the-embed-source-endpoint-origin": "Could not resolve the embed-source endpoint origin.",
+  "could-not-resolve-your-party-record-in-this-workspace": "Could not resolve your party record in this workspace",
+  "could-not-save-the-note": "Could not save the note.",
+  "could-not-save-the-signature": "Could not save the signature.",
+  "document-body-is-not-a-valid-editor-document": "Document body is not a valid editor document",
+  "document-body-was-not-valid-json": "Document body was not valid JSON",
+  "duration-must-be-gte-1-month": "Duration must be ≥ 1 month",
+  "empty-code": "Empty code.",
+  "end-must-be-after-start": "End must be after start",
+  "ends-on-must-be-on-or-after-starts-on": "ends_on must be on or after starts_on",
+  "enter-a-label-for-the-requirement": "Enter a label for the requirement",
+  "enter-a-scan-code": "Enter a scan code",
+  "every-line-needs-a-start-date": "Every Line Needs A Start Date",
+  "every-report-must-be-on-this-project-s-roster": "Every report must be on this project's roster.",
+  "existing-event-has-invalid-timestamps": "Existing event has invalid timestamps",
+  "failed-to-create-invite": "Failed to create invite",
+  "file-must-be-1-byte-to-25-mb": "File must be 1 byte to 25 MB",
+  "give-the-role-a-name": "Give the role a name",
+  "grant-not-found-or-already-revoked": "Grant not found, or already revoked",
+  "incident-is-closed-reopen-it-before-adding-corrective-work": "Incident is closed. Reopen it before adding corrective work",
+  "invalid": {
+   "bulk-decision-request": "Invalid bulk decision request",
+   "bulk-transition-request": "Invalid Bulk Transition Request",
+   "cart-payload": "Invalid Cart Payload",
+   "cursor": "Invalid cursor",
+   "decision": "Invalid decision",
+   "fee": "Invalid fee",
+   "ids": "Invalid ids",
+   "input": "Invalid input",
+   "layout-shape": "Invalid layout shape",
+   "meeting": "Invalid meeting",
+   "note": "Invalid note.",
+   "request": "Invalid request",
+   "scope": "Invalid scope",
+   "selection": "Invalid Selection",
+   "split-pct": "Invalid split %",
+   "start-or-end-time": "Invalid start or end time",
+   "state": "Invalid state",
+   "target-phase": "Invalid target phase",
+   "target-state": "Invalid target state",
+   "transition": "Invalid transition",
+   "trigger-kind": "invalid trigger kind"
+  },
+  "label-must-be-1-160-characters": "Label must be 1-160 characters",
+  "malformed-payload": "Malformed payload",
+  "manager-access-required": "Manager access required",
+  "manager-is-not-in-your-organization": "Manager is not in your organization",
+  "manager-role-or-higher-required": "Manager role or higher required.",
+  "manager-role-required": "Manager role required",
+  "markup-must-be-gte-0": "Markup must be ≥ 0",
+  "maximum-20-photos-per-upload": "Maximum 20 photos per upload",
+  "merging-roles-merges-their-permissions-which-needs-admin-access": "Merging roles merges their permissions, which needs admin access",
+  "miss-not-found-or-already-resolved": "Miss not found, or already resolved",
+  "missing-concurrency-token-reload-the-page-and-try-again": "Missing concurrency token. Reload the page and try again.",
+  "missing": {
+   "call": "Missing call",
+   "connection": "Missing connection",
+   "dashboard-id": "Missing dashboard id",
+   "deal": "Missing deal",
+   "entry": "Missing entry",
+   "hold": "Missing hold",
+   "id": "Missing id",
+   "offer": "Missing offer",
+   "partnership": "Missing partnership",
+   "posting": "Missing posting",
+   "roster-entry": "Missing roster entry",
+   "steps-payload": "missing steps payload",
+   "talent": "Missing talent"
+  },
+  "name-is-required": "Name is required",
+  "need-at-least-2-options": "Need at least 2 options",
+  "need-at-least-a-header-row-plus-one-data": "Need at least a header row plus one data row.",
+  "no-deliverables-submittals-or-rfis-with-text-to-index": "No deliverables, submittals, or RFIs with text to index.",
+  "not-a-member-of-this-room": "Not a member of this room",
+  "not-authorized": "Not authorized",
+  "not-found": {
+   "account-in-org": "Account not found in this org",
+   "accreditation": "Accreditation not found.",
+   "accreditation-categorie": "Accreditation Categorie not found.",
+   "accreditation-change": "Accreditation Change not found.",
+   "accreditation-in-org": "Accreditation not found in your organization",
+   "ad-manifest": "Ad Manifest not found.",
+   "agency-in-org": "Agency not found in your organization",
+   "application": "Application not found",
+   "asset": "Asset not found",
+   "asset-2": "Asset not found.",
+   "asset-in-org": "Asset not found in your organization",
+   "assignment-in-org": "Assignment not found in your organization",
+   "atom-in-org": "Atom not found in your organization",
+   "automation": "Automation not found",
+   "baseline-in-org": "Baseline not found in your organization",
+   "batch": "Batch not found",
+   "beo": "BEO not found",
+   "beo-in-org": "BEO not found in your organization",
+   "block": "Block not found.",
+   "budget": "Budget not found.",
+   "call": "Call not found",
+   "catalog-item-in-org": "Catalog item not found in your organization",
+   "change-order": "Change order not found",
+   "channel": "Channel not found",
+   "client": "Client not found.",
+   "client-in-org": "Client not found in your organization",
+   "contract": "Contract not found",
+   "credential": "Credential not found.",
+   "crew-member": "Crew Member not found.",
+   "crisis-alert": "Crisis Alert not found.",
+   "day-sheet": "Day sheet not found",
+   "deal": "Deal not found",
+   "deal-in-org": "Deal not found in your organization",
+   "delegation": "Delegation not found.",
+   "delegation-entrie": "Delegation Entrie not found.",
+   "delegation-in-org": "Delegation not found in your organization",
+   "deliverable": "Deliverable not found.",
+   "dispatch-run": "Dispatch Run not found.",
+   "dsar-request": "Dsar Request not found.",
+   "envelope": "Envelope not found",
+   "environmental-event": "Environmental Event not found.",
+   "estimate": "Estimate not found",
+   "estimate-2": "Estimate not found.",
+   "event": "Event not found",
+   "event-2": "Event not found.",
+   "event-in-org": "Event not found in your organization",
+   "event-listing": "Event listing not found",
+   "expense": "Expense not found.",
+   "fabrication-order": "Fabrication Order not found.",
+   "form-def": "Form Def not found.",
+   "generic": "Not found",
+   "goal": "Goal not found",
+   "grant": "Grant not found",
+   "guest-list": "Guest list not found",
+   "incident": "Incident not found",
+   "incident-2": "Incident not found.",
+   "inspection": "Inspection not found.",
+   "insurance-policie": "Insurance Policie not found.",
+   "invoice": "Invoice not found.",
+   "invoice-in-org": "Invoice not found in your organization",
+   "journal-entry": "Journal entry not found",
+   "kb-article": "Kb Article not found.",
+   "lead": "Lead not found",
+   "lead-2": "Lead not found.",
+   "location-in-org": "Location not found in your organization",
+   "major-incident": "Major Incident not found.",
+   "medical-encounter": "Medical Encounter not found.",
+   "meeting-in-org": "Meeting not found in your organization",
+   "mileage-log": "Mileage Log not found.",
+   "model": "Model not found.",
+   "offer-letter": "Offer letter not found",
+   "org-in-session": "Org not found in your session",
+   "packet": "Packet not found",
+   "packet-in-org": "Packet not found in your organization",
+   "parent-entity-in-org": "Parent entity not found in your organization",
+   "party-in-org": "Party not found in your organization",
+   "person-in-org": "Person Not Found In Your Organization",
+   "policy": "Policy not found",
+   "program-review": "Program Review not found.",
+   "project": "Project Not Found",
+   "project-2": "Project not found",
+   "project-3": "Project not found.",
+   "project-in-org": "Project not found in your organization",
+   "project-or-forbidden": "Project not found or insufficient permissions.",
+   "promoter": "Promoter not found.",
+   "proposal": "Proposal not found",
+   "punch-item": "Punch Item not found.",
+   "punch-list-in-org": "Punch list not found in your organization",
+   "purchase-order": "Purchase order not found",
+   "purchase-order-2": "Purchase Order not found.",
+   "purchase-order-in-org": "Purchase order not found in your organization",
+   "questionnaire-in-org": "Questionnaire not found in your organization",
+   "rate-card-item": "Rate Card Item not found.",
+   "readiness-exercise": "Readiness Exercise not found.",
+   "receipt": "Receipt not found",
+   "rental": "Rental not found.",
+   "requisition": "Requisition not found",
+   "requisition-2": "Requisition not found.",
+   "requisition-in-org": "Requisition not found in your organization",
+   "reservation": "Reservation not found",
+   "rfi": "Rfi not found.",
+   "rfq": "RFQ not found",
+   "risk": "Risk not found.",
+   "role": "Role not found",
+   "roster": "Roster not found.",
+   "safeguarding-report": "Safeguarding Report not found.",
+   "settlement": "Settlement not found",
+   "share-link": "Share link not found",
+   "sheet": "Sheet not found.",
+   "sheet-set": "Sheet set not found.",
+   "site-plan-in-org": "Site plan not found in your organization",
+   "spec-section": "Spec section not found.",
+   "sponsor-entitlement": "Sponsor Entitlement not found.",
+   "submission": "Submission not found",
+   "submittal": "Submittal not found.",
+   "sustainability-metric": "Sustainability Metric not found.",
+   "table-in-org": "Table not found in your organization",
+   "takeoff": "Takeoff not found.",
+   "talent-profile-in-org": "Talent profile not found in your organization",
+   "task": "Task not found.",
+   "team-in-org": "Team not found in your organization",
+   "template-in-org": "Template not found in your organization",
+   "thread": "Thread not found.",
+   "ticketing-connection-in-org": "Ticketing connection not found in your organization",
+   "time-entrie": "Time Entrie not found.",
+   "timesheet": "Timesheet not found.",
+   "tour-in-org": "Tour not found in your organization",
+   "trademark": "Trademark not found.",
+   "vendor": "Vendor not found",
+   "vendor-2": "Vendor not found.",
+   "vendor-in-org": "Vendor not found in your organization",
+   "venue": "Venue not found.",
+   "venue-in-org": "Venue not found in your organization",
+   "visa-case": "Visa Case not found.",
+   "work-order": "Work order not found",
+   "workforce-deployment": "Workforce Deployment not found.",
+   "workforce-member": "Workforce Member not found."
+  },
+  "offer-can-only-be-accepted-from-sent-or-countered": "Offer can only be accepted from sent or countered",
+  "offer-can-t-be-sent-from-its-current-state": "Offer can't be sent from its current state",
+  "only-a-draft-call-can-be-published": "Only a draft call can be published",
+  "only-a-draft-posting-can-be-published": "Only a draft posting can be published",
+  "only-a-live-packet-can-be-sent-go-live": "Only a live packet can be sent. Go live from the packet composer first",
+  "only-a-pending-guest-can-be-checked-in": "Only a pending guest can be checked in",
+  "only-a-pending-invite-can-be-resent": "Only a pending invite can be resent",
+  "only-a-pending-invite-can-be-revoked": "Only a pending invite can be revoked",
+  "only-a-published-call-can-be-closed": "Only a published call can be closed",
+  "only-a-published-posting-can-be-closed": "Only a published posting can be closed",
+  "only-a-sent-or-countered-offer-can-be-declined": "Only a sent or countered offer can be declined",
+  "only-an-approved-change-order-can-post-to-budget": "Only an approved change order can post to budget. Route it through approvals first",
+  "only-owner-admin-manager-can-edit-project-branding": "Only owner / admin / manager can edit project branding",
+  "ownership-pct-must-be-between-0-and-100": "Ownership % must be between 0 and 100",
+  "paste-csv-or-tsv-from-the-xpms-budget-tab": "Paste CSV or TSV from the XPMS Budget tab.",
+  "percentage-must-be-between-0-pct-and-100-pct": "Percentage must be between 0% and 100%",
+  "pick-a-crew-member": "Pick a crew member.",
+  "pick-a-manager-from-the-org-s-directory": "Pick a manager from the org's directory.",
+  "pick-a-position-from-the-org-s-role-catalog": "Pick a position from the org's role catalog.",
+  "pick-a-reviewer": "Pick a reviewer.",
+  "pick-a-valid-decision": "Pick a valid decision.",
+  "pick-a-vendor-to-award-to": "Pick a vendor to award to",
+  "pick-at-least-one-module-the-subcontractor-can-reach": "Pick at least one module the subcontractor can reach.",
+  "pick-at-least-one-photo": "Pick at least one photo",
+  "pick-two-different-roles": "Pick two different roles",
+  "po-not-found-or-missing-project": "PO not found or missing project",
+  "portal-user-and-account-manager-must-be-different-people": "Portal user and account manager must be different people",
+  "portal-user-is-not-in-your-organization": "Portal user is not in your organization",
+  "punch-list-belongs-to-a-different-project": "Punch list belongs to a different project",
+  "refusing-to-demote-the-only-owner-promote-someone-to": "Refusing to demote the only owner. Promote someone to owner first.",
+  "reply-body-is-required": "Reply body is required.",
+  "selected-delegatee-is-not-a-member-of-this-workspace": "Selected delegatee is not a member of this workspace",
+  "selected-person-is-not-a-member-of-this-workspace": "Selected person is not a member of this workspace",
+  "selected-signer-is-not-a-member-of-this-workspace": "Selected signer is not a member of this workspace",
+  "settlement-already-final": "Settlement already final",
+  "snapshot-is-not-valid-json": "Snapshot is not valid JSON",
+  "someone-else-already-decided-this-one-refresh": "Someone else already decided this one. Refresh.",
+  "stage-does-not-belong-to-this-pipeline": "Stage does not belong to this pipeline",
+  "submission-has-no-talent-profile-to-book": "Submission has no talent profile to book",
+  "submitting-an-advance-requires-advance-request": "Submitting An Advance Requires advance:request",
+  "that-change-would-create-a-reporting-loop-pick-a": "That change would create a reporting loop. Pick a different manager.",
+  "that-code-is-already-active-on-another-assignment-void": "That code is already active on another assignment. Void it before re-issuing.",
+  "that-line-item-does-not-belong-to-this-receipt": "That line item does not belong to this receipt's purchase order",
+  "that-name-has-no-letters-or-digits-to-key": "That name has no letters or digits to key on",
+  "that-person-has-been-separated-reinstate-them-before-rostering": "That person has been separated. Reinstate them before rostering.",
+  "that-person-is-not-in-this-org-s-directory": "That person is not in this org's directory.",
+  "that-person-is-not-in-this-organization": "That person is not in this organization.",
+  "that-person-is-separated-re-engage-them-from-people": "That person is separated. Re-engage them from People before assigning.",
+  "that-person-isn-t-a-member-of-this-workspace": "That person isn't a member of this workspace",
+  "that-project-doesn-t-belong-to-your-org": "That project doesn't belong to your org.",
+  "that-rate-card-item-is-not-available": "That rate card item is not available.",
+  "that-reporting-line-would-create-a-loop-pick-a": "That reporting line would create a loop. Pick a different manager.",
+  "that-request-no-longer-exists": "That request no longer exists.",
+  "that-roster-no-longer-exists": "That roster no longer exists.",
+  "that-user-is-already-on-this-team": "That user is already on this team.",
+  "the-end-of-the-window-has-to-be-after": "The end of the window has to be after the start",
+  "the-manager-must-be-on-this-project-s-roster": "The manager must be on this project's roster.",
+  "the-packet-has-no-audience-contacts-to-send-to": "The packet has no audience contacts to send to",
+  "the-shift-has-to-end-after-it-starts-for": "The shift has to end after it starts. For an overnight shift, set the end date to the next day.",
+  "this-call-has-ended": "This call has ended",
+  "this-subcontractor-is-blocked-required-compliance-documents-are-missing": "This subcontractor is blocked: required compliance documents are missing or expired.",
+  "this-timesheet-was-decided-by-someone-else-refresh-and": "This timesheet was decided by someone else. Refresh and review the current state.",
+  "this-vendor-already-has-a-response-edit-it-instead": "This vendor already has a response. Edit it instead.",
+  "those-times-are-not-valid": "Those times are not valid.",
+  "trigger-config-must-be-an-object": "trigger config must be an object",
+  "unknown-state": "Unknown state",
+  "unknown-submission-schema": "Unknown submission schema",
+  "unknown-timezone-use-an-iana-name-like-america-new": "Unknown timezone. Use an IANA name like America/New_York",
+  "use-the-leave-org-flow-to-change-your-own": "Use the leave-org flow to change your own role",
+  "user-is-not-in-an-organization": "User is not in an organization",
+  "user-isn-t-an-active-member-of-this-org": "User isn't an active member of this org. Invite them to the org first.",
+  "vendor-already-invited-to-this-questionnaire": "Vendor already invited to this questionnaire.",
+  "waste-factor-must-be-gte-0": "Waste factor must be ≥ 0",
+  "you-are-not-a-member-of-this-thread": "You are not a member of this thread.",
+  "you-can-t-review-your-own-timesheet-another-manager": "You can't review your own timesheet. Another manager has to decide this one.",
+  "you-do-not-have-permission-to-create-meeting-notes": "You do not have permission to create meeting notes.",
+  "you-do-not-have-permission-to-roster-shifts": "You do not have permission to roster shifts.",
+  "your-account-is-not-linked-to-a-party-record": "Your account is not linked to a party record in this organization."
  }
 }

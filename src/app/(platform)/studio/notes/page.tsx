@@ -87,7 +87,7 @@ export default async function NotesPage() {
               },
               {
                 key: "state",
-                header: t("console.notes.col.state", undefined, "State"),
+                header: t("console.notes.col.state", undefined, "Status"),
                 render: (r) => <StatusBadge status={r.note_state} />,
                 accessor: (r) => r.note_state,
                 filterable: true,

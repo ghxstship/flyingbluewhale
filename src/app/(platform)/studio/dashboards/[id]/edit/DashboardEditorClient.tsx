@@ -6,6 +6,7 @@ import type { DashboardLayout } from "@/lib/dashboards/types";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { saveLayoutAction } from "../actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 const DEBOUNCE_MS = 500;
 
 /**
@@ -26,6 +27,7 @@ export function DashboardEditorClient({
   const [layout, setLayout] = React.useState<DashboardLayout>(initialLayout);
   const [status, setStatus] = React.useState<"idle" | "saving" | "saved" | "error">("idle");
   const [error, setError] = React.useState<string | null>(null);
+  const resolveErr = useActionErrorResolver();
   const debounceRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const persist = React.useCallback(
@@ -35,12 +37,12 @@ export function DashboardEditorClient({
       const result = await saveLayoutAction(dashboardId, next);
       if (result?.error) {
         setStatus("error");
-        setError(result.error);
+        setError(resolveErr(result.error));
       } else {
         setStatus("saved");
       }
     },
-    [dashboardId],
+    [dashboardId, resolveErr],
   );
 
   const handleLayoutChange = React.useCallback(

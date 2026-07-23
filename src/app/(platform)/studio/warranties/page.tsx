@@ -163,7 +163,7 @@ export default async function Page() {
             },
             {
               key: "state",
-              header: t("console.warranties.columns.state", undefined, "State"),
+              header: t("console.warranties.columns.state", undefined, "Status"),
               render: (r) => <Badge variant={toneFor(r.warranty_state)}>{toTitle(r.warranty_state)}</Badge>,
               accessor: (r) => r.warranty_state,
               filterable: true,

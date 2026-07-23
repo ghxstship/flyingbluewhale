@@ -18,6 +18,7 @@ import {
 } from "@/lib/db/advance-packets";
 import { SUBMISSION_SCHEMA_KEYS } from "@/lib/advancing/submission-schemas";
 import { materializeDeadlineEvents, seedAdvanceChaseAutomations } from "@/lib/automations/advance-deadlines";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = {
   error?: string;
@@ -44,7 +45,7 @@ const DEFAULT_SECTIONS: Array<{ key: AdvanceSectionKey; schema?: string; deliver
 
 async function guardProject(projectId: string): Promise<{ orgId: string; userId: string } | { error: string }> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can author advance packets" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.author-advance-packets", "Only manager+ can author advance packets") };
   const supabase = await createClient();
   const { data: project } = await supabase
     .from("projects")
@@ -53,7 +54,7 @@ async function guardProject(projectId: string): Promise<{ orgId: string; userId:
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!project) return { error: "Project not found in your organization" };
+  if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
   return { orgId: session.orgId, userId: session.userId };
 }
 
@@ -188,7 +189,7 @@ export async function addSectionAction(projectId: string, _: State, fd: FormData
   if (!parsed.success) return formFail(parsed.error, fd);
   const schemaKey = parsed.data.submission_schema_key || null;
   if (schemaKey && !SUBMISSION_SCHEMA_KEYS.includes(schemaKey as never)) {
-    return { error: "Unknown submission schema" };
+    return { error: actionErrorMessage("unknown-submission-schema", "Unknown submission schema") };
   }
   const supabase = await createClient();
   const { count } = await supabase
@@ -259,7 +260,7 @@ export async function addAudienceAction(projectId: string, _: State, fd: FormDat
   if (!parsed.success) return formFail(parsed.error, fd);
   const contacts = parseContacts(parsed.data.contacts);
   if (contacts.length === 0) {
-    return { error: "Add at least one contact, one per line: Name <email> or a bare email", values: Object.fromEntries(fd) as Record<string, string> };
+    return { error: actionErrorMessage("add-at-least-one-contact-one-per-line-name", "Add at least one contact, one per line: Name <email> or a bare email"), values: Object.fromEntries(fd) as Record<string, string> };
   }
   const supabase = await createClient();
 
@@ -271,7 +272,7 @@ export async function addAudienceAction(projectId: string, _: State, fd: FormDat
     .eq("org_id", guard.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!packet) return { error: "Packet not found" };
+  if (!packet) return { error: actionErrorMessage("not-found.packet", "Packet not found") };
 
   // soft-delete-exempt: insert returning id, not a read
   const { data: audience, error } = await supabase

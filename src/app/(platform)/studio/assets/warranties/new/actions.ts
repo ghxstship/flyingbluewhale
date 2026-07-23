@@ -6,6 +6,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = {
   error?: string;
@@ -28,12 +29,12 @@ const Schema = z.object({
 
 export async function createWarranty(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create warranties" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-warranties", "Only manager+ can create warranties") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
 
   const durationMonths = parsed.data.duration_months ? Math.round(Number(parsed.data.duration_months)) : null;
-  if (durationMonths != null && !Number.isFinite(durationMonths)) return actionFail("Bad duration", fd);
+  if (durationMonths != null && !Number.isFinite(durationMonths)) return actionFail(actionErrorMessage("bad-duration", "Bad duration"), fd);
 
   const supabase = await createClient();
   // warranty_state (enum) defaults to 'active' in the DB — omit and let

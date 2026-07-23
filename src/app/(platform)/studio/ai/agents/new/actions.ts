@@ -7,6 +7,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { AGENT_OUTPUT_TYPES, AGENT_TARGET_TABLES } from "../constants";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   target_table: z.enum(AGENT_TARGET_TABLES),
@@ -30,7 +31,7 @@ export type State = {
 
 export async function createAgentAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return actionFail("Not authorized", fd);
+  if (!isManagerPlus(session)) return actionFail(actionErrorMessage("not-authorized", "Not authorized"), fd);
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
 

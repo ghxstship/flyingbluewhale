@@ -182,7 +182,7 @@ export default async function Page() {
             },
             {
               key: "state",
-              header: t("console.captures.columns.state", undefined, "State"),
+              header: t("console.captures.columns.state", undefined, "Status"),
               render: (r) => <Badge variant={STATE_TONE[r.capture_state]}>{toTitle(r.capture_state)}</Badge>,
               accessor: (r) => r.capture_state,
               filterable: true,

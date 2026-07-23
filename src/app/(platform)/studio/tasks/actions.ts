@@ -5,6 +5,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   title: z.string().min(1).max(200),
@@ -41,7 +42,7 @@ export async function createTaskAction(_: State, fd: FormData): Promise<State> {
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!project) return { error: "Project not found in your organization" };
+    if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
   }
 
   // Cross-tenant guard on atom pin — must belong to same org, and to
@@ -54,9 +55,9 @@ export async function createTaskAction(_: State, fd: FormData): Promise<State> {
       .eq("id", atomId)
       .eq("org_id", session.orgId)
       .maybeSingle();
-    if (!atom) return { error: "Atom not found in your organization" };
+    if (!atom) return { error: actionErrorMessage("not-found.atom-in-org", "Atom not found in your organization") };
     if (projectId && atom.project_id && atom.project_id !== projectId) {
-      return { error: "Atom belongs to a different project" };
+      return { error: actionErrorMessage("atom-belongs-to-a-different-project", "Atom belongs to a different project") };
     }
   }
 
@@ -89,7 +90,7 @@ export type BulkResult = { message?: string; error?: string };
 export async function bulkCompleteTasks(ids: string[]): Promise<BulkResult> {
   const session = await requireSession();
   const parsed = BulkIds.safeParse(ids);
-  if (!parsed.success) return { error: "Invalid Selection" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.selection", "Invalid Selection") };
   const supabase = await createClient();
   const { data: updated, error } = await supabase
     .from("tasks")

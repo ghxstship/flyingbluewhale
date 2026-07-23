@@ -70,7 +70,7 @@ export default async function SpacesPage() {
             },
             {
               key: "state",
-              header: t("console.diary.spaces.col.state", undefined, "State"),
+              header: t("console.diary.spaces.col.state", undefined, "Status"),
               render: (r) => <StatusBadge status={r.space_state} />,
               accessor: (r) => r.space_state,
             },

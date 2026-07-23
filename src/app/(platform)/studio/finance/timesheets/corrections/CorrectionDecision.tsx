@@ -6,6 +6,7 @@ import { Alert } from "@/components/ui/Alert";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { decideCorrection, type State } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 /**
  * Approve or deny one worker's correction request.
  *
@@ -23,6 +24,7 @@ export function CorrectionDecision({
 }) {
   const t = useT();
   const [state, formAction, pending] = useActionState<State, FormData>(decideCorrection, null);
+  const resolveErr = useActionErrorResolver();
 
   if (selfRequested) {
     return (
@@ -45,7 +47,7 @@ export function CorrectionDecision({
         className="ps-input ps-input--sm w-full"
         placeholder={t("console.finance.corrections.notesPlaceholder", undefined, "Note back to them (optional)…")}
       />
-      {state?.error && <Alert kind="error">{state.error}</Alert>}
+      {state?.error && <Alert kind="error">{resolveErr(state.error)}</Alert>}
       {state?.ok && <Alert kind="success">{state.ok}</Alert>}
       <div className="flex gap-2">
         <Button type="submit" name="decision" value="approved" size="sm" loading={pending}>

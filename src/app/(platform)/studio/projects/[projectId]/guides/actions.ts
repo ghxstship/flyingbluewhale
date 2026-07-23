@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { PERSONA_TIERS } from "@/lib/db/guides";
 import type { GuidePersona } from "@/lib/supabase/types";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const PERSONAS: GuidePersona[] = ["artist", "vendor", "client", "sponsor", "guest", "crew", "staff", "custom"];
 
@@ -35,7 +36,7 @@ export async function upsertGuideAction(projectId: string, _: State, fd: FormDat
   try {
     config = JSON.parse(parsed.data.config || "{}");
   } catch {
-    return { error: "Config is not valid JSON" };
+    return { error: actionErrorMessage("config-is-not-valid-json", "Config is not valid JSON") };
   }
 
   const tierInfo = PERSONA_TIERS[parsed.data.persona];

@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   venue_id: z.string().uuid(),
@@ -34,7 +35,7 @@ export async function createDeployment(_: State, fd: FormData): Promise<State> {
     .eq("id", parsed.data.venue_id)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  if (!venue) return { error: "Venue not found in your organization" };
+  if (!venue) return { error: actionErrorMessage("not-found.venue-in-org", "Venue not found in your organization") };
 
   const { data, error } = await supabase
     .from("workforce_deployments")

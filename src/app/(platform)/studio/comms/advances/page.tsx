@@ -133,7 +133,7 @@ export default async function AdvancesPage() {
             },
             {
               key: "batch_state",
-              header: t("console.comms.advances.columns.state", undefined, "State"),
+              header: t("console.comms.advances.columns.state", undefined, "Status"),
               render: (r) => <Badge variant={STATE_VARIANT[r.batch_state] ?? "muted"}>{r.batch_state}</Badge>,
             },
             {

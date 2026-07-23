@@ -6,15 +6,17 @@ import { Button } from "@/components/ui/Button";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { createShareLinkAction } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export function ShareLinkPanel({ proposalId }: { proposalId: string }) {
   const t = useT();
+  const resolveErr = useActionErrorResolver();
   const [pending, start] = useTransition();
 
   const generate = (audience: string | null) =>
     start(async () => {
       const res = await createShareLinkAction(proposalId, audience);
       if (res?.error) {
-        toast.error(res.error);
+        toast.error(resolveErr(res.error));
         return;
       }
       if (res?.ok) {

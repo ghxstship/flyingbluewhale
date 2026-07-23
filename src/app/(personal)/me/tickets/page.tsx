@@ -117,7 +117,7 @@ export default async function MyTicketsPage() {
             },
             {
               key: "state",
-              header: t("me.tickets.columns.state", undefined, "State"),
+              header: t("me.tickets.columns.state", undefined, "Status"),
               render: (r) => <StatusBadge status={r.fulfillment_state} />,
               accessor: (r) => r.fulfillment_state,
               filterable: true,

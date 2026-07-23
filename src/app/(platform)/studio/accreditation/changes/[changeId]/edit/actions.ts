@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   kind: z.string().min(1).max(80),
@@ -33,7 +34,7 @@ export async function updateAccreditationChange(id: string, _: State, fd: FormDa
     note: parsed.data.note || null,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Accreditation Change not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.accreditation-change", "Accreditation Change not found.") };
   }
   revalidatePath(`/studio/accreditation/changes/${id}`);
   revalidatePath("/studio/accreditation/changes");

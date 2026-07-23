@@ -250,7 +250,7 @@ export default async function BoxOfficeConsolePage({
                 },
                 {
                   key: "state",
-                  header: "State",
+                  header: "Status",
                   render: (r) => <StatusBadge status={r.order_state} />,
                   accessor: (r) => r.order_state,
                   filterable: true,
@@ -300,7 +300,7 @@ export default async function BoxOfficeConsolePage({
                 <tr>
                   <th>Period</th>
                   <th>Net</th>
-                  <th>State</th>
+                  <th>Status</th>
                   <th>Scheduled / Paid</th>
                 </tr>
               </thead>

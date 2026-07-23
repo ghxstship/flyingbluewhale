@@ -8,6 +8,7 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { walkOrgSources } from "@/lib/ai/corpus";
 import { SITE } from "@/lib/seo";
 import { log } from "@/lib/log";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = { error?: string; ok?: true; indexed?: number; skipped?: number } | null;
 
@@ -29,7 +30,7 @@ export type State = { error?: string; ok?: true; indexed?: number; skipped?: num
  */
 export async function reindexCorpus(): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Manager role or higher required." };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("manager-role-or-higher-required", "Manager role or higher required.") };
 
   const supabase = (await createClient()) as unknown as LooseSupabase;
 
@@ -38,11 +39,11 @@ export async function reindexCorpus(): Promise<State> {
     sources = await walkOrgSources(supabase, session.orgId);
   } catch (e) {
     log.error("corpus.walk.failed", { err: e instanceof Error ? e.message : String(e) });
-    return { error: "Could not enumerate corpus sources." };
+    return { error: actionErrorMessage("could-not-enumerate-corpus-sources", "Could not enumerate corpus sources.") };
   }
 
   if (sources.length === 0) {
-    return { error: "No deliverables, submittals, or RFIs with text to index." };
+    return { error: actionErrorMessage("no-deliverables-submittals-or-rfis-with-text-to-index", "No deliverables, submittals, or RFIs with text to index.") };
   }
 
   // Resolve an absolute origin for the self-call. Prefer the live request
@@ -52,7 +53,7 @@ export async function reindexCorpus(): Promise<State> {
   const host = h.get("x-forwarded-host") ?? h.get("host") ?? "";
   const proto = h.get("x-forwarded-proto") ?? (host.includes("localhost") || host.includes("lvh.me") ? "http" : "https");
   const origin = host ? `${proto}://${host}` : SITE.baseUrl;
-  if (!origin) return { error: "Could not resolve the embed-source endpoint origin." };
+  if (!origin) return { error: actionErrorMessage("could-not-resolve-the-embed-source-endpoint-origin", "Could not resolve the embed-source endpoint origin.") };
 
   const cookieHeader = (await cookies())
     .getAll()

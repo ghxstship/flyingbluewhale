@@ -75,7 +75,7 @@ export default async function RuleDetailPage({ params }: { params: Promise<{ id:
             <Field label="Severity">
               <StatusBadge status={rule.severity} />
             </Field>
-            <Field label="State">
+            <Field label="Status">
               <StatusBadge status={rule.rule_state} />
             </Field>
             <Field label="Added">{timeAgo(rule.created_at)}</Field>

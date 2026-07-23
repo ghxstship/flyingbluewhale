@@ -90,7 +90,7 @@ export default async function DiscountsPage() {
             },
             {
               key: "state",
-              header: "State",
+              header: "Status",
               render: (r) => <StatusBadge status={r.discount_state} />,
               accessor: (r) => r.discount_state,
             },

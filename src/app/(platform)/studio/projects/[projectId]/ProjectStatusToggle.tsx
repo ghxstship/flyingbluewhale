@@ -7,6 +7,7 @@ import { updateProjectAction } from "../actions";
 import type { ProjectState } from "@/lib/supabase/types";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 const NEXT_STATE: Partial<Record<ProjectState, ProjectState>> = {
   draft: "active",
   active: "paused",
@@ -17,6 +18,7 @@ const NEXT_STATE: Partial<Record<ProjectState, ProjectState>> = {
 
 export function ProjectStatusToggle({ projectId, projectState }: { projectId: string; projectState: ProjectState }) {
   const t = useT();
+  const resolveErr = useActionErrorResolver();
   const [pending, start] = useTransition();
   const next = NEXT_STATE[projectState];
   if (!next) return null;
@@ -30,7 +32,7 @@ export function ProjectStatusToggle({ projectId, projectState }: { projectId: st
           const fd = new FormData();
           fd.set("project_state", next);
           const res = await updateProjectAction(projectId, fd);
-          if (res?.error) toast.error(res.error);
+          if (res?.error) toast.error(resolveErr(res.error));
           else toast.success(t("console.projects.statusToggle.markedToast", { state: next }, `Marked ${next}`));
         })
       }

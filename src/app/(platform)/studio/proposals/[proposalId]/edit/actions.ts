@@ -10,6 +10,7 @@ import { urlFor } from "@/lib/urls";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { resolveDepositPct, PROPOSAL_DEPOSIT_PCT_DEFAULT } from "@/lib/payment-terms";
 import { getOrgPaymentDefaults } from "@/lib/payment-terms-server";
+import { actionErrorMessage } from "@/lib/errors";
 
 const UpdateSchema = z.object({
   title: z.string().min(1).max(200),
@@ -37,7 +38,7 @@ export async function saveProposalAction(proposalId: string, _: EditState, fd: F
   try {
     parsedBlocks = JSON.parse(parsed.data.blocks || "[]");
   } catch {
-    return { error: "Blocks JSON is invalid" };
+    return { error: actionErrorMessage("blocks-json-is-invalid", "Blocks JSON is invalid") };
   }
   // Boundary validation. The TS union in src/lib/proposals/types.ts is
   // the source of truth; the zod schema mirrors it so a single
@@ -54,7 +55,7 @@ export async function saveProposalAction(proposalId: string, _: EditState, fd: F
     .eq("org_id", session.orgId)
     .eq("id", proposalId)
     .maybeSingle();
-  if (!current) return { error: "Not found" };
+  if (!current) return { error: actionErrorMessage("not-found.generic", "Not found") };
   const currentVersion = current.version ?? 1;
 
   // Resolve the deposit % through the canonical payment-terms seam
@@ -191,7 +192,7 @@ export async function revokeShareLinkAction(linkId: string, proposalId: string) 
     .eq("proposal_id", proposalId)
     .maybeSingle();
   const ownerOrgId = (link as unknown as { proposals?: { org_id?: string } } | null)?.proposals?.org_id;
-  if (!link || ownerOrgId !== session.orgId) return { error: "Share link not found" };
+  if (!link || ownerOrgId !== session.orgId) return { error: actionErrorMessage("not-found.share-link", "Share link not found") };
 
   const { data: revoked, error } = await supabase
     .from("proposal_share_links")

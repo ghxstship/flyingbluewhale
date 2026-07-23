@@ -6,6 +6,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   name: z.string().min(1).max(200),
@@ -34,7 +35,7 @@ export type State = {
 
 export async function createEventTypeAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create event types" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-event-types", "Only manager+ can create event types") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
 
@@ -42,7 +43,7 @@ export async function createEventTypeAction(_: State, fd: FormData): Promise<Sta
   try {
     new Intl.DateTimeFormat("en-US", { timeZone: parsed.data.timezone });
   } catch {
-    return { error: "Unknown timezone. Use an IANA name like America/New_York" };
+    return { error: actionErrorMessage("unknown-timezone-use-an-iana-name-like-america-new", "Unknown timezone. Use an IANA name like America/New_York") };
   }
 
   const supabase = await createClient();

@@ -7,6 +7,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { RFQ_VISIBILITIES, slugify } from "@/lib/marketplace";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   rfq_id: z.string().uuid(),
@@ -38,7 +39,7 @@ export async function publishRfqAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   // RFQ visibility flip → public mints the public_slug + lands on the
   // public marketplace surface. Manager+ only.
-  if (!isManagerPlus(session)) return { error: "Only manager+ can publish RFQs" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.publish-rfqs", "Only manager+ can publish RFQs") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -50,7 +51,7 @@ export async function publishRfqAction(_: State, fd: FormData): Promise<State> {
     .eq("id", parsed.data.rfq_id)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  if (!rfqResp.data) return { error: "RFQ not found" };
+  if (!rfqResp.data) return { error: actionErrorMessage("not-found.rfq", "RFQ not found") };
   const rfq = rfqResp.data as {
     id: string;
     title: string;

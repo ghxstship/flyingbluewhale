@@ -114,7 +114,7 @@ export default async function BoxOfficeListingsPage() {
               },
               {
                 key: "state",
-                header: "State",
+                header: "Status",
                 render: (r) => <StatusBadge status={r.listingState} />,
                 accessor: (r) => r.listingState,
                 filterable: true,

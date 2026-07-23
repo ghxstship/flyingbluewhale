@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/Input";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { createAnnouncementAction, type State } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 /**
  * Announcement composer. Audience targeting works as three layered
  * filters that AND together (server-side fan-out reads all three):
@@ -28,6 +29,7 @@ export function NewAnnouncementForm({
 }) {
   const t = useT();
   const [state, formAction, pending] = useActionState<State, FormData>(createAnnouncementAction, null);
+  const resolveErr = useActionErrorResolver();
 
   return (
     <form action={formAction} className="surface space-y-4 p-6">
@@ -111,7 +113,7 @@ export function NewAnnouncementForm({
         <input type="checkbox" name="pinned" />{" "}
         {t("console.comms.announcements.new.pinToTop", undefined, "Pin To Top Of Feed")}
       </label>
-      {state?.error ? <Alert kind="error">{state.error}</Alert> : null}
+      {state?.error ? <Alert kind="error">{resolveErr(state.error)}</Alert> : null}
       <div className="flex items-center justify-end gap-2">
         <Button href="/studio/comms/announcements" variant="ghost">
           {t("common.cancel", undefined, "Cancel")}

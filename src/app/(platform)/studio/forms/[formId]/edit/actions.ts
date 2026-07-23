@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { Json } from "@/lib/supabase/database.types";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 // Field shape stored on form_defs.schema. Kept narrow on purpose — adding
 // new field kinds is a deliberate schema bump, not an open-ended free-for-all.
@@ -81,7 +82,7 @@ export async function updateFormDefAction(_: State, fd: FormData): Promise<State
     schema: parsedSchema,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Form Def not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.form-def", "Form Def not found.") };
   }
   revalidatePath(`/studio/forms/${parsed.data.formId}`);
   revalidatePath("/studio/forms");

@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import Link from "next/link";
 import { requestTimeOff, type State } from "./time-off-action";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 /**
  * Portal-native "Request time off" form (ADR-0008 Amendment 4).
  *
@@ -24,6 +25,7 @@ const TYPES = ["Vacation", "Sick", "Personal", "Unpaid"];
 
 export function TimeOffRequestForm({ revalidate, backHref }: { revalidate: string; backHref: string }) {
   const [state, formAction, pending] = useActionState<State, FormData>(requestTimeOff, null);
+  const resolveErr = useActionErrorResolver();
 
   return (
     <form action={formAction}>
@@ -35,7 +37,7 @@ export function TimeOffRequestForm({ revalidate, backHref }: { revalidate: strin
 
       {state?.error && (
         <div className="ps-alert ps-alert--danger mb-4" role="alert">
-          {state.error}
+          {resolveErr(state.error)}
         </div>
       )}
 

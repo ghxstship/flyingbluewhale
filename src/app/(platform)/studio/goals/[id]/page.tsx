@@ -93,7 +93,7 @@ export default async function GoalDetail({ params }: { params: Promise<{ id: str
       />
       <div className="page-content space-y-8">
         <div className="metric-grid">
-          <Field label="State">
+          <Field label="Status">
             <StatusBadge status={goal.goal_state} />
           </Field>
           <Field label="Owner">{ownerLabel ?? "Unassigned"}</Field>

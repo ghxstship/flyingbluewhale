@@ -6,6 +6,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { DECISION_KINDS } from "@/lib/approvals/queries";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   instance_id: z.string().uuid(),
@@ -23,7 +24,7 @@ export type State = {
 
 export async function recordDecision(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can record approval decisions" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.record-approval-decisions", "Only manager+ can record approval decisions") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();

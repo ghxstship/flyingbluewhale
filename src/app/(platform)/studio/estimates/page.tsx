@@ -159,7 +159,7 @@ export default async function Page() {
             },
             {
               key: "state",
-              header: t("console.estimates.columns.state", undefined, "State"),
+              header: t("console.estimates.columns.state", undefined, "Status"),
               render: (r) => <Badge variant={toneFor(r.estimate_state)}>{toTitle(r.estimate_state)}</Badge>,
               accessor: (r) => r.estimate_state,
               filterable: true,

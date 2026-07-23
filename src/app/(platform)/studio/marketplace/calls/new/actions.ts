@@ -7,6 +7,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { MARKETPLACE_KINDS, slugify } from "@/lib/marketplace";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   title: z.string().min(1).max(200),
@@ -48,7 +49,7 @@ const toArray = (v: string | undefined): string[] =>
 
 export async function createCallAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can post open calls" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.post-open-calls", "Only manager+ can post open calls") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -96,7 +97,7 @@ export async function createCallAction(_: State, fd: FormData): Promise<State> {
 export async function publishCallAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const id = String(fd.get("call_id") ?? "");
-  if (!id) return { error: "Missing call" };
+  if (!id) return { error: actionErrorMessage("missing.call", "Missing call") };
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("open_calls")
@@ -106,7 +107,7 @@ export async function publishCallAction(_: State, fd: FormData): Promise<State> 
     .eq("open_call_phase", "draft")
     .select("id");
   if (error) return { error: error.message };
-  if (!data || data.length === 0) return { error: "Only a draft call can be published" };
+  if (!data || data.length === 0) return { error: actionErrorMessage("only-a-draft-call-can-be-published", "Only a draft call can be published") };
   revalidatePath("/studio/marketplace/calls");
   revalidatePath(`/studio/marketplace/calls/${id}`);
   return { error: undefined };
@@ -115,7 +116,7 @@ export async function publishCallAction(_: State, fd: FormData): Promise<State> 
 export async function closeCallAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   const id = String(fd.get("call_id") ?? "");
-  if (!id) return { error: "Missing call" };
+  if (!id) return { error: actionErrorMessage("missing.call", "Missing call") };
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("open_calls")
@@ -125,7 +126,7 @@ export async function closeCallAction(_: State, fd: FormData): Promise<State> {
     .eq("open_call_phase", "published")
     .select("id");
   if (error) return { error: error.message };
-  if (!data || data.length === 0) return { error: "Only a published call can be closed" };
+  if (!data || data.length === 0) return { error: actionErrorMessage("only-a-published-call-can-be-closed", "Only a published call can be closed") };
   revalidatePath("/studio/marketplace/calls");
   revalidatePath(`/studio/marketplace/calls/${id}`);
   return { error: undefined };

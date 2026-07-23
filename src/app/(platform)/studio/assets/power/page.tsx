@@ -107,7 +107,7 @@ export default async function Page() {
                   <th className="text-start">{t("console.assets.power.columns.class", undefined, "Class")}</th>
                   <th className="text-end">{t("console.assets.power.columns.qty", undefined, "Qty")}</th>
                   <th className="text-start">{t("console.assets.power.columns.location", undefined, "Location")}</th>
-                  <th className="text-start">{t("console.assets.power.columns.state", undefined, "State")}</th>
+                  <th className="text-start">{t("console.assets.power.columns.state", undefined, "Status")}</th>
                 </tr>
               </thead>
               <tbody>

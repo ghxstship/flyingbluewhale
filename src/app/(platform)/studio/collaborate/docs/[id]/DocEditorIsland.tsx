@@ -8,6 +8,7 @@ import { Alert } from "@/components/ui/Alert";
 import { DOC_STATES, DOC_STATE_LABEL, type DocState, type TiptapDoc } from "@/lib/collaborate";
 import { saveDoc, type State } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 // Tiptap is browser-only (ProseMirror touches window/document at module
 // eval). Load it via next/dynamic with ssr:false inside this client island
 // so the prod Turbopack build never evaluates it during SSR.
@@ -32,6 +33,7 @@ export function DocEditorIsland({
   // Held in a ref so editor keystrokes don't re-render the whole island.
   const contentRef = useRef<TiptapDoc>(initialContent);
   const [result, setResult] = useState<State>(null);
+  const resolveErr = useActionErrorResolver();
   const [pending, startTransition] = useTransition();
 
   const onChange = useCallback((doc: TiptapDoc) => {
@@ -84,7 +86,7 @@ export function DocEditorIsland({
         </Button>
       </div>
 
-      {result?.error && <Alert kind="error">{result.error}</Alert>}
+      {result?.error && <Alert kind="error">{resolveErr(result.error)}</Alert>}
       {result?.ok && <Alert kind="success">Saved</Alert>}
 
       <TiptapEditor initialContent={initialContent} onChange={onChange} />

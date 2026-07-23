@@ -7,6 +7,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { CHANNEL_KINDS } from "@/lib/messaging/queries";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   name: z.string().min(1).max(200),
@@ -25,7 +26,7 @@ export type State = {
 export async function createChannel(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   // Creating a channel is org-config — manager+.
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create channels" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-channels", "Only manager+ can create channels") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -39,7 +40,7 @@ export async function createChannel(_: State, fd: FormData): Promise<State> {
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!project) return actionFail("Project not found", fd);
+    if (!project) return actionFail(actionErrorMessage("not-found.project-2", "Project not found"), fd);
   }
 
   const { data, error } = await supabase

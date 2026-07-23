@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { XPMS_DEPARTMENTS, XPMS_DISCIPLINES, XPMS_PHASES } from "@/lib/finance/xpms-budget";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { moneyCentsString } from "@/app/(platform)/studio/finance/money";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   description: z.string().min(1).max(500),
@@ -51,7 +52,7 @@ export async function createExpenseAction(_: State, fd: FormData): Promise<State
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!project) return { error: "Project not found in your organization" };
+    if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
   }
 
   // Cross-tenant guard on atom pin.
@@ -63,9 +64,9 @@ export async function createExpenseAction(_: State, fd: FormData): Promise<State
       .eq("id", atomId)
       .eq("org_id", session.orgId)
       .maybeSingle();
-    if (!atom) return { error: "Atom not found in your organization" };
+    if (!atom) return { error: actionErrorMessage("not-found.atom-in-org", "Atom not found in your organization") };
     if (parsed.data.project_id && atom.project_id && atom.project_id !== parsed.data.project_id) {
-      return { error: "Atom belongs to a different project" };
+      return { error: actionErrorMessage("atom-belongs-to-a-different-project", "Atom belongs to a different project") };
     }
   }
 
@@ -99,9 +100,9 @@ export type BulkResult = { message?: string; error?: string };
  */
 async function bulkSetExpenseState(ids: string[], next: "approved" | "rejected"): Promise<BulkResult> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "You Need Manager Access To Review Expenses" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager.review-expenses", "You Need Manager Access To Review Expenses") };
   const parsed = BulkIds.safeParse(ids);
-  if (!parsed.success) return { error: "Invalid Selection" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.selection", "Invalid Selection") };
   const supabase = await createClient();
   const { data: updated, error } = await supabase
     .from("expenses")

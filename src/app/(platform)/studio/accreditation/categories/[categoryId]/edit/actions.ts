@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   code: z.string().min(1).max(40),
@@ -41,7 +42,7 @@ export async function updateCategory(categoryId: string, _: State, fd: FormData)
     },
   );
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Accreditation Categorie not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.accreditation-categorie", "Accreditation Categorie not found.") };
   }
   revalidatePath(`/studio/accreditation/categories/${categoryId}`);
   revalidatePath("/studio/accreditation/categories");

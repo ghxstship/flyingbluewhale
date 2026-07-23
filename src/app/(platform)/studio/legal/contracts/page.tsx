@@ -98,7 +98,7 @@ export default async function Page({
             },
             {
               key: "state",
-              header: t("console.legal.contracts.columns.state", undefined, "State"),
+              header: t("console.legal.contracts.columns.state", undefined, "Status"),
               render: (r) => <StatusBadge status={r.state} />,
             },
             {

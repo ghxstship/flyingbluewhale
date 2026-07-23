@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { nextOrgCode } from "@/lib/codes";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   title: z.string().min(1).max(200),
@@ -44,7 +45,7 @@ export async function createPunchItem(_: State, fd: FormData): Promise<State> {
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!project) return { error: "Project not found in your organization" };
+  if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
   if (parsed.data.vendor_id) {
     const { data: vendor } = await supabase
       .from("vendors")
@@ -53,7 +54,7 @@ export async function createPunchItem(_: State, fd: FormData): Promise<State> {
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!vendor) return { error: "Vendor not found in your organization" };
+    if (!vendor) return { error: actionErrorMessage("not-found.vendor-in-org", "Vendor not found in your organization") };
   }
   if (parsed.data.site_plan_id) {
     const { data: sitePlan } = await supabase
@@ -62,7 +63,7 @@ export async function createPunchItem(_: State, fd: FormData): Promise<State> {
       .eq("id", parsed.data.site_plan_id)
       .eq("org_id", session.orgId)
       .maybeSingle();
-    if (!sitePlan) return { error: "Site plan not found in your organization" };
+    if (!sitePlan) return { error: actionErrorMessage("not-found.site-plan-in-org", "Site plan not found in your organization") };
   }
   if (parsed.data.punch_list_id) {
     // Cross-tenant + cross-project guard: the chosen list must belong
@@ -74,9 +75,9 @@ export async function createPunchItem(_: State, fd: FormData): Promise<State> {
       .eq("id", parsed.data.punch_list_id)
       .eq("org_id", session.orgId)
       .maybeSingle();
-    if (!list) return { error: "Punch list not found in your organization" };
+    if (!list) return { error: actionErrorMessage("not-found.punch-list-in-org", "Punch list not found in your organization") };
     if ((list as { project_id: string }).project_id !== parsed.data.project_id) {
-      return { error: "Punch list belongs to a different project" };
+      return { error: actionErrorMessage("punch-list-belongs-to-a-different-project", "Punch list belongs to a different project") };
     }
   }
 

@@ -9,6 +9,7 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { dateRangeRefine } from "@/lib/zod/dateRange";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z
   .object({
@@ -46,7 +47,7 @@ export async function updateMeeting(id: string, _: State, fd: FormData): Promise
     event_state: parsed.data.event_state as "draft" | "scheduled" | "live" | "complete" | "cancelled",
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Event not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.event-2", "Event not found.") };
   }
 
   // Meeting-shaped fields live on the details sibling; the form only posts

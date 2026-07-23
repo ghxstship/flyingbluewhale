@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/Input";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { linkAssetAction, type State } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export function LinkAssetForm({
   assignments,
 }: {
@@ -18,6 +19,7 @@ export function LinkAssetForm({
 }) {
   const t = useT();
   const [state, action, pending] = useActionState<State, FormData>(linkAssetAction, null);
+  const resolveErr = useActionErrorResolver();
   return (
     <form action={action} className="grid gap-3 sm:grid-cols-3">
       <div className="sm:col-span-1">
@@ -63,7 +65,7 @@ export function LinkAssetForm({
           placeholder={t("console.people.credentials.assetLinker.form.codePlaceholder", undefined, "e.g. 04:A2:B5:C0")}
         />
       </div>
-      {state?.error && <p className="text-xs text-[var(--p-danger)] sm:col-span-3">{state.error}</p>}
+      {state?.error && <p className="text-xs text-[var(--p-danger)] sm:col-span-3">{resolveErr(state.error)}</p>}
       <div className="flex justify-end sm:col-span-3">
         <Button type="submit" loading={pending}>
           {t("console.people.credentials.assetLinker.form.submit", undefined, "Bind Code")}

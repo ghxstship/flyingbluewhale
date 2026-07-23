@@ -164,7 +164,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </label>
             <label className="flex flex-col gap-1.5">
               <span className={LBL}>
-                {t("console.finance.entities.new.fields.consolidationState", undefined, "Consolidation State")}
+                {t("console.finance.entities.new.fields.consolidationState", undefined, "Consolidation Status")}
               </span>
               <select name="consolidation_state" defaultValue={e.consolidation_state} className={INPUT}>
                 {["active", "pending", "dormant", "divested"].map((s) => (

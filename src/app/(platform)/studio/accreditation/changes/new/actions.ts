@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   accreditation_id: z.string().uuid(),
@@ -33,7 +34,7 @@ export async function createChange(_: State, fd: FormData): Promise<State> {
     .eq("id", parsed.data.accreditation_id)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  if (!accreditation) return { error: "Accreditation not found in your organization" };
+  if (!accreditation) return { error: actionErrorMessage("not-found.accreditation-in-org", "Accreditation not found in your organization") };
 
   const { data, error } = await supabase
     .from("accreditation_changes")

@@ -10,6 +10,7 @@ import { moneyDollarsString } from "@/lib/zod/money";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { emitAudit } from "@/lib/audit";
 import { Constants } from "@/lib/supabase/database.types";
+import { actionErrorMessage } from "@/lib/errors";
 
 // Single source of truth for lead stages — the `lead_stage` enum.
 const LEAD_STAGES = Constants.public.Enums.lead_stage;
@@ -98,7 +99,7 @@ export type CreateProposalFromLeadState = { error?: string } | null;
  */
 export async function createProposalFromLeadAction(leadId: string): Promise<CreateProposalFromLeadState> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create proposals" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-proposals", "Only manager+ can create proposals") };
 
   const supabase = await createClient();
   const { data: lead, error: loadError } = await supabase
@@ -109,7 +110,7 @@ export async function createProposalFromLeadAction(leadId: string): Promise<Crea
     .eq("id", leadId)
     .maybeSingle();
   if (loadError) return { error: loadError.message };
-  if (!lead) return { error: "Lead not found" };
+  if (!lead) return { error: actionErrorMessage("not-found.lead", "Lead not found") };
 
   // Idempotency: a proposal already drafted from this lead wins — a
   // retry or double-click lands on the proposal the first click created.
@@ -169,7 +170,7 @@ export type BulkResult = { message?: string; error?: string };
 async function bulkSetLeadStage(ids: string[], stage: (typeof LEAD_STAGES)[number]): Promise<BulkResult> {
   const session = await requireSession();
   const parsed = BulkIds.safeParse(ids);
-  if (!parsed.success) return { error: "Invalid Selection" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.selection", "Invalid Selection") };
   const supabase = await createClient();
   const { data: updated, error } = await supabase
     .from("opportunities")

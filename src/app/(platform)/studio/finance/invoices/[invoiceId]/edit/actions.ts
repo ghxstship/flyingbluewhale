@@ -9,6 +9,7 @@ import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrenc
 import { formFail } from "@/lib/forms/fail";
 import { moneyCentsString } from "@/app/(platform)/studio/finance/money";
 import { INVOICE_TITLE_MAX_LENGTH } from "@/lib/validation/constraints";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   title: z.string().min(1).max(INVOICE_TITLE_MAX_LENGTH),
@@ -66,7 +67,7 @@ function parseLineItems(fd: FormData): ParsedLineItem[] {
 
 export async function updateInvoice(id: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can edit invoices" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.edit-invoices", "Only manager+ can edit invoices") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   // Sea Trial FINDING-022: optimistic concurrency.
@@ -81,7 +82,7 @@ export async function updateInvoice(id: string, _: State, fd: FormData): Promise
     notes: parsed.data.notes || null,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Invoice not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.invoice", "Invoice not found.") };
   }
 
   // Reconcile invoice_line_items against the editor's submitted rows. RLS

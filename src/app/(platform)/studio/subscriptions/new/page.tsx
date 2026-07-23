@@ -71,7 +71,7 @@ export default async function NewSubscriptionPage() {
             </label>
             <label className="block">
               <span className="text-sm font-medium">
-                {t("console.subscriptions.new.trialDays", undefined, "Trial Days · Optional · Starts as TRIAL State")}
+                {t("console.subscriptions.new.trialDays", undefined, "Trial Days · Optional · Starts as TRIAL Status")}
               </span>
               <Input
                 name="trial_days"

@@ -8,9 +8,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { createCustomRole, type State } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export function CustomRoleForm() {
   const t = useT();
   const [state, action, pending] = useActionState<State, FormData>(createCustomRole, null);
+  const resolveErr = useActionErrorResolver();
   const [open, setOpen] = React.useState(false);
   React.useEffect(() => {
     if (state === null) setOpen(false);
@@ -56,7 +58,7 @@ export function CustomRoleForm() {
               "Comma-separated, e.g. invoices:read, expenses:read",
             )}
           />
-          {state?.error && <p className="text-xs text-[var(--p-danger)]">{state.error}</p>}
+          {state?.error && <p className="text-xs text-[var(--p-danger)]">{resolveErr(state.error)}</p>}
           <div className="flex justify-end">
             <Button type="submit" loading={pending}>
               {t("console.people.roles.createRole", undefined, "Create Role")}

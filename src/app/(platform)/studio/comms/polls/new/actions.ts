@@ -6,6 +6,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   question: z.string().min(1).max(300),
@@ -23,7 +24,7 @@ export type State = {
 
 export async function createPollAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can publish polls" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.publish-polls", "Only manager+ can publish polls") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const options = parsed.data.options
@@ -31,7 +32,7 @@ export async function createPollAction(_: State, fd: FormData): Promise<State> {
     .map((s) => s.trim())
     .filter(Boolean)
     .slice(0, 8);
-  if (options.length < 2) return { error: "Need at least 2 options" };
+  if (options.length < 2) return { error: actionErrorMessage("need-at-least-2-options", "Need at least 2 options") };
 
   const supabase = await createClient();
   const live = parsed.data.publish_now === "on";

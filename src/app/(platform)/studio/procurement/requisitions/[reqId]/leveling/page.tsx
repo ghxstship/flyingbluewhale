@@ -95,7 +95,7 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
             },
             {
               key: "response_state",
-              header: t("console.procurement.requisitions.leveling.columns.state", undefined, "State"),
+              header: t("console.procurement.requisitions.leveling.columns.state", undefined, "Status"),
               render: (r) => <Badge variant={toneFor(r.response_state)}>{toTitle(r.response_state)}</Badge>,
               accessor: (r) => r.response_state,
               filterable: true,

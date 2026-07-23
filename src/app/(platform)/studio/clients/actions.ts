@@ -6,6 +6,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   name: z.string().min(1).max(120),
@@ -24,7 +25,7 @@ export type State = {
 
 export async function createClientAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create clients" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-clients", "Only manager+ can create clients") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -58,9 +59,9 @@ export type BulkResult = { message?: string; error?: string };
  */
 export async function bulkDeleteClients(ids: string[]): Promise<BulkResult> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "You Need Manager Access To Delete Clients" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager.delete-clients", "You Need Manager Access To Delete Clients") };
   const parsed = BulkIds.safeParse(ids);
-  if (!parsed.success) return { error: "Invalid Selection" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.selection", "Invalid Selection") };
   const supabase = await createClient();
 
   const { data: updated, error } = await supabase

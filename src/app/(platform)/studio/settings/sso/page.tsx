@@ -129,7 +129,7 @@ export default async function Page() {
             },
             {
               key: "enabled",
-              header: t("console.settings.sso.col.state", undefined, "State"),
+              header: t("console.settings.sso.col.state", undefined, "Status"),
               render: (r) => (
                 <form action={toggleSsoProvider}>
                   <input type="hidden" name="id" value={r.id} />

@@ -8,6 +8,7 @@ import { emitAudit } from "@/lib/audit";
 import { PROJECT_ROLES } from "@/lib/supabase/types";
 import type { FormState } from "@/components/FormShell";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 // Adding an existing org member to a project. Project-role authority is the
 // gate: platform manager+ (auto-bypass) OR the project's `lead` may manage the
@@ -38,7 +39,7 @@ async function loadProjectForSession(projectId: string) {
 
 export async function addProjectMemberAction(projectId: string, _: FormState, fd: FormData): Promise<FormState> {
   const { session, project } = await loadProjectForSession(projectId);
-  if (!project) return { error: "Project not found or insufficient permissions." };
+  if (!project) return { error: actionErrorMessage("not-found.project-or-forbidden", "Project not found or insufficient permissions.") };
 
   const parsed = AddSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
@@ -55,7 +56,7 @@ export async function addProjectMemberAction(projectId: string, _: FormState, fd
     .is("deleted_at", null)
     .maybeSingle();
   if (!candidate) {
-    return { error: "User isn't an active member of this org. Invite them to the org first." };
+    return { error: actionErrorMessage("user-isn-t-an-active-member-of-this-org", "User isn't an active member of this org. Invite them to the org first.") };
   }
 
   const { error } = await supabase
@@ -87,10 +88,10 @@ const UpdateRoleSchema = z.object({
 
 export async function updateProjectMemberRoleAction(projectId: string, _: FormState, fd: FormData): Promise<FormState> {
   const { session, project } = await loadProjectForSession(projectId);
-  if (!project) return { error: "Project not found or insufficient permissions." };
+  if (!project) return { error: actionErrorMessage("not-found.project-or-forbidden", "Project not found or insufficient permissions.") };
 
   const parsed = UpdateRoleSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: "Invalid input" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.input", "Invalid input") };
 
   const supabase = await createClient();
   const { error } = await supabase

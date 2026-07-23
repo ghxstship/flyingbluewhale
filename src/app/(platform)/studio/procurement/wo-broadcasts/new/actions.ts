@@ -7,6 +7,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { nextOrgCode } from "@/lib/codes";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   title: z.string().min(1).max(200),
@@ -27,7 +28,7 @@ export type State = {
 export async function createBroadcast(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   // Work-order broadcasts fan out to vendors — manager+ only.
-  if (!isManagerPlus(session)) return { error: "Only manager+ can broadcast work orders" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.broadcast-work-orders", "Only manager+ can broadcast work orders") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -42,7 +43,7 @@ export async function createBroadcast(_: State, fd: FormData): Promise<State> {
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!project) return { error: "Project not found in your organization" };
+    if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
   }
 
   const code = await nextOrgCode("work_order_broadcasts", session.orgId, "WOB");

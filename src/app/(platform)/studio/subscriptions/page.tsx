@@ -65,7 +65,7 @@ export default async function SubscriptionsPage() {
             },
             {
               key: "state",
-              header: t("console.subscriptions.columns.state", undefined, "State"),
+              header: t("console.subscriptions.columns.state", undefined, "Status"),
               render: (r) => <Badge variant={badgeVariantForState(r.state)}>{toTitle(r.state)}</Badge>,
               accessor: (r) => r.state,
             },

@@ -6,6 +6,7 @@ import { getOfferLetterByToken } from "@/lib/offer-letters/queries";
 import { getActiveMsaForCrew } from "@/lib/msa/queries";
 import { msaPublicUrl } from "@/lib/msa/format";
 import { LetterDocument } from "@/components/offer-letters/LetterDocument";
+import { PRINT_PALETTE_CSS } from "@/lib/print/print-palette";
 import { PrintTrigger } from "./PrintTrigger";
 
 export const dynamic = "force-dynamic";
@@ -34,37 +35,7 @@ export default async function PrintPage({ params }: { params: Promise<{ token: s
 
   return (
     <main className="min-h-screen bg-white text-black" data-theme="light">
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
-            @page { size: Letter; margin: 0.5in; }
-            @media print {
-              html, body { background: #fff !important; color: #000 !important; }
-              .no-print { display: none !important; }
-            }
-            html, body { background: #fff; color: #000; }
-            /* Force the letter document into a print-friendly palette */
-            main[data-theme="light"] {
-              --p-bg: #ffffff;
-              --p-surface: #ffffff;
-              --p-surface-2: #f5f5f3;
-              --p-text-1: #0a0a0a;
-              --p-text-2: #1a1a1a;
-              --p-text-3: #6b6b6b;
-              --p-border: #d4d4d4;
-              --p-accent: #1a4dbb;
-              color: #0a0a0a;
-            }
-            main[data-theme="light"] article { color: #0a0a0a; }
-            main[data-theme="light"] .surface,
-            main[data-theme="light"] .surface-raised {
-              background: #ffffff;
-              color: #0a0a0a;
-              border-color: #d4d4d4;
-            }
-          `,
-        }}
-      />
+      <style dangerouslySetInnerHTML={{ __html: PRINT_PALETTE_CSS }} />
       <div className="mx-auto max-w-[8in] py-8 print:py-0">
         <div className="no-print mb-6 flex items-center justify-between gap-3 rounded border border-black/20 bg-[var(--p-surface-2)] px-4 py-3 text-xs text-black">
           <div>

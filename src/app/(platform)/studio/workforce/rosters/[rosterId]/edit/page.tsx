@@ -58,7 +58,7 @@ export default async function Page({ params }: { params: Promise<{ rosterId: str
           />
           <label className="flex flex-col gap-1.5">
             <span className="text-xs font-medium text-[var(--p-text-2)]">
-              {t("console.workforce.rosters.edit.fields.state", undefined, "State")}
+              {t("console.workforce.rosters.edit.fields.state", undefined, "Status")}
             </span>
             <select name="state" defaultValue={row.state ?? ""} required className="ps-input focus-ring w-full">
               <option value="draft">{t("console.workforce.rosters.edit.state.draft", undefined, "draft")}</option>

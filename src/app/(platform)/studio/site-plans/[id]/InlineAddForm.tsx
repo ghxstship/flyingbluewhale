@@ -4,6 +4,7 @@ import { useActionState, useRef } from "react";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import type { State } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 const INPUT = "rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-2 py-1.5 text-xs";
 const LBL = "text-[11px] uppercase tracking-wide text-[var(--p-text-2)]";
 
@@ -35,6 +36,7 @@ export function InlineAddForm({ action, sheetId, submitLabel, fields }: Props) {
     if (result?.ok) formRef.current?.reset();
     return result;
   }, null);
+  const resolveErr = useActionErrorResolver();
 
   return (
     <form ref={formRef} action={formAction} className="mt-3 border-t border-[var(--p-border)] pt-3">
@@ -52,7 +54,7 @@ export function InlineAddForm({ action, sheetId, submitLabel, fields }: Props) {
         </button>
         {state?.error && (
           <span className="text-[11px] text-[var(--p-danger)]" role="alert">
-            {state.error}
+            {resolveErr(state.error)}
           </span>
         )}
       </div>

@@ -33,7 +33,7 @@ export default async function Page() {
           />
           <div>
             <label htmlFor="state" className="text-xs font-medium text-[var(--p-text-2)]">
-              {t("console.workforce.rosters.new.state.label", undefined, "State")}
+              {t("console.workforce.rosters.new.state.label", undefined, "Status")}
             </label>
             <select id="state" name="state" defaultValue="draft" className="ps-input mt-1.5 w-full">
               <option value="draft">{t("console.workforce.rosters.new.state.draft", undefined, "Draft")}</option>

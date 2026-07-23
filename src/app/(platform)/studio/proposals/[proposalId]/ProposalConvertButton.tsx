@@ -6,8 +6,10 @@ import { Button } from "@/components/ui/Button";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { convertProposalToProjectAction } from "../actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export function ProposalConvertButton({ id }: { id: string }) {
   const t = useT();
+  const resolveErr = useActionErrorResolver();
   const [pending, start] = useTransition();
   return (
     <Button
@@ -20,7 +22,7 @@ export function ProposalConvertButton({ id }: { id: string }) {
           // A successful run redirects, so reaching this code path
           // implies the action returned an error state instead of
           // throwing NEXT_REDIRECT.
-          if (res?.error) toast.error(res.error);
+          if (res?.error) toast.error(resolveErr(res.error));
         })
       }
     >

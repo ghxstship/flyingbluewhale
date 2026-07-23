@@ -160,7 +160,7 @@ export default async function AtomsPage({
             },
             {
               key: "state",
-              header: t("console.xpms.atoms.columns.state", undefined, "State"),
+              header: t("console.xpms.atoms.columns.state", undefined, "Status"),
               render: (r) => <Badge variant={r.state === "tpc" ? "success" : "info"}>{r.state.toUpperCase()}</Badge>,
               accessor: (r) => r.state,
               sortable: true,

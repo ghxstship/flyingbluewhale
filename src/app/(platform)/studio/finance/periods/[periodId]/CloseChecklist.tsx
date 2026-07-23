@@ -5,6 +5,7 @@ import { useActionState } from "react";
 import { Check } from "lucide-react";
 import { addCloseTask, toggleCloseTask, type CloseState } from "./close-actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export type CloseItem = { id: string; title: string; done: boolean };
 
 /**
@@ -22,6 +23,7 @@ export function CloseChecklist({
   locked: boolean;
 }) {
   const [state, formAction, pending] = useActionState<CloseState, FormData>(addCloseTask, null);
+  const resolveErr = useActionErrorResolver();
   const formRef = React.useRef<HTMLFormElement>(null);
   const done = items.filter((i) => i.done).length;
 
@@ -83,7 +85,7 @@ export function CloseChecklist({
       )}
       {state?.error && (
         <p role="alert" className="text-xs text-[var(--p-danger-text)]">
-          {state.error}
+          {resolveErr(state.error)}
         </p>
       )}
     </section>

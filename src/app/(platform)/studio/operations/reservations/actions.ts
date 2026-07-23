@@ -9,6 +9,7 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { emitAudit } from "@/lib/audit";
 import { RESERVATION_STATES, canTransitionReservation, type ReservationState } from "@/lib/reservations";
+import { actionErrorMessage } from "@/lib/errors";
 
 const slugify = (s: string) =>
   s
@@ -36,7 +37,7 @@ const CreateSchema = z.object({
 
 export async function createReservation(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create reservations" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-reservations", "Only manager+ can create reservations") };
   const parsed = CreateSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = (await createClient()) as unknown as LooseSupabase;
@@ -50,7 +51,7 @@ export async function createReservation(_: State, fd: FormData): Promise<State> 
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!tbl) return actionFail("Table not found in your organization", fd);
+    if (!tbl) return actionFail(actionErrorMessage("not-found.table-in-org", "Table not found in your organization"), fd);
   }
 
   const { data: row, error } = await supabase
@@ -82,9 +83,9 @@ const TransitionSchema = z.object({
 
 export async function transitionReservation(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can update reservations" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.update-reservations", "Only manager+ can update reservations") };
   const parsed = TransitionSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: "Invalid transition" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.transition", "Invalid transition") };
   const supabase = (await createClient()) as unknown as LooseSupabase;
 
   const { data: current } = await supabase
@@ -94,7 +95,7 @@ export async function transitionReservation(_: State, fd: FormData): Promise<Sta
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!current) return { error: "Reservation not found" };
+  if (!current) return { error: actionErrorMessage("not-found.reservation", "Reservation not found") };
 
   const from = (current as { reservation_state: ReservationState }).reservation_state;
   const to = parsed.data.to_state;
@@ -125,7 +126,7 @@ export async function transitionReservation(_: State, fd: FormData): Promise<Sta
  */
 export async function confirmReservationCreateEventAction(reservationId: string): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create events" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-events", "Only manager+ can create events") };
   const supabase = await createClient();
 
   const { data: res } = await supabase
@@ -135,7 +136,7 @@ export async function confirmReservationCreateEventAction(reservationId: string)
     .eq("id", reservationId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!res) return { error: "Reservation not found" };
+  if (!res) return { error: actionErrorMessage("not-found.reservation", "Reservation not found") };
 
   // Idempotency: a prior conversion left its project marker in notes.
   const linkedProjectId = res.notes?.match(/\[project:([0-9a-f-]{36})\]/)?.[1];
@@ -167,7 +168,7 @@ export async function confirmReservationCreateEventAction(reservationId: string)
       .maybeSingle();
     if (!clash) break;
     slug = `${baseSlug}-${suffix}`;
-    if (suffix === 99) return { error: "Could not derive a unique event slug" };
+    if (suffix === 99) return { error: actionErrorMessage("could-not-derive-a-unique-event-slug", "Could not derive a unique event slug") };
   }
 
   const descriptionLines = [

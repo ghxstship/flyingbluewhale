@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   vendor_id: z.string().uuid(),
@@ -33,7 +34,7 @@ export async function addResponse(reqId: string, _: State, fd: FormData): Promis
     .eq("id", reqId)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  if (!req) return { error: "Requisition not found in your organization" };
+  if (!req) return { error: actionErrorMessage("not-found.requisition-in-org", "Requisition not found in your organization") };
   const { data: vendor } = await supabase
     .from("vendors")
     .select("id")
@@ -41,7 +42,7 @@ export async function addResponse(reqId: string, _: State, fd: FormData): Promis
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!vendor) return { error: "Vendor not found in your organization" };
+  if (!vendor) return { error: actionErrorMessage("not-found.vendor-in-org", "Vendor not found in your organization") };
 
   const totalCents = parsed.data.total ? Math.round(Number(parsed.data.total) * 100) : null;
   const { error } = await supabase.from("rfq_responses").insert({
@@ -54,7 +55,7 @@ export async function addResponse(reqId: string, _: State, fd: FormData): Promis
     submitted_at: totalCents != null ? new Date().toISOString() : null,
   } as never);
   if (error) {
-    if (error.code === "23505") return { error: "This vendor already has a response. Edit it instead." };
+    if (error.code === "23505") return { error: actionErrorMessage("this-vendor-already-has-a-response-edit-it-instead", "This vendor already has a response. Edit it instead.") };
     return actionFail(error.message, fd);
   }
   revalidatePath(`/studio/procurement/requisitions/${reqId}/leveling`);

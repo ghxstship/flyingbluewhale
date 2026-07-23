@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   name: z.string().min(1).max(200),
@@ -40,7 +41,7 @@ export async function createGuardTour(_: State, fd: FormData): Promise<State> {
       .eq("id", venueId)
       .eq("org_id", session.orgId)
       .maybeSingle();
-    if (!venue) return { error: "Venue not found in your organization" };
+    if (!venue) return { error: actionErrorMessage("not-found.venue-in-org", "Venue not found in your organization") };
   }
 
   const { error } = await supabase.from("guard_tours").insert({

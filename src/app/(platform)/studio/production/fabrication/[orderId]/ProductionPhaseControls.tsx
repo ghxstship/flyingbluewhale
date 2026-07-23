@@ -8,6 +8,7 @@ import { toTitle } from "@/lib/format";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { useToast } from "@/lib/hooks/useToast";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export function ProductionPhaseControls({
   orderId,
   currentPhase,
@@ -18,6 +19,7 @@ export function ProductionPhaseControls({
   allowedNext: readonly ProductionPhase[];
 }) {
   const t = useT();
+  const resolveErr = useActionErrorResolver();
   const toast = useToast();
   const [pending, startTransition] = useTransition();
 
@@ -39,7 +41,7 @@ export function ProductionPhaseControls({
               const r = await transitionProductionPhaseAction(orderId, target);
               if ("error" in r && r.error) {
                 console.error(r.error);
-                toast.error(r.error);
+                toast.error(resolveErr(r.error));
               }
             });
           }}

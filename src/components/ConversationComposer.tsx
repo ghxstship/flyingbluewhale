@@ -6,6 +6,7 @@ import { Button } from "./ui/Button";
 import { postConversationMessage } from "@/lib/actions/conversations";
 import type { ConversationRecordType } from "@/lib/db/conversations";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 function Submit() {
   const { pending } = useFormStatus();
   return (
@@ -23,6 +24,7 @@ export function ConversationComposer({
   recordId: string;
 }) {
   const [state, formAction] = useActionState<{ error?: string } | null, FormData>(postConversationMessage, null);
+  const resolveErr = useActionErrorResolver();
   return (
     <form action={formAction} className="space-y-2">
       <input type="hidden" name="record_type" value={recordType} />
@@ -34,7 +36,7 @@ export function ConversationComposer({
         placeholder="Add a comment…"
         className="w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
       />
-      {state?.error && <p className="text-xs text-[var(--error)]">{state.error}</p>}
+      {state?.error && <p className="text-xs text-[var(--error)]">{resolveErr(state.error)}</p>}
       <div className="flex justify-end">
         <Submit />
       </div>

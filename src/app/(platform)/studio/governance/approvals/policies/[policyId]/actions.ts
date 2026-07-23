@@ -6,6 +6,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { ROUTING_KINDS } from "@/lib/approvals/queries";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   policy_id: z.string().uuid(),
@@ -24,7 +25,7 @@ export type State = {
 
 export async function addStep(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can edit approval policies" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.edit-approval-policies", "Only manager+ can edit approval policies") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -37,12 +38,12 @@ export async function addStep(_: State, fd: FormData): Promise<State> {
     .eq("id", parsed.data.policy_id)
     .eq("org_id", session.orgId)
     .maybeSingle();
-  if (!policy) return { error: "Policy not found" };
+  if (!policy) return { error: actionErrorMessage("not-found.policy", "Policy not found") };
 
   const threshold = parsed.data.threshold ? Math.round(Number(parsed.data.threshold)) : null;
   const slaHours = parsed.data.sla_hours ? Math.round(Number(parsed.data.sla_hours)) : null;
-  if (threshold != null && !Number.isFinite(threshold)) return { error: "Bad threshold" };
-  if (slaHours != null && !Number.isFinite(slaHours)) return { error: "Bad SLA hours" };
+  if (threshold != null && !Number.isFinite(threshold)) return { error: actionErrorMessage("bad-threshold", "Bad threshold") };
+  if (slaHours != null && !Number.isFinite(slaHours)) return { error: actionErrorMessage("bad-sla-hours", "Bad SLA hours") };
 
   const { error } = await supabase.from("approval_steps").insert({
     policy_id: parsed.data.policy_id,

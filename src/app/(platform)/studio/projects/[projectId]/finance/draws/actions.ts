@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { XPMS_DEFAULT_DRAW_SCHEDULE, XPMS_PHASES } from "@/lib/finance/xpms-budget";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const DrawSchema = z.object({
   draw_name: z.string().min(1).max(120),
@@ -47,9 +48,9 @@ async function assertProjectInOrg(
 
 export async function seedDefaultDraws(projectId: string): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can seed draw schedules" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.seed-draw-schedules", "Only manager+ can seed draw schedules") };
   const supabase = await createClient();
-  if (!(await assertProjectInOrg(supabase, projectId, session.orgId))) return { error: "Project not found" };
+  if (!(await assertProjectInOrg(supabase, projectId, session.orgId))) return { error: actionErrorMessage("not-found.project-2", "Project not found") };
 
   const rows = XPMS_DEFAULT_DRAW_SCHEDULE.map((d) => ({
     org_id: session.orgId,
@@ -69,14 +70,14 @@ export async function seedDefaultDraws(projectId: string): Promise<State> {
 
 export async function createDraw(projectId: string, _: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create draws" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-draws", "Only manager+ can create draws") };
   const parsed = DrawSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const pct = normalizePct(parsed.data.percentage);
-  if (pct === null || pct < 0 || pct > 1) return { error: "Percentage must be between 0% and 100%" };
+  if (pct === null || pct < 0 || pct > 1) return { error: actionErrorMessage("percentage-must-be-between-0-pct-and-100-pct", "Percentage must be between 0% and 100%") };
 
   const supabase = await createClient();
-  if (!(await assertProjectInOrg(supabase, projectId, session.orgId))) return { error: "Project not found" };
+  if (!(await assertProjectInOrg(supabase, projectId, session.orgId))) return { error: actionErrorMessage("not-found.project-2", "Project not found") };
 
   const { error } = await (supabase as unknown as LooseSupabase).from("project_billing_draws").insert({
     org_id: session.orgId,

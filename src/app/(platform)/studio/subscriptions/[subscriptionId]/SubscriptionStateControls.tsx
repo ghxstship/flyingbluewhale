@@ -7,6 +7,7 @@ import { useToast } from "@/lib/hooks/useToast";
 import { transitionSubscriptionAction } from "../actions";
 import type { SubscriptionState } from "@/lib/subscriptions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export function SubscriptionStateControls({
   subscriptionId,
   currentState,
@@ -17,6 +18,7 @@ export function SubscriptionStateControls({
   allowedNext: readonly SubscriptionState[];
 }) {
   const t = useT();
+  const resolveErr = useActionErrorResolver();
   const toast = useToast();
   const [pending, startTransition] = useTransition();
 
@@ -39,7 +41,7 @@ export function SubscriptionStateControls({
               const r = await transitionSubscriptionAction(subscriptionId, target, reason);
               if ("error" in r && r.error) {
                 console.error(r.error);
-                toast.error(r.error);
+                toast.error(resolveErr(r.error));
               }
             });
           }}

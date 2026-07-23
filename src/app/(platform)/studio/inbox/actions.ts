@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getRequestFormatters } from "@/lib/i18n/request";
 import { resolveRecordRefs } from "./record-refs";
 import { createChannelRoom, findOrCreateDirectRoom } from "@/lib/db/chat-rooms";
+import { actionErrorMessage } from "@/lib/errors";
 
 /**
  * Console inbox write actions (kit 20 Inbox M-series). Mirrors the COMPVSS
@@ -38,7 +39,7 @@ export async function sendConsoleMessage(_prev: State, fd: FormData): Promise<St
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!room) return { error: "Thread not found." };
+  if (!room) return { error: actionErrorMessage("not-found.thread", "Thread not found.") };
 
   const { data: member } = await supabase
     .from("chat_room_members")
@@ -46,7 +47,7 @@ export async function sendConsoleMessage(_prev: State, fd: FormData): Promise<St
     .eq("room_id", roomId)
     .eq("user_id", session.userId)
     .maybeSingle();
-  if (!member) return { error: "You are not a member of this thread." };
+  if (!member) return { error: actionErrorMessage("you-are-not-a-member-of-this-thread", "You are not a member of this thread.") };
 
   const now = new Date().toISOString();
   const { error: msgError } = await supabase
@@ -256,7 +257,7 @@ export async function loadEarlierMessages(roomId: string, beforeIso: string): Pr
   const parsed = z
     .object({ roomId: z.string().uuid(), beforeIso: z.string().datetime({ offset: true }) })
     .safeParse({ roomId, beforeIso });
-  if (!parsed.success) return { error: "Invalid cursor" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.cursor", "Invalid cursor") };
   const supabase = await createClient();
 
   // Deterministic membership check (RLS backstops the table).
@@ -266,7 +267,7 @@ export async function loadEarlierMessages(roomId: string, beforeIso: string): Pr
     .eq("room_id", parsed.data.roomId)
     .eq("user_id", session.userId)
     .maybeSingle();
-  if (!member) return { error: "Not a member of this room" };
+  if (!member) return { error: actionErrorMessage("not-a-member-of-this-room", "Not a member of this room") };
 
   const { data: msgs, error } = await supabase
     .from("chat_messages")

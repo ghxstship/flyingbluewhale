@@ -7,6 +7,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   summary: z.string().min(1).max(500),
@@ -39,7 +40,7 @@ export async function updateIncident(incidentId: string, _: State, fd: FormData)
     occurred_at: parsed.data.occurred_at || undefined,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Incident not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.incident-2", "Incident not found.") };
   }
   revalidatePath(`/studio/operations/incidents/${incidentId}`);
   revalidatePath("/studio/operations/incidents");

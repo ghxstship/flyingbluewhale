@@ -205,7 +205,7 @@ export async function AssetInventorySurface({
             },
             {
               key: "state",
-              header: t("console.assets.columns.state", undefined, "State"),
+              header: t("console.assets.columns.state", undefined, "Status"),
               render: (r) => <StatusBadge status={r.state} />,
               accessor: (r) => r.state,
               filterable: true,

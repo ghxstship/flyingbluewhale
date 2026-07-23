@@ -7,8 +7,10 @@ import { formatMoney } from "@/lib/i18n/format";
 import { lineTotalCents, type BeoLineItem } from "@/lib/beos";
 import { deleteBeoLineAction } from "../actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export function BeoLineRow({ line, beoId }: { line: BeoLineItem; beoId: string }) {
   const [pending, start] = useTransition();
+  const resolveErr = useActionErrorResolver();
   return (
     <tr>
       <td>
@@ -26,7 +28,7 @@ export function BeoLineRow({ line, beoId }: { line: BeoLineItem; beoId: string }
           onClick={() =>
             start(async () => {
               const res = await deleteBeoLineAction(line.id, beoId);
-              if (res?.error) toast.error(res.error);
+              if (res?.error) toast.error(resolveErr(res.error));
               else toast.success("Line removed");
             })
           }

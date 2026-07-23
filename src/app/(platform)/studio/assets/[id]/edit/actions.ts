@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { updateOrgScopedWithCheck, STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   display_name: z.string().min(1).max(200),
@@ -32,7 +33,7 @@ export async function updateAsset(id: string, _: State, fd: FormData): Promise<S
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const dailyRate = parsed.data.daily_rate_usd ? Math.round(Number(parsed.data.daily_rate_usd) * 100) : null;
-  if (parsed.data.daily_rate_usd && !Number.isFinite(dailyRate)) return { error: "Bad daily rate" };
+  if (parsed.data.daily_rate_usd && !Number.isFinite(dailyRate)) return { error: actionErrorMessage("bad-daily-rate", "Bad daily rate") };
   // Optimistic concurrency (Sea Trial FINDING-022 pattern).
   const expectedUpdatedAt = String(fd.get("_updated_at") ?? "");
   const result = await updateOrgScopedWithCheck("assets", session.orgId, id, expectedUpdatedAt, {
@@ -49,7 +50,7 @@ export async function updateAsset(id: string, _: State, fd: FormData): Promise<S
     notes: parsed.data.notes || null,
   });
   if (!result.ok) {
-    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : "Asset not found." };
+    return { error: result.reason === "stale" ? STALE_ROW_MESSAGE : actionErrorMessage("not-found.asset-2", "Asset not found.") };
   }
   revalidatePath(`/studio/assets/${id}`);
   revalidatePath("/studio/assets");

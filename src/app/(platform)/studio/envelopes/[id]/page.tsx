@@ -87,7 +87,7 @@ export default async function EnvelopeDetail({ params }: { params: Promise<{ id:
       />
       <div className="page-content space-y-6">
         <div className="metric-grid">
-          <Field label={t("console.envelopes.column.state", undefined, "State")}>
+          <Field label={t("console.envelopes.column.state", undefined, "Status")}>
             <Badge variant={toneFor(env.envelope_state)}>{toTitle(env.envelope_state)}</Badge>
           </Field>
           <Field label={t("console.envelopes.column.provider", undefined, "Provider")}>

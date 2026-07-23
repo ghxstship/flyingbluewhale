@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { requestSwap } from "./swap-action";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 /**
  * "Can't make it" — file a swap ask against your own shift, from the portal.
  *
@@ -30,6 +31,7 @@ export function SwapRequestButton({
   revalidate: string;
 }) {
   const router = useRouter();
+  const resolveErr = useActionErrorResolver();
   const [open, setOpen] = useState(false);
   const [sent, setSent] = useState(false);
   const [reason, setReason] = useState("");
@@ -46,7 +48,7 @@ export function SwapRequestButton({
     startTransition(async () => {
       const res = await requestSwap(null, fd);
       if (res?.error) {
-        setError(res.error);
+        setError(resolveErr(res.error));
         return;
       }
       setSent(true);

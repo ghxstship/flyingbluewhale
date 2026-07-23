@@ -12,6 +12,7 @@ import {
   type SubscriptionState,
 } from "@/lib/subscriptions";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const CreateSchema = z.object({
   label: z.string().min(1).max(200),
@@ -45,7 +46,7 @@ export async function createSubscriptionAction(_: State, fd: FormData): Promise<
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!party) return { error: "Party not found in your organization" };
+    if (!party) return { error: actionErrorMessage("not-found.party-in-org", "Party not found in your organization") };
   }
   const initialState: SubscriptionState = parsed.data.trial_days && parsed.data.trial_days > 0 ? "TRIAL" : "PROSPECT";
   const trialEndsAt = parsed.data.trial_days
@@ -84,7 +85,7 @@ export async function createSubscriptionAction(_: State, fd: FormData): Promise<
 
 export async function transitionSubscriptionAction(id: string, to: SubscriptionState, reason?: string) {
   const session = await requireSession();
-  if (!SUBSCRIPTION_STATES.includes(to)) return { error: "Invalid target state" };
+  if (!SUBSCRIPTION_STATES.includes(to)) return { error: actionErrorMessage("invalid.target-state", "Invalid target state") };
   const result = await transitionSubscription({
     orgId: session.orgId,
     subscriptionId: id,

@@ -4,6 +4,7 @@ import * as React from "react";
 import { useActionState } from "react";
 import { createChannelAction, startDmAction, type State } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export type NewThreadLabels = {
   newChannel: string;
   newDm: string;
@@ -26,6 +27,7 @@ export function NewThreadControls({
   labels: NewThreadLabels;
 }) {
   const [dmState, dmAction, dmPending] = useActionState<State, FormData>(startDmAction, null);
+  const resolveErr = useActionErrorResolver();
   const [chState, chAction, chPending] = useActionState<State, FormData>(createChannelAction, null);
 
   return (
@@ -48,7 +50,7 @@ export function NewThreadControls({
           </select>
           {dmState?.error ? (
             <p role="alert" className="text-xs text-[var(--p-danger-text)]">
-              {dmState.error}
+              {resolveErr(dmState.error)}
             </p>
           ) : null}
           <button type="submit" className="ps-btn ps-btn--sm w-full" disabled={dmPending}>
@@ -68,7 +70,7 @@ export function NewThreadControls({
           <input id="channel-name" name="name" required maxLength={80} className="ps-input ps-input--sm w-full" />
           {chState?.error ? (
             <p role="alert" className="text-xs text-[var(--p-danger-text)]">
-              {chState.error}
+              {resolveErr(chState.error)}
             </p>
           ) : null}
           <button type="submit" className="ps-btn ps-btn--sm w-full" disabled={chPending}>

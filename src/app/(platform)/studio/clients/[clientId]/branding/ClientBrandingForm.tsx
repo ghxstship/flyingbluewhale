@@ -8,6 +8,7 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 import { LogoUploader } from "@/components/branding/LogoUploader";
 import { updateClientBrandingAction, type ClientBrandingState } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 type Initial = {
   clientId: string;
   clientName: string;
@@ -19,10 +20,11 @@ type Initial = {
 
 export function ClientBrandingForm({ initial }: { initial: Initial }) {
   const t = useT();
+  const resolveErr = useActionErrorResolver();
   const [state, formAction, pending] = useActionState<ClientBrandingState, FormData>(async (prev, fd) => {
     const result = await updateClientBrandingAction(initial.clientId, prev, fd);
     if (result?.ok) toast.success(t("console.clients.branding.savedToast", undefined, "Client branding saved"));
-    else if (result?.error) toast.error(result.error);
+    else if (result?.error) toast.error(resolveErr(result.error));
     return result;
   }, null);
 
@@ -72,7 +74,7 @@ export function ClientBrandingForm({ initial }: { initial: Initial }) {
         </div>
       </section>
 
-      {state?.error ? <Alert kind="error">{state.error}</Alert> : null}
+      {state?.error ? <Alert kind="error">{resolveErr(state.error)}</Alert> : null}
 
       <div className="flex justify-end">
         <Button type="submit" disabled={pending}>

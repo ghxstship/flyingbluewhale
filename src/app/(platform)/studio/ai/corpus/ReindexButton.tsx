@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
 import { reindexCorpus, type State } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 /**
  * Manual corpus reindex trigger. Walks the org's deliverables / submittals /
  * RFIs and feeds each to the embed-source endpoint server-side. Disabled
@@ -17,6 +18,7 @@ export function ReindexButton() {
     async () => reindexCorpus(),
     null,
   );
+  const resolveErr = useActionErrorResolver();
 
   return (
     <div className="space-y-3">
@@ -36,7 +38,7 @@ export function ReindexButton() {
       )}
       {state?.error && (
         <Alert kind="error" title="Reindex failed">
-          {state.error}
+          {resolveErr(state.error)}
         </Alert>
       )}
     </div>

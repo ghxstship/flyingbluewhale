@@ -137,7 +137,7 @@ export default async function RevenuePayoutsPage() {
               },
               {
                 key: "state",
-                header: t("console.revenue.payouts.col.state", undefined, "State"),
+                header: t("console.revenue.payouts.col.state", undefined, "Status"),
                 render: (r) => <StatusBadge status={r.payout_state} />,
                 accessor: (r) => r.payout_state,
                 filterable: true,

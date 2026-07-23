@@ -6,6 +6,7 @@ import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   name: z.string().min(1).max(120),
@@ -34,7 +35,7 @@ export type State = {
 export async function createZoneAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   // Time-clock zones are an operations-trust surface — manager+ only.
-  if (!isManagerPlus(session)) return { error: "Only manager+ can manage time-clock zones" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.manage-time-clock-zones", "Only manager+ can manage time-clock zones") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -48,7 +49,7 @@ export async function createZoneAction(_: State, fd: FormData): Promise<State> {
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .maybeSingle();
-    if (!project) return { error: "Project not found in your organization" };
+    if (!project) return { error: actionErrorMessage("not-found.project-in-org", "Project not found in your organization") };
   }
 
   const { data, error } = await supabase

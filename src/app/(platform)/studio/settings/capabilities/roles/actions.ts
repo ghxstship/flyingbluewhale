@@ -6,6 +6,7 @@ import { isAdmin, isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { emitAudit } from "@/lib/audit";
 import { slugifyRole } from "@/lib/rbac/slugify-role";
+import { actionErrorMessage } from "@/lib/errors";
 
 export type State = { error?: string; ok?: true } | null;
 
@@ -31,12 +32,12 @@ const CreateSchema = z.object({ name: z.string().trim().min(1).max(120) });
 
 export async function createRole(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "You need manager access to edit the role catalog" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager.edit-the-role-catalog", "You need manager access to edit the role catalog") };
   const parsed = CreateSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: "Give the role a name" };
+  if (!parsed.success) return { error: actionErrorMessage("give-the-role-a-name", "Give the role a name") };
 
   const slug = slugifyRole(parsed.data.name);
-  if (!slug) return { error: "That name has no letters or digits to key on" };
+  if (!slug) return { error: actionErrorMessage("that-name-has-no-letters-or-digits-to-key", "That name has no letters or digits to key on") };
 
   const supabase = await createClient();
   const { data: created, error } = await supabase
@@ -47,7 +48,7 @@ export async function createRole(_prev: State, fd: FormData): Promise<State> {
   if (error) {
     // The partial unique index (org_id, slug) WHERE deleted_at IS NULL:
     // a live duplicate is refused; a merged-away role's slug is free again.
-    if (error.code === "23505") return { error: "A role with that name already exists" };
+    if (error.code === "23505") return { error: actionErrorMessage("a-role-with-that-name-already-exists", "A role with that name already exists") };
     return { error: error.message };
   }
 
@@ -79,9 +80,9 @@ const RenameSchema = z.object({
  */
 export async function renameRole(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "You need manager access to edit the role catalog" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager.edit-the-role-catalog", "You need manager access to edit the role catalog") };
   const parsed = RenameSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: "Give the role a name" };
+  if (!parsed.success) return { error: actionErrorMessage("give-the-role-a-name", "Give the role a name") };
 
   const supabase = await createClient();
   const { data: updated, error } = await supabase
@@ -92,7 +93,7 @@ export async function renameRole(_prev: State, fd: FormData): Promise<State> {
     .is("deleted_at", null)
     .select("id, slug");
   if (error) return { error: error.message };
-  if (!updated || updated.length === 0) return { error: "Role not found" };
+  if (!updated || updated.length === 0) return { error: actionErrorMessage("not-found.role", "Role not found") };
 
   await emitAudit({
     actorId: session.userId,
@@ -136,13 +137,13 @@ const MergeSchema = z.object({
  */
 export async function mergeRoles(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isAdmin(session)) return { error: "Merging roles merges their permissions, which needs admin access" };
+  if (!isAdmin(session)) return { error: actionErrorMessage("merging-roles-merges-their-permissions-which-needs-admin-access", "Merging roles merges their permissions, which needs admin access") };
   const parsed = MergeSchema.safeParse(Object.fromEntries(fd));
-  if (!parsed.success) return { error: "Invalid request" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.request", "Invalid request") };
   const { source_id, target_id } = parsed.data;
-  if (source_id === target_id) return { error: "Pick two different roles" };
+  if (source_id === target_id) return { error: actionErrorMessage("pick-two-different-roles", "Pick two different roles") };
   if (!parsed.data.acknowledged) {
-    return { error: "Confirm that you have reviewed both roles' permissions before merging" };
+    return { error: actionErrorMessage("confirm-that-you-have-reviewed-both-roles-permissions-before", "Confirm that you have reviewed both roles' permissions before merging") };
   }
 
   const supabase = await createClient();
@@ -159,7 +160,7 @@ export async function mergeRoles(_prev: State, fd: FormData): Promise<State> {
   const target = (roles ?? []).find((r) => (r as { id: string }).id === target_id) as
     | { id: string; name: string; slug: string }
     | undefined;
-  if (!source || !target) return { error: "Role not found" };
+  if (!source || !target) return { error: actionErrorMessage("not-found.role", "Role not found") };
 
   // 1. Copy grants. ignoreDuplicates rides the (crew_role_id, capability)
   // unique index, so a capability both roles hold keeps the TARGET's row —

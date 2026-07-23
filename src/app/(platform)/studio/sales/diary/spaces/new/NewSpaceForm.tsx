@@ -31,7 +31,7 @@ export function NewSpaceForm() {
       </div>
       <div>
         <label htmlFor="space_state" className="text-xs font-medium text-[var(--p-text-2)]">
-          {t("console.diary.spaces.field.state", undefined, "State")}
+          {t("console.diary.spaces.field.state", undefined, "Status")}
         </label>
         <select id="space_state" name="space_state" defaultValue="active" className="ps-input mt-1.5 w-full">
           {SPACE_STATES.map((s) => (

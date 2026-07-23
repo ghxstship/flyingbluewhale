@@ -7,6 +7,7 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 import type { OfferLetterStatus } from "@/lib/offer-letters/types";
 import { sendLetter, withdrawLetter, rotateLetterCode } from "./actions";
 
+import { useActionErrorResolver } from "@/lib/errors-client";
 export function LetterLifecycleActions({
   letterId,
   status,
@@ -20,6 +21,7 @@ export function LetterLifecycleActions({
   msaIssueHref?: string;
 }) {
   const t = useT();
+  const resolveErr = useActionErrorResolver();
   const [pending, start] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
@@ -27,7 +29,7 @@ export function LetterLifecycleActions({
     start(async () => {
       setError(null);
       const result = await sendLetter(letterId, null, new FormData());
-      if (result && "error" in result && result.error) setError(result.error);
+      if (result && "error" in result && result.error) setError(resolveErr(result.error));
     });
   const withdraw = () =>
     start(async () => {

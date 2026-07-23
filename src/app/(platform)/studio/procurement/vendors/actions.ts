@@ -6,6 +6,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({
   name: z.string().min(1).max(120),
@@ -25,7 +26,7 @@ export type State = {
 
 export async function createVendorAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only manager+ can create vendors" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager-plus.create-vendors", "Only manager+ can create vendors") };
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -61,9 +62,9 @@ export type BulkResult = { message?: string; error?: string };
  */
 export async function bulkDeleteVendors(ids: string[]): Promise<BulkResult> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "You Need Manager Access To Delete Vendors" };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager.delete-vendors", "You Need Manager Access To Delete Vendors") };
   const parsed = BulkIds.safeParse(ids);
-  if (!parsed.success) return { error: "Invalid Selection" };
+  if (!parsed.success) return { error: actionErrorMessage("invalid.selection", "Invalid Selection") };
   const supabase = (await createClient()) as unknown as LooseSupabase;
 
   const { data: updated, error } = await supabase

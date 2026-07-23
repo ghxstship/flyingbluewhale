@@ -8,6 +8,7 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { compute, type ActivityInput, type DependencyInput, type DepType } from "@/lib/schedule/cpm";
 import { parseSchedule } from "@/lib/schedule/import";
 import { formFail } from "@/lib/forms/fail";
+import { actionErrorMessage } from "@/lib/errors";
 
 const Schema = z.object({ baseline_id: z.string().uuid() });
 
@@ -199,7 +200,7 @@ export type ImportState = {
 
 export async function importSchedule(_: ImportState, fd: FormData): Promise<ImportState> {
   const session = await requireSession();
-  if (!isManagerPlus(session)) return { error: "Only owners, admins, and managers can import a schedule." };
+  if (!isManagerPlus(session)) return { error: actionErrorMessage("auth.manager.import-a-schedule", "Only owners, admins, and managers can import a schedule.") };
   const parsed = ImportScheduleSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = (await createClient()) as unknown as LooseSupabase;
@@ -212,7 +213,7 @@ export async function importSchedule(_: ImportState, fd: FormData): Promise<Impo
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!baseline) return { error: "Baseline not found in your organization" };
+  if (!baseline) return { error: actionErrorMessage("not-found.baseline-in-org", "Baseline not found in your organization") };
 
   const result = parseSchedule(parsed.data.source_content);
   if (result.activities.length === 0) {

@@ -185,6 +185,16 @@ export type AuditAction =
   | "privacy.data_export"
   | "privacy.audit_export"
   // ────────────────────────────────────────────────────────────────
+  // Kiosk / shared-device punch mode (T1-4). Kiosk punches run under
+  // the service role with no user session, so the SSOT audit trigger
+  // never sees an auth.uid() — these rows are the attribution: actor =
+  // the worker the PIN/pass resolved to, device in metadata.
+  // ────────────────────────────────────────────────────────────────
+  | "kiosk.device.registered"
+  | "kiosk.device.deactivated"
+  | "kiosk.pin.set"
+  | "kiosk.punch"
+  // ────────────────────────────────────────────────────────────────
   // Marketplace
   // ────────────────────────────────────────────────────────────────
   | "talent_offer.sent"
@@ -199,6 +209,10 @@ export type AuditAction =
   // AI
   // ────────────────────────────────────────────────────────────────
   | "copilot.answered"
+  // L-P5 event-scoped corpus sync — linking / unlinking a verified knowledge
+  // source into a project's grounded-retrieval corpus (project_corpus_links).
+  | "corpus.event_sync"
+  | "corpus.event_unsync"
   // ────────────────────────────────────────────────────────────────
   // v7.8 record actions — loop-closing conversions. Each one creates
   // the downstream record pre-filled from the source and patches the

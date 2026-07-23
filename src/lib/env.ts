@@ -32,6 +32,11 @@ const schema = z.object({
   // local cookies survive process restarts. Rotating this value revokes
   // every outstanding access token.
   GUIDE_ACCESS_SECRET: z.string().optional(),
+  // T1-4 kiosk punch mode: server pepper for the worker-PIN lookup digest
+  // (HMAC-SHA256(org:pin)). Set in prod via Vercel env; dev uses a
+  // deterministic fallback so local PINs survive restarts. Rotating this
+  // invalidates every stored digest — workers re-set their PINs.
+  KIOSK_PIN_SECRET: z.string().optional(),
   // Speech-to-text for COMPVSS field dictation (T1-3, MOBILE_BEST_PRACTICES
   // Rank 3). The Anthropic SDK has no audio input, so transcription rides a
   // Whisper-compatible HTTP endpoint. OPENAI_API_KEY unset = the dictation
@@ -70,6 +75,7 @@ export const env = schema.parse({
   WEATHER_DISABLED: process.env.WEATHER_DISABLED,
   LOG_LEVEL: process.env.LOG_LEVEL as "trace" | "debug" | "info" | "warn" | "error" | undefined,
   GUIDE_ACCESS_SECRET: process.env.GUIDE_ACCESS_SECRET,
+  KIOSK_PIN_SECRET: process.env.KIOSK_PIN_SECRET,
   OPENAI_API_KEY: process.env.OPENAI_API_KEY,
   TRANSCRIBE_API_URL: process.env.TRANSCRIBE_API_URL,
   TRANSCRIBE_MODEL: process.env.TRANSCRIBE_MODEL,

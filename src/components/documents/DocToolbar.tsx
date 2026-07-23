@@ -15,15 +15,24 @@ export function DocToolbar({
   org,
   client,
   data,
+  defaultBrand,
 }: {
   template: DocTemplate;
   org?: OrgBrand;
   client?: ClientBrand;
   /** Bound record data, keyed by the template's merge-field paths. */
   data?: Record<string, unknown>;
+  /**
+   * Org-configured default brand mode for this doc type
+   * (org_doc_template_settings.default_brand, Configurator v1). Overrides the
+   * viewer heuristic when set; the toggle stays fully interactive.
+   */
+  defaultBrand?: DocBrand | null;
 }) {
   const bound = data != null;
-  const [brand, setBrand] = useState<DocBrand>(bound && (org?.name || client?.name) ? "co" : "atlvs");
+  const [brand, setBrand] = useState<DocBrand>(
+    defaultBrand ?? (bound && (org?.name || client?.name) ? "co" : "atlvs"),
+  );
   // Real records render clean (no highlight); the sample showcase highlights
   // the merge contract by default.
   const [showMergeFields, setShowMergeFields] = useState(!bound);

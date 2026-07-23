@@ -1,6 +1,13 @@
 import Link from "next/link";
 import { DOC_TEMPLATES_BY_APP } from "@/lib/documents/registry";
 import { supportsRecordBinding } from "@/lib/documents/resolvers";
+import {
+  docDefaultBrand,
+  getOrgDocSettings,
+  partitionDocTemplates,
+} from "@/lib/documents/org-settings";
+import { requireSession } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
 import { Badge } from "@/components/ui/Badge";
 import { getRequestT } from "@/lib/i18n/request";
 
@@ -8,6 +15,13 @@ import { getRequestT } from "@/lib/i18n/request";
  * V6 Documents hub — the cross-app document library. Every one of the 29 doc
  * types renders from the shared DocEngine (token-driven, print-ready, merge-
  * field contract). This index groups templates by the app that owns them.
+ *
+ * Configurator v1 (L-P2): this grid is a CREATION PICKER, so it honors
+ * org_doc_template_settings — doc types the org disabled are hidden here
+ * (they stay renderable for existing records via /studio/documents/[docType]
+ * ?recordId= and the documents API; see src/lib/documents/org-settings.ts).
+ * Org default brand modes are annotated per type. Configure both in the
+ * LEG3ND template library (/legend/hub/templates).
  */
 
 export const dynamic = "force-dynamic";
@@ -21,9 +35,24 @@ const APP_META: Record<string, { name: string; tagline: string }> = {
 
 const APP_ORDER = ["atlvs", "compvss", "gvteway", "legend"];
 
+const BRAND_LABEL: Record<string, string> = {
+  atlvs: "ATLVS",
+  co: "Co-brand",
+  white: "White-label",
+};
+
 export default async function DocumentsHubPage() {
   const { t } = await getRequestT();
-  const total = Object.values(DOC_TEMPLATES_BY_APP).reduce((n, list) => n + list.length, 0);
+  const session = await requireSession();
+  const supabase = await createClient();
+  const settings = await getOrgDocSettings(supabase, session.orgId);
+
+  const partitioned = Object.fromEntries(
+    Object.entries(DOC_TEMPLATES_BY_APP).map(([app, list]) => [app, partitionDocTemplates(list, settings)]),
+  );
+  const total = Object.values(partitioned).reduce((n, p) => n + p.offered.length, 0);
+  const hiddenTotal = Object.values(partitioned).reduce((n, p) => n + p.disabled.length, 0);
+
   // Literal keys per app — the extractor needs plain string keys, never
   // template-literal composition.
   const taglines: Record<string, string> = {
@@ -53,11 +82,23 @@ export default async function DocumentsHubPage() {
             " merge contract, and white-labels through three brand modes: ATLVS, co-brand, or full white-label.",
           )}
         </p>
+        {hiddenTotal > 0 && (
+          <p className="mt-2 max-w-2xl text-xs text-[var(--p-text-3)]">
+            {t(
+              "console.documents.hub.hiddenNote",
+              { count: hiddenTotal },
+              `${hiddenTotal} types are disabled for your organization and hidden from this picker. Documents already issued against them still render. Manage this in the template library.`,
+            )}{" "}
+            <Link href="/legend/hub/templates" className="underline hover:text-[var(--p-accent-text)]">
+              {t("console.documents.hub.manageInLibrary", undefined, "Template library")}
+            </Link>
+          </p>
+        )}
       </header>
 
       <div className="flex flex-col gap-10">
         {APP_ORDER.map((app) => {
-          const list = DOC_TEMPLATES_BY_APP[app] ?? [];
+          const list = partitioned[app]?.offered ?? [];
           if (list.length === 0) return null;
           const meta = APP_META[app] ?? { name: app, tagline: "" };
           return (
@@ -68,32 +109,44 @@ export default async function DocumentsHubPage() {
                 <Badge>{list.length}</Badge>
               </div>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {list.map((tpl) => (
-                  <Link
-                    key={tpl.id}
-                    href={`/studio/documents/${tpl.id}`}
-                    className="surface-raised hover-lift press-scale flex flex-col gap-1 rounded-lg border border-[var(--p-border)] p-4"
-                  >
-                    <span className="flex items-center gap-2 font-semibold tracking-tight">
-                      {tpl.title}
-                      {supportsRecordBinding(tpl.id) && (
-                        <Badge
-                          variant="brand"
-                          aria-label={t(
-                            "console.documents.hub.recordBackedAria",
-                            undefined,
-                            "Binds live org records via the record picker or ?recordId",
+                {list.map((tpl) => {
+                  const brand = docDefaultBrand(tpl.id, settings);
+                  return (
+                    <Link
+                      key={tpl.id}
+                      href={`/studio/documents/${tpl.id}`}
+                      className="surface-raised hover-lift press-scale flex flex-col gap-1 rounded-lg border border-[var(--p-border)] p-4"
+                    >
+                      <span className="flex items-center gap-2 font-semibold tracking-tight">
+                        {tpl.title}
+                        {supportsRecordBinding(tpl.id) && (
+                          <Badge
+                            variant="brand"
+                            aria-label={t(
+                              "console.documents.hub.recordBackedAria",
+                              undefined,
+                              "Binds live org records via the record picker or ?recordId",
+                            )}
+                          >
+                            {t("console.documents.hub.recordBacked", undefined, "Record-backed")}
+                          </Badge>
+                        )}
+                      </span>
+                      <span className="font-mono text-[11px] tracking-wide text-[var(--p-text-3)] uppercase">
+                        {tpl.schema}
+                      </span>
+                      {brand && (
+                        <span className="text-[11px] text-[var(--p-text-3)]">
+                          {t(
+                            "console.documents.hub.defaultBrand",
+                            { brand: BRAND_LABEL[brand] ?? brand },
+                            `Default brand: ${BRAND_LABEL[brand] ?? brand}`,
                           )}
-                        >
-                          {t("console.documents.hub.recordBacked", undefined, "Record-backed")}
-                        </Badge>
+                        </span>
                       )}
-                    </span>
-                    <span className="font-mono text-[11px] tracking-wide text-[var(--p-text-3)] uppercase">
-                      {tpl.schema}
-                    </span>
-                  </Link>
-                ))}
+                    </Link>
+                  );
+                })}
               </div>
             </section>
           );

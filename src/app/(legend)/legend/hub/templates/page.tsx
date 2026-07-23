@@ -1,23 +1,36 @@
-import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { urlFor } from "@/lib/urls";
-import { DOC_TEMPLATES } from "@/lib/documents/registry";
 import { getRequestT } from "@/lib/i18n/request";
+import { getOrgDocSettings } from "@/lib/documents/org-settings";
+import {
+  buildAdvanceItems,
+  buildDocItems,
+  buildFieldItems,
+  buildJobItems,
+  familyCreateHref,
+  TEMPLATE_FAMILIES,
+  type TemplateFamily,
+  type TemplateLibraryItem,
+} from "@/lib/templates/library";
+import { TemplateLibrary } from "./TemplateLibrary";
 
 export const dynamic = "force-dynamic";
 
 /**
- * Templates pillar: one place to see every template family the org
- * configures. Counts are live. Job templates are hub-native (canonical home,
- * decision 6 rider); the remaining families deep-link to their editing homes
- * (doc templates ride the code-defined registry via the console documents
- * hub, field templates are COMPVSS-native for offline use, advance-packet
- * presets are advancing-engine config).
+ * The ONE template library (L-P2). All four template families in one surface
+ * with real data: the code-defined doc registry (with per-type merge-field
+ * meta + the org configurator over org_doc_template_settings), hub-native job
+ * templates inline, COMPVSS field templates, and the advance-packet preset
+ * matrix. Unified search/filter across families rides the client island;
+ * every item deep-links to its native editor/preview.
+ *
+ * Configurator enforcement rule: a DISABLED doc type is hidden from creation
+ * pickers (here + the /studio/documents hub) but stays renderable for
+ * existing records. See src/lib/documents/org-settings.ts.
  */
 export default async function TemplatesPillarPage() {
   const { t } = await getRequestT();
@@ -33,97 +46,88 @@ export default async function TemplatesPillarPage() {
     );
   }
   const session = await requireSession();
-  const db = (await createClient()) as unknown as LooseSupabase;
+  const supabase = await createClient();
 
-  const [{ count: jobTemplateCount }, { count: fieldTemplateCount }, { count: advancePresetCount }] =
-    await Promise.all([
-      db
-        .from("job_templates")
-        .select("id", { count: "exact", head: true })
-        .eq("org_id", session.orgId)
-        .is("deleted_at", null),
-      db
-        .from("field_templates")
-        .select("id", { count: "exact", head: true })
-        .eq("org_id", session.orgId)
-        .is("deleted_at", null),
-      db
-        .from("org_advance_presets")
-        .select("id", { count: "exact", head: true })
-        .eq("org_id", session.orgId)
-        .is("deleted_at", null),
-    ]);
+  const [jobRes, fieldRes, advanceRes, docSettings] = await Promise.all([
+    supabase
+      .from("job_templates")
+      .select("id, name, trade, steps:job_template_steps(count)")
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .order("created_at", { ascending: false })
+      .limit(200),
+    supabase
+      .from("field_templates")
+      .select("id, name, category, summary, use_count")
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .order("updated_at", { ascending: false })
+      .limit(200),
+    supabase
+      .from("org_advance_presets")
+      .select("audience_type")
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .limit(500),
+    getOrgDocSettings(supabase, session.orgId),
+  ]);
 
-  const nTemplates = (count: number) =>
-    t("console.legend.hub.templates.nTemplates", { count }, `${count} templates`);
+  const jobRows = (jobRes.data ?? []) as unknown as Array<{
+    id: string;
+    name: string;
+    trade: string | null;
+    steps: { count: number }[] | null;
+  }>;
+  const fieldRows = (fieldRes.data ?? []) as unknown as Array<{
+    id: string;
+    name: string;
+    category: string;
+    summary: string | null;
+    use_count: number;
+  }>;
+  const presetRows = (advanceRes.data ?? []) as Array<{ audience_type: string }>;
 
-  const families: {
-    href: string;
-    title: string;
-    count: string;
-    blurb: string;
-    linkLabel: string;
-  }[] = [
-    {
-      href: urlFor("platform", "/documents"),
-      title: t("console.legend.hub.templates.doc.title", undefined, "Document templates"),
-      count: nTemplates(DOC_TEMPLATES.length),
-      blurb: t(
-        "console.legend.hub.templates.doc.blurb",
-        undefined,
-        "The kit document library: proposals, invoices, riders, run of shows, SOPs, and more. Every merge field record-backed.",
-      ),
-      linkLabel: t("console.legend.hub.templates.openInConsole", undefined, "Open in console"),
-    },
-    {
-      href: "/legend/hub/templates/job-templates",
-      title: t("console.legend.hub.templates.job.title", undefined, "Job templates"),
-      count:
-        jobTemplateCount == null
-          ? t("console.legend.hub.templates.job.inTheHub", undefined, "In the hub")
-          : jobTemplateCount === 1
-            ? t("console.legend.hub.templates.oneTemplate", undefined, "1 template")
-            : nTemplates(jobTemplateCount),
-      blurb: t(
-        "console.legend.hub.templates.job.blurb",
-        undefined,
-        "Reusable job shapes for dispatch and subcontractor work orders.",
-      ),
-      linkLabel: t("console.legend.hub.templates.job.open", undefined, "Open in the hub"),
-    },
-    {
-      href: urlFor("mobile", "/templates"),
-      title: t("console.legend.hub.templates.field.title", undefined, "Field templates"),
-      count:
-        fieldTemplateCount == null
-          ? t("console.legend.hub.templates.field.inTheFieldApp", undefined, "In the field app")
-          : fieldTemplateCount === 1
-            ? t("console.legend.hub.templates.oneTemplate", undefined, "1 template")
-            : nTemplates(fieldTemplateCount),
-      blurb: t(
-        "console.legend.hub.templates.field.blurb",
-        undefined,
-        "Checklists, forms, and inspection shapes the COMPVSS field app runs on site.",
-      ),
-      linkLabel: t("console.legend.hub.templates.field.open", undefined, "Open in COMPVSS"),
-    },
-    {
-      href: urlFor("platform", "/settings/advancing"),
-      title: t("console.legend.hub.templates.advance.title", undefined, "Advance packet presets"),
-      count:
-        advancePresetCount == null
-          ? t("console.legend.hub.templates.advance.inConsole", undefined, "In console")
-          : advancePresetCount === 1
-            ? t("console.legend.hub.templates.onePreset", undefined, "1 preset")
-            : t("console.legend.hub.templates.nPresets", { count: advancePresetCount }, `${advancePresetCount} presets`),
-      blurb: t(
-        "console.legend.hub.templates.advance.blurb",
-        undefined,
-        "The org preset matrix that seeds every advance campaign's sections per audience.",
-      ),
-      linkLabel: t("console.legend.hub.templates.openInConsole", undefined, "Open in console"),
-    },
+  const audienceCounts = new Map<string, number>();
+  for (const row of presetRows) {
+    audienceCounts.set(row.audience_type, (audienceCounts.get(row.audience_type) ?? 0) + 1);
+  }
+
+  const items: TemplateLibraryItem[] = [
+    ...buildDocItems(docSettings),
+    ...buildJobItems(
+      jobRows.map((r) => ({
+        id: r.id,
+        name: r.name,
+        trade: r.trade,
+        stepCount: r.steps?.[0]?.count ?? 0,
+      })),
+    ),
+    ...buildFieldItems(
+      fieldRows.map((r) => ({
+        id: r.id,
+        name: r.name,
+        category: r.category,
+        summary: r.summary,
+        useCount: r.use_count,
+      })),
+    ),
+    ...buildAdvanceItems(
+      Array.from(audienceCounts.entries()).map(([audienceType, sectionCount]) => ({
+        audienceType,
+        sectionCount,
+      })),
+    ),
   ];
+
+  const createHrefs = Object.fromEntries(
+    TEMPLATE_FAMILIES.map((f) => [f, familyCreateHref(f)]),
+  ) as Record<TemplateFamily, string | null>;
+  const homeHrefs: Record<TemplateFamily, string> = {
+    doc: urlFor("platform", "/documents"),
+    job: "/legend/hub/templates/job-templates",
+    field: urlFor("mobile", "/templates"),
+    advance: urlFor("platform", "/settings/advancing"),
+  };
 
   return (
     <>
@@ -142,25 +146,12 @@ export default async function TemplatesPillarPage() {
         ]}
       />
       <div className="page-content">
-        <div className="section-grid">
-          {families.map((f) => (
-            <div key={f.title} className="surface flex flex-col p-5">
-              <div className="flex items-baseline justify-between gap-3">
-                <div className="ps-h text-lg">{f.title}</div>
-                <span className="ps-id shrink-0 text-xs text-[var(--p-text-2)]">{f.count}</span>
-              </div>
-              <p className="mt-1.5 flex-1 text-sm text-[var(--p-text-2)]">{f.blurb}</p>
-              <div className="mt-4">
-                <Link
-                  href={f.href}
-                  className="focus-ring text-sm font-medium text-[var(--p-accent-text)] hover:underline"
-                >
-                  {f.linkLabel}
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
+        <TemplateLibrary
+          items={items}
+          canManage={isManagerPlus(session)}
+          createHrefs={createHrefs}
+          homeHrefs={homeHrefs}
+        />
       </div>
     </>
   );

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getDocTemplate } from "@/lib/documents/registry";
 import { resolveDocData, resolveDocBrand, supportsRecordBinding } from "@/lib/documents/resolvers";
+import { docDefaultBrand, getOrgDocSettings, isDocTypeOffered } from "@/lib/documents/org-settings";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { requireSession } from "@/lib/auth";
@@ -46,6 +47,14 @@ export default async function DocumentPreviewPage({
   const bindable = supportsRecordBinding(docType);
   const session = await requireSession();
   const supabase = await createClient();
+
+  // Configurator v1 (L-P2): a disabled type stays RENDERABLE here — the org
+  // setting only removes it from creation pickers; existing records must keep
+  // rendering. We annotate instead of blocking, and honor the org's default
+  // brand mode for the toolbar's initial state.
+  const docSettings = await getOrgDocSettings(supabase, session.orgId);
+  const offered = isDocTypeOffered(docType, docSettings);
+  const orgDefaultBrand = docDefaultBrand(docType, docSettings);
 
   if (recordId) {
     if (!bindable) {
@@ -96,12 +105,21 @@ export default async function DocumentPreviewPage({
         </Link>
         {source && pickerOptions.length > 0 && <RecordPicker options={pickerOptions} value={recordId ?? null} />}
       </div>
+      {!offered && (
+        <div className="mx-auto mt-4 max-w-[860px] px-6 print:hidden">
+          <Alert kind="info">
+            This document type is disabled in your organization&apos;s template library, so it is hidden
+            from creation pickers. Existing records still render here. Manage this in the template
+            library at /legend/hub/templates.
+          </Alert>
+        </div>
+      )}
       {bindError && (
         <div className="mx-auto mt-4 max-w-[860px] px-6 print:hidden">
           <Alert kind="error">{bindError}</Alert>
         </div>
       )}
-      <DocToolbar template={template} data={data} org={org} client={client} />
+      <DocToolbar template={template} data={data} org={org} client={client} defaultBrand={orgDefaultBrand} />
     </div>
   );
 }

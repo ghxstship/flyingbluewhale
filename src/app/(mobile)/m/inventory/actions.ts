@@ -16,17 +16,18 @@ const Input = z.object({
 /**
  * Take or return custody of an asset, from the field.
  *
- * COMPVSS shipped an "Assets" primary tab that could read the unified
- * `assets` store and never write it — `asset_movements`, the custody
- * ledger, was unwritable from the one place custody physically changes
- * hands. Everything that looked like it closed the loop pointed at the
- * assignment domain instead.
- *
  * Routes through the shared `transitionAssetState`, so the field moves an
- * asset through the identical FSM, TOCTOU guard, ledger write and audit
- * emit the console uses — including its manager+ gate, unchanged. Whether
- * crew may take their own gear is a separate product decision (audit G3);
- * this closes the parity half without inventing an authorization model.
+ * asset through the identical FSM, TOCTOU guard, custodian-stamped
+ * `asset_movements` ledger append, and audit emit the console uses. The
+ * custody band (manager+ or an ADR-0015 `asset:custody` grant) is enforced
+ * in the shared transition AND mirrored at the DB by migration
+ * `20260723120000_asset_movements_field_write` (F1,
+ * MOBILE_BEST_PRACTICES_2026-07): the state flip and the ledger row are
+ * both RLS-sanctioned for the field band, both read back after the write.
+ *
+ * Queue compatibility: the signature stays `(prev, FormData) → State` — a
+ * serializable form payload in, a serializable result out — so the outbox
+ * can replay it unchanged.
  */
 export async function moveAssetCustody(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();

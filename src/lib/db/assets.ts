@@ -78,6 +78,30 @@ export function movementKindFor(from: UalState, to: UalState): string {
   return "transfer";
 }
 
+/**
+ * Which custodian column a custody move stamps on its `asset_movements` row —
+ * the F1 fix (MOBILE_BEST_PRACTICES_2026-07): a custody ledger that never
+ * names the custodian cannot answer "who has the radio". Checkout takes
+ * possession (`to_custodian_id`); a check-in from the field releases it
+ * (`from_custodian_id`). Non-custody transitions (maintain, retire, found,
+ * reserve …) stamp nothing — the mover is `recorded_by`, not a custodian.
+ *
+ * Pure so the binding is unit-testable; the RLS field-custody INSERT arm
+ * (migration 20260723120000) enforces the same shape DB-side.
+ */
+export function custodianPatchFor(
+  from: UalState,
+  to: UalState,
+  partyId: string | null,
+): { to_custodian_id?: string; from_custodian_id?: string } {
+  if (!partyId) return {};
+  if (to === "in_use") return { to_custodian_id: partyId };
+  if (to === "available" && (from === "in_use" || from === "in_transit")) {
+    return { from_custodian_id: partyId };
+  }
+  return {};
+}
+
 /** The check-out / check-in record-action pair (kit §record-actions). */
 export const CHECK_OUT: { from: readonly UalState[]; to: UalState } = {
   from: ["available", "reserved", "acquired"],

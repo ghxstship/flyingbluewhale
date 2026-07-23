@@ -4,7 +4,8 @@ import type { Session } from "@/lib/auth";
 import { can, isManagerPlus } from "@/lib/auth";
 import { emitAudit } from "@/lib/audit";
 import type { UalState } from "@/lib/supabase/types";
-import { CHECK_IN, CHECK_OUT, NEXT_UAL_STATES, movementKindFor } from "./assets";
+import { CHECK_IN, CHECK_OUT, NEXT_UAL_STATES, custodianPatchFor, movementKindFor } from "./assets";
+import { ensureMyPartyId } from "./parties";
 
 /**
  * Unified Asset Lifecycle transitions — shared by the ATLVS console and
@@ -46,17 +47,22 @@ import { CHECK_IN, CHECK_OUT, NEXT_UAL_STATES, movementKindFor } from "./assets"
  * argument, so a custody-granted user calling with `to: "retired"` and no
  * `allowedFrom` must still be refused.
  *
- * NOT YET LIVE, and deliberately harmless until it is. `can()` has no grants
- * branch and `resolveGrants` doesn't exist in HEAD (ADR-0015 is "Accepted,
- * partially implemented" — the DATA half is still to land). So today the
- * `can()` arm is always false and this falls through to `isManagerPlus`:
- * exactly the behaviour that shipped, no crew member gains custody. When the
- * resolver lands, this gate starts working with no change here.
+ * LIVE end to end. The grants resolver (`resolveGrants` in @/lib/auth) rides
+ * `public.effective_capabilities`, and migration `20260723120000` mirrors the
+ * gate at the DB (F1, MOBILE_BEST_PRACTICES_2026-07): `assets_custody_update`
+ * admits a custody-granted member's state flip, and the ledger INSERT arms
+ * are actor-bound — the manager band records any movement it makes itself;
+ * the custody grant records only its own handoff, custodian = its own party.
+ * The grant is administrable at /studio/settings/capabilities.
  *
- * The grant is administrable now — /studio/settings/capabilities — which was
- * the genuinely missing piece: ADR-0015 shipped enforced but unadministered,
- * both grant tables had zero consumers, so turning a capability on for a
- * customer meant SQL against production.
+ * LEDGER SHAPE. Custody moves stamp the actor's `parties` row on the
+ * movement (`custodianPatchFor`): checkout takes possession
+ * (`to_custodian_id`), a check-in from the field releases it
+ * (`from_custodian_id`). A ledger row that never named the custodian could
+ * not answer "who has the radio" — that was the F1 hole. `recorded_by`
+ * remains the auth actor; the custodian columns are the party-canon custody
+ * chain. Both writes are read back per the RLS canon: an RLS no-op returns
+ * no error, so success is only what the returned row proves.
  */
 
 export type AssetTransitionResult = { ok: true } | { ok: false; error: string };
@@ -112,6 +118,21 @@ export async function transitionAssetState(
     };
   }
 
+  // Custody moves name the custodian party BEFORE the state flips: the
+  // field-custody RLS arm requires the custodian to be the caller's own
+  // party, so failing to resolve one must abort while the asset is still
+  // untouched — not after, where it would strand a flipped state with no
+  // ledger row. Managers may proceed unstamped (their ledger arm doesn't
+  // require a custodian and a party row may predate this feature).
+  let custodian: ReturnType<typeof custodianPatchFor> = {};
+  if (isCustodyMove) {
+    const partyId = await ensureMyPartyId(session.orgId, session.userId, session.email);
+    if (!partyId && !isManagerPlus(session)) {
+      return { ok: false, error: "Could not resolve your workspace identity for the custody record" };
+    }
+    custodian = custodianPatchFor(current, to, partyId);
+  }
+
   // Conditional update closes the TOCTOU between SELECT and write.
   // soft-delete-exempt: state-guarded transition update returning id, not a read
   // (the row was already deleted_at-filtered by the SELECT above).
@@ -127,14 +148,25 @@ export async function transitionAssetState(
     return { ok: false, error: "Asset state changed concurrently. Refresh and retry" };
   }
 
-  const { error: mvError } = await supabase.from("asset_movements").insert({
-    asset_id: id,
-    movement_kind: movementKindFor(current, to),
-    from_state: current,
-    to_state: to,
-    recorded_by: session.userId,
-  });
+  // Read the ledger row back (`.select("id")`): a WITH CHECK refusal errors
+  // loudly, but the RLS canon is to trust only the returned row — a custody
+  // trail that silently skipped the handoff is worse than a surfaced error.
+  // soft-delete-exempt: INSERT returning its own row, not a read.
+  const { data: mvRows, error: mvError } = await supabase
+    .from("asset_movements")
+    .insert({
+      asset_id: id,
+      movement_kind: movementKindFor(current, to),
+      from_state: current,
+      to_state: to,
+      recorded_by: session.userId,
+      ...custodian,
+    })
+    .select("id");
   if (mvError) return { ok: false, error: `State moved but ledger write failed: ${mvError.message}` };
+  if (!mvRows || mvRows.length === 0) {
+    return { ok: false, error: "State moved but the custody ledger write did not land — report this" };
+  }
 
   await emitAudit({
     actorId: session.userId,

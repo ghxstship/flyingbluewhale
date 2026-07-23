@@ -7,6 +7,8 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { scoreAttempt, type AssessmentQuestion } from "@/lib/legend_learning";
+import { awardAchievement } from "@/lib/legend_awards";
+import { sendPushTo } from "@/lib/push/send";
 
 export type State = { error?: string; ok?: true } | null;
 
@@ -100,7 +102,10 @@ export async function completeLessonAction(_: State, fd: FormData): Promise<Stat
     .eq("id", enrollment.id);
 
   if (finished && enrollment.enrollment_state !== "completed") {
-    const { data: course } = await db.from("legend_courses").select("points_reward, title").eq("id", course_id).maybeSingle();
+    // select("*") on purpose: pre-migration (20260723120100) the table lacks
+    // completion_achievement_id, and naming it would error the whole query —
+    // silently killing the existing points award. `*` degrades gracefully.
+    const { data: course } = await db.from("legend_courses").select("*").eq("id", course_id).maybeSingle();
     const reward = (course?.points_reward as number | undefined) ?? 0;
     if (reward > 0) {
       await db.from("points_ledger").insert({
@@ -112,6 +117,30 @@ export async function completeLessonAction(_: State, fd: FormData): Promise<Stat
         ref_kind: "course",
         ref_id: course_id,
       });
+    }
+
+    // Badge earn path (S-1): when the course grants an achievement, award it
+    // idempotently (once per user + achievement — the helper's read-back gates
+    // the points credit and the push, so a re-completion can't double-award).
+    const achievementId = (course?.completion_achievement_id as string | null | undefined) ?? null;
+    if (achievementId) {
+      const award = await awardAchievement(db, {
+        orgId: session.orgId,
+        userId: session.userId,
+        achievementId,
+        source: "legend",
+        note: `Completed ${course?.title ?? "course"}`,
+      });
+      if (award.awarded) {
+        await sendPushTo(session.userId, {
+          title: "Badge Earned",
+          body: award.points > 0 ? `${award.name ?? "Achievement"} · +${award.points} pts` : (award.name ?? "Achievement"),
+          url: "/legend/badges",
+          kind: "badge",
+          scope: "all",
+          orgId: session.orgId,
+        });
+      }
     }
   }
   revalidatePath(`/legend/learn/${course_id}`);

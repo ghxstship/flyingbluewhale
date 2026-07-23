@@ -1036,12 +1036,17 @@ export const legendNav: NavGroup[] = [
     label: "Manage",
     items: [
       { label: "Console", href: "/legend/console", icon: "ClipboardList" },
+      // L-P6a course + live-session authoring (blockers B-1 + B-2): the
+      // authoring workbench — courses, lessons, assessments, live sessions.
+      { label: "Teach", href: "/legend/teach", icon: "PencilRuler" },
       { label: "XMCE Engine", href: "/legend/engine", icon: "ShieldCheck" },
       { label: "Recert Matrix", href: "/legend/compliance", icon: "ClipboardCheck" },
       // L-P6b certification lifecycle closure (blockers B-3 + B-5): the
       // recert decision queue + the org's credential-type catalog.
       { label: "Recert Queue", href: "/legend/compliance/recerts", icon: "ListChecks" },
       { label: "Credential Types", href: "/legend/certifications/definitions", icon: "BadgeCheck" },
+      // L-P6c store economy closure (blocker B-4b): stock products, mint vouchers.
+      { label: "Store Admin", href: "/legend/store/admin", icon: "Store" },
     ],
   },
   {

@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import type { LooseSupabase } from "@/lib/supabase/loose";
 
 export type State = { error?: string; ok?: string } | null;
 
@@ -46,4 +47,46 @@ export async function redeemVoucherAction(_: State, fd: FormData): Promise<State
 
   revalidatePath("/legend/store");
   return { ok: `Redeemed: ${res.credits} credits added` };
+}
+
+/**
+ * Spend credits on a store item — THE debit path of the credit economy
+ * (readiness blocker B-4a). Delegates to the atomic `purchase_store_item`
+ * SECURITY DEFINER RPC (migration 20260723120000): balance check + ledger
+ * debit + `credit_purchases` fulfillment row + stock decrement in one
+ * transaction, serialized per (org, user) so the balance can never go
+ * negative. The RPC is not yet in the generated types (migration authored,
+ * not applied), so the call rides the loose client.
+ */
+export async function purchaseItemAction(_: State, fd: FormData): Promise<State> {
+  const session = await requireSession();
+  const parsed = z.object({ product_id: z.string().uuid() }).safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return { error: "Invalid product" };
+  const db = (await createClient()) as unknown as LooseSupabase;
+
+  const { data: result, error } = await db.rpc("purchase_store_item", {
+    p_org_id: session.orgId,
+    p_user_id: session.userId,
+    p_product_id: parsed.data.product_id,
+  });
+  if (error) return { error: error.message };
+
+  const res = result as { ok: boolean; reason?: string; credits?: number; balance?: number; price?: number } | null;
+  if (!res?.ok) {
+    if (res?.reason === "insufficient_balance") {
+      // Honest shortfall: say exactly how many credits are missing.
+      const shortfall = Math.max(0, (res.price ?? 0) - (res.balance ?? 0));
+      return { error: `Not enough credits: this item costs ${res.price ?? 0} and you have ${res.balance ?? 0}. You need ${shortfall} more.` };
+    }
+    const messages: Record<string, string> = {
+      not_found: "Item not found",
+      not_purchasable: "This product is a credit pack, not a store item",
+      inactive: "This item is no longer available",
+      out_of_stock: "This item is out of stock",
+    };
+    return { error: messages[res?.reason ?? ""] ?? "Could not complete this purchase" };
+  }
+
+  revalidatePath("/legend/store");
+  return { ok: `Purchased: ${res.credits} credits spent. New balance: ${res.balance}` };
 }

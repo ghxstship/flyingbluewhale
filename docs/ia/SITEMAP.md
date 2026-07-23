@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1299 · **API route handlers:** 160 · **Distinct nav hrefs:** 592
+**Page routes:** 1313 · **API route handlers:** 160 · **Distinct nav hrefs:** 594
 
 ## Legend
 
@@ -29,19 +29,18 @@
 | COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 117 | 93 | 23 | 0 | 1 |
 | COMPVSS — Kiosk (shared device) | mobileSurfaces | 3 | 3 | 0 | 0 | 0 |
 | GVTEWAY — External Portal | portalNav rail | 156 | 129 | 23 | 0 | 4 |
-| LEG3ND — Knowledge Shell | legendNav rail | 71 | 32 | 38 | 1 | 0 |
+| LEG3ND — Knowledge Shell | legendNav rail | 85 | 34 | 51 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 97 | 34 | 54 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 14 | 2 | 0 | 0 | 12 |
-| **TOTAL** | | **1299** | **566** | **689** | **1** | **43** |
+| **TOTAL** | | **1313** | **568** | **702** | **0** | **43** |
 
-## ⚠️ Orphan modules (1) — features with zero nav entry
+## ⚠️ Orphan modules (0) — features with zero nav entry
 
 These trees exist on disk and are routable, but nothing in `nav.ts` links to them. They are the primary reconciliation target.
 
 | Shell | Module | Orphaned routes |
 |-------|--------|----------------:|
-| LEG3ND — Knowledge Shell | `teach` | 1 |
 
 ## 🔗 Dangling nav hrefs (0) — links with no page on disk
 
@@ -2145,7 +2144,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## LEG3ND — Knowledge Shell (`/legend`)
 
-71 routes — ● 32 nav · ○ 38 linked · ⚠ 1 orphan
+85 routes — ● 34 nav · ○ 51 linked · ⚠ 0 orphan
 
 <details><summary><code>architecture</code> · 1 route</summary>
 
@@ -2313,17 +2312,31 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>store</code> · 3 routes</summary>
+<details><summary><code>store</code> · 5 routes</summary>
 
 ● `/legend/store`
-○ `/legend/store/admin`
+● `/legend/store/admin`
+○ `/legend/store/admin/products/[productId]`
 ○ `/legend/store/admin/products/new`
+○ `/legend/store/admin/vouchers/new`
 
 </details>
 
-<details><summary><code>teach</code> · 1 route ⚠️ **ORPHAN MODULE — not in nav**</summary>
+<details><summary><code>teach</code> · 13 routes</summary>
 
-⚠ `/legend/teach`
+● `/legend/teach`
+○ `/legend/teach/[courseId]`
+○ `/legend/teach/[courseId]/assessments/[assessmentId]`
+○ `/legend/teach/[courseId]/assessments/[assessmentId]/questions/[questionId]`
+○ `/legend/teach/[courseId]/assessments/[assessmentId]/questions/new`
+○ `/legend/teach/[courseId]/assessments/new`
+○ `/legend/teach/[courseId]/edit`
+○ `/legend/teach/[courseId]/lessons/[lessonId]`
+○ `/legend/teach/[courseId]/lessons/new`
+○ `/legend/teach/new`
+○ `/legend/teach/sessions`
+○ `/legend/teach/sessions/[sessionId]`
+○ `/legend/teach/sessions/new`
 
 </details>
 

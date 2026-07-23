@@ -3132,6 +3132,24 @@
               "arch": [
                 "LIST"
               ]
+            },
+            {
+              "path": "/legend/compliance/recerts",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/legend/certifications/definitions",
+              "arch": [
+                "LMS"
+              ]
+            },
+            {
+              "path": "/legend/store/admin",
+              "arch": [
+                "SHOP"
+              ]
             }
           ]
         },

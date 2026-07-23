@@ -6,8 +6,20 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
-import { formatPrice, creditBalance, ORDER_STATE_LABELS, ORDER_STATE_TONES, type CreditProduct, type OrderState } from "@/lib/legend_store";
+import {
+  formatPrice,
+  creditBalance,
+  canPurchase,
+  ORDER_STATE_LABELS,
+  ORDER_STATE_TONES,
+  PURCHASE_STATE_LABELS,
+  PURCHASE_STATE_TONES,
+  type CreditProduct,
+  type CreditPurchase,
+  type OrderState,
+} from "@/lib/legend_store";
 import { BuyButton } from "./BuyButton";
+import { PurchaseButton } from "./PurchaseButton";
 import { VoucherForm } from "./VoucherForm";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
@@ -34,10 +46,13 @@ export default async function StorePage() {
   const db = (await createClient()) as unknown as LooseSupabase;
   const fmt = await getRequestFormatters();
 
-  const [{ data: productData }, { data: ledgerData }, { data: orderData }] = await Promise.all([
+  const [{ data: productData }, { data: ledgerData }, { data: orderData }, { data: purchaseData }] = await Promise.all([
+    // `select("*")` on purpose: pre-migration the table lacks product_kind /
+    // stock_qty, and naming them would error the whole query. The page treats
+    // a missing product_kind as "pack" (its only historical meaning).
     db
       .from("credit_products")
-      .select("id, org_id, sku, name, description, credits, price_cents, currency, stripe_price_id, product_state")
+      .select("*")
       .eq("org_id", session.orgId)
       .eq("product_state", "active")
       .is("deleted_at", null)
@@ -50,11 +65,23 @@ export default async function StorePage() {
       .eq("user_id", session.userId)
       .order("created_at", { ascending: false })
       .limit(20),
+    db
+      .from("credit_purchases")
+      .select("id, item_name, credits_spent, purchase_state, created_at")
+      .eq("org_id", session.orgId)
+      .eq("user_id", session.userId)
+      .order("created_at", { ascending: false })
+      .limit(20),
   ]);
 
-  const products = (productData ?? []) as CreditProduct[];
+  const allProducts = (productData ?? []) as CreditProduct[];
+  // Pre-migration rows carry no product_kind — treat them as packs (their
+  // only historical meaning) so the page renders identically either way.
+  const products = allProducts.filter((p) => (p.product_kind ?? "pack") === "pack");
+  const items = allProducts.filter((p) => p.product_kind === "item").sort((a, b) => a.credits - b.credits);
   const balance = creditBalance((ledgerData ?? []) as Array<{ delta: number }>);
   const orders = (orderData ?? []) as Array<{ id: string; credits: number; amount_cents: number; currency: string; order_state: OrderState; created_at: string }>;
+  const purchases = (purchaseData ?? []) as Array<Pick<CreditPurchase, "id" | "item_name" | "credits_spent" | "purchase_state" | "created_at">>;
 
   return (
     <>
@@ -106,10 +133,71 @@ export default async function StorePage() {
               ))}
             </div>
           )}
+
+          <h2 className="eyebrow pt-4">{t("console.legend.store.spendCredits", undefined, "Spend your credits")}</h2>
+          {items.length === 0 ? (
+            <EmptyState
+              size="compact"
+              title={t("console.legend.store.noItemsTitle", undefined, "Nothing to redeem yet")}
+              description={t(
+                "console.legend.store.noItemsDescription",
+                undefined,
+                "Items your org stocks for credit redemption appear here.",
+              )}
+            />
+          ) : (
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              {items.map((p) => {
+                const check = canPurchase(p, balance);
+                return (
+                  <div key={p.id} className="surface flex flex-col gap-2 p-4">
+                    <div className="flex items-baseline justify-between gap-2">
+                      <h3 className="text-sm font-semibold text-[var(--p-text-1)]">{p.name}</h3>
+                      <span className="text-lg font-bold tabular-nums text-[var(--p-text-1)]">
+                        {fmt.number(p.credits)} <span className="text-xs font-normal text-[var(--p-text-2)]">{t("console.legend.store.credits", undefined, "credits")}</span>
+                      </span>
+                    </div>
+                    {p.description ? <p className="text-xs text-[var(--p-text-2)]">{p.description}</p> : null}
+                    {p.stock_qty !== null && p.stock_qty !== undefined && p.stock_qty > 0 ? (
+                      <p className="text-xs text-[var(--p-text-2)]">
+                        {t("console.legend.store.nLeft", { count: fmt.number(p.stock_qty) }, `${fmt.number(p.stock_qty)} left`)}
+                      </p>
+                    ) : null}
+                    <div className="mt-1">
+                      <PurchaseButton
+                        productId={p.id}
+                        price={p.credits}
+                        balance={balance}
+                        outOfStock={!check.ok && check.reason === "out_of_stock"}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </section>
 
         <aside className="space-y-6">
           <VoucherForm />
+          <div>
+            <h2 className="eyebrow mb-2">{t("console.legend.store.purchases", undefined, "Purchases")}</h2>
+            {purchases.length === 0 ? (
+              <p className="text-sm text-[var(--p-text-2)]">{t("console.legend.store.noPurchases", undefined, "No purchases yet.")}</p>
+            ) : (
+              <ul className="surface divide-y divide-[var(--p-border)]">
+                {purchases.map((p) => (
+                  <li key={p.id} className="flex items-center justify-between gap-2 px-3 py-2 text-sm">
+                    <span className="text-[var(--p-text-1)]">
+                      {p.item_name} ·{" "}
+                      {t("console.legend.store.nCr", { count: fmt.number(p.credits_spent) }, `${fmt.number(p.credits_spent)} cr`)}
+                    </span>
+                    <Badge variant={PURCHASE_STATE_TONES[p.purchase_state]}>{PURCHASE_STATE_LABELS[p.purchase_state]}</Badge>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
           <div>
             <h2 className="eyebrow mb-2">{t("console.legend.store.orderHistory", undefined, "Order history")}</h2>
             {orders.length === 0 ? (

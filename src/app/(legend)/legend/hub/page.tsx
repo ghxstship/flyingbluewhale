@@ -46,6 +46,7 @@ export default async function OrganizationHubPage() {
     { count: catalogCount },
     { count: resourceCount },
     { count: courseCount },
+    { count: atomCount },
   ] = await Promise.all([
     db.from("orgs").select("name, name_override, logo_url").eq("id", session.orgId).maybeSingle(),
     db.from("positions").select("id", { count: "exact", head: true }).eq("org_id", session.orgId).eq("active", true),
@@ -70,6 +71,8 @@ export default async function OrganizationHubPage() {
       .select("id", { count: "exact", head: true })
       .eq("org_id", session.orgId)
       .is("deleted_at", null),
+    // The XPMS 2.5 master catalog is global (not org-scoped): active atoms.
+    db.from("xpms_catalog").select("xpms_atom_id", { count: "exact", head: true }).ilike("catalog_state", "active"),
   ]);
 
   const orgName =
@@ -146,6 +149,20 @@ export default async function OrganizationHubPage() {
         "console.legend.hub.pillars.catalogs.blurb",
         undefined,
         "The master asset catalog and the signage library. Every assignable thing.",
+      ),
+    },
+    {
+      href: "/legend/hub/xpms",
+      title: t("console.legend.hub.pillars.xpms.title", undefined, "XPMS Catalog"),
+      summary: n(
+        atomCount,
+        t("console.legend.hub.pillars.xpms.singular", undefined, "atom"),
+        t("console.legend.hub.pillars.xpms.plural", undefined, "atoms"),
+      ),
+      blurb: t(
+        "console.legend.hub.pillars.xpms.blurb",
+        undefined,
+        "The XPMS 2.5 base kit, ten department classes deep. Enable, disable, and relabel atoms for your organization.",
       ),
     },
     {

@@ -2554,6 +2554,24 @@
               ]
             },
             {
+              "path": "/m/kiosk",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/kiosk/setup",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/kiosk/pin",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/m/scheduler",
               "arch": [
                 "CAL"
@@ -2985,6 +3003,12 @@
               "path": "/legend/hub/catalogs",
               "arch": [
                 "SHOP"
+              ]
+            },
+            {
+              "path": "/legend/hub/xpms",
+              "arch": [
+                "LIST"
               ]
             },
             {

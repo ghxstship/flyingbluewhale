@@ -10,6 +10,8 @@ import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { urlFor } from "@/lib/urls";
 import { getRequestT } from "@/lib/i18n/request";
+import { AppOwnershipChip } from "@/components/legend/AppOwnershipChip";
+import { appForDeptCode, isDepartmentApp, type DepartmentApp } from "@/lib/xpms/app-ownership";
 
 export const dynamic = "force-dynamic";
 
@@ -45,13 +47,24 @@ export default async function FinanceCodesPage() {
   const session = await requireSession();
   const db = (await createClient()) as unknown as LooseSupabase;
 
-  const { data } = await db
-    .from("cost_centers")
-    .select("id, code, name, active, parent_id")
-    .eq("org_id", session.orgId)
-    .order("code", { ascending: true })
-    .limit(300);
+  const [{ data }, { data: dimRows }] = await Promise.all([
+    db
+      .from("cost_centers")
+      .select("id, code, name, active, parent_id")
+      .eq("org_id", session.orgId)
+      .order("code", { ascending: true })
+      .limit(300),
+    // App-canon consumption v1: dim_department.app badges each cost center
+    // with its owning app (sub-codes roll up to their thousand-class).
+    db.from("dim_department").select("code, app"),
+  ]);
   const rows = (data ?? []) as CostCenter[];
+  const appByCode = new Map<string, DepartmentApp>();
+  for (const d of (dimRows ?? []) as { code: string; app: string }[]) {
+    if (isDepartmentApp(d.app)) appByCode.set(d.code, d.app);
+  }
+  const appOf = (code: string): DepartmentApp | null =>
+    (/^\d/.test(code) ? appByCode.get(`${code[0]}000`) : null) ?? appForDeptCode(code);
 
   return (
     <>
@@ -111,6 +124,15 @@ export default async function FinanceCodesPage() {
                 header: t("console.legend.hub.financeCodes.columns.name", undefined, "Name"),
                 render: (c) => c.name,
                 accessor: (c) => c.name,
+              },
+              {
+                key: "app",
+                header: t("console.legend.hub.financeCodes.columns.app", undefined, "App"),
+                render: (c) => {
+                  const app = appOf(c.code);
+                  return app ? <AppOwnershipChip app={app} title={c.code} /> : <>—</>;
+                },
+                accessor: (c) => appOf(c.code) ?? "",
               },
               {
                 key: "active",

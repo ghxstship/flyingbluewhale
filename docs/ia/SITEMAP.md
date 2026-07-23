@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1287 · **API route handlers:** 158 · **Distinct nav hrefs:** 585
+**Page routes:** 1292 · **API route handlers:** 160 · **Distinct nav hrefs:** 590
 
 ## Legend
 
@@ -26,13 +26,13 @@
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
 | ATLVS — Operator Console | platformNav rail | 801 | 254 | 545 | 0 | 2 |
-| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 116 | 92 | 23 | 0 | 1 |
+| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 117 | 93 | 23 | 0 | 1 |
 | GVTEWAY — External Portal | portalNav rail | 156 | 129 | 23 | 0 | 4 |
-| LEG3ND — Knowledge Shell | legendNav rail | 63 | 29 | 34 | 0 | 0 |
+| LEG3ND — Knowledge Shell | legendNav rail | 64 | 30 | 34 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 97 | 34 | 54 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 14 | 2 | 0 | 0 | 12 |
-| **TOTAL** | | **1287** | **559** | **685** | **0** | **43** |
+| **TOTAL** | | **1292** | **564** | **685** | **0** | **43** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -1360,7 +1360,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## COMPVSS — Field PWA (`/m`)
 
-116 routes — ● 92 nav · ○ 23 linked · ⚠ 0 orphan
+117 routes — ● 93 nav · ○ 23 linked · ⚠ 0 orphan
 
 <details><summary><code>activity</code> · 1 route</summary>
 
@@ -1639,6 +1639,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 <details><summary><code>permits</code> · 1 route</summary>
 
 ● `/m/permits`
+
+</details>
+
+<details><summary><code>photos</code> · 1 route</summary>
+
+● `/m/photos`
 
 </details>
 
@@ -2125,7 +2131,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## LEG3ND — Knowledge Shell (`/legend`)
 
-63 routes — ● 29 nav · ○ 34 linked · ⚠ 0 orphan
+64 routes — ● 30 nav · ○ 34 linked · ⚠ 0 orphan
 
 <details><summary><code>architecture</code> · 1 route</summary>
 
@@ -2191,7 +2197,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>hub</code> · 19 routes</summary>
+<details><summary><code>hub</code> · 20 routes</summary>
 
 ● `/legend/hub`
 ● `/legend/hub/brand`
@@ -2212,6 +2218,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ● `/legend/hub/templates`
 ○ `/legend/hub/templates/job-templates`
 ○ `/legend/hub/templates/job-templates/new`
+● `/legend/hub/xpms`
 
 </details>
 
@@ -2785,7 +2792,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ---
 
-## API surface (`/api/v1`) — 158 route handlers
+## API surface (`/api/v1`) — 160 route handlers
 
 
 <details><summary><code>/api/v1/accreditation</code> · 1</summary>
@@ -3008,6 +3015,13 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 <details><summary><code>/api/v1/job-templates</code> · 1</summary>
 
 - `/api/v1/job-templates`
+
+</details>
+
+<details><summary><code>/api/v1/kiosk</code> · 2</summary>
+
+- `/api/v1/kiosk/identify`
+- `/api/v1/kiosk/punch`
 
 </details>
 

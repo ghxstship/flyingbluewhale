@@ -994,6 +994,8 @@ export const legendNav: NavGroup[] = [
       { label: "Finance Codes", href: "/legend/hub/finance-codes", icon: "Receipt" },
       { label: "Locations", href: "/legend/hub/locations", icon: "MapPin" },
       { label: "Catalogs", href: "/legend/hub/catalogs", icon: "Boxes" },
+      // P4: the XPMS 2.5 master-catalog browse + org overlay (enable/label).
+      { label: "XPMS Catalog", href: "/legend/hub/xpms", icon: "Layers" },
       { label: "Templates", href: "/legend/hub/templates", icon: "FileStack" },
       { label: "Start Your Organization", href: "/legend/start", icon: "Compass" },
     ],
@@ -1745,6 +1747,12 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Door Scanner", href: "/m/door" },
   { label: "Advancing", href: "/m/advances" },
   { label: "Time Clock", href: "/m/clock" },
+  // T1-4 kiosk / shared-device punch mode. The kiosk itself is session-less
+  // (its own `(kiosk)` route group); setup is manager-gated on-surface and
+  // the PIN page is any-member self-serve.
+  { label: "Kiosk Mode", href: "/m/kiosk" },
+  { label: "Kiosk Setup", href: "/m/kiosk/setup" },
+  { label: "My Punch PIN", href: "/m/kiosk/pin" },
   // Kit 32 (v2.9): the Shift Scheduler field window (More · Time & Work,
   // schedule:write band — the full scheduling engine stays in ATLVS).
   { label: "Shift Scheduler", href: "/m/scheduler" },

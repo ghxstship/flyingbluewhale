@@ -2447,6 +2447,27 @@ paths:
         "403": { $ref: "#/components/responses/Forbidden" }
         "429": { $ref: "#/components/responses/RateLimited" }
 
+  /api/v1/kiosk/identify:
+    post:
+      summary: "Kiosk mode (T1-4) — resolve a worker from a punch PIN or pass-QR payload on a registered shared device. Authenticated via the httpOnly device-token cookie set at registration, never a user session or PAT; not callable by external API consumers. Returns the confirm-card identity + clock state; device-scoped PIN lockout applies (429)."
+      operationId: postKioskIdentify
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+        "503": { description: kiosk mode not configured }
+  /api/v1/kiosk/punch:
+    post:
+      summary: "Kiosk mode (T1-4) — record a clock punch (clock_in/clock_out/break_start/break_end) for the worker the PIN/pass payload re-resolves to. Device-token cookie auth (see /api/v1/kiosk/identify); offline-queueable (service worker replay, `at` preserves capture time); geofence policy evaluated server-side (422 geofence_blocked)."
+      operationId: postKioskPunch
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "409": { description: duplicate or out-of-sequence punch (terminal for the offline queue) }
+        "422": { description: geofence policy refused the punch; override with a reason is available }
+        "429": { $ref: "#/components/responses/RateLimited" }
+        "503": { description: kiosk mode not configured }
+
   /api/v1/share-links:
     get:
       summary: List active share links scoped to the caller's org. WF-share-1.

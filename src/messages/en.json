@@ -31376,6 +31376,7 @@
   "add-at-least-one-contact-one-per-line-name": "Add at least one contact, one per line: Name <email> or a bare email",
   "add-your-name-and-a-signature-first": "Add your name and a signature first.",
   "an-entity-can-t-consolidate-into-itself": "An entity can't consolidate into itself",
+  "article-has-no-text-to-embed": "Article has no text to embed.",
   "assignee-is-not-in-your-organization": "Assignee is not in your organization",
   "atom-belongs-to-a-different-project": "Atom belongs to a different project",
   "auth": {

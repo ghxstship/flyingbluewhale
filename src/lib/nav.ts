@@ -1038,6 +1038,10 @@ export const legendNav: NavGroup[] = [
       { label: "Console", href: "/legend/console", icon: "ClipboardList" },
       { label: "XMCE Engine", href: "/legend/engine", icon: "ShieldCheck" },
       { label: "Recert Matrix", href: "/legend/compliance", icon: "ClipboardCheck" },
+      // L-P6b certification lifecycle closure (blockers B-3 + B-5): the
+      // recert decision queue + the org's credential-type catalog.
+      { label: "Recert Queue", href: "/legend/compliance/recerts", icon: "ListChecks" },
+      { label: "Credential Types", href: "/legend/certifications/definitions", icon: "BadgeCheck" },
     ],
   },
   {

@@ -32,6 +32,7 @@ const QUEUEABLE_ENDPOINTS = [
   "/api/v1/scan", // ticket / assignment check-in
   "/api/v1/accreditation/scan", // gate accreditation decisions
   "/api/v1/equipment/scan", // asset check-in / check-out
+  "/api/v1/kiosk/punch", // shared-device kiosk punch (T1-4)
 ];
 
 const PRECACHE = [

@@ -143,6 +143,10 @@ const navSet = new Set([...navHrefs].map(norm));
 const SHELL = {
   platform: { label: "ATLVS — Operator Console", base: "/studio" },
   mobile: { label: "COMPVSS — Field PWA", base: "/m" },
+  // T1-4: the session-less shared-device punch shell. Lives under /m (the
+  // compvss.* subdomain rewrite) but in its own route group so the (mobile)
+  // auth gate never wraps it.
+  kiosk: { label: "COMPVSS — Kiosk (shared device)", base: "/m" },
   portal: { label: "GVTEWAY — External Portal", base: "/p" },
   legend: { label: "LEG3ND — Knowledge Shell", base: "/legend" },
   marketing: { label: "GVTEWAY — Public / Marketing", base: "" },
@@ -316,6 +320,7 @@ const MARK = { nav: "●", linked: "○", orphan: "⚠", exempt: "·" };
 const NAV_SOURCE = {
   platform: "platformNav rail",
   mobile: "mobileTabs / mobileSurfaces",
+  kiosk: "mobileSurfaces",
   portal: "portalNav rail",
   legend: "legendNav rail",
   marketing: "marketingHeaderGroups + marketingFooterGroups",
@@ -425,6 +430,7 @@ for (const e of EXEMPT) md += `| \`${e.path}\` | ${e.type} | ${e.reason} |\n`;
 const order = [
   ["platform", "ATLVS — Operator Console (`/studio`)", "/studio"],
   ["mobile", "COMPVSS — Field PWA (`/m`)", "/m"],
+  ["kiosk", "COMPVSS — Kiosk shared-device shell (`/m/kiosk`)", "/m"],
   ["portal", "GVTEWAY — External Portal (`/p/[slug]`)", "/p/[slug]"],
   ["legend", "LEG3ND — Knowledge Shell (`/legend`)", "/legend"],
   ["marketing", "GVTEWAY — Public / Marketing", ""],

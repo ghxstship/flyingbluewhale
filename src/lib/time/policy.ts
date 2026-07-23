@@ -25,7 +25,7 @@ export type GeofencePolicy = (typeof GEOFENCE_POLICIES)[number];
 export const ENFORCEMENT_STATES = ["clean", "warned", "quarantined", "overridden"] as const;
 export type EnforcementState = (typeof ENFORCEMENT_STATES)[number];
 
-export const PUNCH_SOURCE_CHANNELS = ["app", "offline_replay", "manager_entry", "correction", "import"] as const;
+export const PUNCH_SOURCE_CHANNELS = ["app", "offline_replay", "manager_entry", "correction", "import", "kiosk"] as const;
 export type PunchSourceChannel = (typeof PUNCH_SOURCE_CHANNELS)[number];
 
 /** Org-level defaults. Mirrors `public.org_time_settings`. */

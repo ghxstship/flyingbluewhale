@@ -8,7 +8,7 @@ import { join, relative } from "node:path";
  * Form controls and buttons speak the kit vocabulary — `.ps-input` (+ `--sm`
  * / `--lg`) and `.ps-btn` (+ `--ghost` / `--sm` / `--cta` / …). Hand-rolled
  * re-implementations (`rounded-md border border-[var(--p-border)]
- * bg-[var(...)] px-3 py-2 with a forked bg token`) silently lose the focus ring, the
+ * a border/bg/padding cluster with a forked bg token`) silently lose the focus ring, the
  * density axis, the disabled affordance, and fork the control background
  * between `--p-bg` and `--p-surface`. The 2026-07-22 sweep replaced ~80 such
  * sites; this test pins the residual so the pattern can't creep back.

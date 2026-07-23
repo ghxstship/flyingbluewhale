@@ -19,3 +19,13 @@ export function kbVerification(
     ? { state: "stale", verifiedAt }
     : { state: "verified", verifiedAt };
 }
+
+/**
+ * Verified-only event-sync gate (L-P5 knowledge grounding seam): only a
+ * CURRENTLY verified article may be synced into an event's corpus. Stale
+ * articles (review interval lapsed) must be re-verified first — the answer at
+ * the gate only ever grounds on knowledge someone has vouched for recently.
+ */
+export function isEventSyncable(verification: KbVerification): boolean {
+  return verification.state === "verified";
+}

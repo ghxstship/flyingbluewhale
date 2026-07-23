@@ -15,7 +15,11 @@ import { keyFromRequest, ratelimit, RATE_BUDGETS } from "@/lib/ratelimit";
  * Body: { source_type, source_id, project_id?, text }
  *
  * Idempotent: re-embedding the same (org, source_type, source_id) at the
- * same model returns inserted: 0.
+ * same model AND unchanged text returns inserted: 0; edited text re-embeds.
+ *
+ * `sop` + `event_guide` require migration 20260723150000_event_corpus_links
+ * (enum extension); pre-migration the insert fails per-document and the
+ * caller counts it as skipped.
  */
 
 const BodySchema = z.object({
@@ -31,6 +35,9 @@ const BodySchema = z.object({
     "proposal",
     "contract",
     "file",
+    "kb_article",
+    "sop",
+    "event_guide",
   ]),
   source_id: z.string().uuid(),
   project_id: z.string().uuid().optional(),

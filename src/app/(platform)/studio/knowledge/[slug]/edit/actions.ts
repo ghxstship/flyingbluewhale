@@ -5,6 +5,8 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import type { LooseSupabase } from "@/lib/supabase/loose";
+import { postEmbedSource } from "@/lib/ai/embed-client";
 import { STALE_ROW_MESSAGE } from "@/lib/db/concurrency";
 import { actionFail, formFail } from "@/lib/forms/fail";
 
@@ -61,6 +63,35 @@ export async function updateKnowledgeArticle(_: State, fd: FormData): Promise<St
     .maybeSingle();
   if (error) return actionFail(error.message, fd);
   if (!data) return { error: STALE_ROW_MESSAGE };
+
+  // L-P5 event corpus: if this article is synced into any event's corpus,
+  // re-embed the edited text so grounded answers track the change (the embed
+  // path is idempotent per content hash). Best-effort — on failure the corpus
+  // panel shows "Edited since sync" and offers Refresh.
+  try {
+    const loose = supabase as unknown as LooseSupabase;
+    const { data: links, error: linksError } = await loose
+      .from("project_corpus_links")
+      .select("project_id")
+      .eq("org_id", session.orgId)
+      .eq("source_type", "kb_article")
+      .eq("source_id", data.id);
+    const text = [parsed.data.title, parsed.data.body_markdown].filter(Boolean).join("\n\n");
+    if (!linksError && (links ?? []).length > 0 && text) {
+      const embedded = await postEmbedSource({ sourceType: "kb_article", sourceId: data.id, text });
+      if (!embedded.error) {
+        await loose
+          .from("project_corpus_links")
+          .update({ last_synced_at: new Date().toISOString() })
+          .eq("org_id", session.orgId)
+          .eq("source_type", "kb_article")
+          .eq("source_id", data.id);
+      }
+    }
+  } catch {
+    // Pending migration or embed provider missing — derived staleness covers it.
+  }
+
   revalidatePath(`/studio/knowledge/${slug}`);
   if (slug !== parsed.data.slug_current) revalidatePath(`/studio/knowledge/${parsed.data.slug_current}`);
   revalidatePath("/studio/knowledge");

@@ -46,10 +46,31 @@ type Labels = {
   sources: string;
   ungrounded: string;
   error: string;
+  /** Label for the retrieval-scope select (only used when scopes are passed). */
+  scope?: string;
+  /** The org-wide option label for the scope select. */
+  scopeAll?: string;
 };
 
-export function CopilotPanel({ labels }: { labels: Labels }) {
+export type CopilotScope = { id: string; name: string };
+
+export function CopilotPanel({
+  labels,
+  scopes,
+  initialProjectId,
+}: {
+  labels: Labels;
+  /**
+   * Optional event scopes (active projects). When provided, a scope select is
+   * rendered and the chosen projectId rides the request — the API then
+   * retrieves the EVENT corpus (that project's chunks + org-wide sources +
+   * event-synced verified knowledge) instead of the whole workspace.
+   */
+  scopes?: CopilotScope[];
+  initialProjectId?: string;
+}) {
   const [question, setQuestion] = useState("");
+  const [projectId, setProjectId] = useState(initialProjectId ?? "");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<CopilotResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -63,7 +84,7 @@ export function CopilotPanel({ labels }: { labels: Labels }) {
       const r = await fetch("/api/v1/ai/copilot", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ question: q }),
+        body: JSON.stringify({ question: q, ...(projectId ? { projectId } : {}) }),
       });
       const body = await r.json();
       if (!r.ok || !body.ok) {
@@ -81,6 +102,24 @@ export function CopilotPanel({ labels }: { labels: Labels }) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--p-4)", maxWidth: "var(--p-content-max, 760px)" }}>
+      {scopes && scopes.length > 0 && (
+        <label style={{ display: "flex", flexDirection: "column", gap: "var(--p-1)", fontSize: 12, fontWeight: 500 }}>
+          {labels.scope}
+          <select
+            className="ps-input"
+            value={projectId}
+            onChange={(e) => setProjectId(e.target.value)}
+            style={{ maxWidth: 320 }}
+          >
+            <option value="">{labels.scopeAll}</option>
+            {scopes.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.name}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
       <div style={{ display: "flex", gap: "var(--p-2)", alignItems: "flex-end" }}>
         <textarea
           className="ps-input"

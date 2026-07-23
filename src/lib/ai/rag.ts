@@ -33,7 +33,10 @@ export type RagScope =
         | "meeting_note"
         | "proposal"
         | "contract"
-        | "file";
+        | "file"
+        | "kb_article"
+        | "sop"
+        | "event_guide";
       sourceId: string;
     };
 
@@ -54,9 +57,40 @@ export type SearchOptions = {
 };
 
 /**
+ * Pure predicate mirroring the SQL of `match_event_chunks` (migration
+ * 20260723150000_event_corpus_links). The executable contract for what an
+ * event-scoped retrieval may see — unit-tested so the scoping rules can't
+ * silently drift from what the RPC enforces:
+ *   a. the event's own chunks (chunk.project_id === projectId);
+ *   b. org-wide chunks (project_id null) for every source type EXCEPT
+ *      kb_article — org standards apply to every event;
+ *   c. kb_article chunks only when explicitly linked to THIS event (and the
+ *      RPC additionally requires the article to be currently verified);
+ *   d. never another project's chunks.
+ */
+export function isChunkVisibleInEventScope(
+  chunk: { project_id: string | null; source_type: string; source_id: string },
+  projectId: string,
+  linkedKbArticleIds: ReadonlySet<string>,
+): boolean {
+  if (chunk.project_id === projectId) return true;
+  if (chunk.project_id !== null) return false; // another project's chunk — never.
+  if (chunk.source_type !== "kb_article") return true; // org-wide standard.
+  return linkedKbArticleIds.has(chunk.source_id); // knowledge: linked only.
+}
+
+/**
  * Cosine-search the top-K chunks in scope. Returns chunks sorted desc by
  * similarity. The actual embedding + RPC is wired by the chat handler;
  * this is the type-safe entry point.
+ *
+ * Scope semantics (L-P5 event-scoped corpus):
+ * - `global`   — every chunk in the org (match_document_chunks).
+ * - `project`  — the EVENT corpus: that project's chunks + org-wide sources +
+ *   event-linked verified kb articles; never other projects' chunks. Served
+ *   by the `match_event_chunks` RPC; falls back to the legacy strict
+ *   project-equality filter while the migration is pending.
+ * - `document` — one source's chunks (match_document_chunks, unchanged).
  */
 export async function searchChunks(
   supabase: LooseSupabase,
@@ -66,6 +100,23 @@ export async function searchChunks(
 ): Promise<RagChunk[]> {
   const topK = opts.topK ?? 8;
   const minSimilarity = opts.minSimilarity ?? 0.65;
+
+  if (scope.kind === "project") {
+    try {
+      const result = await supabase.rpc("match_event_chunks", {
+        query_embedding: embedding,
+        org_filter: scope.orgId,
+        project_filter: scope.projectId,
+        match_top_k: topK,
+        min_similarity: minSimilarity,
+      });
+      if (!result.error) return (result.data ?? []) as RagChunk[];
+    } catch {
+      // fall through to the legacy RPC below.
+    }
+    // Migration not applied yet — legacy behavior (strict project equality)
+    // so event-scoped asks degrade to project-only rather than erroring.
+  }
 
   // The RPC is created in a follow-up migration once the embedding worker
   // ships. Until then we fall back to a deterministic empty result so the

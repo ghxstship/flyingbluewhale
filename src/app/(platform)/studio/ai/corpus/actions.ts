@@ -43,7 +43,7 @@ export async function reindexCorpus(): Promise<State> {
   }
 
   if (sources.length === 0) {
-    return { error: actionErrorMessage("no-deliverables-submittals-or-rfis-with-text-to-index", "No deliverables, submittals, or RFIs with text to index.") };
+    return { error: actionErrorMessage("no-walkable-sources-with-text-to-index", "No walkable sources with text to index (deliverables, submittals, RFIs, verified knowledge articles, published SOPs, event guides).") };
   }
 
   // Resolve an absolute origin for the self-call. Prefer the live request

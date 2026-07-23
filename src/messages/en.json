@@ -25145,6 +25145,179 @@
    }
   },
   "legend": {
+   "teach": {
+    "assessmentForm": {
+     "maxAttempts": "Max attempts",
+     "maxAttemptsHint": "Leave blank for unlimited attempts.",
+     "passPct": "Pass threshold (%)",
+     "title": "Title"
+    },
+    "assessments": {
+     "addQuestion": "Add Question",
+     "builderEyebrow": "Assessment Builder",
+     "deleteConfirm": "Delete assessment \"{title}\"?",
+     "draftHint": "Publish needs at least one question. Answer keys never leave the server.",
+     "editQuestion": "Edit",
+     "newBreadcrumb": "New assessment",
+     "newSubmit": "Create Assessment",
+     "newTitle": "New Assessment",
+     "noQuestionsDescription": "Add the first question. The assessment can publish once it has at least one.",
+     "noQuestionsTitle": "No questions yet",
+     "pointsShort": "{points} pts",
+     "publishedHint": "Learners see this after finishing the lessons.",
+     "questionsHeading": "Questions · {count}",
+     "removeQuestion": "Remove",
+     "saveSettings": "Save Settings",
+     "settingsHeading": "Settings"
+    },
+    "breadcrumbRoot": "LEG3ND",
+    "edit": {
+     "breadcrumb": "Edit",
+     "eyebrow": "Course Editor",
+     "submit": "Save Course",
+     "title": "Edit Course"
+    },
+    "editor": {
+     "addAssessment": "Add Assessment",
+     "addLesson": "Add Lesson",
+     "archivedHint": "Hidden from the catalog. Restore to edit and republish.",
+     "assessments": "Assessments",
+     "assessmentsHeading": "Assessments",
+     "deleteConfirm": "Delete course \"{title}\"?",
+     "deleteLessonConfirm": "Delete lesson \"{title}\"?",
+     "draftHint": "Drafts are invisible to learners. Publish needs at least one published lesson.",
+     "edit": "Edit",
+     "enrollments": "Enrollments",
+     "eyebrow": "Course Editor",
+     "lessons": "Lessons",
+     "lessonsHeading": "Lessons",
+     "maxAttempts": "{count} attempts max",
+     "noAssessmentsDescription": "Optional. Without a published assessment the course completes on lessons alone; with one, passing can grant the linked certification.",
+     "noAssessmentsTitle": "No assessment",
+     "noLessonsDescription": "Add the first lesson. The course can publish once at least one lesson is published.",
+     "noLessonsTitle": "No lessons yet",
+     "openBuilder": "Open builder",
+     "passPct": "Pass ≥ {pct}%",
+     "publishedHint": "Live in the learner catalog.",
+     "publishedLessons": "Published lessons",
+     "viewAsLearner": "View as learner"
+    },
+    "emptyDescription": "Create your first course, add lessons, then publish it to the learner catalog.",
+    "emptyTitle": "No courses yet",
+    "eyebrow": "LEG3ND · Manage",
+    "form": {
+     "certification": "Grants certification",
+     "certificationHint": "Issued automatically when a learner passes the published assessment.",
+     "coverPath": "Cover path",
+     "coverPathHint": "Text pointer to an already-stored image. File uploads are out of scope.",
+     "noCertification": "None",
+     "pointsReward": "Points reward",
+     "pointsRewardHint": "Arena points awarded on completion.",
+     "summary": "Summary",
+     "title": "Title"
+    },
+    "lens": {
+     "all": "All",
+     "aria": "Filter courses by lifecycle state"
+    },
+    "lessonForm": {
+     "body": "Lesson body",
+     "bodyHint": "HTML content rendered to the learner exactly as the seed lessons are.",
+     "duration": "Duration (minutes)",
+     "kind": "Kind",
+     "mediaUrl": "Media URL",
+     "mediaUrlHint": "Stream URL for video/audio lessons. Article lessons can leave this blank.",
+     "title": "Title"
+    },
+    "lessons": {
+     "editSubmit": "Save Lesson",
+     "editTitle": "Edit Lesson",
+     "newBreadcrumb": "New lesson",
+     "newSubmit": "Add Lesson",
+     "newTitle": "New Lesson"
+    },
+    "metrics": {
+     "courses": "Courses",
+     "drafts": "Drafts",
+     "published": "Published",
+     "upcomingSessions": "Upcoming sessions"
+    },
+    "new": {
+     "breadcrumb": "New",
+     "submit": "Create Course",
+     "title": "New Course"
+    },
+    "newCourse": "New Course",
+    "pointsShort": "{points} pts",
+    "questionForm": {
+     "correctIndex": "Correct option (number, starting at 1)",
+     "options": "Options (one per line)",
+     "optionsHint": "At least two answer options, one per line.",
+     "points": "Points",
+     "prompt": "Prompt"
+    },
+    "questions": {
+     "editBreadcrumb": "Edit question",
+     "editSubmit": "Save Question",
+     "editTitle": "Edit Question",
+     "newBreadcrumb": "New question",
+     "newSubmit": "Add Question",
+     "newTitle": "New Question"
+    },
+    "sessionForm": {
+     "capacity": "Capacity",
+     "capacityHint": "Blank = unlimited. Overflow waitlists.",
+     "course": "Linked course",
+     "description": "Description",
+     "duration": "Duration (minutes)",
+     "host": "Host",
+     "hostName": "Host display name",
+     "hostNameHint": "Shown to learners; use for guest hosts.",
+     "joinUrl": "Join URL",
+     "kind": "Kind",
+     "location": "Location",
+     "noCourse": "None",
+     "noHost": "Unassigned",
+     "startsAt": "Starts",
+     "title": "Title"
+    },
+    "sessions": {
+     "breadcrumb": "Sessions",
+     "cancel": "Cancel",
+     "detailsHeading": "Details",
+     "edit": "Edit",
+     "editEyebrow": "Live Session",
+     "editSubmit": "Save Session",
+     "emptyDescription": "Schedule the first session and it appears on the learner Live Sessions page immediately.",
+     "emptyTitle": "No sessions yet",
+     "end": "End",
+     "goLive": "Go live",
+     "lifecycleHint": "Scheduled sessions go live, then end. Cancelling notifies nobody automatically; tell your registrants.",
+     "metrics": {
+      "liveNow": "Live now",
+      "scheduled": "Scheduled",
+      "total": "Sessions"
+     },
+     "nRegistered": "{count} registered",
+     "newBreadcrumb": "New",
+     "newSession": "New Session",
+     "newSubmit": "Schedule Session",
+     "newTitle": "New Session",
+     "seats": "{taken} / {capacity} seats",
+     "subtitle": "Schedule and run webinars, labs, and workshops. Learners register on the Live Sessions page.",
+     "terminalHint": "This session is closed. Schedule a new one to run it again.",
+     "title": "Live Sessions"
+    },
+    "sessionsCta": "Live Sessions",
+    "subtitle": "Author courses, lessons, and assessments, and schedule live sessions. Published work lands in the learner catalog.",
+    "title": "Teach",
+    "transitions": {
+     "archive": "Archive",
+     "publish": "Publish",
+     "restore": "Restore",
+     "unpublish": "Unpublish"
+    }
+   },
    "tiles": {
     "standard": {
      "title": "The Standard",

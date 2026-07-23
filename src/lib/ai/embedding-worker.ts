@@ -1,5 +1,6 @@
 import "server-only";
 
+import { createHash } from "node:crypto";
 import { createServiceClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { log } from "@/lib/log";
@@ -108,10 +109,20 @@ export async function embedTexts(texts: string[]): Promise<number[][] | { error:
   }
 }
 
+/** Stable content fingerprint stored in chunk metadata for dirty detection. */
+export function contentSha(text: string): string {
+  return createHash("sha256").update(text, "utf8").digest("hex");
+}
+
 /**
  * Index a single source row. The caller passes the rendered text content
  * (already extracted from PDF / Markdown). source_type + source_id link
  * back to the canonical row.
+ *
+ * Idempotency is (embedding_model, content hash): re-posting unchanged text
+ * returns inserted: 0, but EDITED text re-embeds (delete + reinsert). This is
+ * what makes "refresh after the article changed" work — the old model-only
+ * check skipped dirty sources forever.
  */
 export async function indexSource(args: {
   orgId: string;
@@ -123,17 +134,19 @@ export async function indexSource(args: {
   const { orgId, projectId, sourceType, sourceId, text } = args;
   const supabase = createServiceClient() as unknown as LooseSupabase;
   const { provider, model } = pickProvider();
+  const sha = contentSha(text);
 
-  // Skip if already indexed at this model.
+  // Skip only if already indexed at this model AND the content is unchanged.
   const { data: existing } = await supabase
     .from("document_chunks")
-    .select("id")
+    .select("id, metadata")
     .eq("org_id", orgId)
     .eq("source_type", sourceType)
     .eq("source_id", sourceId)
     .eq("embedding_model", model)
     .limit(1);
-  if ((existing as { id: string }[] | null)?.length) {
+  const existingRow = (existing as { id: string; metadata: Record<string, unknown> | null }[] | null)?.[0];
+  if (existingRow && (existingRow.metadata as { content_sha?: string } | null)?.content_sha === sha) {
     return { inserted: 0 };
   }
 
@@ -142,7 +155,7 @@ export async function indexSource(args: {
 
   const result = await embedTexts(chunks);
   if (Array.isArray(result)) {
-    // Replace any prior embedding (different model) for this source.
+    // Replace any prior embedding (different model or stale content).
     await supabase
       .from("document_chunks")
       .delete()
@@ -161,6 +174,7 @@ export async function indexSource(args: {
         embedding_model: model,
         embedding: result[i],
         token_count: Math.round((chunks[i]?.length ?? 0) / 4),
+        metadata: { content_sha: sha },
       });
     }
     return { inserted: chunks.length };

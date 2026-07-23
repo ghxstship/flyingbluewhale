@@ -126,6 +126,28 @@ const TARGETS = [
   // draft seats the scheduler create test inserts (no clock-in → free to drop).
   { table: "field_templates", column: "name", pattern: "E2E Template%" },
   { table: "shifts", column: "role", pattern: "E2E %" },
+  // LEG3ND manage-flow residue (legend-manage-flows.spec). Hard deletes as the
+  // owner fixture (in-band on every legend write policy); children cascade:
+  // courses → lessons/assessments/questions/enrollments, sessions →
+  // registrations, certifications → holders → recert requests, crews →
+  // memberships. Products/vouchers have no dependents (redemptions keep their
+  // ledger rows via SET NULL-free append-only design — the spec never redeems
+  // its own mints). The spec's afterAll purges these too; this is the safety
+  // net for runs killed before afterAll.
+  { table: "legend_courses", column: "title", pattern: "E2E Course %" },
+  { table: "legend_live_sessions", column: "title", pattern: "E2E Session %" },
+  { table: "legend_certifications", column: "code", pattern: "E2E-CT-%" },
+  { table: "legend_certifications", column: "code", pattern: "E2E-RC-%" },
+  { table: "credit_products", column: "name", pattern: "E2E Store Item %" },
+  { table: "vouchers", column: "code", pattern: "E2EV%" },
+  { table: "legend_crews", column: "name", pattern: "E2E Crew %" },
+  // LEG3ND Organization Hub coverage (legend-hub-coverage.spec). Positions
+  // cascade their position_assignments; cost centers are referenced only via
+  // ON DELETE SET NULL FKs; locations cascade their venue_geofences (the spec
+  // deletes its location in-test — this is the mid-failure backstop).
+  { table: "positions", column: "title", pattern: "E2E Position%" },
+  { table: "cost_centers", column: "name", pattern: "E2E Cost Center%" },
+  { table: "locations", column: "name", pattern: "E2E Location%" },
   // Shared parents LAST — children above must clear first (ON DELETE RESTRICT).
   { table: "events", column: "name", pattern: "E2E Event %" },
   { table: "events", column: "name", pattern: "E2E Activity%" },
@@ -415,6 +437,43 @@ async function purgeLifecycleCast(supabase) {
   }
 }
 
+/**
+ * LEG3ND hub coverage (legend-hub-coverage.spec) — heal the two settings
+ * overlays the spec round-trips, in case a mid-test failure stranded them:
+ *   • org_doc_template_settings: the doc-type configurator test disables a
+ *     type then restores it. A stranded enabled=false row hides that type
+ *     from /studio/documents and breaks documents-v6.spec's "every template
+ *     link renders" sweep. The fixture orgs carry no legit disables, so
+ *     deleting enabled=false rows restores the registry default (enabled).
+ *   • org_xpms_atom_settings: the atom-label test sets then clears an
+ *     "E2E Atom Label …" override; clear any stranded ones.
+ * RLS scopes both deletes to the orgs the owner fixture can write.
+ */
+async function healLegendHubOverlays(supabase) {
+  try {
+    const { data, error } = await supabase
+      .from("org_doc_template_settings")
+      .delete()
+      .eq("enabled", false)
+      .select("id");
+    if (error) throw error;
+    if (data?.length) console.log(`e2e:clean — org_doc_template_settings: re-enabled ${data.length} doc type(s).`);
+  } catch (e) {
+    console.error(`e2e:clean — doc-template settings heal (ignored): ${e?.message ?? e}`);
+  }
+  try {
+    const { data, error } = await supabase
+      .from("org_xpms_atom_settings")
+      .update({ org_label: null })
+      .like("org_label", "E2E Atom Label%")
+      .select("id");
+    if (error) throw error;
+    if (data?.length) console.log(`e2e:clean — org_xpms_atom_settings: cleared ${data.length} E2E label override(s).`);
+  } catch (e) {
+    console.error(`e2e:clean — atom-label heal (ignored): ${e?.message ?? e}`);
+  }
+}
+
 async function main() {
   if (!SUPABASE_URL || !ANON) {
     console.error("e2e:clean — missing NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY; skipping.");
@@ -462,6 +521,8 @@ async function main() {
   await purgeE2EAssets(supabase);
   // Kit 30 — the jack-sparrow cast (offer_letters RESTRICT before crew rows).
   await purgeLifecycleCast(supabase);
+  // LEG3ND hub — un-strand the doc-configurator + atom-label overlays.
+  await healLegendHubOverlays(supabase);
   await supabase.auth.signOut();
 }
 

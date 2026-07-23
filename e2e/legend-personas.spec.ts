@@ -334,3 +334,81 @@ test.describe("LEG3ND · operator CRUD (owner)", () => {
     ).toBeVisible({ timeout: 15_000 });
   });
 });
+
+// ── crew band on the persona-floor surfaces (L-P6d enrichment) ──────────────
+// The crew fixture is role=member / persona=crew — the LEARNER band, NOT a
+// read-only stakeholder (viewer/client/community). The persona floor must not
+// bind it: learner surfaces render without AccessDenied, the Manage rail stays
+// hidden (nav is band-filtered, crew < manager), and the crews join/leave
+// self-service works end-to-end (assertLegendWrite passes for members; the
+// self-membership RLS band from 20260723180000 admits the write).
+test.describe("LEG3ND · crew band floor (crew)", () => {
+  test.describe.configure({ timeout: 240_000 });
+  test.beforeEach(async ({ page }) => authedSetup(page, "crew"));
+
+  test("crew: learner surfaces render WITHOUT the access-denied surface", async ({ page }) => {
+    // Stronger than the rail sweep above, which treats AccessDenied as a valid
+    // landing: on the learner spine (learn/store/community/crews) a member must
+    // get the real surface, never the denial.
+    for (const path of ["/legend/learn", "/legend/store", "/legend/community", "/legend/crew"]) {
+      await expectLegendRender(page, path);
+      await expect(
+        page.getByText(ACCESS_DENIED),
+        `${path} renders the real surface to the member band, not AccessDenied`,
+      ).toHaveCount(0);
+    }
+  });
+
+  test("crew: the rail carries no Manage group", async ({ page }) => {
+    await expectLegendRender(page, "/legend");
+    const aside = page.locator('aside[aria-label="LEG3ND"]');
+    await expect(aside, "the desktop rail renders").toBeVisible({ timeout: 15_000 });
+    await expect(aside.getByText(/^Learn$/), "the learner groups stay").toBeVisible();
+    await expect(aside.getByText(/^Manage$/), "the Manage group is band-filtered out").toHaveCount(0);
+    await expect(aside.getByRole("link", { name: "Teach" })).toHaveCount(0);
+    await expect(aside.getByRole("link", { name: "Store Admin" })).toHaveCount(0);
+  });
+
+  test("crew: can join and leave a crew (the read-only floor doesn't bind members)", async ({ page }) => {
+    await expectLegendRender(page, "/legend/crew");
+    const join = page.getByRole("button", { name: /^join$/i });
+    const leave = page.getByRole("button", { name: /^leave$/i });
+    if ((await join.count()) === 0 && (await leave.count()) === 0) {
+      // No legend_crews rows are seeded anywhere (migrations + e2e seeder) —
+      // until an org authors one, this self-service loop has nothing to bind.
+      test.skip(true, "no active crews in the org — nothing to join (crews are manager-authored, none seeded)");
+      return;
+    }
+    // Residue teardown first: leave every crew a prior interrupted run joined,
+    // so the join below always exercises the INSERT path. Bounded loop — each
+    // leave revalidates the page and that row's control flips back to Join.
+    for (let i = 0; i < 10; i++) {
+      const n = await leave.count();
+      if (n === 0) break;
+      await leave.first().click();
+      await expect
+        .poll(async () => leave.count(), { message: "residue leave persisted (control flipped)", timeout: 20_000 })
+        .toBeLessThan(n);
+    }
+    await expect(leave, "no residual crew memberships remain").toHaveCount(0);
+
+    // Join → the row's control flips to Leave only if the INSERT persisted
+    // (the action reads the row back; an RLS-filtered insert is a loud error).
+    await join.first().click();
+    await expect(leave.first(), "the join persisted — the control flipped to Leave").toBeVisible({
+      timeout: 20_000,
+    });
+    await expect(
+      page.getByRole("alert").filter({ hasText: RLS_ERROR }),
+      "join surfaced no RLS/read-only error",
+    ).toHaveCount(0);
+
+    // Teardown: leave again — membership state restored to none.
+    await leave.first().click();
+    await expect.poll(async () => leave.count(), { message: "the leave persisted", timeout: 20_000 }).toBe(0);
+    await expect(
+      page.getByRole("alert").filter({ hasText: RLS_ERROR }),
+      "leave surfaced no RLS/read-only error",
+    ).toHaveCount(0);
+  });
+});

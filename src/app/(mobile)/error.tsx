@@ -18,7 +18,7 @@ export default function MobileError({ error, reset }: { error: Error & { digest?
       <div className="text-xs font-semibold tracking-wider text-[var(--p-danger)] uppercase">
         {t("m.error.eyebrow", undefined, "Error")}
       </div>
-      <h1 className="mt-2 text-2xl font-semibold">{t("m.error.title", undefined, "Something Went Wrong")}</h1>
+      <h1 className="mt-2 text-[length:var(--p-fs-h2)]">{t("m.error.title", undefined, "Something Went Wrong")}</h1>
       <p className="mt-2 text-sm text-[var(--p-text-2)]">
         {error.message || t("m.error.fallbackMessage", undefined, "An unexpected error occurred.")}
       </p>

@@ -23,9 +23,7 @@ export default function RootError({ error, reset }: { error: Error & { digest?: 
       <div className="text-xs font-semibold tracking-wider text-[var(--p-danger)] uppercase">
         {t("rootError.eyebrow", undefined, "Error")}
       </div>
-      <h1 className="mt-3 text-3xl font-semibold tracking-tight">
-        {t("rootError.title", undefined, "Something went wrong")}
-      </h1>
+      <h1 className="mt-3">{t("rootError.title", undefined, "Something went wrong")}</h1>
       <p className="mt-2 text-sm text-[var(--p-text-2)]">
         {error.message || t("rootError.fallback", undefined, "An unexpected error occurred.")}
         {error.digest && (

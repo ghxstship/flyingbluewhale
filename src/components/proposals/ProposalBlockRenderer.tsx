@@ -171,7 +171,7 @@ function HeroBlock({
             {block.eyebrow}
           </div>
         )}
-        <h1 className="font-display mt-4 text-5xl tracking-tight text-balance sm:text-7xl">{block.title}</h1>
+        <h1 className="font-display mt-4 text-[length:var(--p-fs-hero)] tracking-tight text-balance">{block.title}</h1>
         {block.subtitle && <p className="mt-4 text-lg text-[var(--p-text-2)]">{block.subtitle}</p>}
         {block.partners && block.partners.length > 0 && (
           <div className="mt-6 flex items-center gap-3 text-xs font-semibold tracking-widest text-[var(--p-text-2)] uppercase">
@@ -268,7 +268,7 @@ function OverviewCards({
                   {c.tag}
                 </div>
               )}
-              <h3 className="font-subdisplay mt-2 text-xl tracking-wide">{c.title}</h3>
+              <h3 className="font-subdisplay mt-2 text-[length:var(--p-fs-h3)] tracking-wide">{c.title}</h3>
               <dl className="mt-3 space-y-1 text-xs">
                 {c.details.map((d, j) => (
                   <div

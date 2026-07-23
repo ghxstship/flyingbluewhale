@@ -40,7 +40,7 @@ export default async function ApplyTemplatePage({ params }: { params: Promise<{ 
         <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
           {t("console.templates.new.eyebrow", undefined, "New Project from Template")}
         </div>
-        <h1 className="mt-2 text-2xl font-semibold tracking-tight uppercase">{tpl.name}</h1>
+        <h1 className="mt-2 text-[length:var(--p-fs-h2)]">{tpl.name}</h1>
         {tpl.tagline ? <p className="mt-1 text-xs text-[var(--p-text-2)] italic">{tpl.tagline}</p> : null}
       </header>
 

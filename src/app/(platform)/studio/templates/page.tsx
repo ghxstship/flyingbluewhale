@@ -37,9 +37,7 @@ export default async function TemplatesGalleryPage() {
         <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
           {t("console.templates.eyebrow", undefined, "Templates")}
         </div>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight">
-          {t("console.templates.title", undefined, "PROJECT TEMPLATES")}
-        </h1>
+        <h1 className="mt-2">{t("console.templates.title", undefined, "PROJECT TEMPLATES")}</h1>
         <p className="mt-2 text-sm text-[var(--p-text-2)]">
           {t(
             "console.templates.description",

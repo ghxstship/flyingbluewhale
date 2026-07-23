@@ -115,11 +115,11 @@ function anchorId(method: string, path: string): string {
 const METHOD_ORDER = ["get", "post", "patch", "put", "delete"] as const;
 
 const METHOD_COLORS: Record<string, string> = {
-  get: "var(--success, #16a34a)",
-  post: "var(--info, #2563eb)",
-  patch: "var(--warning, #ca8a04)",
-  put: "var(--warning, #ca8a04)",
-  delete: "var(--danger, #dc2626)",
+  get: "var(--p-success)",
+  post: "var(--p-info)",
+  patch: "var(--p-warning)",
+  put: "var(--p-warning)",
+  delete: "var(--p-danger)",
 };
 
 export default async function ApiDocsPage() {
@@ -152,7 +152,9 @@ export default async function ApiDocsPage() {
         <p className="text-xs tracking-[0.2em] text-[var(--p-text-2)] uppercase">
           {t("apiDocs.eyebrow", undefined, "REST API · v1")}
         </p>
-        <h1 className="mt-2 text-4xl font-semibold">{t("apiDocs.heading", undefined, "ATLVS API Reference")}</h1>
+        <h1 className="mt-2 text-[length:var(--p-fs-display-sm)]">
+          {t("apiDocs.heading", undefined, "ATLVS API Reference")}
+        </h1>
         <p className="mt-4 max-w-3xl text-base text-[var(--p-text-2)]">{doc.info.description}</p>
         <div className="mt-6 flex flex-wrap gap-3 text-sm">
           <a
@@ -228,7 +230,7 @@ export default async function ApiDocsPage() {
 
       {sortedTags.map((tag) => (
         <section key={tag} id={tag.toLowerCase()} className="mb-16">
-          <h2 className="mb-6 border-b border-[var(--p-border)] pb-2 text-2xl font-semibold">{tag}</h2>
+          <h2 className="mb-6 border-b border-[var(--p-border)] pb-2">{tag}</h2>
           {byTag.get(tag)!.map(({ path, method, op }) => (
             <article
               key={`${method}-${path}`}

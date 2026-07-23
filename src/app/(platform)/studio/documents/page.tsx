@@ -27,7 +27,7 @@ export default function DocumentsHubPage() {
     <main className="mx-auto w-full max-w-6xl px-6 py-8">
       <header className="border-ink mb-8 border-b-3 pb-6">
         <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">Documents</div>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight">DOCUMENT LIBRARY</h1>
+        <h1 className="mt-2">DOCUMENT LIBRARY</h1>
         <p className="mt-2 max-w-2xl text-sm text-[var(--p-text-2)]">
           {total} canonical document types across the four apps. Every document is both the on-screen view and the
           print/PDF artifact, drives off a <code>data-path</code> merge contract, and white-labels through three brand
@@ -43,7 +43,7 @@ export default function DocumentsHubPage() {
           return (
             <section key={app}>
               <div className="mb-4 flex items-baseline gap-3">
-                <h2 className="text-xl font-semibold tracking-tight">{meta.name}</h2>
+                <h2>{meta.name}</h2>
                 <span className="text-sm text-[var(--p-text-3)]">{meta.tagline}</span>
                 <Badge>{list.length}</Badge>
               </div>

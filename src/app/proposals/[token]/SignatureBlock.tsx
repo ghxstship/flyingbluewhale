@@ -103,7 +103,7 @@ export function SignatureBlock({
           <div className="text-[11px] font-semibold tracking-[0.25em] text-[var(--p-success)] uppercase">
             {t("legal.proposalSignature.signedEyebrow", undefined, "Signed")}
           </div>
-          <div className="font-display mt-3 text-4xl tracking-tight">
+          <div className="font-display mt-3 text-[length:var(--p-fs-display-sm)] tracking-tight">
             {t(
               "legal.proposalSignature.thankYou",
               { name: signerName ?? t("legal.proposalSignature.signerFallback", undefined, "signer") },
@@ -128,7 +128,7 @@ export function SignatureBlock({
         <div className="text-[11px] font-semibold tracking-[0.25em] text-[var(--p-accent)] uppercase">
           {t("legal.proposalSignature.authorizeEyebrow", undefined, "Authorize")}
         </div>
-        <h2 className="font-display mt-3 text-4xl tracking-tight">
+        <h2 className="font-display mt-3 text-[length:var(--p-fs-display-sm)] tracking-tight">
           {t("legal.proposalSignature.acceptHeading", undefined, "Accept this proposal")}
         </h2>
         {instructions && <p className="mt-2 text-sm text-[var(--p-text-2)]">{instructions}</p>}

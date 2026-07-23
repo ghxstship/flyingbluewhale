@@ -85,7 +85,7 @@ export default async function SignPage({ params }: { params: Promise<{ token: st
       <main className="mx-auto flex min-h-screen max-w-2xl flex-col gap-8 px-6 py-12">
         <header className="space-y-2">
           <p className="font-mono text-xs tracking-[0.14em] text-[var(--p-accent-text)] uppercase">ATLVS · E-Sign</p>
-          <h1 className="text-3xl font-bold tracking-tight text-[var(--p-text-1)]">{docTitle}</h1>
+          <h1 className="text-[var(--p-text-1)]">{docTitle}</h1>
         </header>
         <div className="rounded-[var(--p-r,8px)] border border-[var(--p-border)] bg-[var(--p-surface)] p-6">
           <p className="text-sm text-[var(--p-text-2)]">{message}</p>
@@ -135,7 +135,7 @@ export default async function SignPage({ params }: { params: Promise<{ token: st
       <main className="mx-auto flex min-h-screen max-w-2xl flex-col gap-8 px-6 py-12">
         <header className="space-y-2">
           <p className="font-mono text-xs tracking-[0.14em] text-[var(--p-accent-text)] uppercase">ATLVS · E-Sign</p>
-          <h1 className="text-3xl font-bold tracking-tight text-[var(--p-text-1)]">{docTitle}</h1>
+          <h1 className="text-[var(--p-text-1)]">{docTitle}</h1>
           <p className="text-[var(--p-text-2)]">This document has been signed. Thank you.</p>
         </header>
 
@@ -173,7 +173,7 @@ export default async function SignPage({ params }: { params: Promise<{ token: st
     <main className="mx-auto flex min-h-screen max-w-2xl flex-col gap-8 px-6 py-12">
       <header className="space-y-2">
         <p className="font-mono text-xs tracking-[0.14em] text-[var(--p-accent-text)] uppercase">ATLVS · E-Sign</p>
-        <h1 className="text-3xl font-bold tracking-tight text-[var(--p-text-1)]">{docTitle}</h1>
+        <h1 className="text-[var(--p-text-1)]">{docTitle}</h1>
         <p className="text-[var(--p-text-2)]">
           Review the full document below, then add your name and signature to complete it.
         </p>

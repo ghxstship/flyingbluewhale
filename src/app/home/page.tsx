@@ -33,7 +33,7 @@ export default async function HomeLauncherPage() {
       <header className="flex items-start justify-between gap-4">
         <div className="space-y-2">
           <p className="font-mono text-xs tracking-[0.14em] text-[var(--p-accent-text)] uppercase">ATLVS Technologies</p>
-          <h1 className="text-3xl font-bold tracking-tight text-[var(--p-text-1)]">Welcome back</h1>
+          <h1 className="text-[var(--p-text-1)]">Welcome back</h1>
           <p className="text-[var(--p-text-2)]">{session.email} · choose where to work.</p>
         </div>
         <AppSwitcher current="platform" entries={entries} />

@@ -53,16 +53,21 @@ const PALETTE: Array<{
   h: number;
   color: string;
 }> = [
-  { kind: "mic", label: "Mic", Icon: Mic, w: 1, h: 1, color: "#64748b" },
-  { kind: "monitor", label: "Monitor", Icon: Square, w: 3, h: 2, color: "#475569" },
-  { kind: "amp", label: "Amp", Icon: Music, w: 3, h: 2, color: "#1e293b" },
-  { kind: "drum_kit", label: "Drum Kit", Icon: Drum, w: 6, h: 6, color: "#334155" },
-  { kind: "guitar", label: "Guitar", Icon: Guitar, w: 2, h: 2, color: "#334155" },
-  { kind: "keys", label: "Keys", Icon: Music, w: 4, h: 2, color: "#334155" },
-  { kind: "speaker", label: "Speaker", Icon: Speaker, w: 3, h: 3, color: "#0f172a" },
-  { kind: "di_box", label: "DI", Icon: Radio, w: 1, h: 1, color: "#64748b" },
-  { kind: "light_truss", label: "Light Truss", Icon: Lightbulb, w: 20, h: 1, color: "#ca8a04" },
-  { kind: "riser", label: "Riser", Icon: Square, w: 8, h: 4, color: "#78350f" },
+  // Mode-aware ink tones: the --p-neutral-* ramp flips between modes (dark
+  // inks on the light surface, light inks on the dark surface) so the gear
+  // tones stay distinguishable without a hand-held hex ramp. The truss rides
+  // the warning amber and the riser the chart orange so the two overhead/
+  // platform tones stay apart from the neutral gear tones.
+  { kind: "mic", label: "Mic", Icon: Mic, w: 1, h: 1, color: "var(--p-neutral-500)" },
+  { kind: "monitor", label: "Monitor", Icon: Square, w: 3, h: 2, color: "var(--p-neutral-600)" },
+  { kind: "amp", label: "Amp", Icon: Music, w: 3, h: 2, color: "var(--p-neutral-800)" },
+  { kind: "drum_kit", label: "Drum Kit", Icon: Drum, w: 6, h: 6, color: "var(--p-neutral-700)" },
+  { kind: "guitar", label: "Guitar", Icon: Guitar, w: 2, h: 2, color: "var(--p-neutral-700)" },
+  { kind: "keys", label: "Keys", Icon: Music, w: 4, h: 2, color: "var(--p-neutral-700)" },
+  { kind: "speaker", label: "Speaker", Icon: Speaker, w: 3, h: 3, color: "var(--p-neutral-900)" },
+  { kind: "di_box", label: "DI", Icon: Radio, w: 1, h: 1, color: "var(--p-neutral-500)" },
+  { kind: "light_truss", label: "Light Truss", Icon: Lightbulb, w: 20, h: 1, color: "var(--p-warning)" },
+  { kind: "riser", label: "Riser", Icon: Square, w: 8, h: 4, color: "var(--chart-2)" },
 ];
 
 const COLOR_BY_KIND: Record<ElementKind, string> = Object.fromEntries(PALETTE.map((p) => [p.kind, p.color])) as Record<
@@ -356,7 +361,7 @@ export function StagePlotCanvas({
             onClick={onCanvasClick}
             onPointerMove={onElementPointerMove}
             onPointerUp={onElementPointerUp}
-            className="block bg-white"
+            className="block bg-[var(--p-surface)]"
             style={{ cursor: selectedTool ? "crosshair" : "default" }}
           >
             {/* Grid */}
@@ -365,15 +370,15 @@ export function StagePlotCanvas({
                 <path
                   d={`M ${SCALE * GRID_FT * 4} 0 L 0 0 0 ${SCALE * GRID_FT * 4}`}
                   fill="none"
-                  stroke="#e2e8f0"
+                  style={{ stroke: "var(--chart-grid)" }}
                   strokeWidth="0.5"
                 />
               </pattern>
             </defs>
             <rect width={canvasW} height={canvasH} fill="url(#grid)" />
             {/* Downstage edge label */}
-            <line x1={0} y1={canvasH} x2={canvasW} y2={canvasH} stroke="#1e293b" strokeWidth={2} />
-            <text x={canvasW / 2} y={canvasH - 4} fill="#1e293b" fontSize="10" textAnchor="middle">
+            <line x1={0} y1={canvasH} x2={canvasW} y2={canvasH} style={{ stroke: "var(--p-neutral-800)" }} strokeWidth={2} />
+            <text x={canvasW / 2} y={canvasH - 4} style={{ fill: "var(--p-neutral-800)" }} fontSize="10" textAnchor="middle">
               {t("components.stagePlotCanvas.downstage", undefined, "Downstage · audience")}
             </text>
             {/* Elements */}
@@ -386,16 +391,18 @@ export function StagePlotCanvas({
                     y={el.y * SCALE}
                     width={el.w * SCALE}
                     height={el.h * SCALE}
-                    fill={COLOR_BY_KIND[el.kind]}
+                    style={{
+                      fill: COLOR_BY_KIND[el.kind],
+                      stroke: isSelected ? "var(--p-accent)" : "var(--p-neutral-900)",
+                    }}
                     fillOpacity={0.85}
-                    stroke={isSelected ? "var(--p-accent)" : "#0f172a"}
                     strokeWidth={isSelected ? 2 : 1}
                     rx={2}
                   />
                   <text
                     x={el.x * SCALE + (el.w * SCALE) / 2}
                     y={el.y * SCALE + (el.h * SCALE) / 2 + 3}
-                    fill="white"
+                    style={{ fill: "var(--p-surface)" }}
                     fontSize="10"
                     textAnchor="middle"
                     pointerEvents="none"

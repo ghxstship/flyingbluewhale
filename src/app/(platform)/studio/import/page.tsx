@@ -66,9 +66,7 @@ export default async function ImportPage() {
             <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
               {t("console.import.eyebrow", undefined, "Import")}
             </div>
-            <h1 className="mt-2 text-3xl font-semibold tracking-tight">
-              {t("console.import.title", undefined, "IMPORT CENTER")}
-            </h1>
+            <h1 className="mt-2">{t("console.import.title", undefined, "IMPORT CENTER")}</h1>
             <p className="mt-2 text-sm text-[var(--p-text-2)]">
               {t(
                 "console.import.description",

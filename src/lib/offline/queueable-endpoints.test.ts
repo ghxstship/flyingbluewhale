@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { QUEUEABLE_ENDPOINTS } from "./outbox";
+import { EMERGENCY_ROUTES } from "./emergency-routes";
 
 /**
  * The offline queue's endpoint allow-list exists twice by necessity: the
@@ -59,5 +60,63 @@ describe("QUEUEABLE_ENDPOINTS parity", () => {
     for (const endpoint of QUEUEABLE_ENDPOINTS) {
       expect(endpoint).toMatch(/^\/api\/v1\//);
     }
+  });
+});
+
+/**
+ * Emergency offline tier (M0-b F3) — same dual-list necessity as above: the
+ * SW carries its own EMERGENCY_ROUTES literal, `emergency-routes.ts` is the
+ * app-side mirror. The failure mode this ratchet closes: drop the tier (or a
+ * route) from the SW and evac/crisis codes silently stop being guaranteed
+ * offline — nothing else would notice.
+ */
+describe("emergency offline tier", () => {
+  const sw = readFileSync(join(process.cwd(), "public/service-worker.js"), "utf8");
+
+  function swEmergencyRoutes(): string[] {
+    const block = sw.match(/const EMERGENCY_ROUTES = \[([\s\S]*?)\]/);
+    if (!block?.[1]) throw new Error("Could not find EMERGENCY_ROUTES in public/service-worker.js");
+    const routes = [...block[1].matchAll(/"([^"]+)"/g)].map((m) => m[1] as string);
+    // Guard the parsing guard — a regex matching nothing must fail loudly,
+    // not pass every assertion vacuously.
+    if (routes.length === 0) throw new Error("Parsed zero EMERGENCY_ROUTES from the SW");
+    return routes;
+  }
+
+  it("mirrors src/lib/offline/emergency-routes.ts exactly", () => {
+    expect([...swEmergencyRoutes()].sort()).toEqual([...EMERGENCY_ROUTES].sort());
+  });
+
+  it("keeps the emergency hub and its four reference pages in the tier", () => {
+    for (const route of [
+      "/m/emergency",
+      "/m/emergency/codes",
+      "/m/emergency/fire",
+      "/m/emergency/evacuation",
+      "/m/emergency/shelter",
+    ]) {
+      expect(EMERGENCY_ROUTES).toContain(route);
+    }
+  });
+
+  it("declares a dedicated emergency cache and preserves it on activate", () => {
+    // A dedicated cache name is what exempts the tier from the runtime FIFO
+    // trim; the activate keep-list is what stops an upgrade from deleting it.
+    expect(sw).toMatch(/const EMERGENCY_CACHE = `atlvs-emergency-\$\{VERSION\}`/);
+    expect(sw).toContain("k !== EMERGENCY_CACHE");
+  });
+
+  it("serves the tier from the emergency cache on network failure", () => {
+    // The fetch handler must consult EMERGENCY_ROUTES and fall back to the
+    // dedicated cache — the precache CANNOT hold these pages (auth-gated;
+    // install-time capture would cache a login redirect).
+    expect(sw).toMatch(/EMERGENCY_ROUTES\.includes\(url\.pathname\)/);
+    expect(sw).toMatch(/caches\.open\(EMERGENCY_CACHE\)/);
+  });
+
+  it("ships as SW version v8 or later (the version that introduced the tier)", () => {
+    const version = sw.match(/const VERSION = "v(\d+)"/);
+    expect(version?.[1], "SW VERSION constant not found").toBeTruthy();
+    expect(Number(version?.[1])).toBeGreaterThanOrEqual(8);
   });
 });

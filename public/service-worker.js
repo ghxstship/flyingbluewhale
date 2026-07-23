@@ -1,5 +1,7 @@
 // ATLVS Technologies — offline-first service worker (COMPVSS field PWA).
-// Caches the mobile shell + check-in flow + offline fallback page.
+// Caches the mobile shell + check-in flow + offline fallback page, plus a
+// dedicated never-trimmed emergency tier (/m/emergency + its reference
+// pages) so evac/crisis codes open with zero signal.
 //
 // Offline queue: POSTs to the queueable field endpoints (clock punches,
 // gate scans, ticket check-ins, equipment scans) are buffered in
@@ -7,9 +9,10 @@
 // the next reconnect via the background-sync event (or an explicit
 // QUEUE_DRAIN message from a client, for browsers without sync).
 
-const VERSION = "v7";
+const VERSION = "v8";
 const STATIC_CACHE = `atlvs-static-${VERSION}`;
 const RUNTIME_CACHE = `atlvs-runtime-${VERSION}`;
+const EMERGENCY_CACHE = `atlvs-emergency-${VERSION}`;
 const QUEUE_DB = "atlvs-punch-queue";
 const QUEUE_STORE = "punches";
 const SYNC_TAG = "punch-replay";
@@ -43,6 +46,28 @@ const PRECACHE = [
 // Cap the runtime cache — field devices accumulate per-user HTML and
 // assets indefinitely otherwise. Trimmed oldest-first on insert.
 const RUNTIME_CACHE_MAX_ENTRIES = 120;
+
+// Emergency tier (M0-b F3): the evac / crisis-code reference pages must open
+// with ZERO signal. They are auth-gated + org-specific, so they cannot be
+// precached at install (the install-time fetch would capture a login
+// redirect — see the PRECACHE note above). Instead every successful visit
+// stamps the rendered page into the DEDICATED cache below, which is exempt
+// from the runtime FIFO trim so a busy shift can never evict it; visiting
+// the hub warms the four sub-pages in the background. Offline serves carry
+// the CACHED_AT_HEADER age via the existing SERVED_STALE signal.
+// Keep in sync with src/lib/offline/emergency-routes.ts (parity-tested in
+// src/lib/offline/queueable-endpoints.test.ts).
+const EMERGENCY_ROUTES = [
+  "/m/emergency",
+  "/m/emergency/codes",
+  "/m/emergency/fire",
+  "/m/emergency/evacuation",
+  "/m/emergency/shelter",
+];
+// Network race budget for emergency navigations — a black-holed radio link
+// (no fast failure) must not stall the muster card; past this we serve the
+// cached copy with its age.
+const EMERGENCY_NETWORK_TIMEOUT_MS = 4000;
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(STATIC_CACHE).then((cache) => cache.addAll(PRECACHE).catch(() => {})));
@@ -106,7 +131,9 @@ self.addEventListener("activate", (event) => {
     Promise.all([
       caches.keys().then((keys) =>
         Promise.all(
-          keys.filter((k) => k !== STATIC_CACHE && k !== RUNTIME_CACHE).map((k) => caches.delete(k)),
+          keys
+            .filter((k) => k !== STATIC_CACHE && k !== RUNTIME_CACHE && k !== EMERGENCY_CACHE)
+            .map((k) => caches.delete(k)),
         ),
       ),
       migrateLegacyQueue().catch(() => {}),
@@ -338,6 +365,48 @@ self.addEventListener("fetch", (event) => {
     req.headers.get("RSC") === "1" ||
     (req.headers.get("accept") || "").includes("text/html");
 
+  // Emergency tier (M0-b F3): the evac / crisis-code reference must open with
+  // zero signal. Still network-first — a DECLARED code must never render from
+  // a stale copy while the network is reachable — but raced against a short
+  // timeout (a black-holed radio link fails slow, not fast), falling back to
+  // the dedicated never-trimmed emergency cache. The offline copy carries its
+  // age via the same SERVED_STALE signal every stale doc serve uses.
+  if (isDocOrData && EMERGENCY_ROUTES.includes(url.pathname)) {
+    event.respondWith(
+      (async () => {
+        try {
+          const res = await fetchWithTimeout(req, EMERGENCY_NETWORK_TIMEOUT_MS);
+          // !res.redirected: an expired session 302s to login — never let the
+          // login page become the cached "emergency card".
+          if (url.origin === self.location.origin && res.ok && res.status === 200 && !res.redirected) {
+            putStamped(req, res.clone(), EMERGENCY_CACHE);
+            // A hub visit warms the whole tier: one bar of signal at the gate
+            // secures Codes / Fire / Evacuate / Shelter for the tunnels.
+            if (req.mode === "navigate" && url.pathname === "/m/emergency") {
+              event.waitUntil(warmEmergencyTier());
+            }
+          }
+          return res;
+        } catch {
+          const emergency = await caches.open(EMERGENCY_CACHE);
+          // ignoreVary: warmed entries were stamped from SW-side fetches whose
+          // headers differ from a real navigation; the URL is the identity here.
+          const cached = (await emergency.match(req, { ignoreVary: true })) || (await caches.match(req));
+          if (cached) {
+            notifyServedStale(event, url.pathname, cached.headers.get(CACHED_AT_HEADER));
+            return cached;
+          }
+          const offline = await caches.match("/offline.html");
+          return (
+            offline ||
+            new Response("Offline", { status: 503, headers: { "content-type": "text/plain" } })
+          );
+        }
+      })(),
+    );
+    return;
+  }
+
   if (isDocOrData) {
     event.respondWith(
       (async () => {
@@ -384,16 +453,19 @@ self.addEventListener("fetch", (event) => {
   );
 });
 
-// Store a response in the runtime cache stamped with the capture time so a
-// later offline serve can say HOW stale the copy is. FIFO-trimmed.
-function putStamped(req, res) {
+// Store a response in a cache stamped with the capture time so a later
+// offline serve can say HOW stale the copy is. The runtime cache (default)
+// is FIFO-trimmed; the emergency cache is deliberately NOT — five known
+// routes, and eviction is exactly the failure the tier exists to prevent.
+function putStamped(req, res, cacheName = RUNTIME_CACHE) {
   return caches
-    .open(RUNTIME_CACHE)
+    .open(cacheName)
     .then(async (cache) => {
       const headers = new Headers(res.headers);
       headers.set(CACHED_AT_HEADER, String(Date.now()));
       const body = await res.blob();
       await cache.put(req, new Response(body, { status: res.status, statusText: res.statusText, headers }));
+      if (cacheName !== RUNTIME_CACHE) return;
       const keys = await cache.keys();
       if (keys.length > RUNTIME_CACHE_MAX_ENTRIES) {
         // FIFO trim — Cache API keys are insertion-ordered.
@@ -401,6 +473,44 @@ function putStamped(req, res) {
       }
     })
     .catch(() => {});
+}
+
+// Race a fetch against a deadline. An unreachable network usually rejects
+// fast; a degraded one (one bar, deep in the venue) can hang for 30s+ —
+// past the budget we fall back to the cached copy instead of stalling.
+function fetchWithTimeout(req, ms) {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error("timeout")), ms);
+    fetch(req).then(
+      (res) => {
+        clearTimeout(timer);
+        resolve(res);
+      },
+      (err) => {
+        clearTimeout(timer);
+        reject(err);
+      },
+    );
+  });
+}
+
+// Fetch + stamp the emergency sub-pages in the background after a hub visit.
+// Best-effort per route (a failed warm leaves the visit-time stamp path);
+// same-origin fetches carry the session cookies, and `!res.redirected`
+// keeps a login redirect out of the tier.
+async function warmEmergencyTier() {
+  await Promise.all(
+    EMERGENCY_ROUTES.filter((p) => p !== "/m/emergency").map(async (path) => {
+      try {
+        const res = await fetch(path, { headers: { accept: "text/html" } });
+        if (res.ok && res.status === 200 && !res.redirected) {
+          await putStamped(new Request(path), res, EMERGENCY_CACHE);
+        }
+      } catch {
+        // Offline or blocked — the next online visit warms it.
+      }
+    }),
+  );
 }
 
 // Tell the (resulting) client it was just served a cached copy because the

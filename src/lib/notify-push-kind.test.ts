@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { pushKindForEvent } from "./notify";
+import { WEBHOOK_EVENTS } from "./webhooks/events";
 import { NOTIF_KINDS, NOTIF_KIND_FALLBACKS } from "@/components/notifications/kinds";
 
 /**
@@ -43,6 +44,39 @@ describe("notify push-kind map", () => {
       const kind = pushKindForEvent(event);
       expect(NOTIF_KINDS, `${event} -> ${kind} must be toggleable`).toContain(kind);
     }
+  });
+
+  it("maps every mapped event — not just time & pay — onto a toggleable kind", () => {
+    // Generalization of the assertion above: as owners opt more events into
+    // push (memory: project-notify-push-dead-store says "map as owners
+    // decide, never in bulk"), each new mapping must land on a kind that
+    // renders a switch, or it ships an unmutable push.
+    for (const event of WEBHOOK_EVENTS) {
+      const kind = pushKindForEvent(event);
+      if (kind !== undefined) {
+        expect(NOTIF_KINDS, `${event} -> ${kind} must be toggleable`).toContain(kind);
+      }
+    }
+  });
+
+  it("never re-gates push on the retired ui_state.notifications store", () => {
+    // The F2 defect: notify() called shouldNotify(uid, event, "push") — a
+    // store no UI writes, whose push default was false — so push never
+    // fired for anyone. The fix removed that gate and narrowed
+    // NotifyChannel to "in_app" | "email" (compile-time ratchet). This
+    // source scan is the second, independent guard: it fails if anyone
+    // re-widens the channel type AND reintroduces the dead gate in the
+    // same commit — the exact path a notify() push could go dead by again.
+    const notifySrc = readFileSync(join(process.cwd(), "src/lib/notify.ts"), "utf8");
+    const resolverSrc = readFileSync(join(process.cwd(), "src/lib/notify-resolver.ts"), "utf8");
+    expect(
+      /(?:bulkShouldNotify|shouldNotify)\s*\([^)]*["']push["']/.test(notifySrc),
+      "notify.ts must never gate push on the retired resolver — push resolves via NOTIFY_EVENT_PUSH_KIND + notification_preferences (sendPushTo)",
+    ).toBe(false);
+    expect(
+      /NotifyChannel\s*=[^;]*["']push["']/.test(resolverSrc),
+      'the retired resolver must not offer a "push" channel (NotifyChannel is the compile-time ratchet)',
+    ).toBe(false);
   });
 
   it("does not push events it has no kind for", () => {

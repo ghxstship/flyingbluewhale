@@ -61,6 +61,7 @@ export function MobileNavDrawer({ groups }: { groups: NavGroup[] }) {
         // Re-anchor the SaaS skin here so the drawer paints neutral
         // SaaS surfaces + the per-product accent instead of inheriting
         // the cosmic ghxstship root.
+        data-ui="saas"
         data-theme="atlvs-product"
         data-platform="atlvs"
         className="w-[85vw] max-w-[320px] overflow-y-auto bg-[var(--p-surface,var(--p-surface))] p-0 text-[var(--p-text-1,var(--p-text-1))]"

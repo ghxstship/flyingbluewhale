@@ -52,7 +52,7 @@ export function ImportBudgetForm() {
           name="csv"
           required
           rows={14}
-          className="mt-3 w-full rounded-md border border-[var(--p-border)] bg-[var(--p-surface-2)] px-3 py-2 font-mono text-xs"
+          className="ps-input mt-3 w-full font-mono text-xs"
           placeholder={`${TEMPLATE_HEADER}\n…\n`}
         />
       </div>

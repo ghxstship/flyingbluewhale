@@ -6,7 +6,7 @@ import { getRequestT } from "@/lib/i18n/request";
 import { INQUIRY_SUBJECT_PATHS, type InquirySubjectKind } from "@/lib/marketplace";
 import { submitMarketplaceInquiry } from "./actions";
 
-const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
+const INPUT = "ps-input w-full";
 const LBL = "text-xs font-medium text-[var(--p-text-2)]";
 
 const LIST_LABEL_FALLBACK: Record<InquirySubjectKind, string> = {

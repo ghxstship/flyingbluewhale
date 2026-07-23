@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { ModuleHeader } from "@/components/Shell";
 import { MetricCard } from "@/components/ui/MetricCard";
+import { Skeleton } from "@/components/ui/Skeleton";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
 import { listOrgScoped } from "@/lib/db/resource";
@@ -147,19 +148,19 @@ function ReportsSkeleton() {
     <div className="space-y-5" aria-busy="true">
       <div className="metric-grid-3">
         {Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} className="ps-skel h-24" />
+          <Skeleton key={i} width="100%" height={96} />
         ))}
       </div>
       <div className="grid gap-4 lg:grid-cols-2">
-        <div className="ps-skel h-64" />
-        <div className="ps-skel h-64" />
+        <Skeleton width="100%" height={256} />
+        <Skeleton width="100%" height={256} />
       </div>
       <div className="surface overflow-hidden">
         {Array.from({ length: 5 }).map((_, i) => (
           <div key={i} className="flex items-center gap-3 border-b border-[var(--p-border)] px-4 py-2.5 last:border-0">
-            <div className="ps-skel h-4 w-24" />
-            <div className="ps-skel h-4 w-16" />
-            <div className="ps-skel h-4 flex-1" />
+            <Skeleton width={96} height={16} />
+            <Skeleton width={64} height={16} />
+            <Skeleton className="flex-1" height={16} />
           </div>
         ))}
       </div>

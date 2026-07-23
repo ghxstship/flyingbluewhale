@@ -12,7 +12,7 @@ import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
-const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
+const INPUT = "ps-input w-full";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -66,7 +66,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </a>
             {sub.submittal_state !== "closed" && sub.submittal_state !== "void" && (
               <form action={closeSubmittal.bind(null, id)}>
-                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
+                <button className="ps-btn ps-btn--ghost ps-btn--sm" type="submit">
                   {t("common.close", undefined, "Close")}
                 </button>
               </form>
@@ -137,7 +137,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 className={INPUT}
               />
               <div className="flex justify-end">
-                <button type="submit" className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium">
+                <button type="submit" className="ps-btn ps-btn--ghost ps-btn--sm">
                   {t("console.submittals.detail.applyStamp", undefined, "Apply Stamp")}
                 </button>
               </div>
@@ -148,7 +148,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         {current && current.stamp === "revise_resubmit" && (
           <section className="surface p-4">
             <form action={addNextRound.bind(null, id)}>
-              <button type="submit" className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium">
+              <button type="submit" className="ps-btn ps-btn--ghost ps-btn--sm">
                 {t(
                   "console.submittals.detail.openRound",
                   { round: sub.current_round + 1 },

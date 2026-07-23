@@ -3,6 +3,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import { Skeleton } from "@/components/ui/Skeleton";
 import { requireSession } from "@/lib/auth";
 import { listProjects } from "@/lib/db/projects";
 import { countOrgScoped } from "@/lib/db/resource";
@@ -175,15 +176,15 @@ function ProjectsSkeleton() {
     <div className="space-y-5" aria-busy="true">
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="ps-skel h-28" />
+          <Skeleton key={i} width="100%" height={112} />
         ))}
       </div>
       <div className="surface overflow-hidden">
         {Array.from({ length: 8 }).map((_, i) => (
           <div key={i} className="flex items-center gap-3 border-b border-[var(--p-border)] px-4 py-2.5 last:border-0">
-            <div className="ps-skel h-4 flex-1" />
-            <div className="ps-skel h-4 w-24" />
-            <div className="ps-skel h-4 w-16" />
+            <Skeleton className="flex-1" height={16} />
+            <Skeleton width={96} height={16} />
+            <Skeleton width={64} height={16} />
           </div>
         ))}
       </div>

@@ -140,7 +140,7 @@ export default async function Page({ params }: { params: Promise<{ reqId: string
                   <form action={awardResponse.bind(null, reqId, r.id)}>
                     <button
                       type="submit"
-                      className="hover-lift rounded border border-[var(--p-border)] px-2 py-1 text-[11px]"
+                      className="ps-btn ps-btn--ghost ps-btn--sm"
                     >
                       {t("console.procurement.requisitions.leveling.award", undefined, "Award")}
                     </button>

@@ -121,6 +121,9 @@ export function AccessControlScanner({ labels }: AccessControlScannerProps): Rea
         <h2 className="border-b border-[var(--p-border)] px-4 py-2.5 font-mono text-xs tracking-[0.08em] text-[var(--p-text-3)] uppercase">
           {labels.recentTitle}
         </h2>
+        {/* A11Y-2: async verdicts land here after the camera decode — announce
+            them politely so screen-reader operators hear the gate result. */}
+        <div role="status" aria-live="polite">
         {log.length === 0 ? (
           <p className="px-4 py-6 text-sm text-[var(--p-text-3)]">{labels.recentEmpty}</p>
         ) : (
@@ -144,6 +147,7 @@ export function AccessControlScanner({ labels }: AccessControlScannerProps): Rea
             })}
           </ul>
         )}
+        </div>
       </section>
     </div>
   );

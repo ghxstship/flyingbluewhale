@@ -179,10 +179,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   <input type="hidden" name="state" value={to} />
                   <button
                     type="submit"
-                    className={`rounded-md border border-[var(--p-border)] px-2.5 py-1 text-xs font-medium transition-colors ${
-                      to === "retired" || to === "lost"
-                        ? "text-[color:var(--p-danger)] hover:bg-[color:var(--p-danger)]/10"
-                        : "text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)]"
+                    className={`ps-btn ps-btn--ghost ps-btn--sm ${
+                      to === "retired" || to === "lost" ? "text-[color:var(--p-danger)]" : ""
                     }`}
                   >
                     {t("console.assets.detail.markState", { state: toTitle(to) }, `Mark ${toTitle(to)}`)}

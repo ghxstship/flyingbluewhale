@@ -9,7 +9,7 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 import { createExpenseAction } from "../actions";
 import { XPMS_DEPARTMENTS, XPMS_DISCIPLINES, XPMS_PHASES } from "@/lib/finance/xpms-budget";
 
-const SELECT_CLASS = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-2 text-sm";
+const SELECT_CLASS = "ps-input w-full";
 
 function XpmsSelect({ label, name, options }: { label: string; name: string; options: readonly string[] }) {
   return (

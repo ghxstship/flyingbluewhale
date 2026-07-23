@@ -49,7 +49,7 @@ const LINK_TYPE_LABEL: Record<LinkRow["link_type"], string> = {
   transmittal_item: "Transmittal",
 };
 
-const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
+const INPUT = "ps-input w-full";
 
 function fmtBytes(b: number | null): string {
   if (!b) return "—";

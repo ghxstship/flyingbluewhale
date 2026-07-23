@@ -61,21 +61,21 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </a>
             {item.item_state === "open" && (
               <form action={transitionPunchItem.bind(null, id, "in_progress")}>
-                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
+                <button className="ps-btn ps-btn--ghost ps-btn--sm" type="submit">
                   {t("console.punch.detail.start", undefined, "Start")}
                 </button>
               </form>
             )}
             {item.item_state === "in_progress" && (
               <form action={transitionPunchItem.bind(null, id, "ready_for_review")}>
-                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
+                <button className="ps-btn ps-btn--ghost ps-btn--sm" type="submit">
                   {t("console.punch.detail.markReady", undefined, "Mark ready")}
                 </button>
               </form>
             )}
             {item.item_state === "ready_for_review" && (
               <form action={transitionPunchItem.bind(null, id, "complete")}>
-                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
+                <button className="ps-btn ps-btn--ghost ps-btn--sm" type="submit">
                   {t("console.punch.detail.close", undefined, "Close")}
                 </button>
               </form>

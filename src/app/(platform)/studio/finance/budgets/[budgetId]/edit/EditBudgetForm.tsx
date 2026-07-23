@@ -13,7 +13,7 @@ import {
   XPMS_XYZ,
 } from "@/lib/finance/xpms-budget";
 
-const SELECT_CLASS = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-2 text-sm";
+const SELECT_CLASS = "ps-input w-full";
 
 function Select({
   label,

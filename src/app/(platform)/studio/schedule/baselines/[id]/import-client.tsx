@@ -6,7 +6,7 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 import { importSchedule, type ImportState } from "./actions";
 
 import { useActionErrorResolver } from "@/lib/errors-client";
-const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
+const INPUT = "ps-input w-full";
 
 /**
  * Client island that turns a file picker into the source_content needed by

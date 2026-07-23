@@ -73,7 +73,7 @@ export function RestroomAdaCalculator() {
               min={0}
               value={attendance}
               onChange={(e) => setAttendance(Number(e.target.value))}
-              className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+              className="ps-input mt-1 w-full"
             />
           </div>
           <div>
@@ -86,7 +86,7 @@ export function RestroomAdaCalculator() {
               min={0}
               value={hours}
               onChange={(e) => setHours(Number(e.target.value))}
-              className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+              className="ps-input mt-1 w-full"
             />
             <p className="mt-2 text-[11px] text-[var(--p-text-2)]">
               The base table assumes a 4-hour event; longer events scale up to 2x at 10+ hours.
@@ -102,7 +102,7 @@ export function RestroomAdaCalculator() {
               id="restroom-split"
               value={split}
               onChange={(e) => setSplit(e.target.value)}
-              className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+              className="ps-input mt-1 w-full"
             >
               {GENDER_SPLITS.map((s) => (
                 <option key={s.slug} value={s.slug}>

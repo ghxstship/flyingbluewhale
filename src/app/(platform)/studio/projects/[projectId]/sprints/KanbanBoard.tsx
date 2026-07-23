@@ -77,7 +77,7 @@ function MoveButton({
       <input type="hidden" name="story_state" value={target} />
       <button
         type="submit"
-        className="press-scale rounded border border-[var(--p-border)] px-1.5 py-0.5 text-[11px] text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
+        className="ps-btn ps-btn--ghost ps-btn--sm"
       >
         → {STORY_STATE_LABELS[target]}
       </button>

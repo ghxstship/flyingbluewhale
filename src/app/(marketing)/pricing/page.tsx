@@ -533,9 +533,10 @@ export default async function PricingPage() {
       <JsonLd data={[faqSchema(faqs)]} />
       <section className="mx-auto max-w-6xl px-6 pt-12 pb-10 text-center">
         <div className="eyebrow eyebrow-accent">{t("marketing.pages.pricing.hero.eyebrow")}</div>
-        {/* W2 ramp: .kinetic-display read the undefined --font-size-6xl (lane-A
-            T4) and the old text-5xl/6xl utilities papered over it; .hed-2xl is
-            the sanctioned display step (40 to 60px, matching the prior 48/60). */}
+        {/* W2 ramp: the retired display class here read the undefined
+            --font-size-6xl (lane-A T4) and the old text-5xl/6xl utilities
+            papered over it; .hed-2xl is the sanctioned display step
+            (40 to 60px, matching the prior 48/60). */}
         <h1 className="hed-2xl mx-auto mt-3 max-w-3xl">
           {t("marketing.pages.pricing.hero.title")}
         </h1>

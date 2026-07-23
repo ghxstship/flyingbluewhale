@@ -1,6 +1,7 @@
 import { Suspense, cache } from "react";
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
+import { Skeleton } from "@/components/ui/Skeleton";
 import { DataView } from "@/components/views/DataViewServer";
 import { Badge } from "@/components/ui/Badge";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -196,13 +197,13 @@ async function InvoiceTable({ orgId }: { orgId: string }) {
 function TableSkeleton({ rows }: { rows: number }) {
   return (
     <div className="space-y-3" aria-busy="true">
-      <div className="ps-skel h-10 rounded-md" />
+      <Skeleton width="100%" height={40} radius="var(--p-r-md)" />
       <div className="surface overflow-hidden">
         {Array.from({ length: rows }).map((_, i) => (
           <div key={i} className="flex items-center gap-3 border-b border-[var(--p-border)] px-4 py-2.5 last:border-0">
-            <div className="ps-skel h-4 flex-1" />
-            <div className="ps-skel h-4 w-24" />
-            <div className="ps-skel h-4 w-16" />
+            <Skeleton className="flex-1" height={16} />
+            <Skeleton width={96} height={16} />
+            <Skeleton width={64} height={16} />
           </div>
         ))}
       </div>

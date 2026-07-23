@@ -40,7 +40,7 @@ export function NoteEditor({ id, title, bodyHtml, noteState, labels }: NoteEdito
             name="title"
             defaultValue={title}
             placeholder={labels.titlePlaceholder}
-            className="w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+            className="ps-input w-full"
           />
         </label>
         <label>
@@ -48,7 +48,7 @@ export function NoteEditor({ id, title, bodyHtml, noteState, labels }: NoteEdito
           <select
             name="note_state"
             defaultValue={noteState}
-            className="rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+            className="ps-input"
           >
             <option value="draft">{labels.stateDraft}</option>
             <option value="published">{labels.statePublished}</option>

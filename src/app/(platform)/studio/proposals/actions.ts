@@ -7,6 +7,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { BRAND_FALLBACK } from "@/lib/branding";
 import { resolveDepositPct, PROPOSAL_DEPOSIT_PCT_DEFAULT } from "@/lib/payment-terms";
 import { getOrgPaymentDefaults } from "@/lib/payment-terms-server";
 import { actionErrorMessage } from "@/lib/errors";
@@ -91,7 +92,7 @@ export async function createProposalAction(_: State, fd: FormData): Promise<Stat
   // can only see system rows + their org's rows, so a leak through the
   // template_id query parameter would already be blocked at the SELECT.
   let seedBlocks: unknown = [];
-  let seedTheme: unknown = { primary: "#D4782A", secondary: "#6D4A2A" };
+  let seedTheme: unknown = { primary: BRAND_FALLBACK.accent, secondary: BRAND_FALLBACK.secondary };
   const templateId = parsed.data.template_id || null;
   if (templateId) {
     const loose = supabase as unknown as LooseSupabase;

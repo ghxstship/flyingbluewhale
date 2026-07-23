@@ -220,10 +220,14 @@ function EyebrowBlock({
 }
 
 function HeadingBlock({ block }: { block: Extract<ProposalBlock, { type: "heading" }> }) {
+  // W2 ramp discipline: sizes read the --p-fs-* ramp, never raw text-Nxl.
+  // level 3: text-2xl (24) -> --p-fs-h2 (24, exact). level 2: text-3xl/sm:text-4xl
+  // (30/36) -> the fluid --p-fs-display-sm clamp (28 -> 40), the sanctioned
+  // display-sm step (same mapping as SignatureBlock in this surface).
   const cls =
     block.level === 3
-      ? "mt-6 font-subdisplay text-2xl tracking-wide"
-      : "mt-4 font-display text-3xl tracking-tight sm:text-4xl";
+      ? "mt-6 font-subdisplay text-[length:var(--p-fs-h2)] tracking-wide"
+      : "mt-4 font-display text-[length:var(--p-fs-display-sm)] tracking-tight";
   return (
     <div className="mx-auto max-w-4xl px-8">
       <h2 className={cls}>{block.text}</h2>

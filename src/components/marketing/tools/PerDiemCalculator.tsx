@@ -84,7 +84,7 @@ export function PerDiemCalculator() {
                   value={l.city}
                   onChange={(e) => update(l.id, { city: e.target.value })}
                   placeholder={t("marketing.perDiemCalculator.cityPlaceholder", undefined, "e.g. Las Vegas")}
-                  className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+                  className="ps-input mt-1 w-full"
                 />
               </div>
               <div>
@@ -94,7 +94,7 @@ export function PerDiemCalculator() {
                   min={0}
                   value={l.days}
                   onChange={(e) => update(l.id, { days: Number(e.target.value) })}
-                  className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+                  className="ps-input mt-1 w-full"
                 />
               </div>
               <div>
@@ -104,7 +104,7 @@ export function PerDiemCalculator() {
                   min={0}
                   value={l.headcount}
                   onChange={(e) => update(l.id, { headcount: Number(e.target.value) })}
-                  className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+                  className="ps-input mt-1 w-full"
                 />
               </div>
               <div className="sm:col-span-2">
@@ -116,7 +116,7 @@ export function PerDiemCalculator() {
                   min={0}
                   value={l.rate}
                   onChange={(e) => update(l.id, { rate: Number(e.target.value) })}
-                  className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+                  className="ps-input mt-1 w-full"
                 />
                 <div className="mt-2 flex flex-wrap gap-1.5">
                   {GSA_TIER_PRESETS.map((preset) => (

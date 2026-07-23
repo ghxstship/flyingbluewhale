@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import { Skeleton } from "@/components/ui/Skeleton";
 import { DeleteForm } from "@/components/DeleteForm";
 import { RecordShare } from "@/components/records/RecordShare";
 import { Presence } from "@/components/collab/Presence";
@@ -124,7 +125,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ proj
           <div aria-label={t("console.projects.detail.commentsAria", undefined, "Comments")}>
             {/* CommentThread (P2.1) lands here */}
           </div>
-          <Suspense fallback={<div className="ps-skel h-40" aria-busy="true" />}>
+          <Suspense fallback={<Skeleton width="100%" height={160} aria-busy="true" />}>
             <ActivitySection orgId={session.orgId} projectId={project.id} />
           </Suspense>
         </div>

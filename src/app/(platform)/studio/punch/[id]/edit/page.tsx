@@ -11,7 +11,7 @@ import { updatePunchItem } from "./actions";
 
 export const dynamic = "force-dynamic";
 
-const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
+const INPUT = "ps-input w-full";
 const LBL = "text-xs font-medium text-[var(--p-text-2)]";
 
 // Sourced from the promoted native enums (enum-normalization 2026-07-18), not a local copy.

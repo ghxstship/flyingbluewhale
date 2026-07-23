@@ -243,7 +243,7 @@ export function ExportCenter({ initial }: { initial: Run[] }) {
                           type="button"
                           onClick={() => redownload(r)}
                           aria-label={t("console.settings.exports.downloadAgain", undefined, "Download Again")}
-                          className="inline-flex items-center gap-1 rounded border border-[var(--p-border)] px-2 py-1 text-[11px] hover:bg-[var(--p-surface-2)]"
+                          className="ps-btn ps-btn--ghost ps-btn--sm"
                         >
                           <Download size={10} /> {t("console.settings.exports.download", undefined, "Download")}
                         </button>

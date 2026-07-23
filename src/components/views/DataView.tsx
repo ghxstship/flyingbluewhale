@@ -10,6 +10,7 @@ import {
 } from "@/components/DataTableInteractive";
 import type { RowActionItem } from "@/components/ui/RowActions";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { Skeleton } from "@/components/ui/Skeleton";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/Sheet";
 import type { ViewConfigRow, ViewScope, ViewType } from "@/lib/views/types";
 import type { SaveViewSubmit } from "./SaveViewDialog";
@@ -539,7 +540,7 @@ function DataViewSkeleton({ columns, rows }: { columns: number; rows: number }) 
           <tr>
             {Array.from({ length: columns }).map((_, i) => (
               <th key={i} scope="col">
-                <div className="ps-skel h-4 w-20 rounded" />
+                <Skeleton width={80} height={16} radius="var(--p-r-sm)" />
               </th>
             ))}
           </tr>
@@ -549,7 +550,7 @@ function DataViewSkeleton({ columns, rows }: { columns: number; rows: number }) 
             <tr key={r}>
               {Array.from({ length: columns }).map((_, c) => (
                 <td key={c}>
-                  <div className="ps-skel h-4 w-full max-w-[160px] rounded" />
+                  <Skeleton className="max-w-[160px]" width="100%" height={16} radius="var(--p-r-sm)" />
                 </td>
               ))}
             </tr>

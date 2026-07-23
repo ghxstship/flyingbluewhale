@@ -20,7 +20,7 @@ type DrawRow = {
   sort_order: number | null;
 };
 
-const INPUT_CLASS = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-2 text-sm";
+const INPUT_CLASS = "ps-input w-full";
 
 function formatPct(p: number | null): string {
   if (p === null || p === undefined) return "—";

@@ -57,7 +57,7 @@ export function CapacityCalculator() {
             min={0}
             value={sqft}
             onChange={(e) => setSqft(Number(e.target.value))}
-            className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+            className="ps-input mt-1 w-full"
           />
         </div>
         <div>
@@ -68,7 +68,7 @@ export function CapacityCalculator() {
             id="capacity-use-type"
             value={useType}
             onChange={(e) => setUseType(e.target.value)}
-            className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+            className="ps-input mt-1 w-full"
           >
             {USE_TYPES.map((u) => (
               <option key={u.slug} value={u.slug}>
@@ -89,7 +89,7 @@ export function CapacityCalculator() {
             max={100}
             value={usableFactor}
             onChange={(e) => setUsableFactor(Number(e.target.value))}
-            className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+            className="ps-input mt-1 w-full"
           />
           <p className="mt-2 text-[11px] text-[var(--p-text-2)]">
             % of total sqft actually occupiable after stage, bars, lounges, fixed obstructions. 80% is a common default;

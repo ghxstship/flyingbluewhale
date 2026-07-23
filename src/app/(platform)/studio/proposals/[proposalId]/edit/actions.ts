@@ -8,6 +8,7 @@ import { validateBlocks } from "@/lib/proposals/validate";
 import { emitAudit } from "@/lib/audit";
 import { urlFor } from "@/lib/urls";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { BRAND_FALLBACK } from "@/lib/branding";
 import { resolveDepositPct, PROPOSAL_DEPOSIT_PCT_DEFAULT } from "@/lib/payment-terms";
 import { getOrgPaymentDefaults } from "@/lib/payment-terms-server";
 import { actionErrorMessage } from "@/lib/errors";
@@ -78,7 +79,10 @@ export async function saveProposalAction(proposalId: string, _: EditState, fd: F
       doc_number: parsed.data.doc_number || null,
       currency: parsed.data.currency?.toUpperCase() || "USD",
       deposit_percent: depositPct,
-      theme: { primary: parsed.data.theme_primary || "#D4782A", secondary: parsed.data.theme_secondary || "#6D4A2A" },
+      theme: {
+        primary: parsed.data.theme_primary || BRAND_FALLBACK.accent,
+        secondary: parsed.data.theme_secondary || BRAND_FALLBACK.secondary,
+      },
       blocks,
       version: currentVersion + 1,
     })

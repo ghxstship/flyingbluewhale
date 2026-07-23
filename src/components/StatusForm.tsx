@@ -41,12 +41,16 @@ export function StatusForm({
   const resolveErr = useActionErrorResolver();
   const [error, setError] = useState<string | null>(null);
 
+  // Variant → .ps-btn vocabulary (control-vocabulary canon): default renders
+  // the ghost outline, primary the filled accent base, danger keeps the
+  // outline treatment with danger ink (the filled --danger escalation is
+  // reserved for genuinely destructive primaries).
   const tone =
     variant === "danger"
-      ? "text-[var(--p-danger)] hover:bg-[var(--p-danger)]/5"
+      ? "ps-btn--ghost text-[var(--p-danger)]"
       : variant === "primary"
-        ? "bg-[var(--p-accent)] text-[var(--p-accent-contrast)] hover:opacity-90"
-        : "";
+        ? ""
+        : "ps-btn--ghost";
 
   return (
     <span className={`relative inline-block ${className}`}>
@@ -71,7 +75,7 @@ export function StatusForm({
           type="submit"
           disabled={pending}
           aria-busy={pending || undefined}
-          className={`surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium disabled:opacity-50 ${tone}`}
+          className={`ps-btn ps-btn--sm ${tone}`}
         >
           {pending ? (pendingLabel ?? `${label}…`) : label}
         </button>

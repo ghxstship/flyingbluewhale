@@ -13,7 +13,7 @@ import { toTitle } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 
-const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
+const INPUT = "ps-input w-full";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -58,7 +58,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             </a>
             {rfi.rfi_state === "answered" && (
               <form action={closeRfi.bind(null, id)}>
-                <button className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium" type="submit">
+                <button className="ps-btn ps-btn--ghost ps-btn--sm" type="submit">
                   {t("console.rfis.detail.closeRfi", undefined, "Close RFI")}
                 </button>
               </form>
@@ -105,7 +105,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   className={INPUT}
                 />
                 <div className="flex justify-end">
-                  <button type="submit" className="surface hover-lift rounded-md px-3 py-1.5 text-xs font-medium">
+                  <button type="submit" className="ps-btn ps-btn--ghost ps-btn--sm">
                     {t("console.rfis.detail.postAnswer", undefined, "Post Answer")}
                   </button>
                 </div>

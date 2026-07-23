@@ -6,6 +6,7 @@ import { DataView } from "@/components/views/DataViewServer";
 import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { MetricCard } from "@/components/ui/MetricCard";
+import { Skeleton } from "@/components/ui/Skeleton";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { listProjects, projectStats } from "@/lib/db/projects";
@@ -233,7 +234,7 @@ export default async function ConsoleDashboard() {
         </Suspense>
         {/* Event Spine — the Sell → Settle lifecycle checklist IS the training
             (v7.8 zero-training layer). Streams independently of the metrics. */}
-        <Suspense fallback={<div className="ps-skel h-40" aria-busy="true" />}>
+        <Suspense fallback={<Skeleton width="100%" height={160} aria-busy="true" />}>
           <EventSpine orgId={session.orgId} />
         </Suspense>
         <Suspense fallback={<MetricGridSkeleton count={4} />}>
@@ -473,7 +474,7 @@ function MetricGridSkeleton({ count }: { count: number }) {
   return (
     <div className="metric-grid" aria-busy="true">
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="ps-skel h-24" />
+        <Skeleton key={i} width="100%" height={96} />
       ))}
     </div>
   );
@@ -484,9 +485,9 @@ function TableSkeleton({ rows }: { rows: number }) {
     <div className="surface overflow-hidden" aria-busy="true">
       {Array.from({ length: rows }).map((_, i) => (
         <div key={i} className="flex items-center gap-3 border-b border-[var(--p-border)] px-4 py-2.5 last:border-0">
-          <div className="ps-skel h-4 flex-1" />
-          <div className="ps-skel h-4 w-24" />
-          <div className="ps-skel h-4 w-16" />
+          <Skeleton className="flex-1" height={16} />
+          <Skeleton width={96} height={16} />
+          <Skeleton width={64} height={16} />
         </div>
       ))}
     </div>

@@ -5,7 +5,7 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 import type { State } from "./actions";
 
 import { useActionErrorResolver } from "@/lib/errors-client";
-const INPUT = "rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-2 py-1.5 text-xs";
+const INPUT = "ps-input ps-input--sm w-auto";
 const LBL = "text-[11px] uppercase tracking-wide text-[var(--p-text-2)]";
 
 type SelectOption = { value: string; label: string };
@@ -48,7 +48,7 @@ export function InlineAddForm({ action, sheetId, submitLabel, fields }: Props) {
         <button
           type="submit"
           disabled={pending}
-          className="rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--bg-hover)] disabled:opacity-60"
+          className="ps-btn ps-btn--ghost ps-btn--sm"
         >
           {pending ? t("common.loadingEllipsis", undefined, "…") : submitLabel}
         </button>

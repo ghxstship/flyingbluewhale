@@ -97,7 +97,7 @@ export default async function OrgSettingsPage() {
                 required
                 minLength={2}
                 maxLength={120}
-                className="rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+                className="ps-input"
               />
               <Button type="submit" size="sm">
                 {t("common.save", undefined, "Save")}
@@ -150,7 +150,7 @@ export default async function OrgSettingsPage() {
                   max={100}
                   defaultValue={org.default_deposit_pct ?? ""}
                   placeholder={String(PROPOSAL_DEPOSIT_PCT_DEFAULT)}
-                  className="rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+                  className="ps-input"
                 />
               </label>
               <label className="grid gap-1 text-xs font-medium tracking-wide text-[var(--p-text-2)] uppercase">
@@ -158,7 +158,7 @@ export default async function OrgSettingsPage() {
                 <select
                   name="default_balance_terms"
                   defaultValue={org.default_balance_terms ?? ""}
-                  className="rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+                  className="ps-input"
                 >
                   <option value="">
                     {t("console.settings.organization.balanceTermsSystemDefault", undefined, "System default (load-in)")}

@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useActionState } from "react";
 import { toast } from "@/lib/hooks/useToast";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { decideTimeOff, type DecideState } from "./actions";
 
 import { useActionErrorResolver } from "@/lib/errors-client";
@@ -32,7 +33,19 @@ export function DecideTimeOffButtons({
 }) {
   const [state, formAction, pending] = useActionState<DecideState, FormData>(decideTimeOff, null);
   const resolveErr = useActionErrorResolver();
+  const t = useT();
   const [denying, setDenying] = React.useState(false);
+
+  // A11Y-3: the visible labels are bare verbs in a table of identical rows —
+  // give assistive tech the object too (label-in-name kept: each aria-label
+  // starts with the visible text).
+  const approveAria = t("console.workforce.timeOff.action.approveAria", undefined, `${approveLabel}: time-off request`);
+  const denyAria = t("console.workforce.timeOff.action.denyAria", undefined, `${denyLabel}: time-off request`);
+  const confirmDenyAria = t(
+    "console.workforce.timeOff.action.confirmDenyAria",
+    undefined,
+    `${confirmDenyLabel ?? denyLabel}: time-off request`,
+  );
 
   React.useEffect(() => {
     if (state?.error) toast.error(resolveErr(state.error));
@@ -51,7 +64,7 @@ export function DecideTimeOffButtons({
           className="ps-input ps-input--sm w-40"
           autoFocus
         />
-        <button type="submit" className="ps-btn ps-btn--sm" disabled={pending}>
+        <button type="submit" className="ps-btn ps-btn--sm" aria-label={confirmDenyAria} disabled={pending}>
           {confirmDenyLabel ?? denyLabel}
         </button>
         <button
@@ -71,11 +84,17 @@ export function DecideTimeOffButtons({
       <form action={formAction}>
         <input type="hidden" name="id" value={requestId} />
         <input type="hidden" name="decision" value="approved" />
-        <button type="submit" className="ps-btn ps-btn--sm" disabled={pending}>
+        <button type="submit" className="ps-btn ps-btn--sm" aria-label={approveAria} disabled={pending}>
           {approveLabel}
         </button>
       </form>
-      <button type="button" className="ps-btn ps-btn--ghost ps-btn--sm" onClick={() => setDenying(true)} disabled={pending}>
+      <button
+        type="button"
+        className="ps-btn ps-btn--ghost ps-btn--sm"
+        aria-label={denyAria}
+        onClick={() => setDenying(true)}
+        disabled={pending}
+      >
         {denyLabel}
       </button>
     </div>

@@ -67,7 +67,7 @@ export default async function Page({ params }: { params: Promise<{ rentalId: str
                 <input type="hidden" name="id" value={row.id} />
                 <button
                   type="submit"
-                  className="rounded-md border border-[var(--p-border)] px-2.5 py-1 text-xs font-medium text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)]"
+                  className="ps-btn ps-btn--ghost ps-btn--sm"
                 >
                   {t("console.production.rentals.detail.endRentalNow", undefined, "End rental now")}
                 </button>

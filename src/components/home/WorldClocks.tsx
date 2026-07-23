@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { Skeleton } from "@/components/ui/Skeleton";
 
 /**
  * World clocks row (kit 20 fixture 01) — the ops-center strip under the
@@ -104,7 +105,7 @@ export function WorldClocks() {
         const p = now ? partsIn(c.tz, now) : null;
         return (
           <div key={c.city} className="surface flex items-center gap-4 p-4">
-            {p ? <AnalogClock h={p.h} m={p.m} s={p.s} /> : <div className="ps-skel h-12 w-12 shrink-0 rounded-full" />}
+            {p ? <AnalogClock h={p.h} m={p.m} s={p.s} /> : <Skeleton className="shrink-0" width={48} height={48} radius="var(--p-r-pill)" />}
             <div className="min-w-0">
               <div className="truncate text-sm font-semibold">{c.city}</div>
               <div className="font-mono text-lg tabular-nums" suppressHydrationWarning>

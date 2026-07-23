@@ -111,7 +111,7 @@ export function CrewSizeCalculator() {
             min={0}
             value={attendance}
             onChange={(e) => setAttendance(Number(e.target.value))}
-            className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+            className="ps-input mt-1 w-full"
           />
         </div>
         <div>
@@ -122,7 +122,7 @@ export function CrewSizeCalculator() {
             id="crew-event-type"
             value={eventType}
             onChange={(e) => setEventType(e.target.value)}
-            className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+            className="ps-input mt-1 w-full"
           >
             {EVENT_TYPES.map((e) => (
               <option key={e.slug} value={e.slug}>
@@ -143,7 +143,7 @@ export function CrewSizeCalculator() {
               min={0}
               value={doors}
               onChange={(e) => setDoors(Number(e.target.value))}
-              className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+              className="ps-input mt-1 w-full"
             />
             <p className="mt-2 text-[11px] text-[var(--p-text-2)]">MODELED (rule of thumb): 2 security per lane.</p>
           </div>
@@ -157,7 +157,7 @@ export function CrewSizeCalculator() {
               min={0}
               value={bars}
               onChange={(e) => setBars(Number(e.target.value))}
-              className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+              className="ps-input mt-1 w-full"
             />
             <p className="mt-2 text-[11px] text-[var(--p-text-2)]">
               MODELED (rule of thumb): 1 roamer per 3 points.

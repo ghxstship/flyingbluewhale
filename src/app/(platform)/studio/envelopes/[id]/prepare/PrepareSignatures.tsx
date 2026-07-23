@@ -58,7 +58,7 @@ export function PrepareSignatures({ envelopeId, signers, labels }: PrepareSignat
               <select
                 value={signerId}
                 onChange={(e) => setSignerId(e.target.value)}
-                className="w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+                className="ps-input w-full"
               >
                 {signers.map((s) => (
                   <option key={s.id} value={s.id}>
@@ -71,14 +71,14 @@ export function PrepareSignatures({ envelopeId, signers, labels }: PrepareSignat
               <span className="mb-1 block text-xs font-medium text-[var(--p-text-2)]">{labels.nameLabel}</span>
               <input
                 name="signed_name"
-                className="w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+                className="ps-input w-full"
               />
             </label>
             <label className="text-sm">
               <span className="mb-1 block text-xs font-medium text-[var(--p-text-2)]">{labels.titleLabel}</span>
               <input
                 name="signed_title"
-                className="w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+                className="ps-input w-full"
               />
             </label>
           </div>

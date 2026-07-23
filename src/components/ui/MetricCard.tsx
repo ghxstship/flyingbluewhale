@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Sparkline } from "@/components/charts/Sparkline";
+import { Skeleton } from "@/components/ui/Skeleton";
 
 /**
  * Interactive dashboard KPI card (app chrome — `.surface`). Distinct by design
@@ -33,11 +34,11 @@ export function MetricCard({
     return (
       <div className="surface p-4" aria-busy="true">
         <div className="flex items-center justify-between">
-          <div className="ps-skel h-3 w-20 rounded" />
-          <div className="ps-skel h-4 w-4 rounded" />
+          <Skeleton width={80} height={12} radius="var(--p-r-sm)" />
+          <Skeleton width={16} height={16} radius="var(--p-r-sm)" />
         </div>
-        <div className="ps-skel mt-2 h-7 w-24 rounded" />
-        <div className="ps-skel mt-2 h-3 w-16 rounded" />
+        <Skeleton className="mt-2" width={96} height={28} radius="var(--p-r-sm)" />
+        <Skeleton className="mt-2" width={64} height={12} radius="var(--p-r-sm)" />
       </div>
     );
   }

@@ -258,7 +258,7 @@ export default async function Home() {
                 <br />
                 {w("hero.titleLine2", "for crews who")}
                 <br />
-                <span data-platform="compvss" style={{ color: "var(--p-accent-text)" }}>
+                <span data-ui="saas" data-platform="compvss" style={{ color: "var(--p-accent-text)" }}>
                   {w("hero.titleLine3", "build worlds.")}
                 </span>
               </h1>
@@ -285,7 +285,7 @@ export default async function Home() {
             </div>
             {/* lg+ only — narrower columns can't fit the preview + wordmarks
                 without overflow (same constraint the previous hero carried). */}
-            <div className="hidden min-w-0 lg:block" data-platform="compvss">
+            <div className="hidden min-w-0 lg:block" data-ui="saas" data-platform="compvss">
               <div className="mb-4 overflow-hidden rounded-xl border border-[var(--p-border)] bg-[var(--p-surface-2)] p-3 shadow-[var(--p-elev-2)]">
                 <ProductPreview accent={PRODUCT_ACCENTS.compvss} label="COMPVSS · Field" />
               </div>
@@ -354,7 +354,7 @@ export default async function Home() {
       </section>
 
       {/* 2 · LEG3ND FOUNDATION STRIP */}
-      <section id="foundation" className="px-6 py-20" data-platform="legend">
+      <section id="foundation" className="px-6 py-20" data-ui="saas" data-platform="legend">
         <div className="mx-auto max-w-6xl">
           <div className="rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] p-8 shadow-[var(--p-elev-1)] sm:p-10">
             <div className="flex flex-wrap items-end justify-between gap-6">
@@ -392,7 +392,7 @@ export default async function Home() {
       </section>
 
       {/* 3 · COMPVSS PROOF — concrete field capabilities, all live in the product */}
-      <section id="compvss" className="border-t border-[var(--p-border)] bg-[var(--p-surface-2)] px-6 py-20" data-platform="compvss">
+      <section id="compvss" className="border-t border-[var(--p-border)] bg-[var(--p-surface-2)] px-6 py-20" data-ui="saas" data-platform="compvss">
         <div className="mx-auto max-w-6xl">
           <p className="eyebrow" style={{ color: "var(--p-accent-text)" }}>
             {w("proof.eyebrow", "COMPVSS, in the field")}
@@ -434,6 +434,7 @@ export default async function Home() {
           <h2 className="hed-xl mt-3">{w("comingSoon.title", "The rest of the ecosystem is on its way")}</h2>
           <div className="mt-10 grid gap-5 md:grid-cols-2">
             <article
+              data-ui="saas"
               data-platform="atlvs"
               className="relative rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] p-7 shadow-[var(--p-elev-1)]"
             >
@@ -458,6 +459,7 @@ export default async function Home() {
               </div>
             </article>
             <article
+              data-ui="saas"
               data-platform="gvteway"
               className="relative rounded-xl border border-[var(--p-border)] bg-[var(--p-surface)] p-7 shadow-[var(--p-elev-1)]"
             >
@@ -495,6 +497,7 @@ export default async function Home() {
               <Link
                 key={e.slug}
                 href={e.href}
+                data-ui="saas"
                 data-platform={e.slug}
                 className="flex flex-wrap items-baseline gap-x-6 gap-y-2 px-6 py-5 transition-colors hover:bg-[var(--p-surface-2)]"
               >

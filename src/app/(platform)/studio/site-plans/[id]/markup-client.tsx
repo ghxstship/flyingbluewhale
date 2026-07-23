@@ -355,7 +355,7 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
           <select
             value={tool}
             onChange={(e) => setTool(e.target.value as MarkupKind)}
-            className="rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-2 py-1 text-xs"
+            className="ps-input ps-input--sm w-auto"
           >
             {[
               "rectangle",
@@ -398,7 +398,7 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
             <input
               value={text}
               onChange={(e) => setText(e.target.value)}
-              className="rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-2 py-1 text-xs"
+              className="ps-input ps-input--sm w-auto"
             />
           </label>
         )}
@@ -407,7 +407,7 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
             type="button"
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page <= 1}
-            className="rounded border border-[var(--p-border)] px-2 py-1 disabled:opacity-50"
+            className="ps-btn ps-btn--ghost ps-btn--sm"
             aria-label={t("console.sitePlans.markup.previousPage", undefined, "Previous page")}
           >
             ‹
@@ -419,7 +419,7 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
             type="button"
             onClick={() => setPage((p) => Math.min(pageCount, p + 1))}
             disabled={page >= pageCount}
-            className="rounded border border-[var(--p-border)] px-2 py-1 disabled:opacity-50"
+            className="ps-btn ps-btn--ghost ps-btn--sm"
             aria-label={t("console.sitePlans.markup.nextPage", undefined, "Next page")}
           >
             ›
@@ -427,7 +427,7 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
           <button
             type="button"
             onClick={() => setScale((s) => Math.max(0.5, s - 0.25))}
-            className="rounded border border-[var(--p-border)] px-2 py-1"
+            className="ps-btn ps-btn--ghost ps-btn--sm"
             aria-label={t("console.sitePlans.markup.zoomOut", undefined, "Zoom out")}
           >
             −
@@ -436,7 +436,7 @@ export default function MarkupClient({ siteplanId, pdfUrl, calibrationInchesPerF
           <button
             type="button"
             onClick={() => setScale((s) => Math.min(4, s + 0.25))}
-            className="rounded border border-[var(--p-border)] px-2 py-1"
+            className="ps-btn ps-btn--ghost ps-btn--sm"
             aria-label={t("console.sitePlans.markup.zoomIn", undefined, "Zoom in")}
           >
             +

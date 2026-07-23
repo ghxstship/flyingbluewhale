@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useT } from "@/lib/i18n/LocaleProvider";
+import { BRAND_FALLBACK } from "@/lib/branding";
 
 /**
  * Per-proposal brand override (the JOINT layer of the co-brand cascade).
@@ -18,8 +19,8 @@ export function ProposalBrandPanel({
   initialSecondary: string;
 }) {
   const t = useT();
-  const [primary, setPrimary] = useState(initialPrimary || "#000000");
-  const [secondary, setSecondary] = useState(initialSecondary || "#666666");
+  const [primary, setPrimary] = useState(initialPrimary || BRAND_FALLBACK.accent);
+  const [secondary, setSecondary] = useState(initialSecondary || BRAND_FALLBACK.secondary);
 
   return (
     <section className="surface p-5" style={{ ["--p-accent" as string]: primary, ["--p-accent-secondary" as string]: secondary }}>

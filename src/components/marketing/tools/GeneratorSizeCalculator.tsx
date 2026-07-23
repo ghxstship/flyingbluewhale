@@ -81,7 +81,7 @@ export function GeneratorSizeCalculator() {
               min={0}
               value={connectedKw}
               onChange={(e) => setConnectedKw(Number(e.target.value))}
-              className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+              className="ps-input mt-1 w-full"
             />
             <p className="mt-2 text-[11px] text-[var(--p-text-2)]">
               Sum of everything on the load schedule: audio, lighting, video, rigging motors, catering, HVAC.
@@ -99,7 +99,7 @@ export function GeneratorSizeCalculator() {
                 min={0}
                 value={amps}
                 onChange={(e) => setAmps(Number(e.target.value))}
-                className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+                className="ps-input mt-1 w-full"
               />
             </div>
             <div>
@@ -112,7 +112,7 @@ export function GeneratorSizeCalculator() {
                 min={0}
                 value={volts}
                 onChange={(e) => setVolts(Number(e.target.value))}
-                className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+                className="ps-input mt-1 w-full"
               />
             </div>
             <div>
@@ -143,7 +143,7 @@ export function GeneratorSizeCalculator() {
               step={0.05}
               value={powerFactor}
               onChange={(e) => setPowerFactor(Number(e.target.value))}
-              className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+              className="ps-input mt-1 w-full"
             />
             <p className="mt-2 text-[11px] text-[var(--p-text-2)]">
               Basis: standard genset rating convention. 0.8 is the common default for mixed production loads.
@@ -161,7 +161,7 @@ export function GeneratorSizeCalculator() {
               step={0.05}
               value={diversity}
               onChange={(e) => setDiversity(Number(e.target.value))}
-              className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+              className="ps-input mt-1 w-full"
             />
             <p className="mt-2 text-[11px] text-[var(--p-text-2)]">
               Basis: standard load-calculation practice. Not everything draws at once; 0.8 is a MODELED default.
@@ -178,7 +178,7 @@ export function GeneratorSizeCalculator() {
               max={100}
               value={headroom}
               onChange={(e) => setHeadroom(Number(e.target.value))}
-              className="mt-1 w-full rounded border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+              className="ps-input mt-1 w-full"
             />
             <p className="mt-2 text-[11px] text-[var(--p-text-2)]">
               MODELED (rule of thumb): 20 percent covers motor inrush and day-of additions.

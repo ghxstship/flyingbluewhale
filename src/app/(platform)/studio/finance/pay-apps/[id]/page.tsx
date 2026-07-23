@@ -14,7 +14,7 @@ import { toneFor } from "@/lib/tones";
 
 export const dynamic = "force-dynamic";
 
-const INPUT = "w-24 rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-2 py-1 text-xs";
+const INPUT = "ps-input ps-input--sm w-24";
 
 function fmt(d: string): string {
   return formatDate(new Date(d + "T00:00:00"));
@@ -165,7 +165,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                         />
                         <button
                           type="submit"
-                          className="rounded border border-[var(--p-border)] px-2 py-0.5 text-[11px]"
+                          className="ps-btn ps-btn--ghost ps-btn--sm"
                         >
                           {t("console.finance.payApps.detail.set", undefined, "set")}
                         </button>

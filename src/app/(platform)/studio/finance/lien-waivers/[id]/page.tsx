@@ -38,7 +38,7 @@ type Waiver = {
   payment_application: { id: string; period_label: string | null } | null;
 };
 
-const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
+const INPUT = "ps-input w-full";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   if (!hasSupabase) return null;

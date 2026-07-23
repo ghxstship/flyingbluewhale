@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { LogoUploader } from "@/components/branding/LogoUploader";
+import { BRAND_FALLBACK } from "@/lib/branding";
 import { updateClientBrandingAction, type ClientBrandingState } from "./actions";
 
 import { useActionErrorResolver } from "@/lib/errors-client";
@@ -28,9 +29,9 @@ export function ClientBrandingForm({ initial }: { initial: Initial }) {
     return result;
   }, null);
 
-  const [accent, setAccent] = useState(initial.accentColor || "#000000");
-  const [foreground, setForeground] = useState(initial.accentForeground || "#ffffff");
-  const [secondary, setSecondary] = useState(initial.secondaryColor || "#666666");
+  const [accent, setAccent] = useState(initial.accentColor || BRAND_FALLBACK.accent);
+  const [foreground, setForeground] = useState(initial.accentForeground || BRAND_FALLBACK.accentFg);
+  const [secondary, setSecondary] = useState(initial.secondaryColor || BRAND_FALLBACK.secondary);
 
   return (
     <form action={formAction} className="space-y-5">

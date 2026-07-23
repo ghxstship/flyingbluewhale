@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { ModuleHeader } from "@/components/Shell";
 import { MetricCard } from "@/components/ui/MetricCard";
+import { Skeleton } from "@/components/ui/Skeleton";
 import { requireSession } from "@/lib/auth";
 import { countOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
@@ -124,7 +125,7 @@ function MetricsSkeleton() {
   return (
     <div className="metric-grid" aria-busy="true">
       {Array.from({ length: 4 }).map((_, i) => (
-        <div key={i} className="ps-skel h-24" />
+        <Skeleton key={i} width="100%" height={96} />
       ))}
     </div>
   );

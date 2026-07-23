@@ -95,7 +95,7 @@ export default async function Page({ params }: { params: Promise<{ budgetId: str
               <input type="hidden" name="id" value={budget.id} />
               <button
                 type="submit"
-                className="rounded-md border border-[var(--p-border)] px-3 py-1.5 text-xs font-medium text-[var(--p-text-2)] hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)]"
+                className="ps-btn ps-btn--ghost ps-btn--sm"
               >
                 {t("console.finance.budgets.detail.reconcileToActuals", undefined, "Reconcile to actuals")}
               </button>

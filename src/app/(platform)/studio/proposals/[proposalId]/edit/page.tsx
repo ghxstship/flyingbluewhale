@@ -9,6 +9,7 @@ import { timeAgo, toTitle } from "@/lib/format";
 import type { Proposal, ProposalShareLink } from "@/lib/supabase/types";
 import { mintProposalShareUrlToken } from "@/lib/proposals/share";
 import { getRequestT } from "@/lib/i18n/request";
+import { BRAND_FALLBACK } from "@/lib/branding";
 import { resolveDepositPct, PROPOSAL_DEPOSIT_PCT_DEFAULT } from "@/lib/payment-terms";
 import { getOrgPaymentDefaults } from "@/lib/payment-terms-server";
 import { ProposalEditor } from "./ProposalEditor";
@@ -71,8 +72,8 @@ export default async function ProposalEditPage({ params }: { params: Promise<{ p
               PROPOSAL_DEPOSIT_PCT_DEFAULT,
             ),
             theme: (proposal.theme as { primary: string; secondary: string }) ?? {
-              primary: "#D4782A",
-              secondary: "#6D4A2A",
+              primary: BRAND_FALLBACK.accent,
+              secondary: BRAND_FALLBACK.secondary,
             },
             blocks,
           }}

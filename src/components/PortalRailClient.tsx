@@ -98,6 +98,7 @@ export function PortalMobileNav({ sections, title }: { sections: PortalRailSecti
         // The Sheet portals onto <body>, outside the portal shell's
         // data-theme cascade — re-anchor the skin so it paints the
         // GVTEWAY surfaces + accent.
+        data-ui="saas"
         data-theme="atlvs-product"
         data-platform="gvteway"
         className="w-[85vw] max-w-[320px] overflow-y-auto bg-[var(--p-surface)] p-0 text-[var(--p-text-1)]"

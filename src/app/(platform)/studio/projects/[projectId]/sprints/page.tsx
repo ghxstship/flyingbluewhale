@@ -145,7 +145,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                           <input type="hidden" name="sprintId" value={sprint.id} />
                           <button
                             type="submit"
-                            className="press-scale rounded border border-[var(--p-border)] px-1.5 py-0.5 text-[11px] text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
+                            className="ps-btn ps-btn--ghost ps-btn--sm"
                           >
                             Snapshot Today
                           </button>

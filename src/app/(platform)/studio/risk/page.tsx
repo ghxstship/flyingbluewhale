@@ -91,7 +91,7 @@ export default async function Page() {
           <form action={runRiskBatch}>
             <button
               type="submit"
-              className="rounded-md border border-[var(--p-border)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--p-surface)]"
+              className="ps-btn ps-btn--ghost ps-btn--sm"
             >
               {t("console.risk.runBatch", undefined, "Run risk batch")}
             </button>

@@ -140,7 +140,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                       {(["pass", "fail", "na"] as const).map((r) => (
                         <form key={r} action={setInspectionItemResult.bind(null, id, it.id, r)}>
                           <button
-                            className="hover-lift rounded border border-[var(--p-border)] px-2 py-1 text-[11px]"
+                            className="ps-btn ps-btn--ghost ps-btn--sm"
                             type="submit"
                           >
                             {r.toUpperCase()}

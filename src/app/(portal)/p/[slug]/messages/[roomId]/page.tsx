@@ -205,7 +205,7 @@ export default async function PortalRoomPage({
               aria-label={t("p.shared.messages.room.composerAria", undefined, "Write a message")}
               required
               maxLength={4000}
-              className="flex-1 rounded-md border border-[var(--p-border)] bg-[var(--p-surface)] px-3 py-2 text-sm"
+              className="ps-input flex-1"
             />
             <button type="submit" className="ps-btn ps-btn--sm">
               {t("common.send", undefined, "Send")}

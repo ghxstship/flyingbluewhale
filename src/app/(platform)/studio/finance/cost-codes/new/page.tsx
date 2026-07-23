@@ -3,7 +3,7 @@ import { FormShell } from "@/components/FormShell";
 import { getRequestT } from "@/lib/i18n/request";
 import { createCostCode } from "./actions";
 
-const INPUT = "w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm";
+const INPUT = "ps-input w-full";
 const LBL = "text-xs font-medium text-[var(--p-text-2)]";
 
 export default async function Page() {

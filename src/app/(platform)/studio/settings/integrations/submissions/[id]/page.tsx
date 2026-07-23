@@ -192,7 +192,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <select
                   name="next_tier"
                   defaultValue={r.certification_tier}
-                  className="w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+                  className="ps-input w-full"
                 >
                   {(["submitted", "reviewing", "verified", "certified", "rejected"] as Tier[]).map((tier) => (
                     <option key={tier} value={tier}>
@@ -212,7 +212,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 <select
                   name="publish"
                   defaultValue={r.published_at ? "keep" : "no"}
-                  className="w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+                  className="ps-input w-full"
                 >
                   <option value="no">
                     {t(
@@ -254,7 +254,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 rows={3}
                 maxLength={1000}
                 defaultValue={r.rejection_reason ?? ""}
-                className="w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+                className="ps-input w-full"
               />
             </label>
             <div className="flex justify-end">

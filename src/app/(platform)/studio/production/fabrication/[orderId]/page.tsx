@@ -73,7 +73,7 @@ export default async function Page({ params }: { params: Promise<{ orderId: stri
                 <input type="hidden" name="production_phase" value={to} />
                 <button
                   type="submit"
-                  className="rounded-md border border-[var(--p-border)] px-2.5 py-1 text-xs font-medium text-[var(--p-text-2)] transition-colors hover:bg-[var(--p-surface-2)] hover:text-[var(--p-text-1)]"
+                  className="ps-btn ps-btn--ghost ps-btn--sm"
                 >
                   → {toTitle(to)}
                 </button>

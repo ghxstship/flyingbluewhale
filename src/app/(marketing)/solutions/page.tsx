@@ -150,6 +150,7 @@ export default async function SolutionsIndex() {
             <Link
               key={a.slug}
               href={a.href}
+              data-ui="saas"
               data-theme="atlvs-product"
               data-platform={a.slug}
               className="surface hover-lift relative overflow-hidden p-7"

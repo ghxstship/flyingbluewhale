@@ -1,5 +1,6 @@
 import type { NavItem } from "@/lib/nav";
 import { MobileTabBarClient } from "./MobileTabBarClient";
+import { Skeleton } from "./ui/Skeleton";
 
 export { PlatformSidebar } from "./PlatformSidebar";
 // ModuleHeader and PortalRail extracted to their own modules. Shell.tsx
@@ -30,13 +31,13 @@ export function PageSkeleton({
       <div className="page-content space-y-4" aria-busy="true">
         {Array.from({ length: rows }).map((_, i) => (
           <div key={i} className="space-y-1.5">
-            <div className="ps-skel h-3 w-24" />
-            <div className="ps-skel h-10" />
+            <Skeleton width={96} height={12} />
+            <Skeleton width="100%" height={40} />
           </div>
         ))}
         <div className="flex justify-end gap-2 pt-2">
-          <div className="ps-skel h-9 w-20 rounded-md" />
-          <div className="ps-skel h-9 w-24 rounded-md" />
+          <Skeleton width={80} height={36} radius="var(--p-r-md)" />
+          <Skeleton width={96} height={36} radius="var(--p-r-md)" />
         </div>
       </div>
     );
@@ -44,16 +45,16 @@ export function PageSkeleton({
   if (variant === "table") {
     return (
       <div className="page-content space-y-3" aria-busy="true">
-        <div className="ps-skel h-10 rounded-md" />
+        <Skeleton width="100%" height={40} radius="var(--p-r-md)" />
         <div className="surface overflow-hidden">
           {Array.from({ length: rows }).map((_, i) => (
             <div
               key={i}
               className="flex items-center gap-3 border-b border-[var(--p-border)] px-4 py-2.5 last:border-0"
             >
-              <div className="ps-skel h-4 flex-1" />
-              <div className="ps-skel h-4 w-24" />
-              <div className="ps-skel h-4 w-16" />
+              <Skeleton className="flex-1" height={16} />
+              <Skeleton width={96} height={16} />
+              <Skeleton width={64} height={16} />
             </div>
           ))}
         </div>
@@ -64,23 +65,23 @@ export function PageSkeleton({
     return (
       <div className="page-content space-y-6" aria-busy="true">
         <div className="space-y-2">
-          <div className="ps-skel h-3 w-20" />
-          <div className="ps-skel h-7 w-64" />
-          <div className="ps-skel h-4 w-96" />
+          <Skeleton width={80} height={12} />
+          <Skeleton width={256} height={28} />
+          <Skeleton width={384} height={16} />
         </div>
         <div className="grid gap-4 md:grid-cols-3">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="ps-skel h-24" />
+            <Skeleton key={i} width="100%" height={96} />
           ))}
         </div>
-        <div className="ps-skel h-40" />
+        <Skeleton width="100%" height={160} />
       </div>
     );
   }
   return (
     <div className="page-content space-y-3" aria-busy="true">
       {Array.from({ length: rows }).map((_, i) => (
-        <div key={i} className="ps-skel h-14" />
+        <Skeleton key={i} width="100%" height={56} />
       ))}
     </div>
   );

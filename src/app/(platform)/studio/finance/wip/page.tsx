@@ -122,7 +122,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
             <form action={generateOrgWipSnapshots}>
               <button
                 type="submit"
-                className="rounded-md border border-[var(--p-border)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--p-surface)]"
+                className="ps-btn ps-btn--ghost ps-btn--sm"
               >
                 {t("console.finance.wip.generateSnapshots", undefined, "Generate snapshots")}
               </button>
@@ -131,7 +131,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
               href="/api/v1/wip/snapshot-pdf"
               target="_blank"
               rel="noopener"
-              className="rounded-md border border-[var(--p-border)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--p-surface)]"
+              className="ps-btn ps-btn--ghost ps-btn--sm"
             >
               {t("console.finance.wip.downloadLatestPdf", undefined, "Download Latest WIP PDF")}
             </a>

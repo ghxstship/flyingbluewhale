@@ -105,7 +105,7 @@ export function TicketPurchase({ slug, tickets, soldOutLabel }: TicketPurchasePr
           name="buyer_name"
           autoComplete="name"
           placeholder="Your name"
-          className="w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+          className="ps-input w-full"
         />
       </label>
 
@@ -116,7 +116,7 @@ export function TicketPurchase({ slug, tickets, soldOutLabel }: TicketPurchasePr
           name="buyer_email"
           required
           placeholder="you@example.com"
-          className="w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+          className="ps-input w-full"
         />
       </label>
 

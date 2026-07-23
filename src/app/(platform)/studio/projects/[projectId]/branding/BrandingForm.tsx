@@ -50,7 +50,7 @@ export function BrandingForm({
             undefined,
             "Hex like #E23414. Overrides --p-accent in portals.",
           )}
-          placeholder="#E23414"
+          placeholder={BRAND_FALLBACK.accent}
         />
         <Input
           label={t("console.projects.branding.accentForeground.label", undefined, "Accent Foreground")}
@@ -62,7 +62,7 @@ export function BrandingForm({
             undefined,
             "Text color shown on top of the accent.",
           )}
-          placeholder="#FFFFFF"
+          placeholder={BRAND_FALLBACK.accentFg}
         />
         <Input
           label={t("console.projects.branding.secondaryColor.label", undefined, "Secondary Color")}
@@ -74,7 +74,7 @@ export function BrandingForm({
             undefined,
             "Hex. The joint secondary accent (deck gradients, balance cards).",
           )}
-          placeholder="#6D4A2A"
+          placeholder={BRAND_FALLBACK.secondary}
         />
         <LogoUploader
           name="logoUrl"

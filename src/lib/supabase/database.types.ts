@@ -11412,14 +11412,17 @@ export type Database = {
       }
       dim_department: {
         Row: {
+          app: string
           code: string
           label: string
         }
         Insert: {
+          app: string
           code: string
           label: string
         }
         Update: {
+          app?: string
           code?: string
           label?: string
         }

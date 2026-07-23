@@ -4,7 +4,9 @@ import { hasSupabase } from "@/lib/env";
 import { getRequestT, getRequestFormatters } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
 import { KIcon } from "@/components/mobile/kit";
+import { parseQuietHours } from "@/lib/push/tiers";
 import { NotifMatrix, type MatrixState } from "./NotifMatrix";
+import { QuietHoursCard } from "./QuietHoursCard";
 import { NOTIF_ROWS, CHANNELS } from "./constants";
 
 export const dynamic = "force-dynamic";
@@ -18,6 +20,13 @@ export const dynamic = "force-dynamic";
  *
  * Design truth: prototype settings notif-matrix (app.jsx 3306-3704).
  */
+
+/** 0-1439 minutes → "HH:MM" for the native time inputs. */
+function minutesToHHMM(min: number): string {
+  const h = Math.floor(min / 60) % 24;
+  const m = min % 60;
+  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+}
 
 export default async function MobileNotificationsPage() {
   const { t } = await getRequestT();
@@ -38,7 +47,7 @@ export default async function MobileNotificationsPage() {
   const [{ data: prefs }, { data: recent }] = await Promise.all([
     supabase
       .from("notification_preferences")
-      .select("matrix")
+      .select("matrix, quiet_hours")
       .eq("user_id", session.userId)
       .maybeSingle(),
     supabase
@@ -55,6 +64,7 @@ export default async function MobileNotificationsPage() {
   // A display row is ON for a channel unless one of the kinds it owns is
   // explicitly off; missing cells default to push-on, email/text-off.
   const stored = (prefs?.matrix as Record<string, Record<string, boolean>> | null) ?? {};
+  const quiet = parseQuietHours(prefs?.quiet_hours);
   const initial: MatrixState = {};
   for (const r of NOTIF_ROWS) {
     const cells: Record<string, boolean> = {};
@@ -99,6 +109,49 @@ export default async function MobileNotificationsPage() {
       </h1>
 
       <NotifMatrix categories={categories} channels={CHANNELS} initial={initial} labels={labels} />
+
+      {/* T1-2 push discipline — quiet hours + an honest one-liner per tier. */}
+      <div className="sech">
+        <h2>{t("m.settings.notif.quietHours.heading", undefined, "Quiet Hours")}</h2>
+      </div>
+      <QuietHoursCard
+        initial={{
+          enabled: quiet?.enabled ?? false,
+          start: minutesToHHMM(quiet?.start_min ?? 22 * 60),
+          end: minutesToHHMM(quiet?.end_min ?? 7 * 60),
+        }}
+        labels={{
+          enable: t("m.settings.notif.quietHours.enable", undefined, "Pause non-urgent pushes overnight"),
+          from: t("m.settings.notif.quietHours.from", undefined, "From"),
+          to: t("m.settings.notif.quietHours.to", undefined, "To"),
+          save: t("m.settings.notif.quietHours.save", undefined, "Save"),
+          saved: t("m.settings.notif.quietHours.saved", undefined, "Saved."),
+          error: t("m.settings.notif.quietHours.error", undefined, "Could not save. Try again."),
+        }}
+      />
+      <div className="item" style={{ display: "block" }}>
+        {[
+          t(
+            "m.settings.notif.tier.interrupt",
+            undefined,
+            "Urgent: safety and gate-blocking alerts always deliver, even during quiet hours.",
+          ),
+          t(
+            "m.settings.notif.tier.ambient",
+            undefined,
+            "Normal: day-to-day updates hold during quiet hours and arrive when they end.",
+          ),
+          t(
+            "m.settings.notif.tier.digest",
+            undefined,
+            "Digest: feed activity, recognition, and learning bundle into a couple of summary pushes a day.",
+          ),
+        ].map((line, i) => (
+          <div key={i} className="s" style={{ padding: "3px 0" }}>
+            {line}
+          </div>
+        ))}
+      </div>
 
       <div className="sech">
         <h2>{t("m.notifications.recentHeading", undefined, "Recent")}</h2>

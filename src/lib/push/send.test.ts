@@ -14,9 +14,16 @@ type Row = Record<string, unknown>;
 
 function makeFake() {
   const state = {
-    prefs: [] as Array<{ user_id: string; matrix: Record<string, { push?: boolean }> | null }>,
+    prefs: [] as Array<{
+      user_id: string;
+      matrix: Record<string, { push?: boolean }> | null;
+      quiet_hours?: unknown;
+    }>,
     subs: [] as Row[],
     notifications: [] as Row[],
+    deferred: [] as Row[],
+    memberships: [] as Row[],
+    userPrefs: [] as Row[],
     queriedTables: [] as string[],
     flags: { vapid: true },
   };
@@ -29,7 +36,7 @@ function makeFake() {
       if (table === "notification_preferences") {
         const inFilter = filters.find(([op]) => op === "in");
         const ids = (inFilter?.[2] as string[]) ?? [];
-        return { data: state.prefs.filter((p) => ids.includes(p.user_id)), error: null };
+        return { data: state.prefs.filter((p) => ids.includes(p.user_id)) as unknown as Row[], error: null };
       }
       if (table === "push_subscriptions") {
         let rows = state.subs;
@@ -40,6 +47,23 @@ function makeFake() {
         }
         return { data: rows, error: null };
       }
+      if (table === "memberships") {
+        let rows = state.memberships;
+        for (const [op, col, val] of filters) {
+          if (op === "eq") rows = rows.filter((r) => r[col] === val);
+          if (op === "in") rows = rows.filter((r) => (val as unknown[]).includes(r[col]));
+          if (op === "is") rows = rows.filter((r) => r[col] == null);
+        }
+        return { data: rows, error: null };
+      }
+      if (table === "user_preferences") {
+        let rows = state.userPrefs;
+        for (const [op, col, val] of filters) {
+          if (op === "eq") rows = rows.filter((r) => r[col] === val);
+          if (op === "in") rows = rows.filter((r) => (val as unknown[]).includes(r[col]));
+        }
+        return { data: rows, error: null };
+      }
       return { data: null, error: null };
     };
 
@@ -47,6 +71,7 @@ function makeFake() {
       select: (..._args: unknown[]) => builder,
       insert: (rows: Row | Row[]) => {
         if (table === "notifications") state.notifications.push(...(Array.isArray(rows) ? rows : [rows]));
+        if (table === "push_deferred") state.deferred.push(...(Array.isArray(rows) ? rows : [rows]));
         return builder;
       },
       update: (_patch: Row) => builder,
@@ -97,6 +122,7 @@ vi.mock("@/lib/log", () => ({
 }));
 
 import { sendPushTo, sendPushBulk } from "./send";
+import { _clearShowDayCache } from "./show-day";
 import { pushKindForEvent } from "../notify";
 
 function seedSub(userId: string, id = `sub-${userId}`): void {
@@ -115,8 +141,12 @@ beforeEach(() => {
   fake.state.prefs.length = 0;
   fake.state.subs.length = 0;
   fake.state.notifications.length = 0;
+  fake.state.deferred.length = 0;
+  fake.state.memberships.length = 0;
+  fake.state.userPrefs.length = 0;
   fake.state.queriedTables.length = 0;
   fake.state.flags.vapid = true;
+  _clearShowDayCache();
   sendNotificationMock.mockClear();
 });
 
@@ -206,14 +236,169 @@ describe("sendPushBulk — preference gating", () => {
   it("drops opted-out users from delivery but writes bell rows for everyone", async () => {
     seedSub("u-muted");
     seedSub("u-open");
-    fake.state.prefs.push({ user_id: "u-muted", matrix: { kudos: { push: false } } });
+    // `chat` is ambient-tier: with no quiet hours seeded it delivers
+    // immediately, so this test isolates the opt-out gate.
+    fake.state.prefs.push({ user_id: "u-muted", matrix: { chat: { push: false } } });
 
-    const result = await sendPushBulk(["u-muted", "u-open"], { title: "T", body: "B", kind: "kudos" });
+    const result = await sendPushBulk(["u-muted", "u-open"], { title: "T", body: "B", kind: "chat" });
 
     expect(result).toEqual({ sent: 1, failed: 0, disabled: 0 });
     expect(sendNotificationMock).toHaveBeenCalledTimes(1);
     const [subscription] = sendNotificationMock.mock.calls[0] as [{ endpoint: string }, string];
     expect(subscription.endpoint).toContain("sub-u-open");
     expect(fake.state.notifications).toHaveLength(2);
+    // The muted user gets NO deferred row either — mute means silence,
+    // not later.
+    expect(fake.state.deferred).toHaveLength(0);
+  });
+});
+
+// ===========================================================================
+// T1-2 push discipline — tier × quiet-hours × show-day through the REAL
+// pipeline (the pure matrix lives in tiers.test.ts; these pin the wiring:
+// bell/email precede the gate, deferrals land in push_deferred, show-day
+// resolves org posture from memberships × user_preferences).
+// ===========================================================================
+
+const QUIET_ALL_DAY = { enabled: true, start_min: 0, end_min: 1439, tz: "UTC" };
+
+describe("push discipline — quiet hours", () => {
+  it("defers an ambient push during quiet hours (bell row written, no buzz)", async () => {
+    seedSub("u1");
+    fake.state.prefs.push({ user_id: "u1", matrix: null, quiet_hours: QUIET_ALL_DAY });
+
+    const result = await sendPushTo("u1", { title: "T", body: "B", kind: "chat" });
+
+    expect(result).toEqual({ sent: 0, failed: 0, disabled: 0 });
+    expect(sendNotificationMock).not.toHaveBeenCalled();
+    expect(fake.state.notifications).toHaveLength(1); // bell unaffected
+    expect(fake.state.deferred).toHaveLength(1);
+    expect(fake.state.deferred[0]).toMatchObject({ user_id: "u1", kind: "chat", tier: "ambient" });
+  });
+
+  it("delivers an interrupt-tier kind straight through quiet hours", async () => {
+    seedSub("u1");
+    fake.state.prefs.push({ user_id: "u1", matrix: null, quiet_hours: QUIET_ALL_DAY });
+
+    const result = await sendPushTo("u1", { title: "Incident", body: "B", kind: "incident" });
+
+    expect(result.sent).toBe(1);
+    expect(fake.state.deferred).toHaveLength(0);
+  });
+
+  it("delivers crisis through quiet hours even when muted", async () => {
+    seedSub("u1");
+    fake.state.prefs.push({
+      user_id: "u1",
+      matrix: { crisis: { push: false } },
+      quiet_hours: QUIET_ALL_DAY,
+    });
+
+    const result = await sendPushTo("u1", { title: "Evacuate", body: "Now", kind: "crisis" });
+
+    expect(result.sent).toBe(1);
+    expect(fake.state.deferred).toHaveLength(0);
+  });
+
+  it("accrues a digest-tier kind instead of buzzing, even outside quiet hours", async () => {
+    seedSub("u1");
+
+    const result = await sendPushTo("u1", { title: "Kudos", body: "B", kind: "kudos" });
+
+    expect(result).toEqual({ sent: 0, failed: 0, disabled: 0 });
+    expect(sendNotificationMock).not.toHaveBeenCalled();
+    expect(fake.state.deferred).toHaveLength(1);
+    expect(fake.state.deferred[0]).toMatchObject({ user_id: "u1", kind: "kudos", tier: "digest" });
+    expect(fake.state.notifications).toHaveLength(1); // bell still immediate
+  });
+
+  it("honors a per-call interrupt override through quiet hours", async () => {
+    seedSub("u1");
+    fake.state.prefs.push({ user_id: "u1", matrix: null, quiet_hours: QUIET_ALL_DAY });
+
+    const result = await sendPushTo(
+      "u1",
+      { title: "Approve before shift", body: "B", kind: "approval" },
+      { tier: "interrupt" },
+    );
+
+    expect(result.sent).toBe(1);
+    expect(fake.state.deferred).toHaveLength(0);
+  });
+
+  it("splits a bulk send between deliver-now and deferred per user", async () => {
+    seedSub("u-quiet");
+    seedSub("u-awake");
+    fake.state.prefs.push({ user_id: "u-quiet", matrix: null, quiet_hours: QUIET_ALL_DAY });
+
+    const result = await sendPushBulk(["u-quiet", "u-awake"], { title: "T", body: "B", kind: "chat" });
+
+    expect(result.sent).toBe(1);
+    const [subscription] = sendNotificationMock.mock.calls[0] as [{ endpoint: string }, string];
+    expect(subscription.endpoint).toContain("sub-u-awake");
+    expect(fake.state.deferred).toHaveLength(1);
+    expect(fake.state.deferred[0]).toMatchObject({ user_id: "u-quiet", tier: "ambient" });
+  });
+});
+
+describe("push discipline — show-day promotion", () => {
+  const seedShowDayOrg = (orgId: string) => {
+    fake.state.memberships.push({ org_id: orgId, user_id: "op-1", role: "admin", deleted_at: null });
+    fake.state.userPrefs.push({ user_id: "op-1", ui_state: { show_day_mode: true } });
+  };
+
+  it("promotes an operational kind through quiet hours when the org is on show day", async () => {
+    seedSub("u1");
+    fake.state.prefs.push({ user_id: "u1", matrix: null, quiet_hours: QUIET_ALL_DAY });
+    seedShowDayOrg("org-1");
+
+    const result = await sendPushTo("u1", {
+      title: "Scan",
+      body: "B",
+      kind: "assignment_scan",
+      orgId: "org-1",
+    });
+
+    expect(result.sent).toBe(1);
+    expect(fake.state.deferred).toHaveLength(0);
+  });
+
+  it("still defers chat during quiet hours on show day (not a promoted kind)", async () => {
+    seedSub("u1");
+    fake.state.prefs.push({ user_id: "u1", matrix: null, quiet_hours: QUIET_ALL_DAY });
+    seedShowDayOrg("org-1");
+
+    const result = await sendPushTo("u1", { title: "DM", body: "B", kind: "chat", orgId: "org-1" });
+
+    expect(result.sent).toBe(0);
+    expect(fake.state.deferred).toHaveLength(1);
+  });
+
+  it("does not promote without org context (no orgId on the payload)", async () => {
+    seedSub("u1");
+    fake.state.prefs.push({ user_id: "u1", matrix: null, quiet_hours: QUIET_ALL_DAY });
+    seedShowDayOrg("org-1");
+
+    const result = await sendPushTo("u1", { title: "Scan", body: "B", kind: "assignment_scan" });
+
+    expect(result.sent).toBe(0);
+    expect(fake.state.deferred).toHaveLength(1);
+  });
+
+  it("does not promote when no operator has show-day mode on", async () => {
+    seedSub("u1");
+    fake.state.prefs.push({ user_id: "u1", matrix: null, quiet_hours: QUIET_ALL_DAY });
+    fake.state.memberships.push({ org_id: "org-1", user_id: "op-1", role: "admin", deleted_at: null });
+    fake.state.userPrefs.push({ user_id: "op-1", ui_state: { show_day_mode: false } });
+
+    const result = await sendPushTo("u1", {
+      title: "Scan",
+      body: "B",
+      kind: "assignment_scan",
+      orgId: "org-1",
+    });
+
+    expect(result.sent).toBe(0);
+    expect(fake.state.deferred).toHaveLength(1);
   });
 });

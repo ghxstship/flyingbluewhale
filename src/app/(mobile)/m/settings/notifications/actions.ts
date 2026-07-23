@@ -58,3 +58,64 @@ export async function toggleNotifPref(_prev: State, fd: FormData): Promise<State
   revalidatePath("/m/notifications");
   return { ok: true };
 }
+
+const HHMM = /^([01]\d|2[0-3]):[0-5]\d$/;
+
+const QuietHoursInput = z.object({
+  enabled: z.enum(["0", "1"]),
+  start: z.string().regex(HHMM),
+  end: z.string().regex(HHMM),
+  // IANA zone captured client-side (Intl.resolvedOptions().timeZone);
+  // validated server-side by actually constructing a formatter with it.
+  tz: z.string().min(1).max(64),
+});
+
+function hhmmToMinutes(v: string): number {
+  const [h, m] = v.split(":").map(Number);
+  return (h ?? 0) * 60 + (m ?? 0);
+}
+
+function isValidTimeZone(tz: string): boolean {
+  try {
+    new Intl.DateTimeFormat("en-US", { timeZone: tz });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Persist the push quiet-hours window into
+ * `notification_preferences.quiet_hours` (jsonb — the exact shape
+ * `src/lib/push/tiers.ts#parseQuietHours` reads to gate delivery):
+ * `{ enabled, start_min, end_min, tz }`, wall-clock minutes in `tz`.
+ * The window may wrap midnight (22:00 → 07:00).
+ */
+export async function saveQuietHours(_prev: State, fd: FormData): Promise<State> {
+  const session = await requireSession();
+  const parsed = QuietHoursInput.safeParse(Object.fromEntries(fd));
+  if (!parsed.success) return { error: "Invalid quiet hours." };
+  const { enabled, start, end, tz } = parsed.data;
+  const zone = isValidTimeZone(tz) ? tz : "UTC";
+
+  const quiet_hours = {
+    enabled: enabled === "1",
+    start_min: hhmmToMinutes(start),
+    end_min: hhmmToMinutes(end),
+    tz: zone,
+  };
+
+  const supabase = await createClient();
+  const { error } = await (
+    supabase.from("notification_preferences") as unknown as {
+      upsert: (
+        p: Record<string, unknown>,
+        opts?: Record<string, unknown>,
+      ) => Promise<{ error: { message: string } | null }>;
+    }
+  ).upsert({ user_id: session.userId, quiet_hours }, { onConflict: "user_id" });
+  if (error) return { error: error.message };
+
+  revalidatePath("/m/settings/notifications");
+  return { ok: true };
+}

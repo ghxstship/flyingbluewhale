@@ -3,6 +3,7 @@ import { timingSafeEqual } from "node:crypto";
 import { apiError, apiOk } from "@/lib/api";
 import { evaluateSchedules } from "@/lib/automations/schedule";
 import { evaluateAdvanceDeadlines } from "@/lib/automations/advance-deadlines";
+import { evaluateDeferredPushes } from "@/lib/push/flush";
 
 function tokensMatch(provided: string, expected: string): boolean {
   // Constant-time — string `===` short-circuits on first mismatch
@@ -32,5 +33,8 @@ export async function POST(req: NextRequest) {
   // advance_deadline_events emit advance.deadline.* domain events, which
   // the dispatch drain fans out to the seeded chase automations.
   const advance = await evaluateAdvanceDeadlines();
-  return apiOk({ ...result, advance });
+  // T1-2 push discipline — drain due deferred/digest pushes on the same
+  // tick (quiet-hours end + digest windows). No new cron.
+  const pushFlush = await evaluateDeferredPushes();
+  return apiOk({ ...result, advance, pushFlush });
 }

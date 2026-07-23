@@ -5,6 +5,8 @@ import type { Json, TablesInsert } from "../supabase/types";
 import { log } from "../log";
 import { sendNotificationEmailToUsers } from "../email";
 import { hasVapid, vapid } from "./vapid";
+import { gatePush, parseQuietHours, SHOW_DAY_PROMOTED, type GateDecision, type PushTier } from "./tiers";
+import { isOrgShowDay } from "./show-day";
 
 /**
  * Server-side Web Push sender (Phase 2.3).
@@ -122,6 +124,12 @@ export type PushSendOptions = {
    *  rows (writeInbox's idempotent upsert, notify()'s emit_notification
    *  RPC) pass false so the bell doesn't get a duplicate row. */
   recordBell?: boolean;
+  /** Push-discipline tier override (T1-2). Every kind inherits its tier
+   *  from PUSH_KIND_TIER (src/lib/push/tiers.ts); pass this only for the
+   *  edge case where one call site's payload genuinely outranks (or
+   *  underranks) its kind — e.g. an approval that blocks a shift start
+   *  may pass `tier: "interrupt"`. Ignored for kindless payloads. */
+  tier?: PushTier;
 };
 
 type PushSubRow = {
@@ -356,8 +364,13 @@ async function sendOne(
 }
 
 /** One row of the per-user delivery matrix. `matrix` is JSONB keyed by
- *  PushKind, each cell carrying the per-channel toggles. */
-type PrefRow = { user_id: string; matrix: Record<string, { push?: boolean; email?: boolean }> | null };
+ *  PushKind, each cell carrying the per-channel toggles. `quiet_hours` is
+ *  the discipline engine's per-user window (see tiers.ts#QuietHours). */
+type PrefRow = {
+  user_id: string;
+  matrix: Record<string, { push?: boolean; email?: boolean }> | null;
+  quiet_hours?: unknown;
+};
 
 /**
  * Fetch the `notification_preferences.matrix` rows for `userIds` in ONE read.
@@ -376,7 +389,7 @@ async function fetchPrefRows(userIds: string[]): Promise<PrefRow[]> {
     const supabase = createServiceClient();
     const { data } = await supabase
       .from("notification_preferences")
-      .select("user_id, matrix")
+      .select("user_id, matrix, quiet_hours")
       .in("user_id", userIds)
       .returns<PrefRow[]>();
     return data ?? [];
@@ -399,6 +412,89 @@ function pushExcludedFrom(rows: PrefRow[], kind: PushKind | undefined): Set<stri
     if (row.matrix?.[kind]?.push === false) excluded.add(row.user_id);
   }
   return excluded;
+}
+
+/**
+ * T1-2 push discipline — resolve the org's show-day posture for a payload.
+ * Only consulted when the kind is show-day-promotable AND the payload
+ * carries an orgId (no org context → no posture flip; ambient stays
+ * ambient). Cached per org for 60s inside isOrgShowDay.
+ */
+async function resolveShowDay(payload: PushPayload): Promise<boolean> {
+  if (!payload.kind || !payload.orgId) return false;
+  if (!SHOW_DAY_PROMOTED.has(payload.kind)) return false;
+  return isOrgShowDay(payload.orgId);
+}
+
+/**
+ * T1-2 — park a deferred/digest push in `push_deferred` for the worker
+ * flush (src/lib/push/flush.ts, riding the automations schedule tick).
+ * Returns false on failure so the caller can FAIL OPEN to immediate
+ * delivery — a lost enqueue must degrade to a buzz, never to silence.
+ */
+async function enqueueDeferredBulk(
+  items: Array<{ userId: string; tier: "ambient" | "digest"; deferUntil: Date }>,
+  payload: PushPayload,
+): Promise<boolean> {
+  if (items.length === 0) return true;
+  try {
+    // KEPT CAST: push_deferred ships in migration 20260723150000 and is
+    // not in the generated types yet (never blind-regen database.types.ts).
+    const svc = createServiceClient() as unknown as import("../supabase/loose").LooseSupabase;
+    const { error } = (await svc.from("push_deferred").insert(
+      items.map((it) => ({
+        org_id: payload.orgId ?? null,
+        user_id: it.userId,
+        kind: payload.kind ?? "system",
+        tier: it.tier,
+        payload: payload as unknown as Json,
+        defer_until: it.deferUntil.toISOString(),
+      })),
+    )) as { error: { message: string } | null };
+    if (error) {
+      log.warn("push.enqueue_deferred_error", { count: items.length, err: error.message });
+      return false;
+    }
+    return true;
+  } catch (err) {
+    log.warn("push.enqueue_deferred_exception", { count: items.length, err: (err as Error).message });
+    return false;
+  }
+}
+
+async function enqueueDeferred(
+  userId: string,
+  payload: PushPayload,
+  tier: "ambient" | "digest",
+  deferUntil: Date,
+): Promise<boolean> {
+  return enqueueDeferredBulk([{ userId, tier, deferUntil }], payload);
+}
+
+/**
+ * The per-user gate decision for a payload — pure math in tiers.ts, fed
+ * here with the user's opt-out + quiet hours and the org's show-day
+ * posture. `excluded` comes from pushExcludedFrom (already empty for
+ * unsilenceable kinds, preserving that contract).
+ */
+function decideFor(
+  userId: string,
+  payload: PushPayload,
+  prefRows: PrefRow[],
+  excluded: Set<string>,
+  showDay: boolean,
+  tierOverride: PushTier | undefined,
+): GateDecision {
+  const row = prefRows.find((r) => r.user_id === userId);
+  return gatePush({
+    kind: payload.kind,
+    tierOverride,
+    optedOut: excluded.has(userId),
+    unsilenceable: payload.kind ? UNSILENCEABLE_KINDS.has(payload.kind) : false,
+    showDay,
+    quiet: parseQuietHours(row?.quiet_hours),
+    now: new Date(),
+  });
 }
 
 /** Human eyebrow for the email rendering of a push kind. */
@@ -478,10 +574,26 @@ export async function sendPushTo(
   // the push pref gate below; gated on its own matrix column. Fire-and-forget.
   fanOutEmail([userId], payload, prefRows);
   if (!ensureVapid()) return { sent: 0, failed: 0, disabled: 0 };
-  // Pref gate: if the user has toggled this kind off, short-circuit
-  // (push channel only — the notifications row above is already written).
+  // Discipline gate (T1-2): opt-out beats every tier (pushExcludedFrom is
+  // already empty for unsilenceable kinds); then tier × quiet-hours ×
+  // show-day decides deliver-now vs defer vs digest-accrue. The bell row
+  // and email fan-out above already ran — only the BUZZ is disciplined.
   const excluded = pushExcludedFrom(prefRows, payload.kind);
-  if (excluded.has(userId)) return { sent: 0, failed: 0, disabled: 0 };
+  const showDay = await resolveShowDay(payload);
+  const decision = decideFor(userId, payload, prefRows, excluded, showDay, opts?.tier);
+  if (decision.action === "drop") return { sent: 0, failed: 0, disabled: 0 };
+  if (decision.action === "defer") {
+    const parked = await enqueueDeferred(userId, payload, decision.tier, decision.deferUntil);
+    // Fail open: a queue we can't write must not become silence.
+    if (parked) return { sent: 0, failed: 0, disabled: 0 };
+  }
+  return deliverToDevices(userId, payload);
+}
+
+/** Single-user device fan-out — subs read + encrypted sends + last_seen
+ *  bump. No bell row, no email, no gates: the shared tail of the gated
+ *  senders and the flush worker's `sendPushDirect`. */
+async function deliverToDevices(userId: string, payload: PushPayload): Promise<PushSendResult> {
   const subs = await fetchActiveSubs(userId);
   if (subs.length === 0) return { sent: 0, failed: 0, disabled: 0 };
   const serialized = JSON.stringify(payload);
@@ -507,6 +619,19 @@ export async function sendPushTo(
   return { sent, failed, disabled };
 }
 
+/**
+ * T1-2 flush path — deliver a payload to a user's devices NOW, bypassing
+ * the bell/email/pref/discipline pipeline. FOR THE DEFERRED-PUSH FLUSH
+ * WORKER ONLY (src/lib/push/flush.ts): the bell row, email fan-out and
+ * opt-out gate all ran when the push was enqueued; re-running them here
+ * would duplicate side effects or re-defer forever. New feature code
+ * must call sendPushTo/sendPushBulk instead.
+ */
+export async function sendPushDirect(userId: string, payload: PushPayload): Promise<PushSendResult> {
+  if (!ensureVapid()) return { sent: 0, failed: 0, disabled: 0 };
+  return deliverToDevices(userId, payload);
+}
+
 export async function sendPushBulk(
   userIds: string[],
   payload: PushPayload,
@@ -524,10 +649,26 @@ export async function sendPushBulk(
   // the push pref gate below; gated on its own matrix column. Fire-and-forget.
   fanOutEmail(userIds, payload, prefRows);
   if (!ensureVapid()) return { sent: 0, failed: 0, disabled: 0 };
-  // Pref gate: drop users who've toggled this kind off before we hit
-  // the push_subscriptions read (push channel only).
+  // Discipline gate (T1-2), per recipient: opt-out drops; digest/quiet
+  // defers park in push_deferred; only the deliver-now remainder reaches
+  // the push_subscriptions read. Show-day posture resolves once per call.
   const excluded = pushExcludedFrom(prefRows, payload.kind);
-  const allowed = userIds.filter((u) => !excluded.has(u));
+  const showDay = await resolveShowDay(payload);
+  const allowed: string[] = [];
+  const deferred: Array<{ userId: string; tier: "ambient" | "digest"; deferUntil: Date }> = [];
+  for (const u of userIds) {
+    const decision = decideFor(u, payload, prefRows, excluded, showDay, opts?.tier);
+    if (decision.action === "send") allowed.push(u);
+    else if (decision.action === "defer")
+      deferred.push({ userId: u, tier: decision.tier, deferUntil: decision.deferUntil });
+  }
+  // Park the deferrals in ONE insert; if the batch write fails, everyone
+  // in it degrades to deliver-now (fail open — a lost queue write must
+  // not become silence).
+  if (deferred.length > 0) {
+    const parked = await enqueueDeferredBulk(deferred, payload);
+    if (!parked) for (const d of deferred) allowed.push(d.userId);
+  }
   if (allowed.length === 0) return { sent: 0, failed: 0, disabled: 0 };
   const byUser = await fetchActiveSubsBulk(allowed);
   // Preserve userId per sub so the retry queue (P2) knows which user

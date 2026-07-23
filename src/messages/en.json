@@ -25065,6 +25065,7 @@
    "requisition": "Requisition changed concurrently. Refresh and retry",
    "rfq": "RFQ changed concurrently. Refresh and retry",
    "settlement": "Settlement was finalized concurrently. Refresh and retry",
+   "stale-row": "Someone else changed this record while you were editing. Reload the page to see their changes, then re-apply yours.",
    "submission": "Submission was updated concurrently. Refresh and retry"
   },
   "config-is-not-valid-json": "Config is not valid JSON",

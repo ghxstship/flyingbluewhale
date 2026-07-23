@@ -138,7 +138,7 @@ export function ScanCapture({
               value={manual}
               onChange={(e) => setManual(e.target.value)}
               placeholder={labels.manualPlaceholder}
-              className="flex-1 rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm"
+              className="ps-input flex-1"
             />
             <Button type="submit" variant="cta" size="sm">
               {labels.manualSubmit}

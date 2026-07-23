@@ -192,6 +192,9 @@ export function DoorScanner({
         </div>
       )}
 
+      {/* A11Y-2: the redeem verdict arrives async — persistent polite live
+          region so screen readers announce accepted / duplicate / not found. */}
+      <div role="status" aria-live="polite">
       {last && lastTone && (
         <div
           className="item"
@@ -221,6 +224,7 @@ export function DoorScanner({
           <span className={`ps-badge ps-badge--${RESULT_BADGE[lastTone]}`}>{resultLabel(last.result)}</span>
         </div>
       )}
+      </div>
 
       <div className="sech">
         <h2>{labels.recentTitle}</h2>

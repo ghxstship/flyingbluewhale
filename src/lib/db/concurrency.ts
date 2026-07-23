@@ -1,5 +1,6 @@
 import "server-only";
 
+import { actionErrorMessage } from "@/lib/errors";
 import { createClient } from "@/lib/supabase/server";
 import type { Database } from "@/lib/supabase/types";
 
@@ -82,6 +83,17 @@ export async function updateOrgScopedWithCheck<T extends TableName>(
   return { ok: true, row: data };
 }
 
-/** Standardized message surfaced to the form's error alert. */
-export const STALE_ROW_MESSAGE =
-  "Someone else changed this record while you were editing. Reload the page to see their changes, then re-apply yours.";
+/**
+ * Standardized stale-row error surfaced to the form's error alert.
+ *
+ * The value is the `@err:concurrency.stale-row` SENTINEL, not English —
+ * every `{ error: STALE_ROW_MESSAGE }` return flows through a resolver
+ * (`resolveActionError` in FormShell / `useActionErrorResolver` at bespoke
+ * render sites) which maps it to `t("errors.concurrency.stale-row")` in the
+ * viewer's locale. No call site compares against this constant's VALUE
+ * (only `result.reason === "stale"` checks exist), so the swap is safe.
+ */
+export const STALE_ROW_MESSAGE = actionErrorMessage(
+  "concurrency.stale-row",
+  "Someone else changed this record while you were editing. Reload the page to see their changes, then re-apply yours.",
+);

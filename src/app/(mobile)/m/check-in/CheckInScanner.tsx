@@ -248,6 +248,9 @@ export function CheckInScanner({
         </Link>
       )}
 
+      {/* A11Y-2: the scan verdict arrives async after the decode/submit —
+          a persistent polite live region so screen readers announce it. */}
+      <div role="status" aria-live="polite">
       {outcome?.kind === "result" && outcome.result.result === "product" && productLabels ? (
         <ProductMatchCard
           key={`${outcome.result.gtin14}:${outcome.code}`}
@@ -324,6 +327,7 @@ export function CheckInScanner({
           <span style={{ fontSize: 12 }}>{outcome.message}</span>
         </div>
       )}
+      </div>
         </>
       )}
 

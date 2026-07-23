@@ -230,6 +230,7 @@ export const ACTION_ERROR_FALLBACKS = {
  "concurrency.requisition": "Requisition changed concurrently. Refresh and retry",
  "concurrency.rfq": "RFQ changed concurrently. Refresh and retry",
  "concurrency.settlement": "Settlement was finalized concurrently. Refresh and retry",
+ "concurrency.stale-row": "Someone else changed this record while you were editing. Reload the page to see their changes, then re-apply yours.",
  "concurrency.submission": "Submission was updated concurrently. Refresh and retry",
  "config-is-not-valid-json": "Config is not valid JSON",
  "confirm-that-you-have-reviewed-both-roles-permissions-before": "Confirm that you have reviewed both roles' permissions before merging",

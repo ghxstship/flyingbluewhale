@@ -90,53 +90,97 @@ const DASH_LINE_STRIPS: RegExp[] = [
   />\s*[—–]\s*</g, // JSX-text placeholder cell
 ];
 
-// String-aware comment stripper: `/*` or `//` INSIDE a string literal (glob
-// patterns like "/api/v1/ai/*", URLs) must not open a comment — the naive
-// regex approach silently swallowed the rest of such files. Comment bodies are
-// blanked but newlines kept so reported line numbers stay true.
+// Comment stripper, tokenizer-lite (W3a/W3b fix). The previous char-mode
+// mini-parser desynced whenever an apostrophe or quote in JSX prose
+// ("don't", "it's") flipped it into string mode: everything after was
+// misclassified — comment lines counted as UI copy, and real strings after
+// a stray `//`-in-regex were swallowed as comments. This version:
+//  - treats `'`/`"` as a string opener ONLY when a matching close exists on
+//    the same line (legal JS strings never span a raw newline) — a lone
+//    apostrophe in JSX prose stays plain text;
+//  - consumes template literals to their true closing backtick;
+//  - detects regex literals from the preceding token (so `/\/\//`-style
+//    bodies can't fake a `//` comment marker) and blanks them — a regex is
+//    never UI copy. `<`/`>`/`}` are division-ish so JSX tags never read as
+//    regex delimiters (`=>` is special-cased back to regex-allowed).
+// Comment + regex bodies are blanked but newlines kept so reported line
+// numbers stay true; string/JSX content is always emitted.
+const REGEX_KEYWORD_TAIL = /(?:^|[^\w$])(return|typeof|case|do|else|void|delete|instanceof|new|yield|await|in|of)$/;
+function regexCanFollow(outSoFar: string): boolean {
+  const tail = outSoFar.trimEnd();
+  if (tail === "") return true;
+  if (tail.endsWith("=>")) return true;
+  const prev = tail[tail.length - 1]!;
+  if (/[\w$]/.test(prev)) return REGEX_KEYWORD_TAIL.test(tail);
+  return !")]'\"`<>}".includes(prev);
+}
+
 function stripComments(src: string): string {
   let out = "";
   let i = 0;
-  let mode: "code" | "line" | "block" | '"' | "'" | "`" = "code";
-  while (i < src.length) {
-    const ch = src[i];
+  const n = src.length;
+  while (i < n) {
+    const ch = src[i]!;
     const next = src[i + 1];
-    if (mode === "code") {
-      if (ch === "/" && next === "/") {
-        mode = "line";
-        i += 2;
-      } else if (ch === "/" && next === "*") {
-        mode = "block";
-        i += 2;
+    if (ch === "/" && next === "/") {
+      // line comment — blank to EOL (the newline is emitted next pass)
+      while (i < n && src[i] !== "\n") i++;
+    } else if (ch === "/" && next === "*") {
+      // block comment — blank, keep newlines
+      i += 2;
+      while (i < n && !(src[i] === "*" && src[i + 1] === "/")) {
+        if (src[i] === "\n") out += "\n";
+        i++;
+      }
+      i += 2;
+    } else if (ch === '"' || ch === "'") {
+      // String literal only if it closes on this line; otherwise JSX prose.
+      let j = i + 1;
+      while (j < n && src[j] !== "\n" && src[j] !== ch) j += src[j] === "\\" ? 2 : 1;
+      if (j < n && src[j] === ch) {
+        out += src.slice(i, j + 1);
+        i = j + 1;
       } else {
-        if (ch === '"' || ch === "'" || ch === "`") mode = ch;
         out += ch;
         i++;
       }
-    } else if (mode === "line") {
-      if (ch === "\n") {
-        mode = "code";
-        out += ch;
-      }
-      i++;
-    } else if (mode === "block") {
-      if (ch === "*" && next === "/") {
-        mode = "code";
-        i += 2;
+    } else if (ch === "`") {
+      // Template literal — spans lines; copy verbatim to the closing tick.
+      let j = i + 1;
+      while (j < n && src[j] !== "`") j += src[j] === "\\" ? 2 : 1;
+      if (j < n && src[j] === "`") {
+        out += src.slice(i, j + 1);
+        i = j + 1;
       } else {
-        if (ch === "\n") out += ch;
+        out += ch; // unterminated: a stray backtick in prose, not a literal
+        i++;
+      }
+    } else if (ch === "/" && regexCanFollow(out)) {
+      // Candidate regex literal — scan for the closing unescaped "/" on
+      // this line (respecting [...] classes). No close → it was a division.
+      let j = i + 1;
+      let inClass = false;
+      while (j < n && src[j] !== "\n") {
+        const c = src[j]!;
+        if (c === "\\") {
+          j += 2;
+          continue;
+        }
+        if (c === "[") inClass = true;
+        else if (c === "]") inClass = false;
+        else if (c === "/" && !inClass) break;
+        j++;
+      }
+      if (j < n && src[j] === "/") {
+        out += "/" + " ".repeat(j - i - 1) + "/"; // blanked body, columns kept
+        i = j + 1;
+      } else {
+        out += ch;
         i++;
       }
     } else {
-      // inside a string/template literal
-      if (ch === "\\") {
-        out += ch + (next ?? "");
-        i += 2;
-      } else {
-        if (ch === mode) mode = "code";
-        out += ch;
-        i++;
-      }
+      out += ch;
+      i++;
     }
   }
   return out;

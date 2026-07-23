@@ -135,8 +135,14 @@ test.describe("LEG3ND · anon funnel", () => {
     // RPC cannot answer → notFound() → the LEG3ND 404 boundary, inside the
     // shell (anonymously — this page never requires a session).
     const bogus = "00000000-0000-4000-8000-00000000dead";
-    const r = await page.goto(`/legend/certifications/${bogus}/verify`);
-    expect(r?.status(), "an unknown holder id is a 404, not an error or a leak").toBe(404);
+    await page.goto(`/legend/certifications/${bogus}/verify`);
+    // Streaming (the shell's loading boundary) commits a 200 before notFound()
+    // throws, so the honest signal is the RENDERED not-found — never a leak,
+    // never an error boundary.
+    await expect(
+      page.getByRole("heading", { name: "Not Found" }),
+      "an unknown holder id renders the shell 404, not an error or a leak",
+    ).toBeVisible({ timeout: 15_000 });
     expect(page.url(), "no login bounce — verification is anon-callable").not.toMatch(/\/login/);
     await expect(page.locator('[data-product="legend"]').first(), "404 renders inside the shell").toBeVisible({
       timeout: 15_000,
@@ -145,8 +151,11 @@ test.describe("LEG3ND · anon funnel", () => {
     await expect(page.getByText(ERROR_BOUNDARY)).toHaveCount(0);
 
     // A malformed id short-circuits before the RPC — same honest 404.
-    const r2 = await page.goto("/legend/certifications/not-a-uuid/verify");
-    expect(r2?.status(), "a malformed holder id is a 404").toBe(404);
+    await page.goto("/legend/certifications/not-a-uuid/verify");
+    await expect(
+      page.getByRole("heading", { name: "Not Found" }),
+      "a malformed holder id renders the shell 404",
+    ).toBeVisible({ timeout: 15_000 });
   });
 });
 

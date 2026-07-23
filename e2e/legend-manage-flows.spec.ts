@@ -447,7 +447,7 @@ test.describe("Recert queue (request → deny with note → requester sees it)",
     await expect(card.getByText("Expired", { exact: true }), "the holding computes as Expired").toBeVisible();
     await card.getByRole("button", { name: /request recert/i }).click();
     await expect(
-      card.getByText(/recert requested/i),
+      card.getByText(/recert: requested/i),
       "the append-only recert request persisted",
     ).toBeVisible({ timeout: 20_000 });
   });
@@ -461,10 +461,19 @@ test.describe("Recert queue (request → deny with note → requester sees it)",
     const row = page.locator("tr").filter({ hasText: RC_NAME }).first();
     await expect(row, "the learner's request landed in the pending queue").toBeVisible({ timeout: 15_000 });
     // Deny is two-step: reveal the note field, then confirm.
-    await row.getByRole("button", { name: "Deny", exact: true }).click();
+    // Both deny-phase buttons carry aria-label "Deny: recert request" as
+    // their accessible name (the visible "Deny"/"Confirm Deny" text is
+    // overridden) — the same locator serves the two-step flow sequentially.
+    const denyByAria = () => row.getByRole("button", { name: "Deny: recert request" });
+    await denyByAria().click();
     await row.locator('input[name="note"]').fill(DENIAL_NOTE);
-    await row.getByRole("button", { name: "Confirm Deny" }).click();
-    await expect(row.getByText("Decided", { exact: true }), "the decision persisted").toBeVisible({ timeout: 20_000 });
+    await denyByAria().click();
+    // A decided request leaves the pending table and lands under "Recent decisions".
+    await expect(row, "the pending row cleared after the decision").toHaveCount(0, { timeout: 20_000 });
+    const recent = page.locator("section, div").filter({ hasText: "Recent decisions" }).last();
+    await expect(recent.getByText(RC_NAME).first(), "the decision persisted to the ledger").toBeVisible({
+      timeout: 20_000,
+    });
     await expect(page.getByText(RLS_ERROR)).toHaveCount(0);
   });
 

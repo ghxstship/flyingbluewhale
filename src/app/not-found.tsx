@@ -107,6 +107,7 @@ export default async function NotFound() {
 
   return (
     <div
+      data-ui="saas"
       data-platform={platformAttr}
       className="flex min-h-screen items-center justify-center bg-[var(--p-bg)] px-6 py-24"
     >

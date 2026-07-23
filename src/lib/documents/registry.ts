@@ -685,7 +685,8 @@ export const DOC_TEMPLATES: DocTemplate[] = [
       {
         kind: "section",
         table: {
-          cols: [{ label: "Position" }, { label: "Qty", align: "r" }, { label: "Required cert" }, { label: "Assigned" }, { label: "State" }],
+          // "Status" (UI-label ruling 5) — deliberate deviation from the kit-vendored "State" column header; the merge path stays `staffing.N.state`.
+          cols: [{ label: "Position" }, { label: "Qty", align: "r" }, { label: "Required cert" }, { label: "Assigned" }, { label: "Status" }],
           rows: [
             { cells: [mf("staffing.0.position", "Rigger L1"), "2", "ETCP", mf("staffing.0.assigned", "D. Lin, +1"), mf("staffing.0.state", "Accepted")] },
             { cells: [mf("staffing.1.position", "LD / Elec"), "1", "ESTA", mf("staffing.1.assigned", "R. Vega"), mf("staffing.1.state", "Offered")] },

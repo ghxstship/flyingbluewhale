@@ -16,6 +16,7 @@ import {
   totalPoints,
 } from "@/lib/sprints";
 import type { BurndownSnapshot, Sprint, SprintStory } from "@/lib/sprints";
+import { getRequestT } from "@/lib/i18n/request";
 import { BurndownChart } from "./BurndownChart";
 import { KanbanBoard } from "./KanbanBoard";
 import { AddStoryForm } from "./SprintForms";
@@ -23,6 +24,7 @@ import { snapshotBurndownAction } from "./actions";
 
 export default async function Page({ params }: { params: Promise<{ projectId: string }> }) {
   const { projectId } = await params;
+  const { t } = await getRequestT();
   const session = await requireSession();
   const canWrite = isManagerPlus(session);
   const supabase = (await createClient()) as unknown as LooseSupabase;
@@ -63,37 +65,47 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
   return (
     <>
       <ModuleHeader
-        eyebrow={project?.name ?? "Project"}
-        title="Sprints"
-        subtitle="Sprint Board, Burndown, And Velocity"
+        eyebrow={project?.name ?? t("console.projects.sprints.projectFallback", undefined, "Project")}
+        title={t("console.projects.sprints.title", undefined, "Sprints")}
+        subtitle={t("console.projects.sprints.subtitle", undefined, "Sprint Board, Burndown, And Velocity")}
         breadcrumbs={[
-          { label: "Projects", href: "/studio/projects" },
-          { label: project?.name ?? "Project", href: `/studio/projects/${projectId}` },
-          { label: "Sprints" },
+          { label: t("console.projects.sprints.breadcrumb.projects", undefined, "Projects"), href: "/studio/projects" },
+          {
+            label: project?.name ?? t("console.projects.sprints.projectFallback", undefined, "Project"),
+            href: `/studio/projects/${projectId}`,
+          },
+          { label: t("console.projects.sprints.title", undefined, "Sprints") },
         ]}
         action={
           canWrite ? (
             <Button href={`/studio/projects/${projectId}/sprints/new`} size="sm">
-              New Sprint
+              {t("console.projects.sprints.newSprint", undefined, "New Sprint")}
             </Button>
           ) : undefined
         }
       />
       <div className="page-content max-w-5xl space-y-6">
         <div className="metric-grid">
-          <MetricCard label="Sprints" value={String(sprints.length)} />
-          <MetricCard label="Stories" value={String(allStories.length)} />
-          <MetricCard label="Velocity" value={`${velocity} pts`} />
+          <MetricCard label={t("console.projects.sprints.metrics.sprints", undefined, "Sprints")} value={String(sprints.length)} />
+          <MetricCard label={t("console.projects.sprints.metrics.stories", undefined, "Stories")} value={String(allStories.length)} />
+          <MetricCard
+            label={t("console.projects.sprints.metrics.velocity", undefined, "Velocity")}
+            value={t("console.projects.sprints.metrics.velocityValue", { points: velocity }, `${velocity} pts`)}
+          />
         </div>
 
         {sprints.length === 0 ? (
           <EmptyState
-            title="No Sprints Yet"
-            description="Create your first sprint to plan stories on a kanban board and track burndown."
+            title={t("console.projects.sprints.empty", undefined, "No Sprints Yet")}
+            description={t(
+              "console.projects.sprints.emptyDescription",
+              undefined,
+              "Create your first sprint to plan stories on a kanban board and track burndown.",
+            )}
             action={
               canWrite ? (
                 <Button href={`/studio/projects/${projectId}/sprints/new`} size="sm">
-                  New Sprint
+                  {t("console.projects.sprints.newSprint", undefined, "New Sprint")}
                 </Button>
               ) : undefined
             }
@@ -121,13 +133,16 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                   </div>
                   <div className="flex items-center gap-4 text-xs text-[var(--p-text-2)]">
                     <span>
-                      <span className="font-mono text-sm text-[var(--p-text-1)]">{committed}</span> committed
+                      <span className="font-mono text-sm text-[var(--p-text-1)]">{committed}</span>{" "}
+                      {t("console.projects.sprints.points.committed", undefined, "committed")}
                     </span>
                     <span>
-                      <span className="font-mono text-sm text-[var(--p-text-1)]">{done}</span> done
+                      <span className="font-mono text-sm text-[var(--p-text-1)]">{done}</span>{" "}
+                      {t("console.projects.sprints.points.done", undefined, "done")}
                     </span>
                     <span>
-                      <span className="font-mono text-sm text-[var(--p-text-1)]">{remaining}</span> remaining
+                      <span className="font-mono text-sm text-[var(--p-text-1)]">{remaining}</span>{" "}
+                      {t("console.projects.sprints.points.remaining", undefined, "remaining")}
                     </span>
                   </div>
                 </div>
@@ -137,7 +152,7 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                   <div className="surface-inset rounded-md p-3">
                     <div className="mb-1 flex items-center justify-between">
                       <span className="text-[11px] font-medium tracking-[0.18em] text-[var(--p-text-2)] uppercase">
-                        Burndown
+                        {t("console.projects.sprints.burndown", undefined, "Burndown")}
                       </span>
                       {canWrite && (
                         <form action={snapshotBurndownAction}>
@@ -147,19 +162,23 @@ export default async function Page({ params }: { params: Promise<{ projectId: st
                             type="submit"
                             className="ps-btn ps-btn--ghost ps-btn--sm"
                           >
-                            Snapshot Today
+                            {t("console.projects.sprints.snapshotToday", undefined, "Snapshot Today")}
                           </button>
                         </form>
                       )}
                     </div>
-                    <BurndownChart series={series} committed={committed} />
+                    <BurndownChart
+                      series={series}
+                      committed={committed}
+                      label={t("console.projects.sprints.burndownAria", undefined, "Sprint burndown chart")}
+                    />
                   </div>
                 </div>
 
                 {canWrite && (
                   <details className="text-sm">
                     <summary className="cursor-pointer text-[var(--p-text-2)] hover:text-[var(--p-text-1)]">
-                      Add story
+                      {t("console.projects.sprints.addStory", undefined, "Add story")}
                     </summary>
                     <div className="mt-3">
                       <AddStoryForm projectId={projectId} sprintId={sprint.id} />

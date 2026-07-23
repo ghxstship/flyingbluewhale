@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
+import { getRequestT } from "@/lib/i18n/request";
 import type { Goal } from "@/lib/goals";
 import { GoalForm } from "../../GoalForm";
 import { updateGoalAction } from "../../actions";
@@ -14,10 +15,14 @@ export const dynamic = "force-dynamic";
 
 export default async function EditGoalPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Execution" title="Edit Goal" />
+        <ModuleHeader
+          eyebrow={t("console.goals.eyebrow", undefined, "Execution")}
+          title={t("console.goals.editPage.title", undefined, "Edit Goal")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -40,13 +45,13 @@ export default async function EditGoalPage({ params }: { params: Promise<{ id: s
   return (
     <>
       <ModuleHeader
-        eyebrow="Execution"
-        title="Edit Goal"
+        eyebrow={t("console.goals.eyebrow", undefined, "Execution")}
+        title={t("console.goals.editPage.title", undefined, "Edit Goal")}
         breadcrumbs={[
-          { label: "Execution" },
-          { label: "Goals", href: "/studio/goals" },
+          { label: t("console.goals.eyebrow", undefined, "Execution") },
+          { label: t("console.goals.title", undefined, "Goals"), href: "/studio/goals" },
           { label: goal.title, href: `/studio/goals/${goal.id}` },
-          { label: "Edit" },
+          { label: t("console.goals.editPage.breadcrumb", undefined, "Edit") },
         ]}
       />
       <div className="page-content max-w-2xl">
@@ -54,7 +59,7 @@ export default async function EditGoalPage({ params }: { params: Promise<{ id: s
           action={updateGoalAction.bind(null, goal.id)}
           owners={owners}
           goal={goal}
-          submitLabel="Save Goal"
+          submitLabel={t("console.goals.editPage.submit", undefined, "Save Goal")}
         />
       </div>
     </>

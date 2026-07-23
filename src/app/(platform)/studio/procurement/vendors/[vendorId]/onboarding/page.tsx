@@ -6,17 +6,24 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
+import { getRequestT } from "@/lib/i18n/request";
 import { OnboardingChecklist, type OnboardingItem } from "./OnboardingChecklist";
 
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ vendorId: string }> }) {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Vendor" title="Onboarding" />
+        <ModuleHeader
+          eyebrow={t("console.procurement.vendorOnboarding.eyebrow", undefined, "Vendor")}
+          title={t("console.procurement.vendorOnboarding.title", undefined, "Onboarding")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.procurement.vendorOnboarding.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -49,24 +56,39 @@ export default async function Page({ params }: { params: Promise<{ vendorId: str
   const pct = required.length === 0 ? 0 : Math.round((requiredDone / required.length) * 100);
   const status =
     items.length === 0
-      ? { label: "Not started", variant: "muted" as const }
+      ? {
+          label: t("console.procurement.vendorOnboarding.notStarted", undefined, "Not started"),
+          variant: "muted" as const,
+        }
       : requiredDone === required.length
-        ? { label: "Complete", variant: "success" as const }
-        : { label: "In progress", variant: "info" as const };
+        ? {
+            label: t("console.procurement.vendorOnboarding.complete", undefined, "Complete"),
+            variant: "success" as const,
+          }
+        : {
+            label: t("console.procurement.vendorOnboarding.inProgress", undefined, "In progress"),
+            variant: "info" as const,
+          };
 
   return (
     <>
       <ModuleHeader
         eyebrow={(vendor as { name: string }).name}
-        title="Onboarding"
-        subtitle={`${requiredDone}/${required.length} required items cleared`}
+        title={t("console.procurement.vendorOnboarding.title", undefined, "Onboarding")}
+        subtitle={t(
+          "console.procurement.vendorOnboarding.subtitle",
+          { done: requiredDone, total: required.length },
+          `${requiredDone}/${required.length} required items cleared`,
+        )}
         action={<Badge variant={status.variant}>{status.label}</Badge>}
       />
       <div className="page-content max-w-3xl space-y-5">
         {required.length > 0 ? (
           <div className="space-y-1.5">
             <div className="flex justify-between text-xs text-[var(--p-text-2)]">
-              <span>Required completion</span>
+              <span>
+                {t("console.procurement.vendorOnboarding.requiredCompletion", undefined, "Required completion")}
+              </span>
               <span className="tabular-nums">{pct}%</span>
             </div>
             <ProgressBar value={pct} />

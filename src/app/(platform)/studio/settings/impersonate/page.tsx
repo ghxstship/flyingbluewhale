@@ -3,6 +3,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { requireSession } from "@/lib/auth";
 import { createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { PLATFORM_ROLES, PERSONAS } from "@/lib/supabase/types";
+import { getRequestT } from "@/lib/i18n/request";
 import { ImpersonateConsole, type MemberRow } from "./ImpersonateConsole";
 
 export const dynamic = "force-dynamic";
@@ -51,17 +52,26 @@ export default async function ImpersonatePage() {
     }));
   }
 
+  const { t } = await getRequestT();
   return (
     <>
       <ModuleHeader
-        eyebrow="Developer"
-        title="Act As"
-        subtitle="Impersonate a user to reproduce their exact view. Every start and stop is audited."
+        eyebrow={t("console.settings.impersonate.eyebrow", undefined, "Developer")}
+        title={t("console.settings.impersonate.title", undefined, "Act As")}
+        subtitle={t(
+          "console.settings.impersonate.subtitle",
+          undefined,
+          "Impersonate a user to reproduce their exact view. Every start and stop is audited.",
+        )}
       />
       <div className="page-content max-w-5xl space-y-6">
         {!serviceReady ? (
           <div className="surface p-6 text-sm">
-            Impersonation requires the service-role key. Set SUPABASE_SERVICE_ROLE_KEY to enable this console.
+            {t(
+              "console.settings.impersonate.serviceKeyRequired",
+              undefined,
+              "Impersonation requires the service-role key. Set SUPABASE_SERVICE_ROLE_KEY to enable this console.",
+            )}
           </div>
         ) : (
           <ImpersonateConsole

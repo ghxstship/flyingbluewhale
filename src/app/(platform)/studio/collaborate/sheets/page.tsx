@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import type { Sheet } from "@/lib/sheets";
 
 export const dynamic = "force-dynamic";
@@ -13,12 +14,18 @@ export const dynamic = "force-dynamic";
 type SheetListRow = Pick<Sheet, "id" | "name" | "description" | "sheet_state" | "columns" | "updated_at">;
 
 export default async function Page() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Collaborate" title="Sheets" />
+        <ModuleHeader
+          eyebrow={t("console.collaborate.sheets.eyebrow", undefined, "Collaborate")}
+          title={t("console.collaborate.sheets.title", undefined, "Sheets")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.collaborate.sheets.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -40,12 +47,16 @@ export default async function Page() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Collaborate"
-        title="Sheets"
-        subtitle={rows.length === 1 ? "1 sheet" : `${rows.length} sheets`}
+        eyebrow={t("console.collaborate.sheets.eyebrow", undefined, "Collaborate")}
+        title={t("console.collaborate.sheets.title", undefined, "Sheets")}
+        subtitle={
+          rows.length === 1
+            ? t("console.collaborate.sheets.subtitleOne", undefined, "1 sheet")
+            : t("console.collaborate.sheets.subtitleMany", { count: rows.length }, `${rows.length} sheets`)
+        }
         action={
           <Button href="/studio/collaborate/sheets/new" size="sm">
-            + New Sheet
+            {t("console.collaborate.sheets.newSheet", undefined, "+ New Sheet")}
           </Button>
         }
       />
@@ -53,30 +64,34 @@ export default async function Page() {
         <DataView<SheetListRow>
           rows={rows}
           rowHref={(r) => `/studio/collaborate/sheets/${r.id}`}
-          emptyLabel="No sheets yet"
-          emptyDescription="Build an Airtable-style grid: define columns, add rows, edit cells inline, and save in bulk."
+          emptyLabel={t("console.collaborate.sheets.empty", undefined, "No sheets yet")}
+          emptyDescription={t(
+            "console.collaborate.sheets.emptyDescription",
+            undefined,
+            "Build an Airtable-style grid: define columns, add rows, edit cells inline, and save in bulk.",
+          )}
           emptyAction={
             <Button href="/studio/collaborate/sheets/new" size="sm">
-              + New Sheet
+              {t("console.collaborate.sheets.newSheet", undefined, "+ New Sheet")}
             </Button>
           }
           columns={[
             {
               key: "name",
-              header: "Name",
+              header: t("console.collaborate.sheets.columns.name", undefined, "Name"),
               render: (r) => r.name,
               accessor: (r) => r.name,
             },
             {
               key: "columns",
-              header: "Columns",
+              header: t("console.collaborate.sheets.columns.columns", undefined, "Columns"),
               render: (r) => r.columns.length,
               accessor: (r) => r.columns.length,
               mono: true,
             },
             {
               key: "sheet_state",
-              header: "Status",
+              header: t("console.collaborate.sheets.columns.status", undefined, "Status"),
               render: (r) => <StatusBadge status={r.sheet_state} />,
               accessor: (r) => r.sheet_state,
               filterable: true,
@@ -84,7 +99,7 @@ export default async function Page() {
             },
             {
               key: "updated_at",
-              header: "Updated",
+              header: t("console.collaborate.sheets.columns.updated", undefined, "Updated"),
               render: (r) => r.updated_at?.slice(0, 10),
               accessor: (r) => r.updated_at ?? null,
               mono: true,

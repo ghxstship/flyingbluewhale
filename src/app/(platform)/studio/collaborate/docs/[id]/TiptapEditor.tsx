@@ -4,6 +4,7 @@ import { useEditor, EditorContent, type Content } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import type { TiptapDoc } from "@/lib/collaborate";
 
 /**
@@ -62,6 +63,7 @@ export default function TiptapEditor({
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 function Toolbar({ editor }: { editor: any }) {
+  const t = useT();
   const btn = (active: boolean) =>
     `nav-item press-scale text-xs px-2 py-1 ${active ? "text-[var(--p-text-1)] font-semibold" : "text-[var(--p-text-2)]"}`;
   return (
@@ -85,42 +87,42 @@ function Toolbar({ editor }: { editor: any }) {
         className={btn(editor.isActive("bold"))}
         onClick={() => editor.chain().focus().toggleBold().run()}
       >
-        Bold
+        {t("console.collaborate.docs.toolbar.bold", undefined, "Bold")}
       </button>
       <button
         type="button"
         className={btn(editor.isActive("italic"))}
         onClick={() => editor.chain().focus().toggleItalic().run()}
       >
-        Italic
+        {t("console.collaborate.docs.toolbar.italic", undefined, "Italic")}
       </button>
       <button
         type="button"
         className={btn(editor.isActive("bulletList"))}
         onClick={() => editor.chain().focus().toggleBulletList().run()}
       >
-        List
+        {t("console.collaborate.docs.toolbar.list", undefined, "List")}
       </button>
       <button
         type="button"
         className={btn(editor.isActive("orderedList"))}
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
       >
-        1. List
+        {t("console.collaborate.docs.toolbar.orderedList", undefined, "1. List")}
       </button>
       <button
         type="button"
         className={btn(editor.isActive("blockquote"))}
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
       >
-        Quote
+        {t("console.collaborate.docs.toolbar.quote", undefined, "Quote")}
       </button>
       <button
         type="button"
         className={btn(editor.isActive("codeBlock"))}
         onClick={() => editor.chain().focus().toggleCodeBlock().run()}
       >
-        Code
+        {t("console.collaborate.docs.toolbar.code", undefined, "Code")}
       </button>
     </div>
   );
@@ -133,6 +135,7 @@ function Toolbar({ editor }: { editor: any }) {
  * cursor. Consumes the server-sent `delta` events to accumulate text.
  */
 function AiCallout({ onInsert }: { onInsert: (text: string) => void }) {
+  const t = useT();
   const [prompt, setPrompt] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -152,7 +155,7 @@ function AiCallout({ onInsert }: { onInsert: (text: string) => void }) {
       });
       if (!res.ok || !res.body) {
         const j = (await res.json().catch(() => null)) as { error?: { message?: string } } | null;
-        setError(j?.error?.message ?? "AI request failed");
+        setError(j?.error?.message ?? t("console.collaborate.docs.ai.requestFailed", undefined, "AI request failed"));
         return;
       }
       const reader = res.body.getReader();
@@ -182,10 +185,10 @@ function AiCallout({ onInsert }: { onInsert: (text: string) => void }) {
         onInsert(drafted);
         setPrompt("");
       } else {
-        setError("No content was returned");
+        setError(t("console.collaborate.docs.ai.noContent", undefined, "No content was returned"));
       }
     } catch {
-      setError("AI request failed");
+      setError(t("console.collaborate.docs.ai.requestFailed", undefined, "AI request failed"));
     } finally {
       setBusy(false);
     }
@@ -194,7 +197,7 @@ function AiCallout({ onInsert }: { onInsert: (text: string) => void }) {
   return (
     <div className="surface-raised rounded-md p-3">
       <div className="flex items-center gap-2 text-xs font-medium text-[var(--p-text-2)]">
-        AI callout · draft a paragraph
+        {t("console.collaborate.docs.ai.heading", undefined, "AI callout · draft a paragraph")}
       </div>
       <div className="mt-2 flex flex-wrap items-center gap-2">
         <input
@@ -207,12 +210,18 @@ function AiCallout({ onInsert }: { onInsert: (text: string) => void }) {
               void draft();
             }
           }}
-          placeholder="e.g. radio etiquette for load-in crew"
+          placeholder={t(
+            "console.collaborate.docs.ai.placeholder",
+            undefined,
+            "e.g. radio etiquette for load-in crew",
+          )}
           className="ps-input flex-1 min-w-[16rem]"
           disabled={busy}
         />
         <Button type="button" size="sm" loading={busy} onClick={() => void draft()}>
-          {busy ? "Drafting" : "Draft"}
+          {busy
+            ? t("console.collaborate.docs.ai.drafting", undefined, "Drafting")
+            : t("console.collaborate.docs.ai.draft", undefined, "Draft")}
         </Button>
       </div>
       {error && <p className="mt-1.5 text-xs text-[var(--p-danger)]">{error}</p>}

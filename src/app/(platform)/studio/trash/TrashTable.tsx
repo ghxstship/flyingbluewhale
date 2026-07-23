@@ -9,6 +9,7 @@ import { timeAgo } from "@/lib/format";
 import { restoreOrgScoped } from "@/app/(platform)/studio/actions/restore";
 
 import { useActionErrorResolver } from "@/lib/errors-client";
+import { useT } from "@/lib/i18n/LocaleProvider";
 export type TrashRow = { id: string; label: string; deletedAt: string | null };
 
 /**
@@ -19,6 +20,7 @@ export type TrashRow = { id: string; label: string; deletedAt: string | null };
  * record reappears in its normal list.
  */
 export function TrashTable({ table, rows }: { table: string; rows: TrashRow[] }) {
+  const t = useT();
   const router = useRouter();
   const resolveErr = useActionErrorResolver();
   const [items, setItems] = useState(rows);
@@ -34,7 +36,7 @@ export function TrashTable({ table, rows }: { table: string; rows: TrashRow[] })
         setPendingId(null);
         return;
       }
-      toast.success("Restored");
+      toast.success(t("console.trash.restored", undefined, "Restored"));
       setItems((prev) => prev.filter((r) => r.id !== id));
       setPendingId(null);
       router.refresh();
@@ -44,8 +46,12 @@ export function TrashTable({ table, rows }: { table: string; rows: TrashRow[] })
   if (items.length === 0) {
     return (
       <EmptyState
-        title="Nothing here"
-        description="No deleted records of this type. Items you delete elsewhere can be recovered from here."
+        title={t("console.trash.empty", undefined, "Nothing here")}
+        description={t(
+          "console.trash.emptyDescription",
+          undefined,
+          "No deleted records of this type. Items you delete elsewhere can be recovered from here.",
+        )}
       />
     );
   }
@@ -55,9 +61,9 @@ export function TrashTable({ table, rows }: { table: string; rows: TrashRow[] })
       <table className="ps-table">
         <thead>
           <tr>
-            <th>Record</th>
-            <th>Deleted</th>
-            <th className="text-right">Actions</th>
+            <th>{t("console.trash.columns.record", undefined, "Record")}</th>
+            <th>{t("console.trash.columns.deleted", undefined, "Deleted")}</th>
+            <th className="text-right">{t("console.trash.columns.actions", undefined, "Actions")}</th>
           </tr>
         </thead>
         <tbody>
@@ -73,7 +79,7 @@ export function TrashTable({ table, rows }: { table: string; rows: TrashRow[] })
                   loading={pendingId === r.id}
                   onClick={() => restore(r.id)}
                 >
-                  Restore
+                  {t("console.trash.restore", undefined, "Restore")}
                 </Button>
               </td>
             </tr>

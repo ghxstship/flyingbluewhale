@@ -2,6 +2,7 @@
 
 import { FormShell } from "@/components/FormShell";
 import { Input } from "@/components/ui/Input";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { GOAL_STATES, GOAL_STATE_LABELS, type Goal } from "@/lib/goals";
 import type { State } from "./actions";
 
@@ -18,17 +19,24 @@ export function GoalForm({
   goal?: Goal;
   submitLabel: string;
 }) {
+  const t = useT();
   return (
     <FormShell action={action} cancelHref="/studio/goals" submitLabel={submitLabel}>
-      <Input label="Title" name="title" required maxLength={200} defaultValue={goal?.title ?? ""} />
+      <Input
+        label={t("console.goals.form.fields.title", undefined, "Title")}
+        name="title"
+        required
+        maxLength={200}
+        defaultValue={goal?.title ?? ""}
+      />
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="owner_id" className="text-xs font-medium text-[var(--p-text-2)]">
-            Owner
+            {t("console.goals.form.fields.owner", undefined, "Owner")}
           </label>
           <select id="owner_id" name="owner_id" defaultValue={goal?.owner_id ?? ""} className="ps-input mt-1.5 w-full">
-            <option value="">Unassigned</option>
+            <option value="">{t("console.goals.form.unassigned", undefined, "Unassigned")}</option>
             {owners.map((o) => (
               <option key={o.id} value={o.id}>
                 {o.label}
@@ -37,17 +45,17 @@ export function GoalForm({
           </select>
         </div>
         <Input
-          label="Period"
+          label={t("console.goals.form.fields.period", undefined, "Period")}
           name="period"
           maxLength={120}
           defaultValue={goal?.period ?? ""}
-          hint="Planning window, e.g. Q3 2026, FY26, H1."
+          hint={t("console.goals.form.hints.period", undefined, "Planning window, e.g. Q3 2026, FY26, H1.")}
         />
       </div>
 
       <div>
         <label htmlFor="goal_state" className="text-xs font-medium text-[var(--p-text-2)]">
-          State
+          {t("console.goals.form.fields.state", undefined, "State")}
         </label>
         <select
           id="goal_state"
@@ -65,7 +73,7 @@ export function GoalForm({
 
       <div>
         <label htmlFor="description" className="text-xs font-medium text-[var(--p-text-2)]">
-          Description
+          {t("console.goals.form.fields.description", undefined, "Description")}
         </label>
         <textarea
           id="description"

@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/Badge";
 import { assignReviewer, removeReviewer, submitVerdict, type ReviewState } from "./actions";
 
 import { useActionErrorResolver } from "@/lib/errors-client";
+import { useT } from "@/lib/i18n/LocaleProvider";
 export type Reviewer = {
   reviewerId: string;
   name: string;
@@ -14,10 +15,10 @@ export type Reviewer = {
 };
 export type PersonOpt = { id: string; label: string };
 
-const STATE_BADGE: Record<Reviewer["reviewState"], { label: string; variant: "success" | "warning" | "muted" }> = {
-  approved: { label: "Approved", variant: "success" },
-  changes_requested: { label: "Changes Requested", variant: "warning" },
-  pending: { label: "Pending", variant: "muted" },
+const STATE_BADGE_VARIANT: Record<Reviewer["reviewState"], "success" | "warning" | "muted"> = {
+  approved: "success",
+  changes_requested: "warning",
+  pending: "muted",
 };
 
 /**
@@ -51,6 +52,12 @@ export function ReviewPanel({
 }) {
   const [state, formAction, pending] = useActionState<ReviewState, FormData>(assignReviewer, null);
   const resolveErr = useActionErrorResolver();
+  const t = useT();
+  const stateLabels: Record<Reviewer["reviewState"], string> = {
+    approved: t("console.advancing.review.states.approved", undefined, "Approved"),
+    changes_requested: t("console.advancing.review.states.changesRequested", undefined, "Changes Requested"),
+    pending: t("console.advancing.review.states.pending", undefined, "Pending"),
+  };
   const assignedIds = new Set(reviewers.map((r) => r.reviewerId));
   const available = people.filter((p) => !assignedIds.has(p.id));
 
@@ -63,7 +70,7 @@ export function ReviewPanel({
       ) : (
         <ul className="mt-3 space-y-2">
           {reviewers.map((r) => {
-            const badge = STATE_BADGE[r.reviewState];
+            const badge = { label: stateLabels[r.reviewState], variant: STATE_BADGE_VARIANT[r.reviewState] };
             const isMe = r.reviewerId === currentUserId;
             return (
               <li

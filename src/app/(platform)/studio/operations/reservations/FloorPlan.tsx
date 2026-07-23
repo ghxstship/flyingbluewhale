@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import {
   RESERVATION_STATE_LABELS,
   tableStateForReservation,
@@ -45,6 +46,7 @@ function fillVar(effective: VenueTableState): string {
  * the container. All color comes from `--p-*` vars — no raw hex.
  */
 export function FloorPlan({ tables, emptyLabel }: { tables: FloorPlanTable[]; emptyLabel: string }) {
+  const t = useT();
   const router = useRouter();
 
   if (tables.length === 0) {
@@ -66,7 +68,7 @@ export function FloorPlan({ tables, emptyLabel }: { tables: FloorPlanTable[]; em
     <svg
       viewBox={`0 0 ${W} ${H}`}
       role="img"
-      aria-label="Venue floor plan"
+      aria-label={t("console.operations.reservations.floorPlan.aria", undefined, "Venue floor plan")}
       className="w-full"
       style={{
         background: "var(--p-surface-2)",
@@ -90,7 +92,11 @@ export function FloorPlan({ tables, emptyLabel }: { tables: FloorPlanTable[]; em
             style={{ cursor: "pointer" }}
             onClick={() => router.push(goto)}
             role="button"
-            aria-label={`Table ${tbl.table_no}, ${tbl.seats} seats, ${stateLabel}`}
+            aria-label={t(
+              "console.operations.reservations.floorPlan.tableAria",
+              { table: tbl.table_no, seats: tbl.seats, state: stateLabel },
+              `Table ${tbl.table_no}, ${tbl.seats} seats, ${stateLabel}`,
+            )}
           >
             <circle
               cx={cx}

@@ -1,5 +1,7 @@
 import { ShieldOff } from "lucide-react";
 
+import { getRequestT } from "@/lib/i18n/request";
+
 /**
  * The refusal panel for the capabilities admin surfaces.
  *
@@ -10,13 +12,20 @@ import { ShieldOff } from "lucide-react";
  * the org, which is manager-band information (the RLS on the grant
  * tables agrees; the page must too).
  */
-export function AccessGate({ need }: { need: string }) {
+export async function AccessGate({ need }: { need: string }) {
+  const { t } = await getRequestT();
   return (
     <div className="surface mx-auto mt-16 max-w-md p-8 text-center">
       <ShieldOff size={28} className="mx-auto text-[var(--p-text-3)]" aria-hidden="true" />
-      <h1 className="mt-4 text-lg font-semibold">Not authorized</h1>
+      <h1 className="mt-4 text-lg font-semibold">
+        {t("console.settings.capabilities.accessGate.title", undefined, "Not authorized")}
+      </h1>
       <p className="mt-2 text-sm text-[var(--p-text-2)]">
-        Capability administration needs the {need} band. If you think you should have access, ask an org admin.
+        {t(
+          "console.settings.capabilities.accessGate.body",
+          { need },
+          `Capability administration needs the ${need} band. If you think you should have access, ask an org admin.`,
+        )}
       </p>
     </div>
   );

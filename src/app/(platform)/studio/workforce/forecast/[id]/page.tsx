@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
+import { getRequestT } from "@/lib/i18n/request";
 import { WorkloadHeatGrid, type WorkloadLine } from "@/components/views/WorkloadHeatGrid";
 
 export const dynamic = "force-dynamic";
@@ -19,12 +20,18 @@ type Line = WorkloadLine & {
 };
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Workforce" title="Resource Forecast" />
+        <ModuleHeader
+          eyebrow={t("console.workforce.forecast.eyebrow", undefined, "Workforce")}
+          title={t("console.workforce.forecast.title", undefined, "Resource Forecast")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.workforce.forecast.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -56,26 +63,37 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow="Workforce · Resource Forecast"
+        eyebrow={t("console.workforce.forecast.detail.eyebrow", undefined, "Workforce · Resource Forecast")}
         title={hdr.name}
-        subtitle={`${resourceCount} resource${resourceCount === 1 ? "" : "s"} × ${periodCount} period${periodCount === 1 ? "" : "s"} · ${gapCount} gap cell${gapCount === 1 ? "" : "s"}`}
+        subtitle={t(
+          "console.workforce.forecast.detail.subtitle",
+          {
+            resources: `${resourceCount} resource${resourceCount === 1 ? "" : "s"}`,
+            periods: `${periodCount} period${periodCount === 1 ? "" : "s"}`,
+            gaps: `${gapCount} gap cell${gapCount === 1 ? "" : "s"}`,
+          },
+          `${resourceCount} resource${resourceCount === 1 ? "" : "s"} × ${periodCount} period${periodCount === 1 ? "" : "s"} · ${gapCount} gap cell${gapCount === 1 ? "" : "s"}`,
+        )}
         action={<Badge variant="info">{hdr.horizon.replace(/_/g, " ")}</Badge>}
       />
       <div className="page-content space-y-5">
         <div className="metric-grid-3">
-          <MetricCard label="Resources" value={resourceCount} accent />
-          <MetricCard label="Periods" value={periodCount} />
-          <MetricCard label="Gap Cells" value={gapCount} />
+          <MetricCard label={t("console.workforce.forecast.detail.metrics.resources", undefined, "Resources")} value={resourceCount} accent />
+          <MetricCard label={t("console.workforce.forecast.detail.metrics.periods", undefined, "Periods")} value={periodCount} />
+          <MetricCard label={t("console.workforce.forecast.detail.metrics.gapCells", undefined, "Gap Cells")} value={gapCount} />
         </div>
         <div className="flex items-center gap-4 text-[11px] text-[var(--p-text-2)]">
           <span className="inline-flex items-center gap-1.5">
-            <span className="inline-block h-3 w-3 rounded bg-[var(--p-danger)]/20" /> Gap (demand &gt; capacity)
+            <span className="inline-block h-3 w-3 rounded bg-[var(--p-danger)]/20" />{" "}
+            {t("console.workforce.forecast.detail.legend.gap", undefined, "Gap (demand > capacity)")}
           </span>
           <span className="inline-flex items-center gap-1.5">
-            <span className="inline-block h-3 w-3 rounded bg-[var(--p-surface)] ring-1 ring-[var(--p-border)]" /> Balanced
+            <span className="inline-block h-3 w-3 rounded bg-[var(--p-surface)] ring-1 ring-[var(--p-border)]" />{" "}
+            {t("console.workforce.forecast.detail.legend.balanced", undefined, "Balanced")}
           </span>
           <span className="inline-flex items-center gap-1.5">
-            <span className="inline-block h-3 w-3 rounded bg-[var(--p-success)]/15" /> Surplus
+            <span className="inline-block h-3 w-3 rounded bg-[var(--p-success)]/15" />{" "}
+            {t("console.workforce.forecast.detail.legend.surplus", undefined, "Surplus")}
           </span>
         </div>
         <WorkloadHeatGrid lines={lines} />

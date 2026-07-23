@@ -4,12 +4,13 @@ import * as React from "react";
 import { Sparkles, Wrench, ShieldCheck, Gauge } from "lucide-react";
 import type { ChangelogEntry, ChangelogKind } from "@/lib/changelog";
 import { markWhatsNewSeen } from "@/lib/help/whats-new";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
-const KIND_META: Record<ChangelogKind, { label: string; Icon: typeof Sparkles }> = {
-  feature: { label: "New", Icon: Sparkles },
-  improvement: { label: "Improved", Icon: Wrench },
-  security: { label: "Security", Icon: ShieldCheck },
-  performance: { label: "Faster", Icon: Gauge },
+const KIND_ICON: Record<ChangelogKind, typeof Sparkles> = {
+  feature: Sparkles,
+  improvement: Wrench,
+  security: ShieldCheck,
+  performance: Gauge,
 };
 
 type FilterKey = "all" | "feature" | "improvement";
@@ -26,7 +27,14 @@ export function WhatsNewClient({
   entries: ChangelogEntry[];
   labels: { all: string; new: string; improved: string; empty: string };
 }) {
+  const t = useT();
   const [filter, setFilter] = React.useState<FilterKey>("all");
+  const kindLabels: Record<ChangelogKind, string> = {
+    feature: t("console.help.whatsNew.kinds.feature", undefined, "New"),
+    improvement: t("console.help.whatsNew.kinds.improvement", undefined, "Improved"),
+    security: t("console.help.whatsNew.kinds.security", undefined, "Security"),
+    performance: t("console.help.whatsNew.kinds.performance", undefined, "Faster"),
+  };
 
   React.useEffect(() => {
     markWhatsNewSeen();
@@ -65,7 +73,7 @@ export function WhatsNewClient({
       ) : (
         <ol className="space-y-4">
           {shown.map((e) => {
-            const meta = KIND_META[e.kind];
+            const meta = { label: kindLabels[e.kind], Icon: KIND_ICON[e.kind] };
             const Icon = meta.Icon;
             return (
               <li key={e.version} className="surface p-5">

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { useT } from "@/lib/i18n/LocaleProvider";
 
 type ChatTurn = {
   id: string;
@@ -13,11 +14,6 @@ type ChatTurn = {
 };
 
 type Model = "claude-opus-4-7" | "claude-sonnet-4-6";
-
-const MODEL_OPTIONS: ReadonlyArray<{ value: Model; label: string }> = [
-  { value: "claude-sonnet-4-6", label: "Sonnet 4.6 (fast)" },
-  { value: "claude-opus-4-7", label: "Opus 4.7 (deep)" },
-];
 
 /**
  * Client composer for the AI co-pilot conversation detail. POSTs to the
@@ -33,6 +29,11 @@ export function ChatComposer({
   conversationId: string;
   initialTurns: ChatTurn[];
 }) {
+  const t = useT();
+  const MODEL_OPTIONS: ReadonlyArray<{ value: Model; label: string }> = [
+    { value: "claude-sonnet-4-6", label: t("console.assistant.composer.models.sonnet", undefined, "Sonnet 4.6 (fast)") },
+    { value: "claude-opus-4-7", label: t("console.assistant.composer.models.opus", undefined, "Opus 4.7 (deep)") },
+  ];
   const router = useRouter();
   const [turns, setTurns] = useState<ChatTurn[]>(initialTurns);
   const [draft, setDraft] = useState("");
@@ -68,7 +69,11 @@ export function ChatComposer({
 
       if (!res.ok || !res.body) {
         const detail = await res.json().catch(() => null);
-        throw new Error(detail?.error?.message ?? detail?.message ?? "The assistant could not respond.");
+        throw new Error(
+          detail?.error?.message ??
+            detail?.message ??
+            t("console.assistant.composer.errors.noResponse", undefined, "The assistant could not respond."),
+        );
       }
 
       const reader = res.body.getReader();
@@ -103,7 +108,9 @@ export function ChatComposer({
             setStreaming(acc);
             scrollToEnd();
           } else if (eventName === "error") {
-            throw new Error(payload.message ?? "Stream failed.");
+            throw new Error(
+              payload.message ?? t("console.assistant.composer.errors.streamFailed", undefined, "Stream failed."),
+            );
           }
         }
       }
@@ -113,7 +120,11 @@ export function ChatComposer({
       // Re-sync the server transcript (persisted rows, real ids, title).
       router.refresh();
     } catch (e) {
-      setError(e instanceof Error ? e.message : "The assistant could not respond.");
+      setError(
+        e instanceof Error
+          ? e.message
+          : t("console.assistant.composer.errors.noResponse", undefined, "The assistant could not respond."),
+      );
       if (acc) {
         setTurns((prev) => [...prev, { id: `local-a-${Date.now()}`, role: "assistant", content: acc }]);
         setStreaming("");
@@ -133,8 +144,12 @@ export function ChatComposer({
         {turns.length === 0 && !streaming ? (
           <EmptyState
             size="compact"
-            title="No messages yet"
-            description="Ask the assistant about your projects, invoices, deliverables, or crew."
+            title={t("console.assistant.composer.empty", undefined, "No messages yet")}
+            description={t(
+              "console.assistant.composer.emptyDescription",
+              undefined,
+              "Ask the assistant about your projects, invoices, deliverables, or crew.",
+            )}
           />
         ) : null}
         {turns.map((turn) => (
@@ -143,7 +158,11 @@ export function ChatComposer({
         {streaming ? <ChatBubble messageRole="assistant" content={streaming} streaming /> : null}
         {busy && !streaming ? (
           /* kit-ai.css thinking indicator (W5, F-28) — tool-running dots */
-          <p className="ai-think" role="status" aria-label="Thinking">
+          <p
+            className="ai-think"
+            role="status"
+            aria-label={t("console.assistant.composer.thinking", undefined, "Thinking")}
+          >
             <i />
             <i />
             <i />
@@ -157,7 +176,7 @@ export function ChatComposer({
         <textarea
           className="ps-input min-h-[2.75rem] flex-1 resize-y"
           rows={2}
-          placeholder="Message the assistant…"
+          placeholder={t("console.assistant.composer.placeholder", undefined, "Message the assistant…")}
           value={draft}
           disabled={busy}
           onChange={(e) => setDraft(e.target.value)}
@@ -167,7 +186,7 @@ export function ChatComposer({
               void send();
             }
           }}
-          aria-label="Message the assistant"
+          aria-label={t("console.assistant.composer.inputAria", undefined, "Message the assistant")}
         />
         <div className="flex flex-col gap-2">
           <select
@@ -175,7 +194,7 @@ export function ChatComposer({
             value={model}
             disabled={busy}
             onChange={(e) => setModel(e.target.value as Model)}
-            aria-label="Model"
+            aria-label={t("console.assistant.composer.modelAria", undefined, "Model")}
           >
             {MODEL_OPTIONS.map((m) => (
               <option key={m.value} value={m.value}>
@@ -184,11 +203,15 @@ export function ChatComposer({
             ))}
           </select>
           <Button onClick={() => void send()} disabled={busy || draft.trim().length === 0} size="sm">
-            {busy ? "Sending…" : "Send"}
+            {busy
+              ? t("console.assistant.composer.sending", undefined, "Sending…")
+              : t("console.assistant.composer.send", undefined, "Send")}
           </Button>
         </div>
       </div>
-      <p className="font-mono text-[11px] text-[var(--p-text-3)]">⌘/Ctrl + Enter to send</p>
+      <p className="font-mono text-[11px] text-[var(--p-text-3)]">
+        {t("console.assistant.composer.sendHint", undefined, "⌘/Ctrl + Enter to send")}
+      </p>
     </div>
   );
 }

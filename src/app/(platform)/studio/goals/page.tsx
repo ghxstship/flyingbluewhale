@@ -10,6 +10,7 @@ import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
+import { getRequestT } from "@/lib/i18n/request";
 import { goalProgress, formatPercent, type Goal, type KeyResult } from "@/lib/goals";
 
 export const dynamic = "force-dynamic";
@@ -17,10 +18,14 @@ export const dynamic = "force-dynamic";
 type GoalRow = Goal & { progress: number; krCount: number };
 
 export default async function GoalsHubPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Execution" title="Goals" />
+        <ModuleHeader
+          eyebrow={t("console.goals.eyebrow", undefined, "Execution")}
+          title={t("console.goals.title", undefined, "Goals")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -62,46 +67,57 @@ export default async function GoalsHubPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Execution"
-        title="Goals"
-        subtitle={goals.length === 1 ? "1 goal" : `${goals.length} goals`}
-        breadcrumbs={[{ label: "Execution" }, { label: "Goals" }]}
-        action={<Button href="/studio/goals/new">+ New Goal</Button>}
+        eyebrow={t("console.goals.eyebrow", undefined, "Execution")}
+        title={t("console.goals.title", undefined, "Goals")}
+        subtitle={
+          goals.length === 1
+            ? t("console.goals.subtitleOne", undefined, "1 goal")
+            : t("console.goals.subtitleMany", { count: goals.length }, `${goals.length} goals`)
+        }
+        breadcrumbs={[
+          { label: t("console.goals.eyebrow", undefined, "Execution") },
+          { label: t("console.goals.title", undefined, "Goals") },
+        ]}
+        action={<Button href="/studio/goals/new">{t("console.goals.newGoal", undefined, "+ New Goal")}</Button>}
       />
       <div className="page-content">
         {rows.length === 0 ? (
           <EmptyState
-            title="No goals yet"
-            description="Set org objectives and track measurable key results. Progress rolls up from each key result automatically."
-            action={<Button href="/studio/goals/new">+ New Goal</Button>}
+            title={t("console.goals.empty", undefined, "No goals yet")}
+            description={t(
+              "console.goals.emptyDescription",
+              undefined,
+              "Set org objectives and track measurable key results. Progress rolls up from each key result automatically.",
+            )}
+            action={<Button href="/studio/goals/new">{t("console.goals.newGoal", undefined, "+ New Goal")}</Button>}
           />
         ) : (
           <DataView<GoalRow>
             rows={rows}
             rowHref={(g) => `/studio/goals/${g.id}`}
-            emptyLabel="No goals yet"
-            emptyDescription="Create your first objective."
+            emptyLabel={t("console.goals.empty", undefined, "No goals yet")}
+            emptyDescription={t("console.goals.emptyListDescription", undefined, "Create your first objective.")}
             columns={[
               {
                 key: "title",
-                header: "Goal",
+                header: t("console.goals.columns.goal", undefined, "Goal"),
                 render: (g) => g.title,
                 accessor: (g) => g.title,
               },
               {
                 key: "period",
-                header: "Period",
+                header: t("console.goals.columns.period", undefined, "Period"),
                 render: (g) => g.period ?? "—",
                 accessor: (g) => g.period ?? "",
               },
               {
                 key: "progress",
-                header: "Progress",
+                header: t("console.goals.columns.progress", undefined, "Progress"),
                 render: (g) => (
                   <div className="flex items-center gap-2">
                     <ProgressBar
                       value={Math.round(g.progress * 100)}
-                      aria-label={`${g.title} progress`}
+                      aria-label={t("console.goals.progressAria", { title: g.title }, `${g.title} progress`)}
                       className="w-24"
                     />
                     <span className="text-xs text-[var(--p-text-2)]">{formatPercent(g.progress)}</span>
@@ -111,19 +127,19 @@ export default async function GoalsHubPage() {
               },
               {
                 key: "krs",
-                header: "Key Results",
+                header: t("console.goals.columns.keyResults", undefined, "Key Results"),
                 render: (g) => (g.krCount === 1 ? "1" : String(g.krCount)),
                 accessor: (g) => g.krCount,
               },
               {
                 key: "state",
-                header: "Status",
+                header: t("console.goals.columns.status", undefined, "Status"),
                 render: (g) => <StatusBadge status={g.goal_state} />,
                 accessor: (g) => g.goal_state,
               },
               {
                 key: "created",
-                header: "Created",
+                header: t("console.goals.columns.created", undefined, "Created"),
                 render: (g) => timeAgo(g.created_at),
                 accessor: (g) => g.created_at,
               },

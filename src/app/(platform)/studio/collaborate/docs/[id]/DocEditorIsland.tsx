@@ -9,6 +9,7 @@ import { DOC_STATES, DOC_STATE_LABEL, type DocState, type TiptapDoc } from "@/li
 import { saveDoc, type State } from "./actions";
 
 import { useActionErrorResolver } from "@/lib/errors-client";
+import { useT } from "@/lib/i18n/LocaleProvider";
 // Tiptap is browser-only (ProseMirror touches window/document at module
 // eval). Load it via next/dynamic with ssr:false inside this client island
 // so the prod Turbopack build never evaluates it during SSR.
@@ -28,6 +29,7 @@ export function DocEditorIsland({
   initialState: DocState;
   initialContent: TiptapDoc;
 }) {
+  const t = useT();
   const [title, setTitle] = useState(initialTitle);
   const [docState, setDocState] = useState<DocState>(initialState);
   // Held in a ref so editor keystrokes don't re-render the whole island.
@@ -57,7 +59,7 @@ export function DocEditorIsland({
       <div className="surface flex flex-wrap items-end gap-3 p-4">
         <div className="flex-1 min-w-[16rem]">
           <Input
-            label="Title"
+            label={t("console.collaborate.docs.editor.fields.title", undefined, "Title")}
             name="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -66,7 +68,7 @@ export function DocEditorIsland({
         </div>
         <div>
           <label htmlFor="doc-state" className="text-xs font-medium text-[var(--p-text-2)]">
-            State
+            {t("console.collaborate.docs.editor.fields.state", undefined, "State")}
           </label>
           <select
             id="doc-state"
@@ -82,12 +84,14 @@ export function DocEditorIsland({
           </select>
         </div>
         <Button type="button" loading={pending} onClick={save}>
-          {pending ? "Saving" : "Save"}
+          {pending
+            ? t("console.collaborate.docs.editor.saving", undefined, "Saving")
+            : t("console.collaborate.docs.editor.save", undefined, "Save")}
         </Button>
       </div>
 
       {result?.error && <Alert kind="error">{resolveErr(result.error)}</Alert>}
-      {result?.ok && <Alert kind="success">Saved</Alert>}
+      {result?.ok && <Alert kind="success">{t("console.collaborate.docs.editor.saved", undefined, "Saved")}</Alert>}
 
       <TiptapEditor initialContent={initialContent} onChange={onChange} />
     </div>

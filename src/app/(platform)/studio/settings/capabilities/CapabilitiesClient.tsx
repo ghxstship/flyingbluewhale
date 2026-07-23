@@ -14,6 +14,7 @@ import {
 } from "./actions";
 
 import { useActionErrorResolver } from "@/lib/errors-client";
+import { useT } from "@/lib/i18n/LocaleProvider";
 export type MatrixCell = { grantId: string; shiftDerivable: boolean } | null;
 
 export type MatrixRow = {
@@ -56,6 +57,7 @@ export function CapabilitiesClient({
   members: { id: string; email: string }[];
   userGrants: UserGrantRow[];
 }) {
+  const t = useT();
   const router = useRouter();
   const resolveErr = useActionErrorResolver();
   const [pending, startTransition] = useTransition();
@@ -88,24 +90,33 @@ export function CapabilitiesClient({
           hand out", one click changes it. */}
       <div className="surface p-5">
         <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <h2 className="text-sm font-semibold">By Role</h2>
+          <h2 className="text-sm font-semibold">
+            {t("console.settings.capabilities.matrix.byRole", undefined, "By Role")}
+          </h2>
           <a className="text-xs underline text-[var(--p-text-2)]" href="/studio/settings/capabilities/roles">
-            Manage the role catalog
+            {t("console.settings.capabilities.matrix.manageRoleCatalog", undefined, "Manage the role catalog")}
           </a>
         </div>
         <p className="mt-1 text-xs text-[var(--p-text-2)]">
-          Everyone working the role gets the capability. Shift cover means anyone rostered onto a shift for the role
-          also picks it up for that shift window; credential scanning never derives from a shift.
+          {t(
+            "console.settings.capabilities.matrix.byRoleDescription",
+            undefined,
+            "Everyone working the role gets the capability. Shift cover means anyone rostered onto a shift for the role also picks it up for that shift window; credential scanning never derives from a shift.",
+          )}
         </p>
 
         {matrix.length === 0 ? (
-          <p className="mt-4 text-xs text-[var(--p-text-3)]">No roles in the catalog yet.</p>
+          <p className="mt-4 text-xs text-[var(--p-text-3)]">
+            {t("console.settings.capabilities.matrix.noRoles", undefined, "No roles in the catalog yet.")}
+          </p>
         ) : (
           <div className="mt-4 overflow-x-auto">
             <table className="ps-table w-full text-sm">
               <thead>
                 <tr>
-                  <th className="text-left">Role</th>
+                  <th className="text-left">
+                    {t("console.settings.capabilities.matrix.roleColumn", undefined, "Role")}
+                  </th>
                   {catalog.map((c) => (
                     <th key={c.value} className="text-center" title={c.description}>
                       {c.label}
@@ -119,7 +130,13 @@ export function CapabilitiesClient({
                     <td>
                       <span className="font-medium">{row.roleName}</span>
                       <span className="ml-2 text-xs text-[var(--p-text-3)]">
-                        {row.crewCount === 1 ? "1 crew" : `${row.crewCount} crew`}
+                        {row.crewCount === 1
+                          ? t("console.settings.capabilities.matrix.crewOne", undefined, "1 crew")
+                          : t(
+                              "console.settings.capabilities.matrix.crewMany",
+                              { count: row.crewCount },
+                              `${row.crewCount} crew`,
+                            )}
                       </span>
                     </td>
                     {catalog.map((c) => {
@@ -131,7 +148,15 @@ export function CapabilitiesClient({
                               <button
                                 type="button"
                                 disabled={!canEdit || pending}
-                                title={canEdit ? "Granted. Click to revoke." : "Granted"}
+                                title={
+                                  canEdit
+                                    ? t(
+                                        "console.settings.capabilities.matrix.grantedRevokeTitle",
+                                        undefined,
+                                        "Granted. Click to revoke.",
+                                      )
+                                    : t("console.settings.capabilities.matrix.granted", undefined, "Granted")
+                                }
                                 className="ps-badge ps-badge--ok cursor-pointer disabled:cursor-default"
                                 onClick={() => {
                                   if (!canEdit) return;
@@ -140,12 +165,16 @@ export function CapabilitiesClient({
                                   run(revokeRoleCapability, fd);
                                 }}
                               >
-                                Granted
+                                {t("console.settings.capabilities.matrix.granted", undefined, "Granted")}
                               </button>
                               {isShiftDerivable(c.value) && (
                                 <label
                                   className="flex items-center gap-1 text-[11px] text-[var(--p-text-3)]"
-                                  title="Anyone rostered onto a shift for this role gets the capability for that shift window."
+                                  title={t(
+                                    "console.settings.capabilities.matrix.shiftCoverTitle",
+                                    undefined,
+                                    "Anyone rostered onto a shift for this role gets the capability for that shift window.",
+                                  )}
                                 >
                                   <input
                                     type="checkbox"
@@ -158,7 +187,7 @@ export function CapabilitiesClient({
                                       run(setRoleGrantShiftDerivable, fd);
                                     }}
                                   />
-                                  Shift cover
+                                  {t("console.settings.capabilities.matrix.shiftCover", undefined, "Shift cover")}
                                 </label>
                               )}
                             </div>
@@ -167,7 +196,11 @@ export function CapabilitiesClient({
                               size="sm"
                               variant="tertiary"
                               disabled={pending}
-                              title={`Grant ${labelFor(c.value)} to ${row.roleName}`}
+                              title={t(
+                                "console.settings.capabilities.matrix.grantTitle",
+                                { capability: labelFor(c.value), role: row.roleName },
+                                `Grant ${labelFor(c.value)} to ${row.roleName}`,
+                              )}
                               onClick={() => {
                                 const fd = new FormData();
                                 fd.set("crew_role_id", row.roleId);
@@ -175,7 +208,7 @@ export function CapabilitiesClient({
                                 run(grantRoleCapability, fd);
                               }}
                             >
-                              Grant
+                              {t("console.settings.capabilities.matrix.grant", undefined, "Grant")}
                             </Button>
                           ) : (
                             <span className="text-[var(--p-text-3)]">—</span>
@@ -193,16 +226,23 @@ export function CapabilitiesClient({
 
       {/* Individual grants. */}
       <div className="surface p-5">
-        <h2 className="text-sm font-semibold">By Person</h2>
+        <h2 className="text-sm font-semibold">
+          {t("console.settings.capabilities.person.byPerson", undefined, "By Person")}
+        </h2>
         <p className="mt-1 text-xs text-[var(--p-text-2)]">
-          One person, optionally for a set window. This is the cover-shift case: someone has the cage tonight and not
-          tomorrow.
+          {t(
+            "console.settings.capabilities.person.byPersonDescription",
+            undefined,
+            "One person, optionally for a set window. This is the cover-shift case: someone has the cage tonight and not tomorrow.",
+          )}
         </p>
 
         {canEdit && members.length > 0 && (
           <form className="mt-4 flex flex-wrap items-end gap-3" action={(fd) => run(grantUserCapability, fd)}>
             <label className="flex flex-col gap-1">
-              <span className="text-xs text-[var(--p-text-2)]">Person</span>
+              <span className="text-xs text-[var(--p-text-2)]">
+                {t("console.settings.capabilities.person.fields.person", undefined, "Person")}
+              </span>
               <select name="user_id" className="ps-input ps-input--sm" required>
                 {members.map((m) => (
                   <option key={m.id} value={m.id}>
@@ -212,7 +252,9 @@ export function CapabilitiesClient({
               </select>
             </label>
             <label className="flex flex-col gap-1">
-              <span className="text-xs text-[var(--p-text-2)]">Capability</span>
+              <span className="text-xs text-[var(--p-text-2)]">
+                {t("console.settings.capabilities.person.fields.capability", undefined, "Capability")}
+              </span>
               <select name="capability" className="ps-input ps-input--sm" required>
                 {catalog.map((c) => (
                   <option key={c.value} value={c.value}>
@@ -222,31 +264,43 @@ export function CapabilitiesClient({
               </select>
             </label>
             <label className="flex flex-col gap-1">
-              <span className="text-xs text-[var(--p-text-2)]">From</span>
+              <span className="text-xs text-[var(--p-text-2)]">
+                {t("console.settings.capabilities.person.fields.from", undefined, "From")}
+              </span>
               <input type="datetime-local" name="valid_from" className="ps-input ps-input--sm" />
             </label>
             <label className="flex flex-col gap-1">
-              <span className="text-xs text-[var(--p-text-2)]">Until</span>
+              <span className="text-xs text-[var(--p-text-2)]">
+                {t("console.settings.capabilities.person.fields.until", undefined, "Until")}
+              </span>
               <input type="datetime-local" name="valid_until" className="ps-input ps-input--sm" />
             </label>
             <label className="flex flex-col gap-1">
-              <span className="text-xs text-[var(--p-text-2)]">Reason</span>
+              <span className="text-xs text-[var(--p-text-2)]">
+                {t("console.settings.capabilities.person.fields.reason", undefined, "Reason")}
+              </span>
               <input
                 name="reason"
                 className="ps-input ps-input--sm"
                 maxLength={500}
-                placeholder="e.g. covering Dana"
+                placeholder={t(
+                  "console.settings.capabilities.person.placeholders.reason",
+                  undefined,
+                  "e.g. covering Dana",
+                )}
               />
             </label>
             <Button type="submit" size="sm" disabled={pending}>
-              Grant
+              {t("console.settings.capabilities.matrix.grant", undefined, "Grant")}
             </Button>
           </form>
         )}
 
         <div className="mt-4">
           {userGrants.length === 0 ? (
-            <p className="text-xs text-[var(--p-text-3)]">No individual grants.</p>
+            <p className="text-xs text-[var(--p-text-3)]">
+              {t("console.settings.capabilities.person.noGrants", undefined, "No individual grants.")}
+            </p>
           ) : (
             <ul className="divide-y divide-[var(--p-border)]">
               {userGrants.map((g) => (
@@ -257,7 +311,11 @@ export function CapabilitiesClient({
                       lapsed grant is how an operator concludes the permission
                       system is broken. */}
                   <Badge variant={g.live ? "success" : "muted"}>
-                    {g.live ? "Active" : g.lapsed ? "Lapsed" : "Scheduled"}
+                    {g.live
+                      ? t("console.settings.capabilities.person.active", undefined, "Active")
+                      : g.lapsed
+                        ? t("console.settings.capabilities.person.lapsed", undefined, "Lapsed")
+                        : t("console.settings.capabilities.person.scheduled", undefined, "Scheduled")}
                   </Badge>
                   <span className="text-xs text-[var(--p-text-3)]">{g.window}</span>
                   {g.reason && <span className="text-xs text-[var(--p-text-2)]">{g.reason}</span>}
@@ -273,7 +331,7 @@ export function CapabilitiesClient({
                         run(revokeUserCapability, fd);
                       }}
                     >
-                      Revoke
+                      {t("console.settings.capabilities.person.revoke", undefined, "Revoke")}
                     </Button>
                   )}
                 </li>

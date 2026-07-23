@@ -16,9 +16,11 @@ const PAD_B = 22;
 export function BurndownChart({
   series,
   committed,
+  label,
 }: {
   series: BurndownPoint[];
   committed: number;
+  label?: string;
 }) {
   const plotW = VB_W - PAD_L - PAD_R;
   const plotH = VB_H - PAD_T - PAD_B;
@@ -36,7 +38,7 @@ export function BurndownChart({
     <svg
       viewBox={`0 0 ${VB_W} ${VB_H}`}
       role="img"
-      aria-label="Sprint burndown chart"
+      aria-label={label ?? "Sprint burndown chart"}
       className="h-auto w-full"
       preserveAspectRatio="xMidYMid meet"
     >

@@ -17,6 +17,7 @@ import {
 } from "./actions";
 
 import { useActionErrorResolver } from "@/lib/errors-client";
+import { useT } from "@/lib/i18n/LocaleProvider";
 export type OnboardingItem = {
   id: string;
   label: string;
@@ -34,6 +35,7 @@ const STATE_VARIANT: Record<OnboardingItemState, "muted" | "info" | "success" | 
 };
 
 export function OnboardingChecklist({ vendorId, items }: { vendorId: string; items: OnboardingItem[] }) {
+  const t = useT();
   const router = useRouter();
   const resolveErr = useActionErrorResolver();
   const [pending, startTransition] = useTransition();
@@ -57,7 +59,10 @@ export function OnboardingChecklist({ vendorId, items }: { vendorId: string; ite
     const fd = new FormData();
     fd.set("label", label.trim());
     if (required) fd.set("required", "on");
-    run(() => addOnboardingItem(vendorId, null, fd), "Requirement added");
+    run(
+      () => addOnboardingItem(vendorId, null, fd),
+      t("console.procurement.vendorOnboarding.toasts.requirementAdded", undefined, "Requirement added"),
+    );
     setLabel("");
     setRequired(true);
   }
@@ -67,17 +72,30 @@ export function OnboardingChecklist({ vendorId, items }: { vendorId: string; ite
       <div className="surface divide-y divide-[var(--p-border)]">
         {items.length === 0 ? (
           <EmptyState
-            title="No requirements yet"
-            description="Seed the standard due-diligence checklist or add your own below."
+            title={t("console.procurement.vendorOnboarding.empty", undefined, "No requirements yet")}
+            description={t(
+              "console.procurement.vendorOnboarding.emptyDescription",
+              undefined,
+              "Seed the standard due-diligence checklist or add your own below.",
+            )}
             action={
               <Button
                 type="button"
                 size="sm"
                 variant="secondary"
                 loading={pending}
-                onClick={() => run(() => seedOnboardingDefaults(vendorId), "Standard checklist added")}
+                onClick={() =>
+                  run(
+                    () => seedOnboardingDefaults(vendorId),
+                    t(
+                      "console.procurement.vendorOnboarding.toasts.checklistAdded",
+                      undefined,
+                      "Standard checklist added",
+                    ),
+                  )
+                }
               >
-                Seed standard checklist
+                {t("console.procurement.vendorOnboarding.seedChecklist", undefined, "Seed standard checklist")}
               </Button>
             }
           />
@@ -88,23 +106,35 @@ export function OnboardingChecklist({ vendorId, items }: { vendorId: string; ite
                 <div className="flex items-center gap-2">
                   <EditableCell
                     value={it.label}
-                    ariaLabel="Requirement label"
+                    ariaLabel={t(
+                      "console.procurement.vendorOnboarding.requirementLabelAria",
+                      undefined,
+                      "Requirement label",
+                    )}
                     className="text-sm font-medium"
                     maxLength={160}
                     onCommit={(next) => renameOnboardingItem(vendorId, it.id, next)}
                   />
-                  {it.required ? <Badge variant="warning">Required</Badge> : null}
+                  {it.required ? (
+                    <Badge variant="warning">
+                      {t("console.procurement.vendorOnboarding.required", undefined, "Required")}
+                    </Badge>
+                  ) : null}
                 </div>
               </div>
               <Badge variant={STATE_VARIANT[it.item_state]}>{it.item_state}</Badge>
               <select
-                aria-label={`State for ${it.label}`}
+                aria-label={t(
+                  "console.procurement.vendorOnboarding.stateForAria",
+                  { label: it.label },
+                  `State for ${it.label}`,
+                )}
                 value={it.item_state}
                 disabled={pending}
                 onChange={(e) =>
                   run(
                     () => setOnboardingItemState(vendorId, it.id, e.target.value as OnboardingItemState),
-                    "Updated",
+                    t("console.procurement.vendorOnboarding.toasts.updated", undefined, "Updated"),
                   )
                 }
                 className="ps-input w-36 text-xs"
@@ -121,9 +151,13 @@ export function OnboardingChecklist({ vendorId, items }: { vendorId: string; ite
                 size="sm"
                 disabled={pending}
                 onClick={() => run(() => deleteOnboardingItem(vendorId, it.id))}
-                aria-label={`Remove ${it.label}`}
+                aria-label={t(
+                  "console.procurement.vendorOnboarding.removeAria",
+                  { label: it.label },
+                  `Remove ${it.label}`,
+                )}
               >
-                Remove
+                {t("console.procurement.vendorOnboarding.remove", undefined, "Remove")}
               </Button>
             </div>
           ))
@@ -132,21 +166,25 @@ export function OnboardingChecklist({ vendorId, items }: { vendorId: string; ite
 
       <div className="surface flex flex-wrap items-end gap-3 p-3">
         <label className="flex flex-1 flex-col gap-1 text-xs font-medium text-[var(--p-text-2)]">
-          Add requirement
+          {t("console.procurement.vendorOnboarding.addRequirement", undefined, "Add requirement")}
           <input
             value={label}
             onChange={(e) => setLabel(e.target.value)}
-            placeholder="e.g. Safety prequalification (ISN)"
+            placeholder={t(
+              "console.procurement.vendorOnboarding.addPlaceholder",
+              undefined,
+              "e.g. Safety prequalification (ISN)",
+            )}
             className="ps-input w-full"
             maxLength={160}
           />
         </label>
         <label className="flex items-center gap-2 pb-2 text-xs text-[var(--p-text-2)]">
           <input type="checkbox" checked={required} onChange={(e) => setRequired(e.target.checked)} />
-          Required
+          {t("console.procurement.vendorOnboarding.required", undefined, "Required")}
         </label>
         <Button type="button" size="sm" onClick={add} loading={pending} disabled={!label.trim()}>
-          Add
+          {t("console.procurement.vendorOnboarding.add", undefined, "Add")}
         </Button>
       </div>
     </div>

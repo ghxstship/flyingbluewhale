@@ -5,6 +5,7 @@ import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { hasSupabase } from "@/lib/env";
+import { getRequestT } from "@/lib/i18n/request";
 import type { Sheet, SheetColumn, SheetRow } from "@/lib/sheets";
 import { SheetGrid } from "./SheetGrid";
 
@@ -12,12 +13,18 @@ export const dynamic = "force-dynamic";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Sheets" title="Sheet" />
+        <ModuleHeader
+          eyebrow={t("console.collaborate.sheets.new.eyebrow", undefined, "Sheets")}
+          title={t("console.collaborate.sheets.detail.title", undefined, "Sheet")}
+        />
         <div className="page-content">
-          <div className="surface p-6 text-sm">Configure Supabase.</div>
+          <div className="surface p-6 text-sm">
+            {t("console.collaborate.sheets.configureSupabase", undefined, "Configure Supabase.")}
+          </div>
         </div>
       </>
     );
@@ -54,7 +61,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <>
       <ModuleHeader
-        eyebrow="Sheets"
+        eyebrow={t("console.collaborate.sheets.new.eyebrow", undefined, "Sheets")}
         title={s.name}
         subtitle={s.description ?? undefined}
         action={<StatusBadge status={s.sheet_state} />}

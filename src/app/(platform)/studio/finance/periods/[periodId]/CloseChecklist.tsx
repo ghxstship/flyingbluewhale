@@ -6,6 +6,7 @@ import { Check } from "lucide-react";
 import { addCloseTask, toggleCloseTask, type CloseState } from "./close-actions";
 
 import { useActionErrorResolver } from "@/lib/errors-client";
+import { useT } from "@/lib/i18n/LocaleProvider";
 export type CloseItem = { id: string; title: string; done: boolean };
 
 /**
@@ -22,6 +23,7 @@ export function CloseChecklist({
   items: CloseItem[];
   locked: boolean;
 }) {
+  const t = useT();
   const [state, formAction, pending] = useActionState<CloseState, FormData>(addCloseTask, null);
   const resolveErr = useActionErrorResolver();
   const formRef = React.useRef<HTMLFormElement>(null);
@@ -30,21 +32,33 @@ export function CloseChecklist({
   return (
     <section className="surface space-y-3 p-6">
       <div className="flex items-baseline justify-between">
-        <h2 className="text-sm font-semibold tracking-wide uppercase">Close Checklist</h2>
+        <h2 className="text-sm font-semibold tracking-wide uppercase">
+          {t("console.finance.periods.close.heading", undefined, "Close Checklist")}
+        </h2>
         <span className="font-mono text-xs text-[var(--p-text-2)]">
-          {done}/{items.length} done
+          {t("console.finance.periods.close.doneTally", { done, total: items.length }, `${done}/${items.length} done`)}
         </span>
       </div>
 
       {items.length === 0 ? (
-        <p className="text-sm text-[var(--p-text-2)]">Add the reconciliations, accruals, and reviews to close this period.</p>
+        <p className="text-sm text-[var(--p-text-2)]">
+          {t(
+            "console.finance.periods.close.empty",
+            undefined,
+            "Add the reconciliations, accruals, and reviews to close this period.",
+          )}
+        </p>
       ) : (
         <ul className="space-y-1">
           {items.map((it) => (
             <li key={it.id} className="flex items-center gap-2">
               <button
                 type="button"
-                aria-label={it.done ? "Mark not done" : "Mark done"}
+                aria-label={
+                  it.done
+                    ? t("console.finance.periods.close.markNotDone", undefined, "Mark not done")
+                    : t("console.finance.periods.close.markDone", undefined, "Mark done")
+                }
                 disabled={locked}
                 onClick={() => React.startTransition(() => void toggleCloseTask(it.id, periodId, !it.done))}
                 className={`grid h-5 w-5 shrink-0 place-items-center rounded border ${
@@ -74,12 +88,12 @@ export function CloseChecklist({
           <input
             name="title"
             required
-            placeholder="Add a close task…"
+            placeholder={t("console.finance.periods.close.addPlaceholder", undefined, "Add a close task…")}
             className="ps-input flex-1"
-            aria-label="Close checklist item"
+            aria-label={t("console.finance.periods.close.addAria", undefined, "Close checklist item")}
           />
           <button type="submit" className="ps-btn ps-btn--sm" disabled={pending}>
-            Add
+            {t("console.finance.periods.close.add", undefined, "Add")}
           </button>
         </form>
       )}

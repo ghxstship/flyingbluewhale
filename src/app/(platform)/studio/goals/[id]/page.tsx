@@ -17,6 +17,7 @@ import {
   type Goal,
   type KeyResult,
 } from "@/lib/goals";
+import { getRequestT } from "@/lib/i18n/request";
 import { deleteGoalAction, setGoalStateAction } from "../actions";
 import { KeyResultsPanel } from "./KeyResultsPanel";
 
@@ -61,19 +62,24 @@ export default async function GoalDetail({ params }: { params: Promise<{ id: str
   }
 
   const progress = goalProgress(keyResults);
+  const { t } = await getRequestT();
 
   return (
     <>
       <ModuleHeader
-        eyebrow="Goal"
+        eyebrow={t("console.goals.detail.eyebrow", undefined, "Goal")}
         title={goal.title}
         subtitle={goal.period ?? undefined}
-        breadcrumbs={[{ label: "Execution" }, { label: "Goals", href: "/studio/goals" }, { label: goal.title }]}
+        breadcrumbs={[
+          { label: t("console.goals.eyebrow", undefined, "Execution") },
+          { label: t("console.goals.title", undefined, "Goals"), href: "/studio/goals" },
+          { label: goal.title },
+        ]}
         action={
           canEdit ? (
             <div className="flex items-center gap-2">
               <Button href={`/studio/goals/${goal.id}/edit`} size="sm" variant="secondary">
-                Edit
+                {t("console.goals.detail.edit", undefined, "Edit")}
               </Button>
               {GOAL_STATES.filter((s) => s !== goal.goal_state).map((s) => (
                 <form key={s} action={setGoalStateAction.bind(null, goal.id, s)}>
@@ -84,7 +90,7 @@ export default async function GoalDetail({ params }: { params: Promise<{ id: str
               ))}
               <DeleteForm
                 action={deleteGoalAction.bind(null, goal.id)}
-                confirm={`Delete goal "${goal.title}"?`}
+                confirm={t("console.goals.detail.deleteConfirm", { title: goal.title }, `Delete goal "${goal.title}"?`)}
                 undo={{ table: "goals", id: goal.id, redirectTo: "/studio/goals" }}
               />
             </div>
@@ -93,27 +99,36 @@ export default async function GoalDetail({ params }: { params: Promise<{ id: str
       />
       <div className="page-content space-y-8">
         <div className="metric-grid">
-          <Field label="Status">
+          <Field label={t("console.goals.detail.fields.status", undefined, "Status")}>
             <StatusBadge status={goal.goal_state} />
           </Field>
-          <Field label="Owner">{ownerLabel ?? "Unassigned"}</Field>
-          <Field label="Period">{goal.period ?? "—"}</Field>
-          <Field label="Created">{timeAgo(goal.created_at)}</Field>
+          <Field label={t("console.goals.detail.fields.owner", undefined, "Owner")}>
+            {ownerLabel ?? t("console.goals.form.unassigned", undefined, "Unassigned")}
+          </Field>
+          <Field label={t("console.goals.detail.fields.period", undefined, "Period")}>{goal.period ?? "—"}</Field>
+          <Field label={t("console.goals.detail.fields.created", undefined, "Created")}>{timeAgo(goal.created_at)}</Field>
         </div>
 
         <div className="surface p-5">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold">Overall Progress</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.goals.detail.overallProgress", undefined, "Overall Progress")}
+            </h3>
             <span className="text-sm font-medium">{formatPercent(progress)}</span>
           </div>
           <ProgressBar
             value={Math.round(progress * 100)}
-            aria-label="Overall goal progress"
+            aria-label={t("console.goals.detail.overallProgressAria", undefined, "Overall goal progress")}
             className="mt-3"
           />
           <p className="mt-2 text-xs text-[var(--p-text-2)]">
-            Average of {keyResults.length === 1 ? "1 key result" : `${keyResults.length} key results`} (current /
-            target).
+            {keyResults.length === 1
+              ? t("console.goals.detail.averageOfOne", undefined, "Average of 1 key result (current / target).")
+              : t(
+                  "console.goals.detail.averageOfMany",
+                  { count: keyResults.length },
+                  `Average of ${keyResults.length} key results (current / target).`,
+                )}
           </p>
         </div>
 
@@ -121,7 +136,9 @@ export default async function GoalDetail({ params }: { params: Promise<{ id: str
 
         {goal.description && (
           <div className="surface p-5">
-            <h3 className="text-sm font-semibold">Description</h3>
+            <h3 className="text-sm font-semibold">
+              {t("console.goals.detail.description", undefined, "Description")}
+            </h3>
             <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--p-text-2)]">{goal.description}</p>
           </div>
         )}

@@ -7,6 +7,7 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { DeleteForm } from "@/components/DeleteForm";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { krProgress, formatPercent, type KeyResult } from "@/lib/goals";
 import { KeyResultForm } from "../KeyResultForm";
 import {
@@ -30,16 +31,17 @@ export function KeyResultsPanel({
   keyResults: KeyResult[];
   canEdit: boolean;
 }) {
+  const t = useT();
   const [adding, setAdding] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
   return (
     <div className="surface p-5">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold">Key Results</h3>
+        <h3 className="text-sm font-semibold">{t("console.goals.kr.heading", undefined, "Key Results")}</h3>
         {canEdit && !adding && (
           <Button size="sm" variant="secondary" onClick={() => setAdding(true)}>
-            + Add Key Result
+            {t("console.goals.kr.add", undefined, "+ Add Key Result")}
           </Button>
         )}
       </div>
@@ -53,7 +55,7 @@ export function KeyResultsPanel({
               return res;
             }}
             goalId={goalId}
-            submitLabel="Add Key Result"
+            submitLabel={t("console.goals.kr.submitAdd", undefined, "Add Key Result")}
           />
         </div>
       )}
@@ -61,9 +63,19 @@ export function KeyResultsPanel({
       {keyResults.length === 0 && !adding ? (
         <div className="mt-4">
           <EmptyState
-            title="No key results yet"
-            description="Add measurable outcomes so this goal's progress can roll up automatically."
-            action={canEdit ? <Button size="sm" onClick={() => setAdding(true)}>+ Add Key Result</Button> : undefined}
+            title={t("console.goals.kr.empty", undefined, "No key results yet")}
+            description={t(
+              "console.goals.kr.emptyDescription",
+              undefined,
+              "Add measurable outcomes so this goal's progress can roll up automatically.",
+            )}
+            action={
+              canEdit ? (
+                <Button size="sm" onClick={() => setAdding(true)}>
+                  {t("console.goals.kr.add", undefined, "+ Add Key Result")}
+                </Button>
+              ) : undefined
+            }
           />
         </div>
       ) : (
@@ -82,7 +94,7 @@ export function KeyResultsPanel({
                     }}
                     goalId={goalId}
                     keyResult={kr}
-                    submitLabel="Save Key Result"
+                    submitLabel={t("console.goals.kr.submitSave", undefined, "Save Key Result")}
                   />
                 ) : (
                   <div className="space-y-2">
@@ -99,7 +111,7 @@ export function KeyResultsPanel({
                     <div className="flex items-center gap-2">
                       <ProgressBar
                         value={Math.round(progress * 100)}
-                        aria-label={`${kr.title} progress`}
+                        aria-label={t("console.goals.kr.progressAria", { title: kr.title }, `${kr.title} progress`)}
                         className="flex-1"
                       />
                       <Badge variant="muted">{formatPercent(progress)}</Badge>
@@ -107,11 +119,15 @@ export function KeyResultsPanel({
                     {canEdit && (
                       <div className="flex items-center gap-2 pt-1">
                         <Button size="sm" variant="secondary" onClick={() => setEditingId(kr.id)}>
-                          Edit
+                          {t("console.goals.kr.edit", undefined, "Edit")}
                         </Button>
                         <DeleteForm
                           action={deleteKeyResultAction.bind(null, goalId, kr.id)}
-                          confirm={`Delete key result "${kr.title}"?`}
+                          confirm={t(
+                            "console.goals.kr.deleteConfirm",
+                            { title: kr.title },
+                            `Delete key result "${kr.title}"?`,
+                          )}
                           undo={{ table: "key_results", id: kr.id, redirectTo: `/studio/goals/${goalId}` }}
                         />
                       </div>

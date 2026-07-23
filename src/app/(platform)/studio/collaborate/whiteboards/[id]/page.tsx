@@ -6,6 +6,7 @@ import { DeleteForm } from "@/components/DeleteForm";
 import { requireSession, isManagerPlus } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { getWhiteboard } from "@/lib/db/whiteboards";
+import { getRequestT } from "@/lib/i18n/request";
 import { WHITEBOARD_STATES, WHITEBOARD_STATE_LABELS } from "@/lib/whiteboards";
 import { setWhiteboardStateAction, deleteWhiteboardAction } from "../actions";
 import { WhiteboardCanvas } from "./whiteboard-loader";
@@ -25,16 +26,20 @@ export default async function WhiteboardDetail({ params }: { params: Promise<{ i
   // The snapshot is opaque tldraw document state; the canvas validates it on
   // load. Null until the board's first save.
   const initialSnapshot = (board.snapshot ?? null) as TLEditorSnapshot | null;
+  const { t } = await getRequestT();
 
   return (
     <>
       <ModuleHeader
-        eyebrow="Whiteboard"
+        eyebrow={t("console.collaborate.whiteboards.detail.eyebrow", undefined, "Whiteboard")}
         title={board.name}
         subtitle={WHITEBOARD_STATE_LABELS[board.whiteboard_state]}
         breadcrumbs={[
-          { label: "Collaborate" },
-          { label: "Whiteboards", href: "/studio/collaborate/whiteboards" },
+          { label: t("console.collaborate.whiteboards.detail.breadcrumb.collaborate", undefined, "Collaborate") },
+          {
+            label: t("console.collaborate.whiteboards.title", undefined, "Whiteboards"),
+            href: "/studio/collaborate/whiteboards",
+          },
           { label: board.name },
         ]}
         action={
@@ -43,13 +48,19 @@ export default async function WhiteboardDetail({ params }: { params: Promise<{ i
               {WHITEBOARD_STATES.filter((s) => s !== board.whiteboard_state).map((s) => (
                 <form key={s} action={setWhiteboardStateAction.bind(null, board.id, s)}>
                   <Button type="submit" size="sm" variant="secondary">
-                    {s === "archived" ? "Archive" : "Reactivate"}
+                    {s === "archived"
+                      ? t("console.collaborate.whiteboards.detail.archive", undefined, "Archive")
+                      : t("console.collaborate.whiteboards.detail.reactivate", undefined, "Reactivate")}
                   </Button>
                 </form>
               ))}
               <DeleteForm
                 action={deleteWhiteboardAction.bind(null, board.id)}
-                confirm={`Delete whiteboard "${board.name}"?`}
+                confirm={t(
+                  "console.collaborate.whiteboards.detail.deleteConfirm",
+                  { name: board.name },
+                  `Delete whiteboard "${board.name}"?`,
+                )}
                 undo={{ table: "whiteboards", id: board.id, redirectTo: "/studio/collaborate/whiteboards" }}
               />
             </div>

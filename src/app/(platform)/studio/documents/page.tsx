@@ -2,6 +2,7 @@ import Link from "next/link";
 import { DOC_TEMPLATES_BY_APP } from "@/lib/documents/registry";
 import { supportsRecordBinding } from "@/lib/documents/resolvers";
 import { Badge } from "@/components/ui/Badge";
+import { getRequestT } from "@/lib/i18n/request";
 
 /**
  * V6 Documents hub — the cross-app document library. Every one of the 29 doc
@@ -20,18 +21,37 @@ const APP_META: Record<string, { name: string; tagline: string }> = {
 
 const APP_ORDER = ["atlvs", "compvss", "gvteway", "legend"];
 
-export default function DocumentsHubPage() {
+export default async function DocumentsHubPage() {
+  const { t } = await getRequestT();
   const total = Object.values(DOC_TEMPLATES_BY_APP).reduce((n, list) => n + list.length, 0);
+  // Literal keys per app — the extractor needs plain string keys, never
+  // template-literal composition.
+  const taglines: Record<string, string> = {
+    atlvs: t("console.documents.hub.taglines.atlvs", undefined, "Sales, finance & governance documents"),
+    compvss: t("console.documents.hub.taglines.compvss", undefined, "Site & venue operations documents"),
+    gvteway: t("console.documents.hub.taglines.gvteway", undefined, "Public & access documents"),
+    legend: t("console.documents.hub.taglines.legend", undefined, "Knowledge, safety & credential documents"),
+  };
 
   return (
     <main className="mx-auto w-full max-w-6xl px-6 py-8">
       <header className="border-ink mb-8 border-b-3 pb-6">
-        <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">Documents</div>
-        <h1 className="mt-2">DOCUMENT LIBRARY</h1>
+        <div className="text-xs font-semibold tracking-wider text-[var(--p-accent)] uppercase">
+          {t("console.documents.hub.eyebrow", undefined, "Documents")}
+        </div>
+        <h1 className="mt-2">{t("console.documents.hub.title", undefined, "DOCUMENT LIBRARY")}</h1>
         <p className="mt-2 max-w-2xl text-sm text-[var(--p-text-2)]">
-          {total} canonical document types across the four apps. Every document is both the on-screen view and the
-          print/PDF artifact, drives off a <code>data-path</code> merge contract, and white-labels through three brand
-          modes: ATLVS, co-brand, or full white-label.
+          {t(
+            "console.documents.hub.intro",
+            { total },
+            `${total} canonical document types across the four apps. Every document is both the on-screen view and the print/PDF artifact, drives off a `,
+          )}
+          <code>data-path</code>
+          {t(
+            "console.documents.hub.introTail",
+            undefined,
+            " merge contract, and white-labels through three brand modes: ATLVS, co-brand, or full white-label.",
+          )}
         </p>
       </header>
 
@@ -44,7 +64,7 @@ export default function DocumentsHubPage() {
             <section key={app}>
               <div className="mb-4 flex items-baseline gap-3">
                 <h2>{meta.name}</h2>
-                <span className="text-sm text-[var(--p-text-3)]">{meta.tagline}</span>
+                <span className="text-sm text-[var(--p-text-3)]">{taglines[app] ?? meta.tagline}</span>
                 <Badge>{list.length}</Badge>
               </div>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -57,8 +77,15 @@ export default function DocumentsHubPage() {
                     <span className="flex items-center gap-2 font-semibold tracking-tight">
                       {tpl.title}
                       {supportsRecordBinding(tpl.id) && (
-                        <Badge variant="brand" aria-label="Binds live org records via the record picker or ?recordId">
-                          Record-backed
+                        <Badge
+                          variant="brand"
+                          aria-label={t(
+                            "console.documents.hub.recordBackedAria",
+                            undefined,
+                            "Binds live org records via the record picker or ?recordId",
+                          )}
+                        >
+                          {t("console.documents.hub.recordBacked", undefined, "Record-backed")}
                         </Badge>
                       )}
                     </span>

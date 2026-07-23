@@ -3,6 +3,7 @@
 import * as React from "react";
 import { KanbanBoard, type KanbanLane } from "@/components/views/KanbanBoard";
 import { Badge } from "@/components/ui/Badge";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { type FulfillmentState } from "@/lib/db/assignments";
 import { bulkAdvanceAssignments } from "./actions";
 
@@ -26,23 +27,6 @@ export type AssignmentCardRow = {
  * announcement — the lane set is intentionally complete rather than
  * pre-filtered, so the board never hides a state a row might be in.
  */
-const LANES: KanbanLane<AssignmentCardRow>[] = [
-  { id: "briefed", title: "Briefed", tone: "neutral" },
-  { id: "draft", title: "Draft", tone: "neutral" },
-  { id: "submitted", title: "Submitted", tone: "info" },
-  { id: "in_review", title: "In Review", tone: "info" },
-  { id: "revision_requested", title: "Revision Requested", tone: "warn" },
-  { id: "approved", title: "Approved", tone: "success" },
-  { id: "delivered", title: "Delivered", tone: "success" },
-  { id: "issued", title: "Issued", tone: "info" },
-  { id: "transferred", title: "Transferred", tone: "info" },
-  { id: "redeemed", title: "Redeemed", tone: "success" },
-  { id: "returned", title: "Returned", tone: "neutral" },
-  { id: "rejected", title: "Rejected", tone: "error" },
-  { id: "expired", title: "Expired", tone: "error" },
-  { id: "voided", title: "Voided", tone: "error" },
-];
-
 export function AssignmentsKanban({
   projectId,
   rows,
@@ -50,6 +34,27 @@ export function AssignmentsKanban({
   projectId: string;
   rows: AssignmentCardRow[];
 }): React.ReactElement {
+  const t = useT();
+  const lanes: KanbanLane<AssignmentCardRow>[] = [
+    { id: "briefed", title: t("console.projects.assignmentsKanban.lanes.briefed", undefined, "Briefed"), tone: "neutral" },
+    { id: "draft", title: t("console.projects.assignmentsKanban.lanes.draft", undefined, "Draft"), tone: "neutral" },
+    { id: "submitted", title: t("console.projects.assignmentsKanban.lanes.submitted", undefined, "Submitted"), tone: "info" },
+    { id: "in_review", title: t("console.projects.assignmentsKanban.lanes.inReview", undefined, "In Review"), tone: "info" },
+    {
+      id: "revision_requested",
+      title: t("console.projects.assignmentsKanban.lanes.revisionRequested", undefined, "Revision Requested"),
+      tone: "warn",
+    },
+    { id: "approved", title: t("console.projects.assignmentsKanban.lanes.approved", undefined, "Approved"), tone: "success" },
+    { id: "delivered", title: t("console.projects.assignmentsKanban.lanes.delivered", undefined, "Delivered"), tone: "success" },
+    { id: "issued", title: t("console.projects.assignmentsKanban.lanes.issued", undefined, "Issued"), tone: "info" },
+    { id: "transferred", title: t("console.projects.assignmentsKanban.lanes.transferred", undefined, "Transferred"), tone: "info" },
+    { id: "redeemed", title: t("console.projects.assignmentsKanban.lanes.redeemed", undefined, "Redeemed"), tone: "success" },
+    { id: "returned", title: t("console.projects.assignmentsKanban.lanes.returned", undefined, "Returned"), tone: "neutral" },
+    { id: "rejected", title: t("console.projects.assignmentsKanban.lanes.rejected", undefined, "Rejected"), tone: "error" },
+    { id: "expired", title: t("console.projects.assignmentsKanban.lanes.expired", undefined, "Expired"), tone: "error" },
+    { id: "voided", title: t("console.projects.assignmentsKanban.lanes.voided", undefined, "Voided"), tone: "error" },
+  ];
   const onMove = React.useCallback(
     async (rowId: string, toLaneId: string) => {
       // Single-row drag reuses the bulk transition action (one id): it
@@ -65,16 +70,22 @@ export function AssignmentsKanban({
   return (
     <KanbanBoard<AssignmentCardRow>
       rows={rows}
-      lanes={LANES}
+      lanes={lanes}
       laneOf={(r) => r.fulfillment_state}
       hrefOf={(r) => `/studio/projects/${projectId}/advancing/assignments/${r.id}`}
       onMove={onMove}
-      emptyTitle="No Assignments Yet"
-      emptyDescription="Whatever you assign here lands on the assignee's portal and mobile views in real time."
+      emptyTitle={t("console.projects.assignmentsKanban.empty", undefined, "No Assignments Yet")}
+      emptyDescription={t(
+        "console.projects.assignmentsKanban.emptyDescription",
+        undefined,
+        "Whatever you assign here lands on the assignee's portal and mobile views in real time.",
+      )}
       renderCard={(r) => (
         <div className="space-y-1.5">
           <div className="flex items-start justify-between gap-2">
-            <span className="line-clamp-2 text-sm font-medium text-[var(--p-text-1)]">{r.title ?? "Untitled"}</span>
+            <span className="line-clamp-2 text-sm font-medium text-[var(--p-text-1)]">
+              {r.title ?? t("console.projects.assignmentsKanban.untitled", undefined, "Untitled")}
+            </span>
             <span className="shrink-0 font-mono text-[11px] text-[var(--p-text-2)]">{r.kindLabel}</span>
           </div>
           <div className="flex items-center justify-between gap-2 text-xs text-[var(--p-text-2)]">

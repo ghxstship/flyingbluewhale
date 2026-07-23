@@ -7,6 +7,7 @@ import { listOrgScopedWithCount } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
 import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
+import { getRequestT } from "@/lib/i18n/request";
 import type { BeoState } from "@/lib/beos";
 
 export const dynamic = "force-dynamic";
@@ -23,10 +24,11 @@ type BeoRow = {
 };
 
 export default async function BeosPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader title="BEOs" />
+        <ModuleHeader title={t("console.sales.beos.title", undefined, "BEOs")} />
         <ConfigureSupabase />
       </>
     );
@@ -42,10 +44,14 @@ export default async function BeosPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Sales"
-        title="BEOs"
-        subtitle={totalCount === 1 ? "1 Banquet Event Order" : `${totalCount} Banquet Event Orders`}
-        action={<Button href="/studio/sales/beos/new">+ New BEO</Button>}
+        eyebrow={t("console.sales.beos.eyebrow", undefined, "Sales")}
+        title={t("console.sales.beos.title", undefined, "BEOs")}
+        subtitle={
+          totalCount === 1
+            ? t("console.sales.beos.subtitleOne", undefined, "1 Banquet Event Order")
+            : t("console.sales.beos.subtitleMany", { count: totalCount }, `${totalCount} Banquet Event Orders`)
+        }
+        action={<Button href="/studio/sales/beos/new">{t("console.sales.beos.newBeo", undefined, "+ New BEO")}</Button>}
       />
       <div className="page-content">
         <DataView<BeoRow>
@@ -55,43 +61,43 @@ export default async function BeosPage() {
           columns={[
             {
               key: "event_name",
-              header: "Event",
+              header: t("console.sales.beos.columns.event", undefined, "Event"),
               render: (r) => r.event_name,
               accessor: (r) => r.event_name,
             },
             {
               key: "beo_number",
-              header: "BEO #",
+              header: t("console.sales.beos.columns.beoNumber", undefined, "BEO #"),
               render: (r) => r.beo_number ?? "—",
               accessor: (r) => r.beo_number ?? null,
             },
             {
               key: "event_date",
-              header: "Date",
+              header: t("console.sales.beos.columns.date", undefined, "Date"),
               render: (r) => r.event_date ?? "—",
               accessor: (r) => r.event_date ?? null,
             },
             {
               key: "space",
-              header: "Space",
+              header: t("console.sales.beos.columns.space", undefined, "Space"),
               render: (r) => r.space ?? "—",
               accessor: (r) => r.space ?? null,
             },
             {
               key: "headcount",
-              header: "Pax",
+              header: t("console.sales.beos.columns.pax", undefined, "Pax"),
               render: (r) => String(r.headcount),
               accessor: (r) => r.headcount,
             },
             {
               key: "beo_state",
-              header: "Status",
+              header: t("console.sales.beos.columns.status", undefined, "Status"),
               render: (r) => <StatusBadge status={r.beo_state} />,
               accessor: (r) => r.beo_state,
             },
             {
               key: "created",
-              header: "Added",
+              header: t("console.sales.beos.columns.added", undefined, "Added"),
               render: (r) => timeAgo(r.created_at),
               accessor: (r) => r.created_at,
             },

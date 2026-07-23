@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
+import { getRequestT } from "@/lib/i18n/request";
 import { formatBps } from "@/lib/discounts_promoters";
 
 export const dynamic = "force-dynamic";
@@ -23,10 +24,14 @@ type PromoterRow = {
 };
 
 export default async function PromotersPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Sales" title="Promoters" />
+        <ModuleHeader
+          eyebrow={t("console.marketplace.discounts.eyebrow", undefined, "Sales")}
+          title={t("console.marketplace.discounts.promoters", undefined, "Promoters")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -45,15 +50,33 @@ export default async function PromotersPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Sales"
-        title="Promoters"
-        subtitle={rows.length === 1 ? "1 affiliate" : `${rows.length} affiliates`}
+        eyebrow={t("console.marketplace.discounts.eyebrow", undefined, "Sales")}
+        title={t("console.marketplace.discounts.promoters", undefined, "Promoters")}
+        subtitle={
+          rows.length === 1
+            ? t("console.marketplace.discounts.promotersTree.subtitleOne", undefined, "1 affiliate")
+            : t(
+                "console.marketplace.discounts.promotersTree.subtitleMany",
+                { count: rows.length },
+                `${rows.length} affiliates`,
+              )
+        }
         breadcrumbs={[
-          { label: "Marketplace", href: "/studio/marketplace" },
-          { label: "Discounts", href: "/studio/marketplace/discounts" },
-          { label: "Promoters" },
+          {
+            label: t("console.marketplace.discounts.breadcrumb.marketplace", undefined, "Marketplace"),
+            href: "/studio/marketplace",
+          },
+          {
+            label: t("console.marketplace.discounts.title", undefined, "Discounts"),
+            href: "/studio/marketplace/discounts",
+          },
+          { label: t("console.marketplace.discounts.promoters", undefined, "Promoters") },
         ]}
-        action={<Button href="/studio/marketplace/discounts/promoters/new">+ New Promoter</Button>}
+        action={
+          <Button href="/studio/marketplace/discounts/promoters/new">
+            {t("console.marketplace.discounts.promotersTree.newPromoter", undefined, "+ New Promoter")}
+          </Button>
+        }
       />
       <div className="page-content">
         <DataView<PromoterRow>
@@ -62,38 +85,38 @@ export default async function PromotersPage() {
           columns={[
             {
               key: "name",
-              header: "Name",
+              header: t("console.marketplace.discounts.promotersTree.columns.name", undefined, "Name"),
               render: (r) => r.name,
               accessor: (r) => r.name,
             },
             {
               key: "email",
-              header: "Email",
+              header: t("console.marketplace.discounts.promotersTree.columns.email", undefined, "Email"),
               render: (r) => r.email ?? "—",
               accessor: (r) => r.email ?? null,
             },
             {
               key: "ref",
-              header: "Ref Code",
+              header: t("console.marketplace.discounts.promotersTree.columns.refCode", undefined, "Ref Code"),
               render: (r) => r.ref_code ?? "—",
               mono: true,
               accessor: (r) => r.ref_code ?? null,
             },
             {
               key: "commission",
-              header: "Commission",
+              header: t("console.marketplace.discounts.promotersTree.columns.commission", undefined, "Commission"),
               render: (r) => formatBps(r.commission_bps),
               accessor: (r) => r.commission_bps,
             },
             {
               key: "state",
-              header: "Status",
+              header: t("console.marketplace.discounts.promotersTree.columns.status", undefined, "Status"),
               render: (r) => <StatusBadge status={r.promoter_state} />,
               accessor: (r) => r.promoter_state,
             },
             {
               key: "created",
-              header: "Added",
+              header: t("console.marketplace.discounts.promotersTree.columns.added", undefined, "Added"),
               render: (r) => timeAgo(r.created_at),
               accessor: (r) => r.created_at,
             },

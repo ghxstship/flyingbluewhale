@@ -3,7 +3,7 @@ import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
@@ -46,6 +46,9 @@ export default async function SignageLibraryPage({
     );
   }
   const session = await requireSession();
+  // Browse stays open to every member; authoring affordances are manager-band
+  // (the /new and /edit pages are page-gated with AccessDenied — L-P6d).
+  const canAuthor = isManagerPlus(session);
   const { q, category, standard } = await searchParams;
   const activeCategory = SIGNAGE_CATEGORIES.includes(category as SignageCategory)
     ? (category as SignageCategory)
@@ -97,7 +100,11 @@ export default async function SignageLibraryPage({
             ? t("console.legend.signage.oneSign", undefined, "1 sign")
             : t("console.legend.signage.nSigns", { count: signs.length }, `${signs.length} signs`)
         }
-        action={<Button href="/legend/signage/new">{t("console.legend.signage.newSign", undefined, "+ New Sign")}</Button>}
+        action={
+          canAuthor ? (
+            <Button href="/legend/signage/new">{t("console.legend.signage.newSign", undefined, "+ New Sign")}</Button>
+          ) : undefined
+        }
       />
       <div className="page-content space-y-4">
         {/* Search + facet row (D-25). GET form keeps this a zero-JS server surface. */}
@@ -180,7 +187,11 @@ export default async function SignageLibraryPage({
                 undefined,
                 "Build your life-safety and wayfinding catalog on ISO 7010, DOT-AIGA, and ISA pictograms.",
               )}
-              action={<Button href="/legend/signage/new">{t("console.legend.signage.newSign", undefined, "+ New Sign")}</Button>}
+              action={
+                canAuthor ? (
+                  <Button href="/legend/signage/new">{t("console.legend.signage.newSign", undefined, "+ New Sign")}</Button>
+                ) : undefined
+              }
             />
           )
         ) : (

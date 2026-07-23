@@ -210,6 +210,7 @@ export const ACTION_ERROR_FALLBACKS = {
  "auth.owner-admin.resend": "Only owners and admins can resend.",
  "auth.owner-admin.revoke": "Only owners and admins can revoke.",
  "auth.owner-admin.transition-accounting-periods": "Only owners and admins can transition accounting periods",
+ "auth.read-only.legend": "Your access is read-only. Ask an org admin for member access to participate.",
  "automation-is-disabled": "Automation is disabled",
  "bad-acquisition-cost": "Bad acquisition cost",
  "bad-amount": "Bad amount",

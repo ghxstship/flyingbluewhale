@@ -41,6 +41,10 @@ const LEARNER_WRITE_POLICIES: ReadonlyArray<{ table: string; policy: string }> =
   { table: "assessment_attempts", policy: "assessment_attempts_insert" },
   { table: "community_posts", policy: "community_posts_insert" },
   { table: "legend_session_registrations", policy: "legend_session_registrations_insert" },
+  // Crew self-service join (PERSONA_MATRIX S-2, migration 20260723180000) —
+  // the manager-band legend_crew_members_write policy stays for roster
+  // curation; this is the learner's own-row insert band.
+  { table: "legend_crew_members", policy: "legend_crew_members_self_insert" },
 ];
 
 /**

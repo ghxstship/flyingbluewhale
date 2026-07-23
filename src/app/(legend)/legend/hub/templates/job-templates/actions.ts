@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
+import { assertLegendWrite } from "@/lib/legend_access";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { urlFor } from "@/lib/urls";
@@ -24,6 +25,8 @@ const Schema = z.object({
 
 export async function createJobTemplateAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  const denied = assertLegendWrite(session);
+  if (denied) return denied;
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();
@@ -66,6 +69,8 @@ export async function createJobTemplateAction(_: State, fd: FormData): Promise<S
  */
 export async function createWorkOrderFromTemplate(templateId: string): Promise<void> {
   const session = await requireSession();
+  const denied = assertLegendWrite(session);
+  if (denied) throw new Error(denied.error);
   const supabase = await createClient();
 
   const { data: tpl } = await supabase

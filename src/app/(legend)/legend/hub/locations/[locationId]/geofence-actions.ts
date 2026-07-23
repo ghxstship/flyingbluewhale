@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
+import { assertLegendWrite } from "@/lib/legend_access";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
 
@@ -30,6 +31,8 @@ const CreateSchema = z.object({
 
 export async function createGeofence(locationId: string, _prev: GeofenceState, fd: FormData): Promise<GeofenceState> {
   const session = await requireSession();
+  const denied = assertLegendWrite(session);
+  if (denied) return denied;
   const parsed = CreateSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const v = parsed.data;
@@ -61,6 +64,8 @@ export async function createGeofence(locationId: string, _prev: GeofenceState, f
 /** Flip a fence's `active` flag. Plain-form action (no field errors possible). */
 export async function toggleGeofence(geofenceId: string, locationId: string): Promise<void> {
   const session = await requireSession();
+  const denied = assertLegendWrite(session);
+  if (denied) throw new Error(denied.error);
   const supabase = await createClient();
   const { data: row } = await supabase
     .from("venue_geofences")
@@ -79,6 +84,8 @@ export async function toggleGeofence(geofenceId: string, locationId: string): Pr
 
 export async function deleteGeofence(geofenceId: string, locationId: string): Promise<void> {
   const session = await requireSession();
+  const denied = assertLegendWrite(session);
+  if (denied) throw new Error(denied.error);
   const supabase = await createClient();
   await supabase.from("venue_geofences").delete().eq("id", geofenceId).eq("org_id", session.orgId);
   revalidatePath(`/legend/hub/locations/${locationId}`);

@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { submitReviewAction, type State } from "./review-actions";
+import { resolveActionError } from "@/lib/errors";
 
 /**
  * Course review form. Pre-fills the learner's existing review (if any) so the
@@ -58,7 +59,7 @@ export function ReviewForm({
       </div>
       {state?.error && (
         <p className="text-xs text-[var(--p-danger)]" role="alert">
-          {state.error}
+          {resolveActionError(state.error, t)}
         </p>
       )}
       {state?.ok && <p className="text-xs text-[var(--p-success)]">{state.ok}</p>}

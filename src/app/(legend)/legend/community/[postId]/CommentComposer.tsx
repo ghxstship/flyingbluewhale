@@ -3,6 +3,7 @@
 import { useActionState, useRef } from "react";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { addCommentAction, type State } from "../actions";
+import { resolveActionError } from "@/lib/errors";
 
 /** Answer/comment composer for a community post (kit 21 R2). */
 export function CommentComposer({ postId }: { postId: string }) {
@@ -29,7 +30,7 @@ export function CommentComposer({ postId }: { postId: string }) {
       />
       {state?.error && (
         <p role="alert" className="mt-1 text-xs text-[var(--p-danger-text)]">
-          {state.error}
+          {resolveActionError(state.error, t)}
         </p>
       )}
       <div className="mt-2 flex justify-end">

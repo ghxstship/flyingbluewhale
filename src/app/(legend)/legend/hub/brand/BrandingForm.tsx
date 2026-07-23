@@ -10,6 +10,7 @@ import { LogoUploader } from "@/components/branding/LogoUploader";
 import { BRAND_FALLBACK } from "@/lib/branding";
 import { bestInk, contrastRatio, wcagLevel } from "@/lib/theme/contrast-util";
 import { updateBrandingAction, type BrandingState } from "./actions";
+import { resolveActionError } from "@/lib/errors";
 
 type Initial = {
   productName: string;
@@ -205,7 +206,7 @@ export function BrandingForm({ initial }: { initial: Initial }) {
         </div>
       </section>
 
-      {state?.error ? <Alert kind="error">{state.error}</Alert> : null}
+      {state?.error ? <Alert kind="error">{resolveActionError(state.error, t)}</Alert> : null}
 
       <div className="flex justify-end">
         <Button type="submit" disabled={pending}>

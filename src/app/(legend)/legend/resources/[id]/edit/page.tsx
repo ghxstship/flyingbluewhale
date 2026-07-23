@@ -1,10 +1,11 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
+import { AccessDenied } from "@/components/ui/AccessDenied";
 import type { Resource, ResourceCollection } from "@/lib/legend_resources";
 import { ResourceForm } from "../../ResourceForm";
 import { updateResourceAction } from "../../actions";
@@ -27,6 +28,9 @@ export default async function EditResourcePage({ params }: { params: Promise<{ i
     );
   }
   const session = await requireSession();
+  if (!isManagerPlus(session)) {
+    return <AccessDenied requiredRole="Manager" backHref="/legend/resources" />;
+  }
   const db = (await createClient()) as unknown as LooseSupabase;
 
   const [{ data }, { data: cData }] = await Promise.all([

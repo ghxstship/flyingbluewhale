@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
+import { assertLegendWrite } from "@/lib/legend_access";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 
@@ -15,6 +16,8 @@ export type State = { error?: string; ok?: string } | null;
  */
 export async function registerForSessionAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  const denied = assertLegendWrite(session);
+  if (denied) return denied;
   const parsed = z.object({ session_id: z.string().uuid() }).safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: "Invalid session" };
   const db = (await createClient()) as unknown as LooseSupabase;
@@ -61,6 +64,8 @@ export async function registerForSessionAction(_: State, fd: FormData): Promise<
 /** Cancel the caller's registration for a session. */
 export async function cancelRegistrationAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  const denied = assertLegendWrite(session);
+  if (denied) return denied;
   const parsed = z.object({ session_id: z.string().uuid() }).safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: "Invalid session" };
   const db = (await createClient()) as unknown as LooseSupabase;

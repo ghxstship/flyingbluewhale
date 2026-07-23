@@ -18,8 +18,10 @@
  *     there since the page gates first).
  *   • Signage library — sign create → SignPanel wayfinding render (real
  *     `<use href="…#aiga-*">` sprite), a placement that rolls up the Installed
- *     total, a draft→published state transition, and the ACTION-level refusal
- *     (the /signage/new PAGE has no gate — only `createSignAction` does).
+ *     total, a draft→published state transition, and the page-level
+ *     AccessDenied on /signage/new (L-P6d brought signage/resources authoring
+ *     onto the same page-gate pattern as the engine; `createSignAction` keeps
+ *     its manager gate underneath).
  *   • Certifications / recert — a recert REQUEST from the wallet (append-only
  *     `certification_recerts` insert) and the manager-only Recert Matrix grid
  *     DEPTH (member × certification table + six-state legend with counts) that
@@ -359,26 +361,20 @@ test.describe("LEG3ND deep coverage (learner/member · crew)", () => {
     expect(page.url(), "the member is not bounced to /login").not.toMatch(/\/login/);
   });
 
-  test("Signage authoring is action-gated for a member", async ({ page }) => {
-    // /legend/signage/new has NO page-level gate → the form renders for a member.
+  test("Signage authoring is page-gated for a member", async ({ page }) => {
+    // L-P6d (PERSONA_MATRIX S-4): /legend/signage/new is now page-gated like
+    // the engine — the member sees AccessDenied instead of a form whose action
+    // would refuse. createSignAction keeps its own isManagerPlus gate as the
+    // defense-in-depth layer.
     await page.goto("/legend/signage/new");
-    const form = page.locator("main form").first();
-    await expect(form, "the sign form renders for the member (no page gate)").toBeVisible({ timeout: 15_000 });
-    await form.locator('[name="code"]').fill(`ISO-X${stamp()}`);
-    await form.locator('[name="name"]').fill(`E2E Blocked Sign ${stamp()}`);
-    await form.locator('[name="pictogram_key"]').fill("aiga-exit");
-    await form.locator('[name="category"]').selectOption("safe_condition");
-    await form.evaluate((f: HTMLFormElement) => f.requestSubmit());
-
-    // createSignAction runs requireSession + isManagerPlus → { error }, surfaced
-    // by FormShell's error Alert. The form stays on /signage/new (no redirect).
-    // The refusal renders twice (inline Alert + sr-only aria-live region) —
-    // take the first.
     await expect(
-      page.getByText(/only manager\+ can create signs/i).first(),
-      "the action-level refusal message surfaces in the form",
+      page.getByText(/you don'?t have access/i).first(),
+      "the member sees the AccessDenied EmptyState",
     ).toBeVisible({ timeout: 15_000 });
-    await expect(page, "the form did not redirect to a sign detail").toHaveURL(/\/legend\/signage\/new(\?|$)/);
+    // The sign form never rendered.
+    await expect(page.locator('main form [name="code"]')).toHaveCount(0);
+    // AccessDenied is a render, NOT an auth bounce.
+    expect(page.url(), "the member is not bounced to /login").not.toMatch(/\/login/);
   });
 
   test("Certifications: request recert from the wallet", async ({ page }) => {

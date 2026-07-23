@@ -5,6 +5,7 @@ import { useActionState } from "react";
 import { Badge } from "@/components/ui/Badge";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { setAtomEnabledAction, setAtomOrgLabelAction, type State } from "./actions";
+import { resolveActionError } from "@/lib/errors";
 
 /**
  * Row controls for the XPMS Catalog pillar (LEG3ND P4): the org overlay's
@@ -35,7 +36,7 @@ export function AtomEnabledToggle({ atomId, enabled }: { atomId: string; enabled
           setError(null);
           startTransition(async () => {
             const res = await setAtomEnabledAction(atomId, !enabled);
-            if (res?.error) setError(res.error);
+            if (res?.error) setError(resolveActionError(res.error, t));
           });
         }}
       >
@@ -112,7 +113,7 @@ export function AtomLabelEditor({
       >
         {t("console.legend.hub.xpms.cancel", undefined, "Cancel")}
       </button>
-      {state?.error ? <span className="text-[11px] text-[var(--p-danger-text)]">{state.error}</span> : null}
+      {state?.error ? <span className="text-[11px] text-[var(--p-danger-text)]">{resolveActionError(state.error, t)}</span> : null}
     </form>
   );
 }

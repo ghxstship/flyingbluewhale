@@ -9,6 +9,8 @@ import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { pointsByUser } from "@/lib/db/legend-people";
 import { rankCrews, type Crew, type CrewStanding } from "@/lib/legend_crew";
+import { isLegendReadOnly } from "@/lib/legend_access";
+import { CrewJoinButton } from "./CrewJoinButton";
 import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
@@ -93,19 +95,26 @@ export default async function CrewPage() {
       ) : (
         <div className="surface flex flex-col gap-1 p-2">
           {ranked.map((s) => (
-            <LeaderboardRow
-              key={s.crew.id}
-              rank={s.rank}
-              name={s.crew.name}
-              avatarUrl={null}
-              points={s.points}
-              subtitle={
-                s.memberCount === 1
-                  ? t("console.legend.crew.oneMember", undefined, "1 member")
-                  : t("console.legend.crew.nMembers", { count: s.memberCount }, `${s.memberCount} members`)
-              }
-              highlight={myCrewIds.has(s.crew.id)}
-            />
+            <div key={s.crew.id} className="flex items-center gap-2">
+              <div className="min-w-0 flex-1">
+                <LeaderboardRow
+                  rank={s.rank}
+                  name={s.crew.name}
+                  avatarUrl={null}
+                  points={s.points}
+                  subtitle={
+                    s.memberCount === 1
+                      ? t("console.legend.crew.oneMember", undefined, "1 member")
+                      : t("console.legend.crew.nMembers", { count: s.memberCount }, `${s.memberCount} members`)
+                  }
+                  highlight={myCrewIds.has(s.crew.id)}
+                />
+              </div>
+              {/* Read-only personas browse standings without join/leave (P-1). */}
+              {!isLegendReadOnly(session) && (
+                <CrewJoinButton crewId={s.crew.id} member={myCrewIds.has(s.crew.id)} />
+              )}
+            </div>
           ))}
         </div>
       )}

@@ -4,7 +4,7 @@ import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Badge } from "@/components/ui/Badge";
 import { DataView } from "@/components/views/DataViewServer";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
@@ -34,6 +34,8 @@ export default async function ResourcesHubPage() {
     );
   }
   const session = await requireSession();
+  // Browse stays open to every member; authoring affordances are manager-band.
+  const canAuthor = isManagerPlus(session);
   const db = (await createClient()) as unknown as LooseSupabase;
 
   const [{ data: collectionData }, { data: resourceData }] = await Promise.all([
@@ -79,7 +81,9 @@ export default async function ResourcesHubPage() {
             <Button href="/legend/resources/collections" size="sm" variant="secondary">
               {t("console.legend.resources.collections", undefined, "Collections")}
             </Button>
-            <Button href="/legend/resources/new">{t("console.legend.resources.newResource", undefined, "+ New Resource")}</Button>
+            {canAuthor && (
+              <Button href="/legend/resources/new">{t("console.legend.resources.newResource", undefined, "+ New Resource")}</Button>
+            )}
           </div>
         }
       />
@@ -92,11 +96,17 @@ export default async function ResourcesHubPage() {
               undefined,
               "Build a curated library of links, documents, templates, and references, grouped into collections.",
             )}
-            action={<Button href="/legend/resources/new">{t("console.legend.resources.newResource", undefined, "+ New Resource")}</Button>}
+            action={
+              canAuthor ? (
+                <Button href="/legend/resources/new">{t("console.legend.resources.newResource", undefined, "+ New Resource")}</Button>
+              ) : undefined
+            }
             secondaryAction={
-              <Button href="/legend/resources/collections/new" variant="secondary">
-                {t("console.legend.resources.newCollection", undefined, "New Collection")}
-              </Button>
+              canAuthor ? (
+                <Button href="/legend/resources/collections/new" variant="secondary">
+                  {t("console.legend.resources.newCollection", undefined, "New Collection")}
+                </Button>
+              ) : undefined
             }
           />
         ) : (

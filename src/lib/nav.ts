@@ -1033,20 +1033,23 @@ export const legendNav: NavGroup[] = [
   },
   {
     // MANAGE — training console (roster · assignment · compliance reporting).
+    // Every surface here is page-gated (isManagerPlus → AccessDenied), so the
+    // whole group is band-filtered out of the sidebar for non-managers
+    // (PERSONA_MATRIX P-3; the legend layout applies filterNavByRole).
     label: "Manage",
     items: [
-      { label: "Console", href: "/legend/console", icon: "ClipboardList" },
+      { label: "Console", href: "/legend/console", icon: "ClipboardList", minRole: "manager" },
       // L-P6a course + live-session authoring (blockers B-1 + B-2): the
       // authoring workbench — courses, lessons, assessments, live sessions.
-      { label: "Teach", href: "/legend/teach", icon: "PencilRuler" },
-      { label: "XMCE Engine", href: "/legend/engine", icon: "ShieldCheck" },
-      { label: "Recert Matrix", href: "/legend/compliance", icon: "ClipboardCheck" },
+      { label: "Teach", href: "/legend/teach", icon: "PencilRuler", minRole: "manager" },
+      { label: "XMCE Engine", href: "/legend/engine", icon: "ShieldCheck", minRole: "manager" },
+      { label: "Recert Matrix", href: "/legend/compliance", icon: "ClipboardCheck", minRole: "manager" },
       // L-P6b certification lifecycle closure (blockers B-3 + B-5): the
       // recert decision queue + the org's credential-type catalog.
-      { label: "Recert Queue", href: "/legend/compliance/recerts", icon: "ListChecks" },
-      { label: "Credential Types", href: "/legend/certifications/definitions", icon: "BadgeCheck" },
+      { label: "Recert Queue", href: "/legend/compliance/recerts", icon: "ListChecks", minRole: "manager" },
+      { label: "Credential Types", href: "/legend/certifications/definitions", icon: "BadgeCheck", minRole: "manager" },
       // L-P6c store economy closure (blocker B-4b): stock products, mint vouchers.
-      { label: "Store Admin", href: "/legend/store/admin", icon: "Store" },
+      { label: "Store Admin", href: "/legend/store/admin", icon: "Store", minRole: "manager" },
     ],
   },
   {

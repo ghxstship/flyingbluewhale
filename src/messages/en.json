@@ -25490,6 +25490,8 @@
     "emptyDescription": "Learning crews your org creates will appear here.",
     "emptyTitle": "No crews yet",
     "eyebrow": "LEG3ND · Community",
+    "join": "Join",
+    "leave": "Leave",
     "members": "Members",
     "oneMember": "1 member",
     "subtitle": "Learning crews ranked by total contribution points. Climb the board together.",
@@ -31731,6 +31733,9 @@
     "resend": "Only owners and admins can resend.",
     "revoke": "Only owners and admins can revoke.",
     "transition-accounting-periods": "Only owners and admins can transition accounting periods"
+   },
+   "read-only": {
+    "legend": "Your access is read-only. Ask an org admin for member access to participate."
    }
   },
   "automation-is-disabled": "Automation is disabled",

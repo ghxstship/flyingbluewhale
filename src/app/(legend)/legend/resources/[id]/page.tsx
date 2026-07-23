@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { DeleteForm } from "@/components/DeleteForm";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
@@ -27,6 +27,8 @@ export default async function ResourceDetail({ params }: { params: Promise<{ id:
   const { t } = await getRequestT();
   if (!hasSupabase) return notFound();
   const session = await requireSession();
+  // Browse stays open to every member; authoring affordances are manager-band.
+  const canAuthor = isManagerPlus(session);
   const db = (await createClient()) as unknown as LooseSupabase;
   const { data } = await db
     .from("resources")
@@ -66,27 +68,29 @@ export default async function ResourceDetail({ params }: { params: Promise<{ id:
           { label: resource.title },
         ]}
         action={
-          <div className="flex items-center gap-2">
-            <Button href={`/legend/resources/${resource.id}/edit`} size="sm" variant="secondary">
-              {t("console.legend.resources.detail.edit", undefined, "Edit")}
-            </Button>
-            {RESOURCE_STATES.filter((s) => s !== resource.resource_state).map((s) => (
-              <form key={s} action={setResourceStateAction.bind(null, resource.id, s)}>
-                <Button type="submit" size="sm" variant="secondary">
-                  {RESOURCE_STATE_LABELS[s]}
-                </Button>
-              </form>
-            ))}
-            <DeleteForm
-              action={deleteResourceAction.bind(null, resource.id)}
-              confirm={t(
-                "console.legend.resources.detail.deleteConfirm",
-                { title: resource.title },
-                `Delete resource "${resource.title}"?`,
-              )}
-              undo={{ table: "resources", id: resource.id, redirectTo: "/legend/resources" }}
-            />
-          </div>
+          canAuthor ? (
+            <div className="flex items-center gap-2">
+              <Button href={`/legend/resources/${resource.id}/edit`} size="sm" variant="secondary">
+                {t("console.legend.resources.detail.edit", undefined, "Edit")}
+              </Button>
+              {RESOURCE_STATES.filter((s) => s !== resource.resource_state).map((s) => (
+                <form key={s} action={setResourceStateAction.bind(null, resource.id, s)}>
+                  <Button type="submit" size="sm" variant="secondary">
+                    {RESOURCE_STATE_LABELS[s]}
+                  </Button>
+                </form>
+              ))}
+              <DeleteForm
+                action={deleteResourceAction.bind(null, resource.id)}
+                confirm={t(
+                  "console.legend.resources.detail.deleteConfirm",
+                  { title: resource.title },
+                  `Delete resource "${resource.title}"?`,
+                )}
+                undo={{ table: "resources", id: resource.id, redirectTo: "/legend/resources" }}
+              />
+            </div>
+          ) : undefined
         }
       />
       <div className="page-content space-y-8">

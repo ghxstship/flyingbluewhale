@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
+import { assertLegendWrite } from "@/lib/legend_access";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 
@@ -15,6 +16,8 @@ export type State = { error?: string; ok?: string } | null;
  */
 export async function redeemVoucherAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  const denied = assertLegendWrite(session);
+  if (denied) return denied;
   const parsed = z.object({ code: z.string().min(1, "Enter a code").max(120) }).safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid code" };
   const code = parsed.data.code.trim();
@@ -60,6 +63,8 @@ export async function redeemVoucherAction(_: State, fd: FormData): Promise<State
  */
 export async function purchaseItemAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  const denied = assertLegendWrite(session);
+  if (denied) return denied;
   const parsed = z.object({ product_id: z.string().uuid() }).safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: "Invalid product" };
   const db = (await createClient()) as unknown as LooseSupabase;

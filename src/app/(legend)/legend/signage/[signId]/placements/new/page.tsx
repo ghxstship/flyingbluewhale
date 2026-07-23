@@ -1,9 +1,10 @@
 import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
+import { AccessDenied } from "@/components/ui/AccessDenied";
 import type { SignageSign } from "@/lib/legend_signage";
 import { NewPlacementForm } from "./NewPlacementForm";
 import { getRequestT } from "@/lib/i18n/request";
@@ -17,6 +18,9 @@ export default async function NewPlacementPage({ params }: { params: Promise<{ s
   const { t } = await getRequestT();
   if (!hasSupabase) return notFound();
   const session = await requireSession();
+  if (!isManagerPlus(session)) {
+    return <AccessDenied requiredRole="Manager" backHref={`/legend/signage/${signId}`} />;
+  }
   const db = (await createClient()) as unknown as LooseSupabase;
 
   const { data: signRow } = await db

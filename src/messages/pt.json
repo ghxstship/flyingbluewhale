@@ -25305,6 +25305,8 @@
         "emptyDescription": "Crews de aprendizado que sua organização cria aparecerão aqui.",
         "emptyTitle": "Nenhum crew ainda",
         "eyebrow": "LEG3ND · Comunidade",
+        "join": "Entrar",
+        "leave": "Sair",
         "members": "Membros",
         "oneMember": "1 membro",
         "subtitle": "Crews de aprendizado ranqueados por pontos totais de contribuição. Subam o placar juntos.",
@@ -31543,6 +31545,9 @@
         "resend": "Apenas responsáveis e admins podem reenviar.",
         "revoke": "Apenas responsáveis e admins podem revogar.",
         "transition-accounting-periods": "Apenas responsáveis e admins podem transicionar períodos contábeis"
+      },
+      "read-only": {
+        "legend": "Seu acesso é somente leitura. Peça a um administrador da organização acesso de membro para participar."
       }
     },
     "automation-is-disabled": "A automação está desativada",

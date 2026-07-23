@@ -83,6 +83,9 @@ export async function updateSignAction(id: string, _: State, fd: FormData): Prom
 
 export async function deleteSign(id: string): Promise<void> {
   const session = await requireSession();
+  // Same authoring band as create/update — the delete was the one signage
+  // write missing its manager gate (L-P6d).
+  if (!isManagerPlus(session)) throw new Error("Only manager+ can delete signs");
   const db = (await createClient()) as unknown as LooseSupabase;
   const { error } = await db
     .from("signage_signs")

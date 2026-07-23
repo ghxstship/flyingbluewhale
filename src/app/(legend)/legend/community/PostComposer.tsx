@@ -4,6 +4,7 @@ import { useActionState, useEffect, useRef } from "react";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { createPostAction, type State } from "./actions";
 import { POST_CATEGORIES, POST_CATEGORY_LABELS } from "@/lib/legend_community";
+import { resolveActionError } from "@/lib/errors";
 
 /**
  * Inline community post composer. Posts to the server action; clears on
@@ -55,7 +56,7 @@ export function PostComposer() {
       </div>
       {state?.error && (
         <p className="ps-alert ps-alert--danger" role="alert">
-          {state.error}
+          {resolveActionError(state.error, t)}
         </p>
       )}
     </form>

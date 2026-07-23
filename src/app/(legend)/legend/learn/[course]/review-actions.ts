@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
+import { assertLegendWrite } from "@/lib/legend_access";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 
@@ -15,6 +16,8 @@ export type State = { error?: string; ok?: string } | null;
  */
 export async function submitReviewAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  const denied = assertLegendWrite(session);
+  if (denied) return denied;
   const parsed = z
     .object({
       course_id: z.string().uuid(),

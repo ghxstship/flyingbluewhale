@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
+import { assertLegendWrite } from "@/lib/legend_access";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
 
@@ -31,6 +32,8 @@ export type State = {
 
 export async function createLocationAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  const denied = assertLegendWrite(session);
+  if (denied) return denied;
   const parsed = Schema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return formFail(parsed.error, fd);
   const supabase = await createClient();

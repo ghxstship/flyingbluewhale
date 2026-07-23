@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { DataView } from "@/components/views/DataViewServer";
 import { DeleteForm } from "@/components/DeleteForm";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
@@ -30,6 +30,8 @@ export default async function SignDetail({ params }: { params: Promise<{ signId:
   const { t } = await getRequestT();
   if (!hasSupabase) return notFound();
   const session = await requireSession();
+  // Browse stays open to every member; authoring affordances are manager-band.
+  const canAuthor = isManagerPlus(session);
   const db = (await createClient()) as unknown as LooseSupabase;
 
   const { data: signRow } = await db
@@ -67,21 +69,25 @@ export default async function SignDetail({ params }: { params: Promise<{ signId:
         action={
           <div className="flex items-center gap-2">
             <StatusBadge status={sign.sign_state} />
-            <Button href={`/legend/signage/${signId}/edit`} size="sm" variant="secondary">
-              {t("console.legend.signage.detail.edit", undefined, "Edit")}
-            </Button>
-            <Button href={`/legend/signage/${signId}/placements/new`} size="sm">
-              {t("console.legend.signage.detail.newPlacement", undefined, "+ New Placement")}
-            </Button>
-            <DeleteForm
-              action={deleteSign.bind(null, signId)}
-              confirm={t(
-                "console.legend.signage.detail.deleteConfirm",
-                { name: sign.name },
-                `Delete sign "${sign.name}"? Its placements will be removed too.`,
-              )}
-              undo={{ table: "signage_signs", id: signId, redirectTo: "/legend/signage" }}
-            />
+            {canAuthor && (
+              <>
+                <Button href={`/legend/signage/${signId}/edit`} size="sm" variant="secondary">
+                  {t("console.legend.signage.detail.edit", undefined, "Edit")}
+                </Button>
+                <Button href={`/legend/signage/${signId}/placements/new`} size="sm">
+                  {t("console.legend.signage.detail.newPlacement", undefined, "+ New Placement")}
+                </Button>
+                <DeleteForm
+                  action={deleteSign.bind(null, signId)}
+                  confirm={t(
+                    "console.legend.signage.detail.deleteConfirm",
+                    { name: sign.name },
+                    `Delete sign "${sign.name}"? Its placements will be removed too.`,
+                  )}
+                  undo={{ table: "signage_signs", id: signId, redirectTo: "/legend/signage" }}
+                />
+              </>
+            )}
           </div>
         }
       />

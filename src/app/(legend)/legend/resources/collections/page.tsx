@@ -1,7 +1,7 @@
 import { ModuleHeader } from "@/components/Shell";
 import { Button } from "@/components/ui/Button";
 import { DataView } from "@/components/views/DataViewServer";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
@@ -28,6 +28,8 @@ export default async function CollectionsPage() {
     );
   }
   const session = await requireSession();
+  // Browse stays open to every member; authoring affordances are manager-band.
+  const canAuthor = isManagerPlus(session);
   const db = (await createClient()) as unknown as LooseSupabase;
 
   const [{ data: cData }, { data: rData }] = await Promise.all([
@@ -72,9 +74,11 @@ export default async function CollectionsPage() {
           { label: t("console.legend.resources.collectionsTitle", undefined, "Collections") },
         ]}
         action={
-          <Button href="/legend/resources/collections/new">
-            {t("console.legend.resources.newCollectionCta", undefined, "+ New Collection")}
-          </Button>
+          canAuthor ? (
+            <Button href="/legend/resources/collections/new">
+              {t("console.legend.resources.newCollectionCta", undefined, "+ New Collection")}
+            </Button>
+          ) : undefined
         }
       />
       <div className="page-content">

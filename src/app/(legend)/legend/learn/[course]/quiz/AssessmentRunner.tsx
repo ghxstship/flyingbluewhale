@@ -6,6 +6,7 @@ import { QuizQuestion } from "@/components/ui/QuizQuestion";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { submitAttemptAction } from "../../actions";
+import { resolveActionError } from "@/lib/errors";
 
 export type RunnerQuestion = { id: string; prompt: string; options: string[] };
 
@@ -89,7 +90,7 @@ export function AssessmentRunner({
       />
       {result?.error && (
         <p className="ps-alert ps-alert--danger" role="alert">
-          {result.error}
+          {resolveActionError(result.error, t)}
         </p>
       )}
       <div className="flex justify-between gap-2">

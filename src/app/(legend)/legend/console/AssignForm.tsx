@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { assignCourseAction, type State } from "./actions";
+import { resolveActionError } from "@/lib/errors";
 
 /**
  * Course-assignment control for the training console. Posts a (member, course)
@@ -49,7 +50,7 @@ export function AssignForm({
       </div>
       {state?.error && (
         <p className="text-xs text-[var(--p-danger)]" role="alert">
-          {state.error}
+          {resolveActionError(state.error, t)}
         </p>
       )}
       {state?.ok && <p className="text-xs text-[var(--p-success)]">{state.ok}</p>}

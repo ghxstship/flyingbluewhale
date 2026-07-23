@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { redeemVoucherAction, type State } from "./actions";
+import { resolveActionError } from "@/lib/errors";
 
 /**
  * Voucher redemption form. Posts a code to the server action and surfaces the
@@ -24,7 +25,7 @@ export function VoucherForm() {
       </div>
       {state?.error && (
         <p className="text-xs text-[var(--p-danger)]" role="alert">
-          {state.error}
+          {resolveActionError(state.error, t)}
         </p>
       )}
       {state?.ok && <p className="text-xs text-[var(--p-success)]">{state.ok}</p>}

@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { registerForSessionAction, cancelRegistrationAction, type State } from "./actions";
+import { resolveActionError } from "@/lib/errors";
 
 /**
  * Per-session register / cancel control. Shows the live registration outcome.
@@ -35,7 +36,7 @@ export function SessionRegisterButton({
       </button>
       {state?.error && (
         <span className="text-xs text-[var(--p-danger)]" role="alert">
-          {state.error}
+          {resolveActionError(state.error, t)}
         </span>
       )}
       {state?.ok && <span className="text-xs text-[var(--p-success)]">{state.ok}</span>}

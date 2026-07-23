@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
+import { assertLegendWrite } from "@/lib/legend_access";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { POST_CATEGORIES } from "@/lib/legend_community";
@@ -18,6 +19,8 @@ const POST_POINTS = 5;
  */
 export async function createPostAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  const denied = assertLegendWrite(session);
+  if (denied) return denied;
   const parsed = z
     .object({
       title: z.string().min(1, "Title is required").max(200),
@@ -62,6 +65,8 @@ export async function createPostAction(_: State, fd: FormData): Promise<State> {
  */
 export async function toggleReactionAction(postId: string): Promise<{ error?: string; liked?: boolean }> {
   const session = await requireSession();
+  const denied = assertLegendWrite(session);
+  if (denied) return denied;
   if (!z.string().uuid().safeParse(postId).success) return { error: "Invalid post" };
   const db = (await createClient()) as unknown as LooseSupabase;
 
@@ -92,6 +97,8 @@ export async function toggleReactionAction(postId: string): Promise<{ error?: st
 /** Add a comment (answer) to a post and keep the denormalized count honest. */
 export async function addCommentAction(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  const denied = assertLegendWrite(session);
+  if (denied) return denied;
   const parsed = z
     .object({ postId: z.string().uuid(), body_html: z.string().min(1, "Say something").max(20000) })
     .safeParse(Object.fromEntries(fd));
@@ -123,6 +130,8 @@ export async function addCommentAction(_prev: State, fd: FormData): Promise<Stat
  */
 export async function acceptAnswerAction(postId: string, commentId: string): Promise<void> {
   const session = await requireSession();
+  const denied = assertLegendWrite(session);
+  if (denied) throw new Error(denied.error);
   const db = (await createClient()) as unknown as LooseSupabase;
 
   const { data: post } = await db

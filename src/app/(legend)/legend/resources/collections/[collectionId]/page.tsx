@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/Button";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { DataView } from "@/components/views/DataViewServer";
 import { DeleteForm } from "@/components/DeleteForm";
-import { requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { timeAgo } from "@/lib/format";
@@ -21,6 +21,8 @@ export default async function CollectionDetail({ params }: { params: Promise<{ c
   const { t } = await getRequestT();
   if (!hasSupabase) return notFound();
   const session = await requireSession();
+  // Browse stays open to every member; authoring affordances are manager-band.
+  const canAuthor = isManagerPlus(session);
   const db = (await createClient()) as unknown as LooseSupabase;
 
   const { data } = await db
@@ -62,41 +64,47 @@ export default async function CollectionDetail({ params }: { params: Promise<{ c
           { label: collection.name },
         ]}
         action={
-          <DeleteForm
-            action={deleteCollectionAction.bind(null, collection.id)}
-            confirm={t(
-              "console.legend.resources.collectionDetail.deleteConfirm",
-              { name: collection.name },
-              `Delete collection "${collection.name}"? Its resources will become ungrouped.`,
-            )}
-            undo={{
-              table: "resource_collections",
-              id: collection.id,
-              redirectTo: "/legend/resources/collections",
-            }}
-          />
+          canAuthor ? (
+            <DeleteForm
+              action={deleteCollectionAction.bind(null, collection.id)}
+              confirm={t(
+                "console.legend.resources.collectionDetail.deleteConfirm",
+                { name: collection.name },
+                `Delete collection "${collection.name}"? Its resources will become ungrouped.`,
+              )}
+              undo={{
+                table: "resource_collections",
+                id: collection.id,
+                redirectTo: "/legend/resources/collections",
+              }}
+            />
+          ) : undefined
         }
       />
       <div className="page-content space-y-8">
-        <div className="surface p-6">
-          <h3 className="mb-4 text-sm font-semibold">
-            {t("console.legend.resources.collectionDetail.editHeading", undefined, "Edit collection")}
-          </h3>
-          <CollectionForm
-            action={updateCollectionAction.bind(null, collection.id)}
-            collection={collection}
-            submitLabel={t("console.legend.resources.collectionDetail.submit", undefined, "Save Collection")}
-          />
-        </div>
+        {canAuthor && (
+          <div className="surface p-6">
+            <h3 className="mb-4 text-sm font-semibold">
+              {t("console.legend.resources.collectionDetail.editHeading", undefined, "Edit collection")}
+            </h3>
+            <CollectionForm
+              action={updateCollectionAction.bind(null, collection.id)}
+              collection={collection}
+              submitLabel={t("console.legend.resources.collectionDetail.submit", undefined, "Save Collection")}
+            />
+          </div>
+        )}
 
         <section className="space-y-3">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-semibold text-[var(--p-text-1)]">
               {t("console.legend.resources.title", undefined, "Resources")}
             </h2>
-            <Button href="/legend/resources/new" size="sm" variant="secondary">
-              {t("console.legend.resources.newResource", undefined, "+ New Resource")}
-            </Button>
+            {canAuthor && (
+              <Button href="/legend/resources/new" size="sm" variant="secondary">
+                {t("console.legend.resources.newResource", undefined, "+ New Resource")}
+              </Button>
+            )}
           </div>
           <DataView<Resource>
             rows={resources}

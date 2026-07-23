@@ -6,7 +6,7 @@ import type { ReactNode } from "react";
 // this shell mounts.
 import "../theme/kit-signage.css";
 import "../theme/kit-rail.css";
-import { legendNav } from "@/lib/nav";
+import { filterNavByRole, legendNav } from "@/lib/nav";
 import { LegendSidebar } from "@/components/legend/LegendSidebar";
 import { getSession } from "@/lib/auth";
 import { AppRail } from "@/components/workspace-chrome/AppRail";
@@ -73,7 +73,11 @@ export default async function LegendLayout({ children }: { children: ReactNode }
           </div>
         </header>
         <div className="flex flex-1 flex-col md:flex-row">
-          <LegendSidebar groups={legendNav} />
+          {/* Role-filtered rail (PERSONA_MATRIX P-3): the MANAGE group's items
+              all carry minRole:"manager" — non-manager bands (and anon) never
+              see surfaces that resolve to AccessDenied. Defaults-not-cages:
+              only minRole-marked items are stripped; everything else renders. */}
+          <LegendSidebar groups={filterNavByRole(legendNav, session?.role ?? null)} />
           <main id="main" tabIndex={-1} className="mx-auto w-full max-w-5xl flex-1 px-6 py-8">
             {children}
           </main>

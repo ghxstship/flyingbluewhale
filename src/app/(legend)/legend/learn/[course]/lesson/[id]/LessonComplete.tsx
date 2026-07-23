@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { completeLessonAction } from "../../../actions";
+import { resolveActionError } from "@/lib/errors";
 
 /**
  * Mark-complete control for a real lesson. Calls the server action (which
@@ -37,7 +38,7 @@ export function LessonComplete({
     start(async () => {
       const res = await completeLessonAction(null, fd);
       if (res?.error) {
-        setError(res.error);
+        setError(resolveActionError(res.error, t));
         return;
       }
       router.push(nextHref);

@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { purchaseItemAction, type State } from "./actions";
+import { resolveActionError } from "@/lib/errors";
 
 /**
  * Spend control for a credits-priced store item. Renders an honest disabled
@@ -48,7 +49,7 @@ export function PurchaseButton({
       )}
       {state?.error && (
         <p className="text-xs text-[var(--p-danger)]" role="alert">
-          {state.error}
+          {resolveActionError(state.error, t)}
         </p>
       )}
       {state?.ok && <p className="text-xs text-[var(--p-success)]">{state.ok}</p>}

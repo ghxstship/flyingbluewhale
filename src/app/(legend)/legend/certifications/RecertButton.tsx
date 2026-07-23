@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { requestRecertAction, type State } from "./actions";
+import { resolveActionError } from "@/lib/errors";
 
 /**
  * Inline "request recert" control for a certification holding. Posts the
@@ -24,7 +25,7 @@ export function RecertButton({ holderId, label }: { holderId: string; label: str
       <button type="submit" disabled={pending} className="ps-btn ps-btn--secondary ps-btn--sm" style={{ minHeight: 44 }}>
         {pending ? "…" : label}
       </button>
-      {state?.error && <span className="text-xs text-[var(--p-danger)]">{state.error}</span>}
+      {state?.error && <span className="text-xs text-[var(--p-danger)]">{resolveActionError(state.error, t)}</span>}
     </form>
   );
 }

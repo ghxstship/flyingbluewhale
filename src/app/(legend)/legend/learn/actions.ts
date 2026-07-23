@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
+import { assertLegendWrite } from "@/lib/legend_access";
 import { createClient } from "@/lib/supabase/server";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { scoreAttempt, type AssessmentQuestion } from "@/lib/legend_learning";
@@ -18,6 +19,8 @@ export type State = { error?: string; ok?: true } | null;
  */
 export async function enrollAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  const denied = assertLegendWrite(session);
+  if (denied) return denied;
   const courseId = z.string().uuid().safeParse(fd.get("course_id"));
   if (!courseId.success) return { error: "Invalid course" };
   const db = (await createClient()) as unknown as LooseSupabase;
@@ -51,6 +54,8 @@ export async function enrollAction(_: State, fd: FormData): Promise<State> {
  */
 export async function completeLessonAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  const denied = assertLegendWrite(session);
+  if (denied) return denied;
   const parsed = z
     .object({ course_id: z.string().uuid(), lesson_id: z.string().uuid(), position_seconds: z.coerce.number().int().min(0).default(0) })
     .safeParse(Object.fromEntries(fd));
@@ -157,6 +162,8 @@ export async function completeLessonAction(_: State, fd: FormData): Promise<Stat
  */
 export async function saveLessonProgressAction(_: State, fd: FormData): Promise<State> {
   const session = await requireSession();
+  const denied = assertLegendWrite(session);
+  if (denied) return denied;
   const parsed = z
     .object({
       course_id: z.string().uuid(),
@@ -210,6 +217,8 @@ export async function submitAttemptAction(
   answers: number[],
 ): Promise<{ error?: string; passed?: boolean; scorePct?: number }> {
   const session = await requireSession();
+  const denied = assertLegendWrite(session);
+  if (denied) return denied;
   if (!z.string().uuid().safeParse(assessmentId).success) return { error: "Invalid assessment" };
   const db = (await createClient()) as unknown as LooseSupabase;
 

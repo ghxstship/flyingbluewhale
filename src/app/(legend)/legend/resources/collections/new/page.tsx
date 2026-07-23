@@ -1,10 +1,17 @@
 import { ModuleHeader } from "@/components/Shell";
+import { AccessDenied } from "@/components/ui/AccessDenied";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { CollectionForm } from "../CollectionForm";
 import { createCollectionAction } from "../actions";
 import { getRequestT } from "@/lib/i18n/request";
 
 export default async function NewCollectionPage() {
   const { t } = await getRequestT();
+  // Authoring is page-gated to match the engine/teach denial UX (S-4).
+  const session = await requireSession();
+  if (!isManagerPlus(session)) {
+    return <AccessDenied requiredRole="Manager" backHref="/legend/resources/collections" />;
+  }
   return (
     <>
       <ModuleHeader

@@ -1,6 +1,11 @@
 # COMPVSS · Mobile SaaS Best Practices — Ranked List + Implementation Plan
 
-**Date:** 2026-07-23 · **Status: FOR OWNER REVIEW — no implementation begun.**
+**Date:** 2026-07-23 · **Status: RATIFIED 2026-07-23 — owner ruling: fix the
+defects now, implement Tier 1 now, Tiers 2-4 to the BACKLOG.** M0 (F1-F3) +
+the Tier-1 six are IN EXECUTION. Everything from Rank 7 down, the M2-M4
+phases, and decisions D1-D5 constitute the standing backlog; telemetry
+(Rank 7) is the recommended first backlog pull since Tier-1 exit metrics
+depend on it.
 
 Method: four research passes over the category leaders — construction/PM
 (Procore, Autodesk Construction Cloud, Fieldwire, Raken, CompanyCam,

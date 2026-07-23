@@ -4,6 +4,7 @@ import * as React from "react";
 import { useActionState } from "react";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { decideRecertAction, type DecideState } from "./actions";
+import { resolveActionError } from "@/lib/errors";
 
 /**
  * Approve / Deny pair for a pending recert request — the DecideButtons
@@ -59,7 +60,7 @@ export function DecideRecertButtons({ recertId }: { recertId: string }) {
             {t("common.cancel", undefined, "Cancel")}
           </button>
         </form>
-        {state?.error && <span className="text-xs text-[var(--p-danger)]">{state.error}</span>}
+        {state?.error && <span className="text-xs text-[var(--p-danger)]">{resolveActionError(state.error, t)}</span>}
       </div>
     );
   }
@@ -89,7 +90,7 @@ export function DecideRecertButtons({ recertId }: { recertId: string }) {
           {denyLabel}
         </button>
       </div>
-      {state?.error && <span className="text-xs text-[var(--p-danger)]">{state.error}</span>}
+      {state?.error && <span className="text-xs text-[var(--p-danger)]">{resolveActionError(state.error, t)}</span>}
     </div>
   );
 }

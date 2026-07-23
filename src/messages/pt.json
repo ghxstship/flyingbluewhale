@@ -6975,7 +6975,7 @@
         "columns": {
           "person": "Pessoa",
           "barcode": "Código de barras",
-          "state": "Estado"
+          "state": "Status"
         },
         "sheet": {
           "title": "Folha de Impressão",
@@ -7042,7 +7042,7 @@
           "titleWithName": "Editar {name}",
           "validFrom": "Válido De",
           "validTo": "Válido Até",
-          "vettingState": "Estado da triagem"
+          "vettingState": "Status da triagem"
         },
         "emptyLabel": "Nenhuma solicitação em triagem",
         "eyebrow": "Espaço de trabalho",
@@ -7550,7 +7550,7 @@
         "discipline": "Disciplina",
         "size": "Tamanho",
         "version": "Versão",
-        "state": "Estado"
+        "state": "Status"
       },
       "edit": {
         "breadcrumbs": {
@@ -7895,7 +7895,7 @@
         "captured": "Capturada",
         "panos": "Panos",
         "sqft": "Pés²",
-        "state": "Estado"
+        "state": "Status"
       }
     },
     "clients": {
@@ -7958,7 +7958,7 @@
         "emptyLabel": "Sem Projetos",
         "columns": {
           "name": "Nome",
-          "state": "Estado",
+          "state": "Status",
           "start": "Início",
           "end": "Fim",
           "budget": "Orçamento"
@@ -8230,7 +8230,7 @@
         "emptyLabel": "Nenhum comunicado ainda",
         "columns": {
           "title": "Título",
-          "state": "Estado",
+          "state": "Status",
           "audience": "Audiência",
           "pinned": "Fixado"
         },
@@ -8267,7 +8267,7 @@
         "emptyLabel": "Nenhuma enquete ainda",
         "col": {
           "question": "Pergunta",
-          "state": "Estado",
+          "state": "Status",
           "audience": "Audiência"
         }
       },
@@ -8314,7 +8314,7 @@
         "emptyLabel": "Nenhuma pesquisa ainda",
         "columns": {
           "title": "Título",
-          "state": "Estado",
+          "state": "Status",
           "audience": "Audiência",
           "anon": "Anôn"
         }
@@ -8401,7 +8401,7 @@
       "noRecentProjects": "Sem Projetos Recentes",
       "columns": {
         "name": "Nome",
-        "state": "Estado",
+        "state": "Status",
         "start": "Início",
         "end": "Fim"
       }
@@ -8481,7 +8481,7 @@
         "columnTitle": "Título",
         "columnType": "Tipo",
         "columnRev": "Rev (na publicação)",
-        "columnDocState": "Estado do Doc",
+        "columnDocState": "Status do Doc",
         "selectSheet": "Selecionar uma prancha…",
         "addSheet": "+ Adicionar Prancha",
         "edit": "Editar",
@@ -8520,7 +8520,7 @@
         "discipline": "Disciplina",
         "currentVersion": "Versão Atual",
         "sheets": "Pranchas",
-        "state": "Estado"
+        "state": "Status"
       },
       "none": "Nenhum",
       "edit": {
@@ -8602,7 +8602,7 @@
         "provider": "Provedor",
         "signers": "Signatários",
         "sent": "Enviado",
-        "state": "Estado"
+        "state": "Status"
       },
       "detail": {
         "body": "Corpo",
@@ -8702,7 +8702,7 @@
         "markup": "Markup",
         "subtotal": "Subtotal",
         "total": "Total",
-        "state": "Estado"
+        "state": "Status"
       },
       "detail": {
         "breadcrumb": {
@@ -8713,7 +8713,7 @@
         "field": {
           "created": "Criada",
           "markup": "Margem",
-          "state": "Estado",
+          "state": "Status",
           "subtotal": "Subtotal",
           "total": "Total com margem",
           "waste": "Fator de perda"
@@ -8729,7 +8729,7 @@
           "defaultWasteFactor": "Fator de perda padrão",
           "name": "Nome",
           "notes": "Notas",
-          "state": "Estado"
+          "state": "Status"
         },
         "submit": "Salvar Alterações",
         "title": "Editar {name}"
@@ -8826,7 +8826,7 @@
           "date": "Data",
           "amount": "Valor",
           "confidence": "Conf",
-          "state": "Estado"
+          "state": "Status"
         },
         "detail": {
           "actionsHeading": "Ações",
@@ -9040,7 +9040,7 @@
         "detail": {
           "eyebrow": "Financeiro · Entidade",
           "metric": {
-            "state": "Estado",
+            "state": "Status",
             "method": "Método",
             "ownership": "Participação",
             "invoices": "Notas Fiscais",
@@ -9068,7 +9068,7 @@
             "taxId": "CNPJ / EIN",
             "parentEntity": "Entidade Controladora (consolida em)",
             "consolidationMethod": "Método de Consolidação",
-            "consolidationState": "Estado de Consolidação",
+            "consolidationState": "Status de Consolidação",
             "effectiveFrom": "Vigência a partir de",
             "effectiveTo": "Vigência até",
             "ownershipPct": "% de participação desta entidade na controladora"
@@ -9097,7 +9097,7 @@
         "colJurisdiction": "Jurisdição",
         "colMethod": "Método",
         "colOwnership": "Participação",
-        "colState": "Estado",
+        "colState": "Status",
         "edit": {
           "eyebrow": "Finanças",
           "title": "Editar entidade legal"
@@ -9382,7 +9382,7 @@
           "project": "Projeto",
           "amount": "Valor",
           "through": "Até",
-          "state": "Estado"
+          "state": "Status"
         }
       },
       "mileage": {
@@ -9560,7 +9560,7 @@
           "state": "Estado",
           "hours": "Horas",
           "gross": "Bruto",
-          "runState": "Estado",
+          "runState": "Status",
           "export": "Exportar"
         },
         "exportPdf": "PDF",
@@ -9573,7 +9573,7 @@
         },
         "detail": {
           "eyebrow": "Período Contábil",
-          "stateHeading": "Estado",
+          "stateHeading": "Status",
           "frozenLabel": "Período congelado.",
           "fullLogLink": "Log completo →",
           "noTransitions": "Nenhuma transição registrada ainda.",
@@ -9606,7 +9606,7 @@
         "cols": {
           "label": "Rótulo",
           "range": "Intervalo",
-          "state": "Estado",
+          "state": "Status",
           "closed": "Encerrado"
         },
         "empty": {
@@ -9789,7 +9789,7 @@
           "amount": "Valor",
           "hours": "Horas",
           "period": "Período",
-          "state": "Estado",
+          "state": "Status",
           "worker": "Trabalhador"
         },
         "configureSupabase": "Configure o Supabase.",
@@ -9801,7 +9801,7 @@
             "created": "Criada",
             "period": "Período",
             "posted": "Lançada",
-            "state": "Estado",
+            "state": "Status",
             "totalHours": "Horas totais",
             "worker": "Trabalhador"
           }
@@ -10591,7 +10591,7 @@
           "endAt": "Termina",
           "kind": "Tipo",
           "number": "Número",
-          "state": "Estado",
+          "state": "Status",
           "title": "Título",
           "value": "Valor"
         },
@@ -10620,7 +10620,7 @@
             "signedAt": "Assinado",
             "signer": "Signatário",
             "signingRole": "Função",
-            "state": "Estado",
+            "state": "Status",
             "trigger": "Gatilho",
             "version": "Versão"
           },
@@ -11073,7 +11073,7 @@
       },
       "offers": {
         "controls": {
-          "stateHeading": "Estado",
+          "stateHeading": "Status",
           "sendOffer": "Enviar Proposta",
           "markAccepted": "Marcar como Aceita",
           "decline": "Recusar"
@@ -11542,7 +11542,7 @@
         "when": "Quando",
         "people": "Pessoas",
         "openActs": "Ações Abertas",
-        "state": "Estado"
+        "state": "Status"
       },
       "description": "A lens over the master schedule: every event with type Meeting. Action items added to a meeting auto-create a task for the assignee. Closure is bidirectional via meeting_action_items.task_id.",
       "fullSchedule": "Full Schedule"
@@ -12898,7 +12898,7 @@
           "emptyLabel": "Nenhuma Resposta de Proposta",
           "columns": {
             "vendor": "Fornecedor",
-            "state": "Estado",
+            "state": "Status",
             "total": "Total",
             "delta": "Δ vs menor",
             "submitted": "Enviada em"
@@ -13011,7 +13011,7 @@
           "metricAvgBid": "Proposta Média",
           "emptyLabel": "Sem Respostas Ainda",
           "colVendor": "Fornecedor",
-          "colState": "Estado",
+          "colState": "Status",
           "colTotal": "Total",
           "colSubmitted": "Enviada em",
           "colAwarded": "Adjudicada",
@@ -13237,7 +13237,7 @@
           "awarded": "Adjudicado",
           "invitees": "Convidados",
           "vendor": "Fornecedor",
-          "state": "Estado",
+          "state": "Status",
           "notes": "Notas",
           "award": "Adjudicar",
           "addVendorPlaceholder": "Adicionar fornecedor",
@@ -13998,7 +13998,7 @@
           "columns": {
             "title": "Título",
             "party": "Parte",
-            "state": "Estado",
+            "state": "Status",
             "due": "Vencimento",
             "updated": "Atualizado",
             "kind": "Tipo"
@@ -14108,7 +14108,7 @@
             "save": "Salvar Detalhes do Veículo"
           },
           "advanceState": {
-            "title": "Estado de Advancing"
+            "title": "Status de Advancing"
           },
           "reassign": {
             "title": "Reatribuir"
@@ -14187,7 +14187,7 @@
         "submit": "Salvar Alterações",
         "fields": {
           "name": "Nome",
-          "state": "Estado",
+          "state": "Status",
           "startDate": "Data de Início",
           "endDate": "Data de Término",
           "client": "Cliente",
@@ -14425,7 +14425,7 @@
         },
         "archive": "Arquivar",
         "fields": {
-          "state": "Estado",
+          "state": "Status",
           "slug": "Slug",
           "start": "Início",
           "end": "Término",
@@ -14632,7 +14632,7 @@
       "columns": {
         "name": "Nome",
         "slug": "Slug",
-        "state": "Estado",
+        "state": "Status",
         "start": "Início",
         "end": "Término",
         "updated": "Atualizado"
@@ -15693,7 +15693,7 @@
         "colActivities": "Atividades",
         "colSource": "Origem",
         "sourceNative": "Nativa",
-        "colState": "Estado"
+        "colState": "Status"
       },
       "title": "Cronograma",
       "configureSupabase": "Configure o Supabase.",
@@ -16240,7 +16240,7 @@
             "displayName": "Nome de Exibição",
             "tenant": "Tenant",
             "lastSync": "Última Sincronização",
-            "state": "Estado"
+            "state": "Status"
           },
           "detail": {
             "connection": "Conexão",
@@ -16251,7 +16251,7 @@
             "lastError": "Último Erro",
             "lastSyncLabel": "Última Sincronização",
             "neverSynced": "Nunca sincronizado",
-            "state": "Estado",
+            "state": "Status",
             "syncNow": "Sincronizar Agora",
             "system": "Sistema",
             "tenant": "Inquilino"
@@ -16534,7 +16534,7 @@
           "protocol": "Protocolo",
           "emailDomains": "Domínios de e-mail",
           "supabaseId": "ID do Supabase",
-          "state": "Estado"
+          "state": "Status"
         },
         "unlinked": "desvinculado",
         "enabled": "Ativado",
@@ -16572,7 +16572,7 @@
           "name": "Nome",
           "center": "Centro",
           "radius": "Raio",
-          "state": "Estado"
+          "state": "Status"
         }
       },
       "webhooks": {
@@ -16601,7 +16601,7 @@
           "col": {
             "when": "Quando",
             "event": "Evento",
-            "state": "Estado",
+            "state": "Status",
             "http": "HTTP",
             "attempts": "Tentativas",
             "error": "Erro"
@@ -16642,7 +16642,7 @@
         "col": {
           "url": "URL",
           "events": "Eventos",
-          "state": "Estado",
+          "state": "Status",
           "lastDelivery": "Última entrega",
           "failures": "Falhas"
         },
@@ -16837,7 +16837,7 @@
         "title": "Título",
         "type": "Tipo",
         "class": "Classe",
-        "state": "Estado",
+        "state": "Status",
         "rev": "Rev",
         "venueProject": "Local / Projeto"
       },
@@ -16918,7 +16918,7 @@
         "division": "Divisão",
         "project": "Projeto",
         "format": "Formato",
-        "state": "Estado"
+        "state": "Status"
       },
       "edit": {
         "breadcrumbs": {
@@ -17021,7 +17021,7 @@
       "detail": {
         "noCadence": "Sem cadência",
         "eyebrow": "Assinatura",
-        "state": "Estado",
+        "state": "Status",
         "allowedNext": "Próximos permitidos:",
         "lifecycleTimeline": "Linha do Tempo do Ciclo de Vida",
         "fullTransitionsLog": "Registro completo de transições →",
@@ -17056,7 +17056,7 @@
         "party": "Parte (UUID opcional)",
         "renewalCadence": "Cadência de renovação (meses)",
         "renewalCadencePlaceholder": "ex.: 12",
-        "trialDays": "Dias de trial (opcional, inicia em estado TRIAL)",
+        "trialDays": "Dias de trial (opcional, inicia em status TRIAL)",
         "trialDaysPlaceholder": "ex.: 14",
         "submit": "Criar Assinatura"
       },
@@ -17067,7 +17067,7 @@
       "columns": {
         "label": "Rótulo",
         "kind": "Tipo",
-        "state": "Estado",
+        "state": "Status",
         "cadence": "Cadência",
         "started": "Iniciada"
       },
@@ -17390,7 +17390,7 @@
         "project": "Projeto",
         "sent": "Enviado",
         "due": "Prazo",
-        "state": "Estado"
+        "state": "Status"
       }
     },
     "transport": {
@@ -17656,7 +17656,7 @@
           "kind": "Tipo",
           "cluster": "Cluster",
           "capacity": "Capacidade",
-          "handoverState": "Estado de handover"
+          "handoverState": "Status de handover"
         }
       },
       "handover": {
@@ -17820,7 +17820,7 @@
         "start": "Início",
         "end": "Fim",
         "months": "Meses",
-        "state": "Estado"
+        "state": "Status"
       }
     },
     "workforce": {
@@ -18012,7 +18012,7 @@
         "emptyLabel": "Nenhum fluxo ainda",
         "col": {
           "name": "Nome",
-          "state": "Estado",
+          "state": "Status",
           "role": "Função"
         }
       },
@@ -18116,7 +18116,7 @@
           "fields": {
             "name": "Nome",
             "dayOf": "Dia",
-            "state": "Estado"
+            "state": "Status"
           },
           "state": {
             "draft": "rascunho",
@@ -18143,7 +18143,7 @@
             "label": "Dia"
           },
           "state": {
-            "label": "Estado",
+            "label": "Status",
             "draft": "Rascunho",
             "published": "Publicado",
             "locked": "Travado"
@@ -18160,7 +18160,7 @@
         "col": {
           "name": "Nome",
           "day": "Dia",
-          "state": "Estado"
+          "state": "Status"
         }
       },
       "services": {
@@ -18196,7 +18196,7 @@
           "role": "Função",
           "venue": "Local",
           "reason": "Motivo",
-          "state": "Estado",
+          "state": "Status",
           "action": "Ação"
         },
         "action": {
@@ -18261,7 +18261,7 @@
           "window": "Janela",
           "hours": "Horas",
           "reason": "Motivo",
-          "state": "Estado",
+          "state": "Status",
           "action": "Ação"
         },
         "action": {
@@ -18392,7 +18392,7 @@
           "class": "Classe",
           "xtc": "XTC",
           "phase": "Fase",
-          "state": "Estado",
+          "state": "Status",
           "qty": "Qtd"
         },
         "filter": {
@@ -18423,7 +18423,7 @@
             "identifier": "Identificador",
             "name": "Nome",
             "phase": "Fase",
-            "state": "Estado"
+            "state": "Status"
           }
         },
         "title": "Classes",
@@ -18550,7 +18550,7 @@
       "colTrigger": "Gatilho",
       "colPct": "%",
       "colAmount": "Valor",
-      "colState": "Estado",
+      "colState": "Status",
       "colActions": "Ações",
       "empty": "Nenhuma parcela programada ainda. Semeie o padrão 50 / 30 / 20 ou adicione uma parcela personalizada abaixo.",
       "drawn": "Sacada",
@@ -18636,7 +18636,7 @@
     "collaborate": {
       "docs": {
         "columns": {
-          "state": "Estado",
+          "state": "Status",
           "title": "Título",
           "updated": "Atualizado"
         },
@@ -18649,7 +18649,7 @@
         "eyebrow": "Colaborar",
         "new": {
           "eyebrow": "Páginas",
-          "stateLabel": "Estado",
+          "stateLabel": "Status",
           "title": "Novo Documento",
           "titleLabel": "Título"
         },
@@ -18662,18 +18662,18 @@
         "guest": "Convidado",
         "party": "Grupo",
         "reservedFor": "Reservado para",
-        "state": "Estado",
+        "state": "Status",
         "table": "Mesa"
       },
       "detail": {
-        "advance": "Atualizar estado",
+        "advance": "Atualizar status",
         "eyebrow": "Reserva",
         "field": {
           "created": "Criada",
           "email": "E-mail",
           "party": "Tamanho do grupo",
           "phone": "Telefone",
-          "state": "Estado",
+          "state": "Status",
           "table": "Mesa"
         },
         "lifecycle": "Ciclo de vida",
@@ -18712,7 +18712,7 @@
           "eyebrow": "Operações de Local",
           "notes": "Notas",
           "seats": "Lugares",
-          "state": "Estado",
+          "state": "Status",
           "submit": "Criar Mesa",
           "tableNo": "Número da mesa",
           "title": "Nova Mesa",
@@ -18781,7 +18781,7 @@
         "guest": "Convidado",
         "heads": "Pessoas",
         "reset": "Redefinir",
-        "state": "Estado",
+        "state": "Status",
         "title": "Lista de Presença"
       },
       "scan": {
@@ -18836,7 +18836,7 @@
         "space": "Espaço",
         "spacePlaceholder": "Selecione um espaço…",
         "startsAt": "Começa às",
-        "state": "Estado",
+        "state": "Status",
         "title": "Título"
       },
       "manageSpaces": "Espaços",
@@ -18859,7 +18859,7 @@
         "col": {
           "capacity": "Capacidade",
           "name": "Nome",
-          "state": "Estado",
+          "state": "Status",
           "venue": "Local"
         },
         "eyebrow": "Agenda de Eventos",
@@ -18867,7 +18867,7 @@
           "capacity": "Capacidade",
           "name": "Nome",
           "notes": "Notas",
-          "state": "Estado",
+          "state": "Status",
           "venue": "Local"
         },
         "new": {
@@ -18885,7 +18885,7 @@
     "board": {
       "col": {
         "due": "Prazo",
-        "state": "Estado",
+        "state": "Status",
         "title": "Tarefa"
       },
       "emptyDescription": "Adicione uma tarefa para começar a popular o quadro.",
@@ -18919,7 +18919,7 @@
           "qty": "Qtd.",
           "rate": "Valor",
           "sense": "Sentido",
-          "state": "Estado"
+          "state": "Status"
         },
         "configureSupabase": "Configure o Supabase.",
         "eyebrow": "Kit de evento",
@@ -18966,7 +18966,7 @@
           "placed": "Realizado",
           "reference": "Referência",
           "source": "Origem",
-          "state": "Estado",
+          "state": "Status",
           "total": "Total"
         },
         "emptyTitle": "Nenhum pedido ainda",
@@ -18978,7 +18978,7 @@
           "kind": "Tipo",
           "occurred": "Quando",
           "processor": "Processador",
-          "state": "Estado"
+          "state": "Status"
         },
         "emptyTitle": "Nenhuma transação ainda",
         "title": "Transações"
@@ -18997,7 +18997,7 @@
         "columns": {
           "initiated": "Iniciado",
           "policy": "Política",
-          "state": "Estado",
+          "state": "Status",
           "subject": "Assunto"
         },
         "configureSupabase": "Configure o Supabase.",
@@ -19093,7 +19093,7 @@
     },
     "notes": {
       "col": {
-        "state": "Estado",
+        "state": "Status",
         "title": "Título",
         "updated": "Atualizado"
       },
@@ -19108,7 +19108,7 @@
       "saving": "Salvando…",
       "stateArchived": "Arquivada",
       "stateDraft": "Rascunho",
-      "stateLabel": "Estado",
+      "stateLabel": "Status",
       "statePublished": "Publicada",
       "title": "Notas",
       "titleLabel": "Título",
@@ -19117,7 +19117,7 @@
     "assets": {
       "columns": {
         "kind": "Tipo",
-        "state": "Estado"
+        "state": "Status"
       },
       "configureSupabase": "Configure o Supabase.",
       "detail": {
@@ -19168,7 +19168,7 @@
           "end": "Expira",
           "name": "Nome",
           "reminders": "Lembretes",
-          "state": "Estado",
+          "state": "Status",
           "warrantor": "Garantidor"
         },
         "configureSupabase": "Configure o Supabase.",
@@ -19228,6 +19228,53 @@
     }
   },
   "m": {
+    "error": {
+      "eyebrow": "Erro",
+      "title": "Algo Deu Errado",
+      "tryAgain": "Tentar Novamente",
+      "fallbackMessage": "Ocorreu um erro inesperado.",
+      "ref": "Ref: {digest}",
+      "backHome": "Voltar Ao Início"
+    },
+    "home": {
+      "title": "Painel",
+      "upcoming": {
+        "sub": "Próximo evento"
+      },
+      "clock": {
+        "title": "Hora local",
+        "sub": "Registrar entrada"
+      },
+      "copilot": {
+        "title": "Copiloto de campo",
+        "sub": "Pergunte · Reporte · Desbloqueie"
+      },
+      "w": {
+        "tasks": "Tarefas abertas",
+        "tasksSub": "Atribuídas a você",
+        "advances": "Atribuições",
+        "advancesSub": "Em todos os shows",
+        "unread": "Mensagens",
+        "unreadSub": "Atividade recente"
+      },
+      "quickActions": "Ações rápidas",
+      "viewAll": "Ver todos os próximos eventos",
+      "noShift": "Nada agendado",
+      "noShiftBody": "Sua próxima convocação aparece aqui.",
+      "newSheet": "Criar",
+      "newSheetBody": "Do que você precisa?",
+      "qa": {
+        "report": "Reportar",
+        "scan": "Escanear",
+        "clock": "Ponto",
+        "advance": "Advancing",
+        "approve": "Aprovar",
+        "expense": "Despesa",
+        "swap": "Trocar",
+        "invite": "Convidar"
+      },
+      "upcomingLabel": "Próximos"
+    },
     "advances": {
       "eyebrow": "Mobile",
       "title": "Advancing",
@@ -19235,42 +19282,65 @@
         "title": "Sem Advancing",
         "body": "Equipamentos, credenciais e serviços atribuídos a você aparecem aqui."
       },
-      "detail": {
-        "due": "Prazo",
-        "eyebrow": "Advancing · Item",
-        "fulfilled": "Cumprido",
-        "issued": "Emitido",
-        "notes": "Observações",
-        "project": "Projeto",
-        "purpose": "Finalidade operacional",
-        "qty": "Quantidade",
-        "special": "Solicitações especiais",
-        "state": "Estado",
-        "type": "Tipo"
-      },
-      "fulfill": {
-        "done": "Atualizado",
-        "error": "Não foi possível atualizar",
-        "working": "Processando…"
-      },
-      "group": {
-        "kind": "Tipo",
-        "none": "Nenhum"
-      },
-      "new": {
-        "prefilled": "Preenchido com base na sua última solicitação. Edite o que mudou.",
-        "submitting": "Enviando…",
-        "crumbItem": "Item"
-      },
-      "offline": {
-        "body": "Seus itens de advancing serão carregados, e quaisquer alterações serão sincronizadas, assim que você voltar a ficar on-line.",
-        "title": "Você está off-line"
-      },
       "search": "Buscar advancing…",
+      "group": {
+        "none": "Nenhum",
+        "kind": "Tipo"
+      },
       "sort": {
         "deadline": "Prazo",
         "kind": "Tipo",
         "title": "Nome"
+      },
+      "detail": {
+        "type": "Tipo",
+        "state": "Status",
+        "project": "Projeto",
+        "qty": "Quantidade",
+        "due": "Prazo",
+        "issued": "Emitido",
+        "fulfilled": "Cumprido",
+        "special": "Solicitações especiais",
+        "purpose": "Finalidade operacional",
+        "eyebrow": "Advancing · Item",
+        "notes": "Observações"
+      },
+      "new": {
+        "title": "Solicitação de advance",
+        "intro": "Solicite equipamento, credenciais ou serviços para um próximo turno.",
+        "submit": "Enviar solicitação",
+        "category": "Categoria",
+        "item": "Item",
+        "customItem": "Item personalizado",
+        "customItemPlaceholder": "Descreva o item que você precisa",
+        "specialOrder": "Não está no catálogo? Pedido especial",
+        "pickCategoryFirst": "Escolha uma categoria para ver os itens.",
+        "noItemsInCategory": "Nenhum item do catálogo nesta categoria. Ative Pedido especial abaixo.",
+        "qty": "Quantidade",
+        "start": "Data de início",
+        "end": "Data de término",
+        "special": "Solicitações especiais",
+        "specialPlaceholder": "Tamanho, canal, dieta, etc.",
+        "purpose": "Finalidade operacional",
+        "purposePlaceholder": "Por que isso é necessário para a operação?",
+        "notes": "Observações adicionais",
+        "notesPlaceholder": "Algo mais que Ops deva saber…",
+        "errCategory": "Escolha uma categoria.",
+        "errCustom": "Dê um nome ao item que você precisa.",
+        "errItem": "Escolha um item do catálogo ou ative Pedido especial.",
+        "fromCatalog": "Preenchido a partir do catálogo. Defina as datas e a quantidade.",
+        "submitting": "Enviando…",
+        "prefilled": "Preenchido com base na sua última solicitação. Edite o que mudou.",
+        "crumbItem": "Item"
+      },
+      "offline": {
+        "title": "Você está off-line",
+        "body": "Seus itens de advancing serão carregados, e quaisquer alterações serão sincronizadas, assim que você voltar a ficar on-line."
+      },
+      "fulfill": {
+        "error": "Não foi possível atualizar",
+        "done": "Atualizado",
+        "working": "Processando…"
       }
     },
     "alerts": {
@@ -19296,6 +19366,17 @@
         "dismissConfirm": "Descartar esta notificação?"
       }
     },
+    "scan": {
+      "eyebrow": "Leitura rápida",
+      "title": "Escanear um código",
+      "hint": "Aponte a câmera para um QR ou código de barras: lê automaticamente.",
+      "manualToggle": "Inserir código manualmente",
+      "manualLabel": "Código",
+      "manualPlaceholder": "ex.: R7-014",
+      "manualSubmit": "Capturar",
+      "recentTitle": "Capturados nesta sessão",
+      "recentEmpty": "Nenhum código capturado ainda"
+    },
     "clock": {
       "working": "Trabalhando…",
       "clockIn": "Bater ponto de entrada",
@@ -19307,78 +19388,54 @@
         "title": "Ainda Sem Registros",
         "body": "Registre a entrada para começar a controlar seu tempo."
       },
-      "active": "Ativo",
       "addNote": "Adicionar observação",
-      "asManager": "Como gerente",
-      "closed": "Encerrado",
-      "hours": "{hours} h",
       "noZone": "Nenhuma zona definida",
-      "now": "agora",
-      "offShift": "Fora do turno",
       "onClock": "No relógio",
-      "recent": "Recente"
+      "offShift": "Fora do turno",
+      "recent": "Recente",
+      "now": "agora",
+      "hours": "{hours} h",
+      "active": "Ativo",
+      "closed": "Encerrado",
+      "asManager": "Como gerente"
     },
     "coc": {
       "eyebrow": "Campo",
       "title": "Cadeia de Custódia",
-      "asset": "Ativo",
       "emptyBody": "Leituras e transferências de ativos aparecerão aqui como uma linha do tempo.",
-      "emptyTitle": "Nenhum evento de custódia",
-      "scan": "Leitura"
-    },
-    "common": {
-      "eyebrow": "Mobile"
+      "asset": "Ativo",
+      "scan": "Leitura",
+      "emptyTitle": "Nenhum evento de custódia"
     },
     "dailyLog": {
       "eyebrow": "Campo",
       "title": "Diário de Bordo",
       "back": "Diários de obra",
-      "emptyBody": "Inicie o diário do dia com clima e observações.",
-      "emptyTitle": "Nenhum diário ainda",
       "new": {
-        "cancel": "Cancelar",
-        "date": "Data",
         "eyebrow": "Local",
-        "high": "Máx. °F",
-        "low": "Mín. °F",
+        "title": "Novo diário de obra",
         "noProjects": "Nenhum projeto",
         "noProjectsBody": "Diários de obra são vinculados a um projeto. Peça à equipe de Ops para adicionar um.",
+        "project": "Projeto",
+        "date": "Data",
+        "weather": "Clima",
+        "weatherPh": "ex.: Céu limpo · vento fraco",
+        "high": "Máx. °F",
+        "low": "Mín. °F",
         "notes": "Observações",
         "notesPh": "Efetivos, entregas, impedimentos, incidentes…",
-        "project": "Projeto",
+        "cancel": "Cancelar",
         "saving": "Salvando…",
         "submit": "Salvar diário",
-        "title": "Novo diário de obra",
-        "weather": "Clima",
-        "weatherPh": "ex.: Céu limpo · vento fraco"
+        "photos": "Fotos do local",
+        "photosHint": "Opcional. Anexe o que você viu."
       },
-      "newCta": "Novo diário",
+      "emptyBody": "Inicie o diário do dia com clima e observações.",
+      "untitled": "Diário sem título",
       "noWeather": "Sem clima registrado",
-      "untitled": "Diário sem título"
-    },
-    "directory": {
-      "eyebrow": "Mobile",
-      "title": "Quadro da Equipe",
-      "peopleCount": "{count} pessoas na sua org",
-      "empty": {
-        "title": "Sem Correspondências",
-        "description": "Membros da org aparecem aqui após serem adicionados.",
-        "body": "Ninguém na escala corresponde."
-      },
-      "action": {
-        "call": "Ligar",
-        "email": "E-mail",
-        "message": "Mensagem"
-      },
-      "search": "Buscar equipe, função, time…",
-      "status": {
-        "active": "Ativo",
-        "available": "Disponível",
-        "off": "Fora do local"
-      },
-      "team": {
-        "crew": "Equipe"
-      }
+      "emptyTitle": "Nenhum diário ainda",
+      "newCta": "Novo diário",
+      "submit": "Enviar"
     },
     "docs": {
       "download": {
@@ -19394,14 +19451,14 @@
         "title": "Sem Documentos",
         "body": "Documentos de projeto a que você tem acesso e seus arquivos pessoais aparecem aqui."
       },
-      "group": {
-        "cat": "Categoria",
-        "none": "Nenhum"
-      },
       "search": "Buscar documentos…",
+      "group": {
+        "none": "Nenhum",
+        "cat": "Categoria"
+      },
       "sort": {
-        "cat": "Categoria",
         "name": "Nome",
+        "cat": "Categoria",
         "updated": "Atualizado"
       },
       "viewer": {
@@ -19412,121 +19469,54 @@
         "share": "Compartilhar"
       }
     },
-    "error": {
-      "eyebrow": "Erro",
-      "title": "Algo Deu Errado",
-      "tryAgain": "Tentar Novamente",
-      "backHome": "Voltar Ao Início",
-      "fallbackMessage": "Ocorreu um erro inesperado.",
-      "ref": "Ref: {digest}"
-    },
-    "feed": {
-      "eyebrow": "Mobile",
-      "title": "Comunidade",
-      "noUpdatesYet": "Nenhuma atualização ainda.",
-      "unreadOfTotal": "{unread} não lidas de {total}",
-      "empty": {
-        "title": "Sem Atualizações",
-        "description": "Comunicados da organização aparecerão aqui."
-      },
-      "pinned": "Fixado",
-      "markRead": "Marcar como Lido",
-      "ago": "há {time}",
-      "announcerRole": "Comunicado",
-      "comment": "Comentar",
-      "composerPlaceholder": "Compartilhe uma atualização…",
-      "memberRole": "Equipe",
-      "post": "Publicar",
-      "share": "Compartilhar",
-      "tag": {
-        "kudos": "Reconhecimentos",
-        "update": "Atualização"
-      }
-    },
     "gigs": {
       "eyebrow": "Marketplace",
       "title": "Vagas",
-      "applicants": "{count} candidaturas",
       "applied": "Candidatado",
-      "apply": "Candidatar-se",
       "applying": "Enviando candidatura…",
-      "network": "Rede",
-      "noMatch": "Nada corresponde à sua busca.",
-      "openNow": "Aberto agora",
-      "perDay": "{rate}/dia",
+      "apply": "Candidatar-se",
+      "search": "Buscar vagas…",
       "postJob": "Publicar uma vaga…",
+      "applicants": "{count} candidaturas",
+      "noMatch": "Nada corresponde à sua busca.",
+      "network": "Rede",
+      "perDay": "{rate}/dia",
       "rateTbd": "Valor a definir",
-      "search": "Buscar vagas…"
+      "openNow": "Aberto agora"
     },
     "guide": {
       "eyebrow": "Guia de Campo",
+      "title": "Guia",
       "empty": "Nenhum guia ainda",
-      "emptyBody": "A equipe de produção ainda não publicou um guia para a sua função.",
-      "title": "Guia"
+      "emptyBody": "A equipe de produção ainda não publicou um guia para a sua função."
     },
     "handover": {
       "eyebrow": "Mobile",
       "title": "Passagem",
-      "assets": "Ativos / Chaves",
+      "new": "Nova passagem de turno",
+      "prior": "Passagens de turno recentes",
       "emptyBody": "Envie uma passagem de turno de fim de expediente para iniciar o registro.",
       "emptyTitle": "Nenhuma passagem de turno",
-      "handedTo": "Passado para {relief}",
-      "new": "Nova passagem de turno",
-      "openItems": "Itens abertos",
-      "prior": "Passagens de turno recentes",
       "state": {
         "allClear": "Tudo certo",
-        "issues": "Problemas",
-        "watchItems": "Itens a observar"
-      }
+        "watchItems": "Itens a observar",
+        "issues": "Problemas"
+      },
+      "handedTo": "Passado para {relief}",
+      "openItems": "Itens abertos",
+      "assets": "Ativos / Chaves"
     },
-    "home": {
-      "title": "Painel",
-      "clock": {
-        "sub": "Registrar entrada",
-        "title": "Hora local"
-      },
-      "copilot": {
-        "sub": "Pergunte · Reporte · Desbloqueie",
-        "title": "Copiloto de campo"
-      },
-      "newSheet": "Criar",
-      "newSheetBody": "Do que você precisa?",
-      "noShift": "Nada agendado",
-      "noShiftBody": "Sua próxima convocação aparece aqui.",
-      "qa": {
-        "advance": "Advancing",
-        "approve": "Aprovar",
-        "clock": "Ponto",
-        "expense": "Despesa",
-        "invite": "Convidar",
-        "report": "Reportar",
-        "scan": "Escanear",
-        "swap": "Trocar"
-      },
-      "quickActions": "Ações rápidas",
-      "upcoming": {
-        "sub": "Próximo evento"
-      },
-      "upcomingLabel": "Próximos",
-      "viewAll": "Ver todos os próximos eventos",
-      "w": {
-        "advances": "Atribuições",
-        "advancesSub": "Em todos os shows",
-        "tasks": "Tarefas abertas",
-        "tasksSub": "Atribuídas a você",
-        "unread": "Mensagens",
-        "unreadSub": "Atividade recente"
-      }
+    "common": {
+      "eyebrow": "Mobile"
     },
     "inbox": {
       "room": {
         "channel": "Canal",
         "direct": "Mensagem direta",
-        "empty": "Nenhuma mensagem ainda",
-        "emptyHint": "Diga olá para começar.",
         "placeholder": "Mensagem",
-        "today": "Hoje"
+        "today": "Hoje",
+        "empty": "Nenhuma mensagem ainda",
+        "emptyHint": "Diga olá para começar."
       },
       "configureSupabase": "Configure o Supabase.",
       "eyebrow": "Mobile",
@@ -19538,32 +19528,32 @@
       "unreadBadge": "Novo",
       "directMessage": "Mensagem direta",
       "back": "Caixa de entrada",
+      "noMessages": "Nenhuma mensagem ainda",
+      "unread": "Não lidas",
+      "emptyHint": "Canais e mensagens diretas aparecem aqui.",
       "channels": "Canais",
       "directMessages": "Mensagens diretas",
-      "emptyHint": "Canais e mensagens diretas aparecem aqui.",
-      "emptyTitle": "Nenhuma conversa",
-      "noMessages": "Nenhuma mensagem ainda",
-      "unread": "Não lidas"
+      "emptyTitle": "Nenhuma conversa"
     },
     "incident": {
       "eyebrow": "Campo",
       "title": "Meus Incidentes",
       "quickFile": "Registro Rápido (Um Campo)",
       "back": "Meus incidentes",
-      "emptyBody": "Você não registrou nenhum relatório de incidente.",
-      "emptyTitle": "Nada registrado",
       "quick": {
-        "cancel": "Cancelar",
         "eyebrow": "Express",
-        "filing": "Registrando…",
+        "title": "Registro rápido",
         "intro": "Uma linha. Encaminharemos à equipe de Ops e você pode adicionar detalhes depois.",
         "label": "O que aconteceu",
         "placeholder": "Descreva o incidente…",
+        "cancel": "Cancelar",
+        "filing": "Registrando…",
         "submit": "Registrar incidente",
-        "title": "Registro rápido",
         "followUpIntro": "Acompanhamento de \"{summary}\". Uma linha, encaminhada à operação na mesma cadeia."
       },
+      "emptyBody": "Você não registrou nenhum relatório de incidente.",
       "untitled": "Incidente sem título",
+      "emptyTitle": "Nada registrado",
       "chain": {
         "title": "Cadeia de status",
         "filed": "Relatório registrado",
@@ -19581,29 +19571,35 @@
       "eyebrow": "Campo",
       "title": "Incidentes",
       "emptyBody": "Nenhum incidente registrado para esta organização ainda.",
-      "emptyTitle": "Tudo certo",
-      "file": "Registrar relatório",
+      "untitled": "Incidente sem título",
       "photos": "fotos",
-      "untitled": "Incidente sem título"
+      "file": "Registrar relatório",
+      "emptyTitle": "Tudo certo"
     },
     "inventory": {
-      "available": "Disponível",
-      "colCategory": "Categoria",
-      "colCode": "Código",
-      "colCost": "Custo unitário",
-      "colItem": "Item",
-      "colQty": "Em estoque",
-      "empty": "Nenhum ativo",
-      "emptyHint": "Nada corresponde a esses filtros.",
       "eyebrow": "Catálogo em estoque",
       "title": "Inventário",
-      "onHand": "em estoque",
-      "scanCta": "Escanear para retirar / devolver",
       "search": "Buscar ativos…",
-      "serialized": "Unidades serializadas",
-      "tracked": "Rastreado",
+      "empty": "Nenhum ativo",
+      "emptyHint": "Nada corresponde a esses filtros.",
       "units": "Unidades",
-      "untracked": "Não rastreado"
+      "colItem": "Item",
+      "colCategory": "Categoria",
+      "colCode": "Código",
+      "colQty": "Em estoque",
+      "colCost": "Custo unitário",
+      "onHand": "em estoque",
+      "tracked": "Rastreado",
+      "untracked": "Não rastreado",
+      "scanCta": "Escanear para retirar / devolver",
+      "serialized": "Unidades serializadas",
+      "available": "Disponível",
+      "custody": {
+        "take": "Assumir custódia",
+        "return": "Devolver",
+        "cancel": "Cancelar",
+        "blocked": "Esta unidade não pode ser movida do status atual."
+      }
     },
     "kudos": {
       "title": "Kudos",
@@ -19631,22 +19627,17 @@
       "dueDate": "prazo {date}",
       "courseFallback": "Curso"
     },
-    "notFound": {
-      "title": "Tela não encontrada",
-      "description": "Esta tela mobile não está no manifest.",
-      "homeCta": "Início"
-    },
     "notifications": {
       "eyebrow": "Mobile",
       "title": "Notificações",
+      "matrixHeading": "Entrega",
       "channel": {
-        "email": "E-mail",
         "push": "Push",
+        "email": "E-mail",
         "text": "SMS"
       },
-      "emptyTitle": "Você está em dia.",
-      "matrixHeading": "Entrega",
-      "recentHeading": "Recentes"
+      "recentHeading": "Recentes",
+      "emptyTitle": "Você está em dia."
     },
     "onboarding": {
       "title": "Integração",
@@ -19654,193 +19645,193 @@
       "completed": "✓ Concluído",
       "finish": "Finalizar Integração",
       "eyebrow": "Mobile",
+      "marking": "Salvando…",
+      "finishing": "Finalizando…",
       "detail": {
         "empty": {
           "title": "Nenhuma Etapa Ainda",
           "description": "Este fluxo de integração não tem etapas. Volte assim que seu admin as publicar."
         }
       },
-      "finishing": "Finalizando…",
-      "marking": "Salvando…",
-      "assignment": {
-        "accept": "Aceitar atribuição",
-        "contact": "Contatar para conversar",
-        "dates": "Datas",
-        "explore": "Explorar a plataforma",
-        "firstCall": "Primeira convocação",
-        "note": "Não está pronto para decidir? Contate quem o convidou para conversar sobre a função primeiro. Se escolher Explorar a plataforma, esta oferta permanece na sua caixa de entrada e nas notificações para aceitar quando quiser.",
-        "rate": "Valor",
-        "reportsTo": "Reporta a",
-        "role": "Função",
-        "sub": "Você recebeu uma função neste projeto. Analise a oferta e aceite, ou explore o app como agente livre.",
-        "title": "Sua primeira atribuição"
+      "emptyBody": "As jornadas de integração de novos contratados atribuídas a você aparecem aqui.",
+      "untitled": "Integração",
+      "emptyTitle": "Tudo em dia",
+      "verify": {
+        "resent": "Código enviado",
+        "title": "Confirme que é você",
+        "sub": "Digite o código de 6 dígitos que enviamos para",
+        "didnt": "Não recebeu?",
+        "resend": "Reenviar",
+        "cta": "Verificar"
+      },
+      "forgot": {
+        "sent": "Verifique seu e-mail",
+        "title": "Redefinir senha",
+        "sub": "Enviaremos um link de redefinição para o seu e-mail.",
+        "email": "E-mail",
+        "cta": "Enviar link de redefinição",
+        "remembered": "Lembrou da senha?",
+        "back": "Voltar ao login"
       },
       "common": {
-        "back": "Voltar",
-        "passkey": "Usar uma chave de acesso",
+        "working": "Processando…",
         "soon": "Em breve",
-        "working": "Processando…"
+        "passkey": "Usar uma chave de acesso",
+        "back": "Voltar"
       },
-      "emptyBody": "As jornadas de integração de novos contratados atribuídas a você aparecem aqui.",
-      "emptyTitle": "Tudo em dia",
-      "forgot": {
-        "back": "Voltar ao login",
-        "cta": "Enviar link de redefinição",
+      "sso": {
+        "google": "Continuar com o Google",
+        "bluesky": "Continuar com o Bluesky"
+      },
+      "splash": {
+        "start": "Começar",
+        "haveAccount": "Já tenho uma conta",
+        "terms": "Ao continuar, você concorda com os",
+        "termsLink": "Termos",
+        "privacyLink": "Política de Privacidade"
+      },
+      "signup": {
+        "title": "Cadastre-se",
+        "sub": "Use seu e-mail corporativo ou número de celular.",
+        "name": "Nome completo",
+        "email": "E-mail corporativo",
+        "mobile": "Celular",
+        "password": "Senha",
+        "continue": "Continuar",
+        "orWith": "Ou cadastre-se com",
+        "haveAccount": "Já tem uma conta?",
+        "signin": "Entrar"
+      },
+      "signin": {
+        "title": "Bem-vindo de volta",
+        "sub": "Faça login na sua conta de equipe.",
+        "email": "E-mail ou celular",
+        "password": "Senha",
+        "forgot": "Esqueceu a senha?",
+        "cta": "Mergulhar",
+        "or": "Ou",
+        "new": "Novo por aqui?",
+        "create": "Criar uma conta"
+      },
+      "profile": {
+        "title": "Configurar perfil",
+        "sub": "Esta é a sua identidade de equipe portátil em todos os projetos. Comece pelo básico: você pode completar o restante quando quiser.",
+        "addPhoto": "Adicionar uma foto",
+        "displayName": "Nome de exibição",
+        "username": "Nome de usuário",
         "email": "E-mail",
-        "remembered": "Lembrou da senha?",
-        "sent": "Verifique seu e-mail",
-        "sub": "Enviaremos um link de redefinição para o seu e-mail.",
-        "title": "Redefinir senha"
+        "phone": "Telefone",
+        "linkedin": "LinkedIn",
+        "spotify": "Spotify",
+        "completeFull": "Completar o perfil agora",
+        "gh": {
+          "identity": "Identidade",
+          "contact": "Contato",
+          "emergency": "Contatos de emergência",
+          "social": "Redes sociais",
+          "dietary": "Alimentação",
+          "travel": "Perfil de viagem",
+          "uniform": "Tamanhos de uniforme",
+          "credentials": "Credenciais"
+        },
+        "pronouns": "Pronomes",
+        "role": "Função / Cargo",
+        "bio": "Bio",
+        "address": "Endereço",
+        "city": "Cidade",
+        "zip": "CEP",
+        "contact1": "Contato 1",
+        "contact2": "Contato 2",
+        "instagram": "Instagram",
+        "website": "Site",
+        "dietary": "Restrições alimentares",
+        "airport": "Aeroporto de origem",
+        "dob": "Data de nascimento",
+        "passport": "Nº do passaporte",
+        "visas": "Vistos",
+        "knownTraveler": "Viajante conhecido",
+        "loyalty": "Fidelidade",
+        "shirt": "Camisa",
+        "pants": "Calça",
+        "shoe": "Calçado",
+        "glove": "Luva",
+        "certs": "Certificações",
+        "skills": "Habilidades e tags",
+        "laterNote": "Bio, contato, contatos de emergência, redes sociais, alimentação, perfil de viagem, tamanhos de uniforme e credenciais podem ser adicionados depois no seu perfil.",
+        "saveFull": "Salvar perfil",
+        "continueBasics": "Continuar com o básico"
       },
       "join": {
+        "title": "Entrar na sua organização",
+        "sub": "Digite o código de acesso do seu admin, ou escaneie o QR do convite.",
         "code": "Código de acesso",
         "cta": "Entrar",
         "note": "Sem código? Você pode solicitar a entrada a um admin da organização, ou continuar e entrar em um projeto mais tarde.",
-        "skip": "Pular por enquanto",
-        "sub": "Digite o código de acesso do seu admin, ou escaneie o QR do convite.",
-        "title": "Entrar na sua organização"
-      },
-      "pass": {
-        "cta": "Continuar",
-        "faq": "Ler o FAQ completo da Rose",
-        "freeAgent": "Agente livre",
-        "howTo": "Como usar sua Rose",
-        "scanNote": "Escaneie para verificar · uso único, atualiza ao abrir",
-        "sub": "Apresentando a sua COMPVSS Rose: a credencial única e duradoura que abre todo o ATLVS Ecosystem. É emitida uma só vez e acompanha você por toda a vida, evoluindo apenas conforme o seu acesso. Bem-vindo à associação.",
-        "title": "A COMPVSS Rose",
-        "use1": "Toque ou escaneie para entrar em locais de trabalho, acessar instalações, rastrear ativos e despachar serviços",
-        "use2": "Acesso atualizado remotamente: concedido, revogado ou ampliado em tempo real",
-        "use3": "Emitida uma vez, carregada por toda a vida: apenas o seu acesso muda"
+        "skip": "Pular por enquanto"
       },
       "permissions": {
-        "bluetooth": "Bluetooth / NFC",
-        "bluetoothSub": "Toque em credenciais e leitores RFID",
-        "camera": "Câmera",
-        "cameraSub": "Escaneie credenciais QR, ativos e documentos do local",
-        "cta": "Continuar",
+        "title": "Acesso ao app e ao campo",
+        "sub": "Defina seu idioma e as permissões que o COMPVSS usa no local. Altere a qualquer momento nas Configurações.",
         "language": "Idioma",
         "location": "Localização",
         "locationSub": "Verifica se você está no local para o geofencing de registro de ponto",
+        "recommended": "Recomendado",
         "notifications": "Notificações",
         "notificationsSub": "Lembretes de turno, aprovações e alertas de operação",
+        "camera": "Câmera",
+        "cameraSub": "Escaneie credenciais QR, ativos e documentos do local",
+        "bluetooth": "Bluetooth / NFC",
+        "bluetoothSub": "Toque em credenciais e leitores RFID",
         "optional": "Opcional",
-        "recommended": "Recomendado",
-        "sub": "Defina seu idioma e as permissões que o COMPVSS usa no local. Altere a qualquer momento nas Configurações.",
-        "title": "Acesso ao app e ao campo",
-        "unavailable": "Indisponível neste dispositivo"
-      },
-      "profile": {
-        "addPhoto": "Adicionar uma foto",
-        "address": "Endereço",
-        "airport": "Aeroporto de origem",
-        "bio": "Bio",
-        "certs": "Certificações",
-        "city": "Cidade",
-        "completeFull": "Completar o perfil agora",
-        "contact1": "Contato 1",
-        "contact2": "Contato 2",
-        "continueBasics": "Continuar com o básico",
-        "dietary": "Restrições alimentares",
-        "displayName": "Nome de exibição",
-        "dob": "Data de nascimento",
-        "email": "E-mail",
-        "gh": {
-          "contact": "Contato",
-          "credentials": "Credenciais",
-          "dietary": "Alimentação",
-          "emergency": "Contatos de emergência",
-          "identity": "Identidade",
-          "social": "Redes sociais",
-          "travel": "Perfil de viagem",
-          "uniform": "Tamanhos de uniforme"
-        },
-        "glove": "Luva",
-        "instagram": "Instagram",
-        "knownTraveler": "Viajante conhecido",
-        "laterNote": "Bio, contato, contatos de emergência, redes sociais, alimentação, perfil de viagem, tamanhos de uniforme e credenciais podem ser adicionados depois no seu perfil.",
-        "linkedin": "LinkedIn",
-        "loyalty": "Fidelidade",
-        "pants": "Calça",
-        "passport": "Nº do passaporte",
-        "phone": "Telefone",
-        "pronouns": "Pronomes",
-        "role": "Função / Cargo",
-        "saveFull": "Salvar perfil",
-        "shirt": "Camisa",
-        "shoe": "Calçado",
-        "skills": "Habilidades e tags",
-        "spotify": "Spotify",
-        "sub": "Esta é a sua identidade de equipe portátil em todos os projetos. Comece pelo básico: você pode completar o restante quando quiser.",
-        "title": "Configurar perfil",
-        "username": "Nome de usuário",
-        "visas": "Vistos",
-        "website": "Site",
-        "zip": "CEP"
-      },
-      "signin": {
-        "create": "Criar uma conta",
-        "cta": "Mergulhar",
-        "email": "E-mail ou celular",
-        "forgot": "Esqueceu a senha?",
-        "new": "Novo por aqui?",
-        "or": "Ou",
-        "password": "Senha",
-        "sub": "Faça login na sua conta de equipe.",
-        "title": "Bem-vindo de volta"
-      },
-      "signup": {
-        "continue": "Continuar",
-        "email": "E-mail corporativo",
-        "haveAccount": "Já tem uma conta?",
-        "mobile": "Celular",
-        "name": "Nome completo",
-        "orWith": "Ou cadastre-se com",
-        "password": "Senha",
-        "signin": "Entrar",
-        "sub": "Use seu e-mail corporativo ou número de celular.",
-        "title": "Cadastre-se"
-      },
-      "splash": {
-        "haveAccount": "Já tenho uma conta",
-        "privacyLink": "Política de Privacidade",
-        "start": "Começar",
-        "terms": "Ao continuar, você concorda com os",
-        "termsLink": "Termos"
-      },
-      "sso": {
-        "bluesky": "Continuar com o Bluesky",
-        "google": "Continuar com o Google"
-      },
-      "untitled": "Integração",
-      "verify": {
-        "cta": "Verificar",
-        "didnt": "Não recebeu?",
-        "resend": "Reenviar",
-        "resent": "Código enviado",
-        "sub": "Digite o código de 6 dígitos que enviamos para",
-        "title": "Confirme que é você"
+        "unavailable": "Indisponível neste dispositivo",
+        "cta": "Continuar"
       },
       "welcome": {
-        "cta": "Ver sua Rose",
+        "title": "Bem-vindo a bordo",
         "sub": "Sua conta COMPVSS está configurada e pronta para uso.",
-        "title": "Bem-vindo a bordo"
+        "cta": "Ver sua Rose"
+      },
+      "pass": {
+        "title": "A COMPVSS Rose",
+        "sub": "Apresentando a sua COMPVSS Rose: a credencial única e duradoura que abre todo o ATLVS Ecosystem. É emitida uma só vez e acompanha você por toda a vida, evoluindo apenas conforme o seu acesso. Bem-vindo à associação.",
+        "scanNote": "Escaneie para verificar · uso único, atualiza ao abrir",
+        "freeAgent": "Agente livre",
+        "howTo": "Como usar sua Rose",
+        "use1": "Toque ou escaneie para entrar em locais de trabalho, acessar instalações, rastrear ativos e despachar serviços",
+        "use2": "Acesso atualizado remotamente: concedido, revogado ou ampliado em tempo real",
+        "use3": "Emitida uma vez, carregada por toda a vida: apenas o seu acesso muda",
+        "faq": "Ler o FAQ completo da Rose",
+        "cta": "Continuar"
+      },
+      "assignment": {
+        "title": "Sua primeira atribuição",
+        "sub": "Você recebeu uma função neste projeto. Analise a oferta e aceite, ou explore o app como agente livre.",
+        "role": "Função",
+        "dates": "Datas",
+        "rate": "Valor",
+        "firstCall": "Primeira convocação",
+        "reportsTo": "Reporta a",
+        "accept": "Aceitar atribuição",
+        "contact": "Contatar para conversar",
+        "explore": "Explorar a plataforma",
+        "note": "Não está pronto para decidir? Contate quem o convidou para conversar sobre a função primeiro. Se escolher Explorar a plataforma, esta oferta permanece na sua caixa de entrada e nas notificações para aceitar quando quiser."
       }
     },
     "punch": {
       "title": "Registro de Ponto",
-      "active": "Ativo",
-      "closed": "Encerrado",
-      "emptyBody": "Registre a entrada para começar seu turno.",
-      "emptyTitle": "Nenhum registro de ponto",
-      "fullClock": "Folha de ponto completa",
-      "hrs": "h",
-      "in": "Registrar entrada",
-      "now": "agora",
-      "off": "Fora do turno",
-      "on": "No relógio",
-      "open": "Aberto",
       "out": "Registrar saída",
-      "today": "Registros de hoje"
+      "in": "Registrar entrada",
+      "on": "No relógio",
+      "off": "Fora do turno",
+      "today": "Registros de hoje",
+      "emptyBody": "Registre a entrada para começar seu turno.",
+      "now": "agora",
+      "hrs": "h",
+      "open": "Aberto",
+      "closed": "Encerrado",
+      "active": "Ativo",
+      "fullClock": "Folha de ponto completa",
+      "emptyTitle": "Nenhum registro de ponto"
     },
     "requests": {
       "eyebrow": "Campo",
@@ -19849,108 +19840,108 @@
         "title": "Tudo certo",
         "body": "Solicitações de folga e de troca de turno aparecem aqui."
       },
-      "approve": "Aprovar",
       "chain": {
-        "managerPlus": "Gerente+",
-        "reviewer": "Revisor",
-        "reviewing": "Em revisão",
+        "submitter": "Solicitante",
         "submitted": "Enviado",
-        "submitter": "Solicitante"
+        "reviewer": "Revisor",
+        "managerPlus": "Gerente+",
+        "reviewing": "Em revisão"
       },
+      "approve": "Aprovar",
       "decline": "Recusar",
-      "hours": "{hours} h",
       "search": "Buscar aprovações…",
-      "someone": "Alguém",
       "sort": {
         "recent": "Recente",
         "type": "Tipo"
       },
-      "swap": {
-        "title": "Troca de turno",
-        "toTitle": "Trocar com {who}"
-      },
+      "someone": "Alguém",
       "timeOff": {
         "title": "Folga"
       },
       "type": {
-        "shiftSwap": "Troca de turno",
-        "timeOff": "Folga"
+        "timeOff": "Folga",
+        "shiftSwap": "Troca de turno"
+      },
+      "hours": "{hours} h",
+      "swap": {
+        "toTitle": "Trocar com {who}",
+        "title": "Troca de turno"
       }
     },
     "settings": {
       "eyebrow": "Campo",
       "title": "Configurações",
       "signOut": "Sair",
-      "account": {
-        "heading": "Conta",
-        "status": "Status da conta"
+      "profile": {
+        "heading": "Perfil",
+        "name": "Nome completo",
+        "tagline": "Slogan",
+        "bio": "Bio",
+        "pronouns": "Pronomes",
+        "role": "Função / Cargo"
       },
-      "appearance": {
-        "density": "Densidade",
-        "heading": "Aparência",
-        "theme": "Tema"
+      "contact": {
+        "heading": "Contato",
+        "phone": "Celular",
+        "email": "Trabalho",
+        "city": "Cidade",
+        "region": "Região / Estado",
+        "country": "País"
       },
       "certs": {
         "label": "Certificações"
       },
-      "contact": {
-        "city": "Cidade",
-        "country": "País",
-        "email": "Trabalho",
-        "heading": "Contato",
-        "phone": "Celular",
-        "region": "Região / Estado"
+      "save": "Salvar",
+      "saved": "Salvo.",
+      "appearance": {
+        "heading": "Aparência",
+        "theme": "Tema",
+        "density": "Densidade"
       },
-      "credentials": {
-        "heading": "Credenciais"
-      },
-      "dietary": {
-        "heading": "Alimentação",
-        "label": "Restrições alimentares"
+      "account": {
+        "heading": "Conta",
+        "status": "Status da conta"
       },
       "emergency": {
         "heading": "Contatos de emergência",
         "name": "Nome",
         "relationship": "Parentesco"
       },
-      "profile": {
-        "bio": "Bio",
-        "heading": "Perfil",
-        "name": "Nome completo",
-        "pronouns": "Pronomes",
-        "role": "Função / Cargo",
-        "tagline": "Slogan"
+      "social": {
+        "heading": "Redes sociais",
+        "linkedin": "LinkedIn",
+        "spotify": "Spotify",
+        "instagram": "Instagram",
+        "website": "Site"
       },
-      "save": "Salvar",
-      "saved": "Salvo.",
-      "setHint": "Separe com · ou vírgulas",
+      "dietary": {
+        "heading": "Alimentação",
+        "label": "Restrições alimentares"
+      },
+      "travel": {
+        "heading": "Viagem",
+        "airport": "Aeroporto de origem",
+        "dob": "Data de nascimento",
+        "passport": "Nº do passaporte",
+        "knownTraveler": "Viajante conhecido",
+        "visas": "Vistos",
+        "loyalty": "Programas de fidelidade"
+      },
+      "uniform": {
+        "heading": "Uniforme",
+        "shirt": "Camisa",
+        "pants": "Calça",
+        "shoe": "Calçado",
+        "glove": "Luva",
+        "hat": "Chapéu"
+      },
+      "credentials": {
+        "heading": "Credenciais"
+      },
       "skills": {
         "label": "Habilidades e tags"
       },
-      "social": {
-        "heading": "Redes sociais",
-        "instagram": "Instagram",
-        "linkedin": "LinkedIn",
-        "spotify": "Spotify",
-        "website": "Site"
-      },
-      "travel": {
-        "airport": "Aeroporto de origem",
-        "dob": "Data de nascimento",
-        "heading": "Viagem",
-        "knownTraveler": "Viajante conhecido",
-        "loyalty": "Programas de fidelidade",
-        "passport": "Nº do passaporte",
-        "visas": "Vistos"
-      },
-      "uniform": {
-        "glove": "Luva",
-        "hat": "Chapéu",
-        "heading": "Uniforme",
-        "pants": "Calça",
-        "shirt": "Camisa",
-        "shoe": "Calçado"
-      }
+      "setHint": "Separe com · ou vírgulas"
     },
     "shift": {
       "eyebrow": "Mobile",
@@ -19974,61 +19965,62 @@
       "title": "Minhas Tarefas",
       "empty": "Nenhuma tarefa atribuída",
       "detail": {
-        "actAssigned": "reatribuiu a tarefa",
-        "actAttached": "adicionou um anexo",
-        "actCommented": "comentou",
-        "actCreated": "Tarefa criada",
-        "actDue": "alterou a data de vencimento",
-        "actUpdated": "Última atualização",
-        "activity": "Atividade",
-        "activityEmpty": "Nenhuma atividade ainda.",
+        "eyebrow": "Tarefa",
+        "status": "Status",
+        "priority": "Prioridade",
+        "due": "Prazo",
         "assignee": "Responsável",
         "created": "Criada",
+        "updated": "Atualizada",
         "description": "Descrição",
         "descriptionEmpty": "Sem descrição.",
-        "due": "Prazo",
-        "eyebrow": "Tarefa",
+        "activity": "Atividade",
+        "actCreated": "Tarefa criada",
+        "actUpdated": "Última atualização",
         "permWarn": "Você não tem permissão para alterar esta tarefa.",
+        "updatedToast": "Tarefa atualizada",
+        "actCommented": "comentou",
+        "actAttached": "adicionou um anexo",
+        "actAssigned": "reatribuiu a tarefa",
+        "actDue": "alterou a data de vencimento",
         "photos": "Fotos",
         "photosEmpty": "Nenhuma foto ainda.",
-        "priority": "Prioridade",
-        "status": "Status",
-        "updated": "Atualizada",
-        "updatedToast": "Tarefa atualizada"
+        "activityEmpty": "Nenhuma atividade ainda."
       },
-      "col": {
-        "due": "Prazo",
-        "task": "Tarefa"
-      },
-      "emptyBody": "Nada corresponde a esses filtros.",
-      "filter": {
-        "showCompleted": "Mostrar concluídas",
-        "status": "Status"
-      },
-      "group": {
-        "assignee": "Responsável",
-        "none": "Nenhum",
-        "priority": "Prioridade",
-        "status": "Status"
-      },
+      "unassigned": "Não atribuída",
       "noDue": "Sem data de vencimento",
-      "noTasksInLane": "Nenhuma tarefa",
-      "reset": "Redefinir filtros",
       "search": "Buscar tarefas…",
+      "emptyBody": "Nada corresponde a esses filtros.",
+      "group": {
+        "none": "Nenhum",
+        "status": "Status",
+        "priority": "Prioridade",
+        "assignee": "Responsável"
+      },
       "sort": {
         "due": "Prazo",
-        "name": "Nome",
-        "priority": "Prioridade"
+        "priority": "Prioridade",
+        "name": "Nome"
       },
+      "filter": {
+        "status": "Status",
+        "showCompleted": "Mostrar concluídas"
+      },
+      "reset": "Redefinir filtros",
       "state": {
-        "blocked": "Bloqueada",
-        "done": "Concluída",
         "open": "Aberta",
         "progress": "Em andamento",
-        "review": "Em revisão"
+        "blocked": "Bloqueada",
+        "review": "Em revisão",
+        "done": "Concluída"
       },
+      "col": {
+        "task": "Tarefa",
+        "due": "Prazo"
+      },
+      "noTasksInLane": "Nenhuma tarefa",
       "swipeHint": "Deslize entre as faixas",
-      "unassigned": "Não atribuída"
+      "new": "Nova tarefa"
     },
     "timeOff": {
       "title": "Folgas",
@@ -20044,12 +20036,12 @@
         "description": "Suas solicitações de folga aparecerão aqui."
       },
       "timeOffFallback": "Folga",
+      "eyebrow": "Você",
       "balance": "Saldo",
+      "requests": "Suas solicitações",
       "emptyBody": "Você não solicitou nenhuma folga.",
       "emptyTitle": "Nenhuma solicitação",
-      "eyebrow": "Você",
-      "newCta": "Solicitar folga",
-      "requests": "Suas solicitações"
+      "newCta": "Solicitar folga"
     },
     "wallet": {
       "eyebrow": "Mobile",
@@ -20058,289 +20050,111 @@
         "title": "Sem Credenciais",
         "body": "As permissões de credencial aparecem aqui após a emissão. Fale com o seu admin."
       },
-      "accessTitle": "Acesso e permissões",
       "credential": "Credencial",
+      "accessTitle": "Acesso e permissões",
       "help": "Contatar o admin para ajuda"
     },
-    "account": {
-      "archive": {
-        "confirmLabel": "Digite ARCHIVE para confirmar",
-        "cta": "Solicitar arquivamento",
-        "export": "Exporte seus dados primeiro",
-        "heading": "Arquivar conta",
-        "preserve": "Registros operacionais preservados",
-        "retainTitle": "Os registros são retidos, não excluídos.",
-        "revoke": "Acesso revogado após confirmação do admin"
+    "notFound": {
+      "title": "Tela não encontrada",
+      "description": "Esta tela mobile não está no manifest.",
+      "homeCta": "Início"
+    },
+    "directory": {
+      "eyebrow": "Mobile",
+      "title": "Quadro da Equipe",
+      "peopleCount": "{count} pessoas na sua org",
+      "empty": {
+        "title": "Sem Correspondências",
+        "description": "Membros da org aparecem aqui após serem adicionados.",
+        "body": "Ninguém na escala corresponde."
       },
-      "eyebrow": "Status da conta",
-      "intro": "Gerencie o status da sua conta: afaste-se por um tempo ou solicite o arquivamento.",
-      "pause": {
-        "active": "Sua conta está pausada. Retome acima quando estiver pronto.",
-        "cta": "Pausar minha conta",
-        "heading": "Pausar conta",
-        "hide": "Oculta do agendamento e das escalas de equipe",
-        "mute": "Notificações pausadas",
-        "resume": "Retomar minha conta",
-        "reverse": "Reative a qualquer momento, nada é perdido"
+      "team": {
+        "crew": "Equipe"
       },
-      "title": "Conta"
-    },
-    "companies": {
-      "call": "Ligar",
-      "count": "{n} no projeto",
-      "email": "E-mail",
-      "empty": "Nenhum fornecedor",
-      "emptyBody": "Nenhuma organização corresponde.",
-      "general": "Geral",
-      "search": "Buscar fornecedores, atividade, escopo…",
-      "title": "Fornecedores",
-      "unnamed": "Fornecedor sem nome"
-    },
-    "inventoryScan": {
-      "back": "Ativos",
-      "cameraDenied": "Câmera indisponível. Use a entrada manual",
-      "cta": "Resolver etiqueta",
-      "enableCamera": "Ativar câmera",
-      "eyebrow": "Etiqueta de ativo",
-      "title": "Escanear um código",
-      "hint": "Aponte para o QR da etiqueta do ativo: lê automaticamente.",
-      "logged": "Registrado",
-      "manualLabel": "Etiqueta de ativo",
-      "manualPlaceholder": "ex.: R7-014",
-      "recentEmpty": "Nenhuma leitura ainda",
-      "recentTitle": "Atividade recente",
-      "scanning": "Verificando…"
-    },
-    "more": {
-      "account": "Conta",
-      "eyebrow": "Espaço de trabalho",
-      "network": "Rede",
-      "people": "Pessoas",
-      "title": "Mais",
-      "tools": "Ferramentas",
-      "templates": "Modelos",
-      "templatesSub": "Biblioteca De Modelos Da Org E Do Projeto",
-      "finance": "Finanças",
-      "financeSub": "Orçamento, POs E Gasto Codificado",
-      "scheduler": "Agendador de turnos",
-      "schedulerSub": "Crie e publique turnos da equipe"
-    },
-    "scan": {
-      "eyebrow": "Leitura rápida",
-      "hint": "Aponte a câmera para um QR ou código de barras: lê automaticamente.",
-      "manualLabel": "Código",
-      "manualPlaceholder": "ex.: R7-014",
-      "manualSubmit": "Capturar",
-      "manualToggle": "Inserir código manualmente",
-      "recentEmpty": "Nenhum código capturado ainda",
-      "recentTitle": "Capturados nesta sessão",
-      "title": "Escanear um código"
-    },
-    "catalog": {
-      "back": "Mais",
-      "empty": "Nenhum item",
-      "emptyHint": "Nada corresponde.",
-      "request": "Solicitar",
-      "search": "Buscar no catálogo…",
-      "title": "Catálogo"
-    },
-    "changelog": {
-      "build": "COMPVSS Field · Build 2406.18",
-      "eyebrow": "COMPVSS Field",
-      "title": "Novidades"
-    },
-    "connections": {
-      "accept": "Aceitar",
-      "connect": "Conectar",
-      "connected": "Conectado",
-      "count": "{n} sugeridos",
-      "title": "Conexões",
-      "crew": "Equipe",
-      "decline": "Recusar",
-      "empty": "Nenhuma pessoa",
-      "emptyBody": "Nenhum outro membro de equipe nesta organização ainda. As sugestões aparecem aqui conforme sua rede cresce.",
-      "network": "Minha rede",
-      "pendingSection": "Solicitações pendentes",
-      "remove": "Remover",
-      "requestSent": "Solicitação enviada",
-      "search": "Buscar por nome, atividade, habilidade, cert.…",
-      "suggestions": "Sugestões",
-      "unnamed": "Sem nome"
-    },
-    "activity": {
-      "count": "{n} eventos",
-      "empty": "Nenhuma atividade",
-      "emptyBody": "Nada corresponde a esses filtros.",
-      "search": "Buscar atividade…",
-      "title": "Histórico de atividades"
-    },
-    "checkin": {
-      "access": "Acesso",
-      "asset": "Ativo",
-      "batch": "Check-in em lote",
-      "cameraDenied": "Câmera indisponível. Use a entrada manual",
-      "ctaAccess": "Verificar credencial",
-      "ctaAsset": "Retirar / devolver",
-      "ctaNfc": "Toque para ler",
-      "ctaPos": "Escanear produto",
-      "enableCamera": "Ativar câmera",
-      "eyebrow": "{count} leituras recentes",
-      "gate": {
-        "eyebrow": "Portão · {slug}"
+      "status": {
+        "available": "Disponível",
+        "active": "Ativo",
+        "off": "Fora do local"
       },
-      "logged": "Registrado",
-      "manual": "Inserir código manualmente",
-      "manualLabel": "Código",
-      "manualPlaceholder": "ex.: R7-014",
-      "nfc": "NFC",
-      "nfcHint": "Mantenha a credencial RFID ou o chaveiro perto do leitor",
-      "pos": "PDV",
-      "qr": "Código QR",
-      "recentEmpty": "Nenhuma leitura ainda",
-      "recentTitle": "Atividade recente",
-      "rfid": "RFID / NFC",
-      "scanHintAccess": "Escaneie o QR na credencial",
-      "scanHintCamera": "Lê QR e códigos de barras automaticamente",
-      "scanning": "Verificando…",
-      "title": "Escanear",
-      "scanner": "Scanner"
-    },
-    "checkinManual": {
-      "back": "Check-in",
-      "code": "Código",
-      "cta": "Enviar código",
-      "eyebrow": "Entrada manual",
-      "hint": "Digite um código de leitura ou etiqueta de ativo quando a câmera não conseguir ler.",
-      "logged": "Registrado",
-      "placeholder": "ex.: R7-014",
-      "scanning": "Verificando…",
-      "title": "Inserir código"
-    },
-    "referrals": {
-      "balance": "Saldo de recompensas",
-      "contactLabel": "E-mail ou telefone",
-      "contactPlaceholder": "nome@exemplo.com",
-      "empty": "Nenhuma indicação ainda",
-      "emptyBody": "Compartilhe seu código: indicações e recompensas aparecem aqui.",
-      "eyebrow": "ATLVS Ecosystem",
-      "how": "Como funciona",
-      "invite": "Convidar",
-      "next": "Indique membros de equipe para começar a ganhar recompensas.",
-      "pts": "pts",
-      "send": "Enviar convite",
-      "sending": "Enviando…",
-      "share": "Compartilhar",
-      "step1": "Compartilhe",
-      "step1s": "Envie seu código ou link",
-      "step2": "Eles entram",
-      "step2s": "Cadastram-se na rede ATLVS",
-      "step3": "Você ganha",
-      "step3s": "Pontos e dinheiro quando são contratados",
-      "title": "Indicações e recompensas",
-      "yours": "Suas indicações"
-    },
-    "batch": {
-      "back": "Check-in",
-      "cta": "Fazer check-in",
-      "ctaTail": "selecionados",
-      "done": "ativo(s) com check-in concluído.",
-      "empty": "Nada para devolver",
-      "emptyHint": "Você não tem nenhum equipamento retirado no momento.",
-      "hint": "Selecione equipamentos atribuídos para devolver de uma só vez.",
-      "of": "de",
-      "selectAll": "Selecionar tudo",
-      "selected": "selecionados",
-      "title": "Check-in em lote",
-      "working": "Fazendo check-in…"
-    },
-    "emergency": {
-      "assembly": "Ponto de encontro",
-      "back": "Início",
-      "codes": "Códigos de emergência",
-      "evac": "Evacuar",
-      "eyebrow": "Posição",
-      "fire": "Segurança contra incêndio",
-      "musterLabel": "Reunião",
-      "musterTo": "Reunião: {to}",
-      "position": "Posição",
-      "project": "Projeto",
-      "shelter": "Abrigo",
-      "title": "Cartão de emergência",
-      "unassigned": "Aguardando atribuição",
-      "openCodes": "Abrir Página",
-      "codesCrumb": "Códigos",
-      "refEyebrow": "Emergência · Referência",
-      "codesHint": "Toque em um código para o plano de departamento, equipe e individual.",
-      "planDept": "Departamento",
-      "planTeam": "Equipe",
-      "planIndiv": "Você",
-      "fireIntro": "Saiba onde está o extintor mais próximo e como usá-lo. PASS: puxe, aponte, aperte, varra.",
-      "fireTypes": "Tipos De Extintor",
-      "fireLocations": "Locais No Site",
-      "fireNoLocations": "Seu projeto ainda não publicou locais de equipamentos. A operação os adiciona na seção de segurança contra incêndio do guia do evento.",
-      "openGuide": "Abrir Guia Do Evento",
-      "evacCrumb": "Evacuação",
-      "evacTitle": "Rotas De Evacuação",
-      "evacIntro": "Em um código de evacuação, conduza as pessoas pela sua faixa de saída designada até o ponto de encontro.",
-      "evacRoutes": "Rotas Até O Ponto De Encontro",
-      "evacVia": "Por {via}",
-      "evacNoRoutes": "Seu projeto ainda não publicou rotas de evacuação. A operação as adiciona na seção de evacuação do guia do evento.",
-      "mapView": "Ver Mapa",
-      "shelterTitle": "Abrigo No Local",
-      "shelterIntro": "Em pausas por clima ou ameaças externas, conduza as pessoas à estrutura reforçada mais próxima e mantenha o rádio livre, exceto para reportar.",
-      "shelterLocations": "Locais De Abrigo",
-      "shelterNoLocations": "Seu projeto ainda não publicou locais de abrigo. A operação os adiciona na seção de recursos do guia do evento.",
-      "crisis": {
-        "imSafe": "Estou seguro",
-        "needHelp": "Preciso de ajuda",
-        "helpSent": "Seu líder foi alertado. Fique onde está se for seguro."
+      "search": "Buscar equipe, função, time…",
+      "action": {
+        "message": "Mensagem",
+        "call": "Ligar",
+        "email": "E-mail"
       }
     },
-    "market": {
-      "by": "por",
-      "empty": "O marketplace da equipe está entrando no ar. Seja o primeiro a anunciar equipamentos, ferramentas ou vestuário.",
-      "emptyTitle": "Nenhum anúncio ainda",
-      "eyebrow": "Marketplace",
-      "listItem": "Anunciar um item",
-      "listed": "Anúncio salvo · aguardando lançamento do marketplace",
-      "markSold": "Marcar como vendido",
-      "member": "Membro",
-      "mine": "Seu anúncio",
-      "title": "Marketplace",
-      "withdraw": "Retirar"
+    "feed": {
+      "eyebrow": "Mobile",
+      "title": "Comunidade",
+      "noUpdatesYet": "Nenhuma atualização ainda.",
+      "unreadOfTotal": "{unread} não lidas de {total}",
+      "empty": {
+        "title": "Sem Atualizações",
+        "description": "Comunicados da organização aparecerão aqui."
+      },
+      "pinned": "Fixado",
+      "markRead": "Marcar como Lido",
+      "composerPlaceholder": "Compartilhe uma atualização…",
+      "post": "Publicar",
+      "comment": "Comentar",
+      "share": "Compartilhar",
+      "tag": {
+        "kudos": "Reconhecimentos",
+        "update": "Atualização"
+      },
+      "announcerRole": "Comunicado",
+      "memberRole": "Equipe",
+      "ago": "há {time}"
     },
     "schedule": {
-      "col": {
-        "detail": "Detalhe",
-        "event": "Evento",
-        "status": "Status",
-        "time": "Horário",
-        "type": "Tipo"
-      },
+      "search": "Buscar na agenda…",
       "empty": "Nada aqui",
       "emptyBody": "Nenhum item corresponde a esses filtros.",
       "emptyDay": "Nada agendado",
       "emptyDayBody": "Nenhum item neste dia.",
-      "eyebrow": "Hoje · {count} eventos",
-      "filter": {
-        "type": "Tipo"
+      "type": {
+        "shift": "Turno",
+        "meeting": "Reunião",
+        "training": "Treinamento",
+        "ros": "Run of Show"
       },
       "group": {
         "none": "Nenhum",
         "type": "Tipo"
       },
-      "reset": "Redefinir filtros",
-      "search": "Buscar na agenda…",
       "sort": {
-        "name": "Nome",
-        "time": "Horário"
+        "time": "Horário",
+        "name": "Nome"
       },
+      "filter": {
+        "type": "Tipo"
+      },
+      "reset": "Redefinir filtros",
+      "col": {
+        "event": "Evento",
+        "type": "Tipo",
+        "time": "Horário",
+        "detail": "Detalhe",
+        "status": "Status"
+      },
+      "eyebrow": "Hoje · {count} eventos",
       "title": "Calendário",
-      "type": {
-        "meeting": "Reunião",
-        "ros": "Run of Show",
-        "shift": "Turno",
-        "training": "Treinamento"
+      "today": "Hoje",
+      "tomorrow": "Amanhã",
+      "myShift": "Seu turno de hoje",
+      "noShift": "Sem turno hoje",
+      "noShiftBody": "Nada escalado para você hoje. Confira os próximos abaixo.",
+      "clockIn": "Registrar entrada",
+      "upcomingShifts": "Seus próximos 7 dias",
+      "orgCalendar": "Calendário de produção",
+      "eyebrowOne": "Hoje · 1 turno",
+      "swap": {
+        "cta": "Não posso comparecer",
+        "reason": "Por quê?",
+        "placeholder": "Seu gerente verá isto.",
+        "send": "Enviar",
+        "cancel": "Cancelar",
+        "sent": "Troca solicitada. Seu gerente foi notificado."
       }
     },
     "scheduler": {
@@ -20388,40 +20202,335 @@
       "poolEmpty": "Ninguém para atribuir. Adicione pessoas pelo roster do projeto.",
       "undo": "Desfazer"
     },
+    "checkin": {
+      "gate": {
+        "eyebrow": "Portão · {slug}"
+      },
+      "title": "Escanear",
+      "access": "Acesso",
+      "asset": "Ativo",
+      "pos": "PDV",
+      "nfc": "NFC",
+      "rfid": "RFID / NFC",
+      "qr": "Código QR",
+      "scanHintCamera": "Lê QR e códigos de barras automaticamente",
+      "scanHintAccess": "Escaneie o QR na credencial",
+      "nfcHint": "Mantenha a credencial RFID ou o chaveiro perto do leitor",
+      "ctaAccess": "Verificar credencial",
+      "ctaAsset": "Retirar / devolver",
+      "ctaPos": "Escanear produto",
+      "ctaNfc": "Toque para ler",
+      "manual": "Inserir código manualmente",
+      "manualLabel": "Código",
+      "manualPlaceholder": "ex.: R7-014",
+      "batch": "Check-in em lote",
+      "scanning": "Verificando…",
+      "recentTitle": "Atividade recente",
+      "recentEmpty": "Nenhuma leitura ainda",
+      "logged": "Registrado",
+      "eyebrow": "{count} leituras recentes",
+      "enableCamera": "Ativar câmera",
+      "cameraDenied": "Câmera indisponível. Use a entrada manual",
+      "scanner": "Scanner"
+    },
+    "checkinManual": {
+      "back": "Check-in",
+      "eyebrow": "Entrada manual",
+      "title": "Inserir código",
+      "hint": "Digite um código de leitura ou etiqueta de ativo quando a câmera não conseguir ler.",
+      "code": "Código",
+      "placeholder": "ex.: R7-014",
+      "scanning": "Verificando…",
+      "cta": "Enviar código",
+      "logged": "Registrado"
+    },
+    "batch": {
+      "back": "Check-in",
+      "of": "de",
+      "selected": "selecionados",
+      "title": "Check-in em lote",
+      "hint": "Selecione equipamentos atribuídos para devolver de uma só vez.",
+      "empty": "Nada para devolver",
+      "emptyHint": "Você não tem nenhum equipamento retirado no momento.",
+      "selectAll": "Selecionar tudo",
+      "working": "Fazendo check-in…",
+      "cta": "Fazer check-in",
+      "ctaTail": "selecionados",
+      "done": "ativo(s) com check-in concluído."
+    },
+    "changelog": {
+      "eyebrow": "COMPVSS Field",
+      "title": "Novidades",
+      "build": "COMPVSS Field · Build 2406.18"
+    },
+    "more": {
+      "title": "Mais",
+      "tools": "Ferramentas",
+      "people": "Pessoas",
+      "network": "Rede",
+      "account": "Conta",
+      "eyebrow": "Espaço de trabalho",
+      "myWork": "Meu trabalho",
+      "myWorkSub": "O que você deve e o que espera por você",
+      "team": "Equipe",
+      "teamSub": "Convide pessoas e altere funções",
+      "reqs": "Solicitações de compra",
+      "reqsSub": "Peça para a org comprar algo",
+      "mileage": "Quilometragem",
+      "mileageSub": "Registre deslocamentos para reembolso",
+      "templates": "Modelos",
+      "templatesSub": "Biblioteca De Modelos Da Org E Do Projeto",
+      "finance": "Finanças",
+      "financeSub": "Orçamento, POs E Gasto Codificado",
+      "scheduler": "Agendador de turnos",
+      "schedulerSub": "Crie e publique turnos da equipe"
+    },
+    "activity": {
+      "count": "{n} eventos",
+      "title": "Histórico de atividades",
+      "search": "Buscar atividade…",
+      "empty": "Nenhuma atividade",
+      "emptyBody": "Nada corresponde a esses filtros."
+    },
+    "referrals": {
+      "step1": "Compartilhe",
+      "step1s": "Envie seu código ou link",
+      "step2": "Eles entram",
+      "step2s": "Cadastram-se na rede ATLVS",
+      "step3": "Você ganha",
+      "step3s": "Pontos e dinheiro quando são contratados",
+      "eyebrow": "ATLVS Ecosystem",
+      "title": "Indicações e recompensas",
+      "balance": "Saldo de recompensas",
+      "pts": "pts",
+      "next": "Indique membros de equipe para começar a ganhar recompensas.",
+      "share": "Compartilhar",
+      "invite": "Convidar",
+      "how": "Como funciona",
+      "yours": "Suas indicações",
+      "empty": "Nenhuma indicação ainda",
+      "emptyBody": "Compartilhe seu código: indicações e recompensas aparecem aqui.",
+      "contactLabel": "E-mail ou telefone",
+      "contactPlaceholder": "nome@exemplo.com",
+      "sending": "Enviando…",
+      "send": "Enviar convite"
+    },
+    "catalog": {
+      "back": "Mais",
+      "title": "Catálogo",
+      "search": "Buscar no catálogo…",
+      "request": "Solicitar",
+      "addToRequest": "Adicionar à solicitação",
+      "empty": "Nenhum item",
+      "emptyHint": "Nada corresponde."
+    },
+    "emergency": {
+      "back": "Início",
+      "eyebrow": "Posição",
+      "title": "Cartão de emergência",
+      "assembly": "Ponto de encontro",
+      "position": "Posição",
+      "project": "Projeto",
+      "musterLabel": "Reunião",
+      "musterTo": "Reunião: {to}",
+      "unassigned": "Aguardando atribuição",
+      "fire": "Segurança contra incêndio",
+      "evac": "Evacuar",
+      "shelter": "Abrigo",
+      "codes": "Códigos de emergência",
+      "openCodes": "Abrir Página",
+      "codesCrumb": "Códigos",
+      "refEyebrow": "Emergência · Referência",
+      "codesHint": "Toque em um código para o plano de departamento, equipe e individual.",
+      "planDept": "Departamento",
+      "planTeam": "Equipe",
+      "planIndiv": "Você",
+      "fireIntro": "Saiba onde está o extintor mais próximo e como usá-lo. PASS: puxe, aponte, aperte, varra.",
+      "fireTypes": "Tipos De Extintor",
+      "fireLocations": "Locais No Site",
+      "fireNoLocations": "Seu projeto ainda não publicou locais de equipamentos. A operação os adiciona na seção de segurança contra incêndio do guia do evento.",
+      "openGuide": "Abrir Guia Do Evento",
+      "evacCrumb": "Evacuação",
+      "evacTitle": "Rotas De Evacuação",
+      "evacIntro": "Em um código de evacuação, conduza as pessoas pela sua faixa de saída designada até o ponto de encontro.",
+      "evacRoutes": "Rotas Até O Ponto De Encontro",
+      "evacVia": "Por {via}",
+      "evacNoRoutes": "Seu projeto ainda não publicou rotas de evacuação. A operação as adiciona na seção de evacuação do guia do evento.",
+      "mapView": "Ver Mapa",
+      "shelterTitle": "Abrigo No Local",
+      "shelterIntro": "Em pausas por clima ou ameaças externas, conduza as pessoas à estrutura reforçada mais próxima e mantenha o rádio livre, exceto para reportar.",
+      "shelterLocations": "Locais De Abrigo",
+      "shelterNoLocations": "Seu projeto ainda não publicou locais de abrigo. A operação os adiciona na seção de recursos do guia do evento.",
+      "crisis": {
+        "imSafe": "Estou seguro",
+        "needHelp": "Preciso de ajuda",
+        "helpSent": "Seu líder foi alertado. Fique onde está se for seguro."
+      }
+    },
     "profile": {
-      "about": "Sobre",
-      "airport": "Aeroporto de origem",
-      "badges": "Insígnias",
-      "certs": "Certificações",
-      "contact": "Contato",
-      "dietary": "Alimentação",
-      "dob": "Data de nascimento",
-      "edit": "Editar",
-      "email": "E-mail",
-      "emergency": "Contatos de emergência",
       "eyebrow": "Você",
+      "title": "Perfil",
+      "unnamed": "Membro da equipe",
+      "someone": "Alguém",
+      "rose": "Minha Rose",
+      "edit": "Editar",
+      "about": "Sobre",
+      "contact": "Contato",
+      "mobile": "Celular",
+      "email": "E-mail",
+      "location": "Localização",
+      "emergency": "Contatos de emergência",
+      "social": "Redes sociais",
+      "dietary": "Alimentação",
+      "travel": "Perfil de viagem",
+      "airport": "Aeroporto de origem",
+      "dob": "Data de nascimento",
+      "passport": "Passaporte",
+      "knownTraveler": "Viajante conhecido",
+      "visas": "Vistos",
+      "loyalty": "Fidelidade",
+      "uniform": "Tamanhos de uniforme",
+      "shirt": "Camisa",
+      "pants": "Calça",
+      "shoe": "Calçado",
       "glove": "Luva",
       "hat": "Chapéu",
-      "knownTraveler": "Viajante conhecido",
-      "location": "Localização",
-      "loyalty": "Fidelidade",
-      "mobile": "Celular",
-      "pants": "Calça",
-      "passport": "Passaporte",
+      "badges": "Insígnias",
+      "certs": "Certificações",
+      "skills": "Habilidades e tags",
       "ratings": "Avaliações e comentários",
       "reviewCount": "{count} avaliações",
-      "rose": "Minha Rose",
-      "share": "Compartilhar perfil",
-      "shirt": "Camisa",
-      "shoe": "Calçado",
-      "skills": "Habilidades e tags",
-      "social": "Redes sociais",
-      "someone": "Alguém",
-      "title": "Perfil",
-      "travel": "Perfil de viagem",
-      "uniform": "Tamanhos de uniforme",
-      "unnamed": "Membro da equipe",
-      "visas": "Vistos"
+      "share": "Compartilhar perfil"
+    },
+    "companies": {
+      "unnamed": "Fornecedor sem nome",
+      "general": "Geral",
+      "count": "{n} no projeto",
+      "title": "Fornecedores",
+      "search": "Buscar fornecedores, atividade, escopo…",
+      "empty": "Nenhum fornecedor",
+      "emptyBody": "Nenhuma organização corresponde.",
+      "call": "Ligar",
+      "email": "E-mail"
+    },
+    "connections": {
+      "unnamed": "Sem nome",
+      "crew": "Equipe",
+      "count": "{n} sugeridos",
+      "title": "Conexões",
+      "search": "Buscar por nome, atividade, habilidade, cert.…",
+      "empty": "Nenhuma pessoa",
+      "emptyBody": "Nenhum outro membro de equipe nesta organização ainda. As sugestões aparecem aqui conforme sua rede cresce.",
+      "connect": "Conectar",
+      "requestSent": "Solicitação enviada",
+      "network": "Minha rede",
+      "pendingSection": "Solicitações pendentes",
+      "suggestions": "Sugestões",
+      "accept": "Aceitar",
+      "decline": "Recusar",
+      "remove": "Remover",
+      "connected": "Conectado"
+    },
+    "inventoryScan": {
+      "eyebrow": "Etiqueta de ativo",
+      "title": "Escanear um código",
+      "hint": "Aponte para o QR da etiqueta do ativo: lê automaticamente.",
+      "back": "Ativos",
+      "manualLabel": "Etiqueta de ativo",
+      "manualPlaceholder": "ex.: R7-014",
+      "cta": "Resolver etiqueta",
+      "scanning": "Verificando…",
+      "recentTitle": "Atividade recente",
+      "recentEmpty": "Nenhuma leitura ainda",
+      "logged": "Registrado",
+      "enableCamera": "Ativar câmera",
+      "cameraDenied": "Câmera indisponível. Use a entrada manual"
+    },
+    "market": {
+      "listed": "Anúncio salvo · aguardando lançamento do marketplace",
+      "emptyTitle": "Nenhum anúncio ainda",
+      "empty": "O marketplace da equipe está entrando no ar. Seja o primeiro a anunciar equipamentos, ferramentas ou vestuário.",
+      "listItem": "Anunciar um item",
+      "eyebrow": "Marketplace",
+      "title": "Marketplace",
+      "member": "Membro",
+      "markSold": "Marcar como vendido",
+      "withdraw": "Retirar",
+      "mine": "Seu anúncio",
+      "by": "por"
+    },
+    "account": {
+      "pause": {
+        "heading": "Pausar conta",
+        "hide": "Oculta do agendamento e das escalas de equipe",
+        "mute": "Notificações pausadas",
+        "reverse": "Reative a qualquer momento, nada é perdido",
+        "resume": "Retomar minha conta",
+        "cta": "Pausar minha conta",
+        "active": "Sua conta está pausada. Retome acima quando estiver pronto."
+      },
+      "archive": {
+        "heading": "Arquivar conta",
+        "retainTitle": "Os registros são retidos, não excluídos.",
+        "export": "Exporte seus dados primeiro",
+        "revoke": "Acesso revogado após confirmação do admin",
+        "preserve": "Registros operacionais preservados",
+        "confirmLabel": "Digite ARCHIVE para confirmar",
+        "cta": "Solicitar arquivamento"
+      },
+      "eyebrow": "Status da conta",
+      "title": "Conta",
+      "intro": "Gerencie o status da sua conta: afaste-se por um tempo ou solicite o arquivamento."
+    },
+    "myWork": {
+      "title": "Meu trabalho",
+      "eyebrow": "{count} itens abertos",
+      "eyebrowOne": "1 item aberto",
+      "tasks": "Atribuídas a você",
+      "approvalsManager": "Aguardando sua decisão",
+      "approvalsMine": "Aprovações que você abriu",
+      "requests": "Suas solicitações pendentes",
+      "noTasks": "Nenhuma tarefa aberta.",
+      "noApprovals": "Nada na fila de aprovação.",
+      "noRequests": "Nenhuma solicitação pendente.",
+      "due": "Prazo {date}",
+      "noDue": "Sem prazo",
+      "awaitingDecision": "Aguardando decisão",
+      "clearTitle": "Você está em dia",
+      "clearBody": "Nada atribuído a você, nada aguardando sua decisão, nada pendente."
+    },
+    "team": {
+      "eyebrow": "Espaço de trabalho",
+      "title": "Equipe",
+      "eyebrowOne": "1 membro",
+      "eyebrowCount": "{count} membros",
+      "invite": "Convidar alguém",
+      "you": "Você",
+      "change": "Alterar função",
+      "cancel": "Cancelar",
+      "save": "Salvar",
+      "selfNote": "Use o fluxo de saída da organização para alterar sua própria função.",
+      "lastOwner": "O único responsável não pode ser rebaixado. Primeiro promova alguém.",
+      "joined": "Atualizado {when}",
+      "back": "Voltar",
+      "noAccessTitle": "Apenas responsáveis e admins",
+      "noAccessBody": "Convidar pessoas e alterar funções é restrito a responsáveis e admins."
+    },
+    "reqs": {
+      "title": "Solicitações de compra",
+      "eyebrow": "{count} solicitações",
+      "eyebrowOne": "1 solicitação",
+      "new": "Solicitar uma compra",
+      "emptyTitle": "Nada solicitado",
+      "emptyBody": "Precisa que comprem algo para o trabalho? Abra aqui e seu gerente assume.",
+      "crumbMore": "Mais"
+    },
+    "mileage": {
+      "title": "Quilometragem",
+      "eyebrow": "{miles} milhas registradas",
+      "new": "Registrar um deslocamento",
+      "emptyTitle": "Nenhum deslocamento registrado",
+      "emptyBody": "Registre o trajeto enquanto lembra. Seu gerente aprova depois."
     },
     "templates": {
       "eyebrow": "Biblioteca",
@@ -20549,9 +20658,6 @@
       "safe": "Em segurança",
       "help": "Precisa de ajuda",
       "unresponsive": "Sem resposta"
-    },
-    "reqs": {
-      "crumbMore": "Mais"
     }
   },
   "me": {
@@ -21223,7 +21329,7 @@
       "empty": "Nenhum ingresso ainda",
       "columns": {
         "tier": "Categoria",
-        "state": "Estado",
+        "state": "Status",
         "issued": "Emitido",
         "redeemed": "Resgatado"
       }
@@ -21897,7 +22003,7 @@
           "billable": "Faturável",
           "hours": "Horas",
           "period": "Período",
-          "state": "Estado"
+          "state": "Status"
         },
         "empty": {
           "title": "Nenhuma Folha de Ponto Ainda"
@@ -22213,7 +22319,7 @@
           "tier": "Categoria",
           "code": "Código",
           "checkedIn": "Check-in feito",
-          "state": "Estado"
+          "state": "Status"
         }
       },
       "itinerary": {
@@ -24740,5 +24846,525 @@
       "products": "Products",
       "extensions": "Extensions"
     }
+  },
+  "errors": {
+    "a-catalog-item-is-no-longer-available": "Um item do catálogo não está mais disponível",
+    "a-code-with-that-name-already-exists": "Já existe um código com esse nome.",
+    "a-daily-log-already-exists-for-this-project-on": "Já existe um registro diário para este projeto nessa data. Abra-o para editar.",
+    "a-line-s-end-date-precedes-its-start-date": "A data de término de uma linha precede sua data de início",
+    "a-pending-invite-already-exists-for-this-email": "Já existe um convite pendente para este e-mail.",
+    "a-person-can-t-report-to-themselves": "Uma pessoa não pode se reportar a si mesma.",
+    "a-promoter-with-that-ref-code-already-exists": "Já existe um promotor com esse código de referência.",
+    "a-role-with-that-name-already-exists": "Já existe uma função com esse nome",
+    "a-team-with-that-slug-already-exists-in-this": "Já existe um time com esse slug nesta organização.",
+    "add-at-least-one-contact-one-per-line-name": "Adicione pelo menos um contato, um por linha: Nome <email> ou apenas um e-mail",
+    "add-your-name-and-a-signature-first": "Adicione primeiro seu nome e uma assinatura.",
+    "an-entity-can-t-consolidate-into-itself": "Uma entidade não pode consolidar em si mesma",
+    "assignee-is-not-in-your-organization": "A pessoa atribuída não está na sua organização",
+    "atom-belongs-to-a-different-project": "O átomo pertence a outro projeto",
+    "auth": {
+      "admin": {
+        "change-capabilities": "Você precisa de acesso de admin para alterar capacidades",
+        "change-enforcement": "Você precisa de acesso de admin para alterar a aplicação"
+      },
+      "capability": {
+        "people-manage": "Você precisa da capacidade people:manage para atribuir pessoas a um projeto.",
+        "people-manage-2": "Você precisa da capacidade people:manage para editar linhas de reporte."
+      },
+      "manager-plus": {
+        "add-key-results": "Apenas gerente+ pode adicionar resultados-chave",
+        "add-stories": "Apenas gerente+ pode adicionar histórias",
+        "add-ticket-types": "Apenas gerente+ pode adicionar tipos de ingresso",
+        "assign-catalog-items": "Apenas gerente+ pode atribuir itens do catálogo",
+        "author-advance-packets": "Apenas gerente+ pode criar pacotes de advance",
+        "author-onboarding-flows": "Apenas gerente+ pode criar fluxos de integração",
+        "award-rfqs": "Apenas gerente+ pode adjudicar RFQs",
+        "bind-scan-codes": "Apenas gerente+ pode vincular códigos de leitura",
+        "book-submissions": "Apenas gerente+ pode contratar submissões",
+        "broadcast-work-orders": "Apenas gerente+ pode divulgar ordens de serviço",
+        "change-beo-status": "Apenas gerente+ pode alterar o status do BEO",
+        "change-envelope-state": "Apenas gerente+ pode alterar o status do envelope",
+        "change-invoice-status": "Apenas gerente+ pode alterar o status da fatura",
+        "change-po-status": "Apenas gerente+ pode alterar o status do PO",
+        "change-project-state": "Apenas gerente+ pode alterar o status do projeto",
+        "change-proposal-status": "Apenas gerente+ pode alterar o status da proposta",
+        "change-sheet-state": "Apenas gerente+ pode alterar o status da prancha",
+        "close-job-postings": "Apenas gerente+ pode encerrar vagas",
+        "convert-estimates": "Apenas gerente+ pode converter orçamentos",
+        "convert-proposals": "Apenas gerente+ pode converter propostas",
+        "convert-requisitions": "Apenas gerente+ pode converter requisições",
+        "create-approval-delegations": "Apenas gerente+ pode criar delegações de aprovação",
+        "create-approval-policies": "Apenas gerente+ pode criar políticas de aprovação",
+        "create-assets": "Apenas gerente+ pode criar ativos",
+        "create-beos": "Apenas gerente+ pode criar BEOs",
+        "create-bookings": "Apenas gerente+ pode criar contratações",
+        "create-budgets": "Apenas gerente+ pode criar orçamentos",
+        "create-channels": "Apenas gerente+ pode criar canais",
+        "create-clients": "Apenas gerente+ pode criar clientes",
+        "create-contracts": "Apenas gerente+ pode criar contratos",
+        "create-corrective-tasks": "Apenas gerente+ pode criar tarefas corretivas",
+        "create-day-sheets": "Apenas gerente+ pode criar day sheets",
+        "create-discount-codes": "Apenas gerente+ pode criar códigos de desconto",
+        "create-documents": "Apenas gerente+ pode criar documentos",
+        "create-draws": "Apenas gerente+ pode criar parcelas",
+        "create-envelopes": "Apenas gerente+ pode criar envelopes",
+        "create-event-types": "Apenas gerente+ pode criar tipos de evento",
+        "create-events": "Apenas gerente+ pode criar eventos",
+        "create-goals": "Apenas gerente+ pode criar metas",
+        "create-guest-lists": "Apenas gerente+ pode criar listas de convidados",
+        "create-invoices": "Apenas gerente+ pode criar faturas",
+        "create-job-postings": "Apenas gerente+ pode criar vagas",
+        "create-payment-applications": "Apenas gerente+ pode criar medições de pagamento",
+        "create-po-change-orders": "Apenas gerente+ pode criar change orders de PO",
+        "create-projects": "Apenas gerente+ pode criar projetos",
+        "create-promoters": "Apenas gerente+ pode criar promotores",
+        "create-proposals": "Apenas gerente+ pode criar propostas",
+        "create-purchase-orders": "Apenas gerente+ pode criar ordens de compra",
+        "create-reservations": "Apenas gerente+ pode criar reservas",
+        "create-rfqs": "Apenas gerente+ pode criar RFQs",
+        "create-sheets": "Apenas gerente+ pode criar pranchas",
+        "create-spaces": "Apenas gerente+ pode criar espaços",
+        "create-sprints": "Apenas gerente+ pode criar sprints",
+        "create-tables": "Apenas gerente+ pode criar mesas",
+        "create-talent-profiles": "Apenas gerente+ pode criar perfis de talento",
+        "create-tiered-holds": "Apenas gerente+ pode criar reservas provisórias em níveis",
+        "create-tours": "Apenas gerente+ pode criar turnês",
+        "create-vendors": "Apenas gerente+ pode criar fornecedores",
+        "create-warranties": "Apenas gerente+ pode criar garantias",
+        "create-whiteboards": "Apenas gerente+ pode criar quadros brancos",
+        "create-wip-snapshots": "Apenas gerente+ pode criar snapshots de WIP",
+        "decide-applications": "Apenas gerente+ pode decidir candidaturas",
+        "decide-submission-outcomes": "Apenas gerente+ pode decidir o resultado das submissões",
+        "define-badges": "Apenas gerente+ pode definir insígnias",
+        "delete-sheets": "Apenas gerente+ pode excluir pranchas",
+        "edit-advancing-presets": "Apenas gerente+ pode editar presets de advancing",
+        "edit-announcements": "Apenas gerente+ pode editar comunicados",
+        "edit-approval-policies": "Apenas gerente+ pode editar políticas de aprovação",
+        "edit-beos": "Apenas gerente+ pode editar BEOs",
+        "edit-bookings": "Apenas gerente+ pode editar contratações",
+        "edit-client-branding": "Apenas gerente+ pode editar o branding do cliente",
+        "edit-co-pro-partnerships": "Apenas gerente+ pode editar parcerias de coprodução",
+        "edit-contracts": "Apenas gerente+ pode editar contratos",
+        "edit-credentials": "Apenas gerente+ pode editar credenciais",
+        "edit-depreciation": "Apenas gerente+ pode editar a depreciação",
+        "edit-documents": "Apenas gerente+ pode editar documentos",
+        "edit-goals": "Apenas gerente+ pode editar metas",
+        "edit-guest-lists": "Apenas gerente+ pode editar listas de convidados",
+        "edit-invoices": "Apenas gerente+ pode editar faturas",
+        "edit-job-postings": "Apenas gerente+ pode editar vagas",
+        "edit-journal-entries": "Apenas gerente+ pode editar lançamentos contábeis",
+        "edit-offer-letters": "Apenas gerente+ pode editar cartas de oferta",
+        "edit-open-calls": "Apenas gerente+ pode editar chamadas abertas",
+        "edit-settlement-records": "Apenas gerente+ pode editar registros de acerto",
+        "edit-sheets": "Apenas gerente+ pode editar pranchas",
+        "edit-talent-profiles": "Apenas gerente+ pode editar perfis de talento",
+        "edit-the-chart-of-accounts": "Apenas gerente+ pode editar o plano de contas",
+        "edit-whiteboards": "Apenas gerente+ pode editar quadros brancos",
+        "finalize-settlements": "Apenas gerente+ pode finalizar acertos",
+        "import-budgets": "Apenas gerente+ pode importar orçamentos",
+        "log-maintenance": "Apenas gerente+ pode registrar manutenção",
+        "manage-time-clock-zones": "Apenas gerente+ pode gerenciar zonas de ponto",
+        "operate-advance-sends": "Apenas gerente+ pode operar envios de advance",
+        "pair-account-managers": "Apenas gerente+ pode parear account managers",
+        "post-change-orders-to-budget": "Apenas gerente+ pode lançar change orders no orçamento",
+        "post-journal-entries": "Apenas gerente+ pode contabilizar lançamentos",
+        "post-open-calls": "Apenas gerente+ pode publicar chamadas abertas",
+        "prepare-advance-sends": "Apenas gerente+ pode preparar envios de advance",
+        "publish-announcements": "Apenas gerente+ pode publicar comunicados",
+        "publish-day-sheets": "Apenas gerente+ pode publicar day sheets",
+        "publish-job-postings": "Apenas gerente+ pode publicar vagas",
+        "publish-polls": "Apenas gerente+ pode publicar enquetes",
+        "publish-rfqs": "Apenas gerente+ pode publicar RFQs",
+        "publish-surveys": "Apenas gerente+ pode publicar pesquisas",
+        "publish-talent-profiles": "Apenas gerente+ pode publicar perfis de talento",
+        "record-a-3-way-match": "Apenas gerente+ pode registrar uma conciliação de 3 vias",
+        "record-approval-decisions": "Apenas gerente+ pode registrar decisões de aprovação",
+        "record-attributions": "Apenas gerente+ pode registrar atribuições",
+        "record-credentials": "Apenas gerente+ pode registrar credenciais",
+        "record-goods-receipts": "Apenas gerente+ pode registrar recebimentos de mercadoria",
+        "record-received-lines": "Apenas gerente+ pode registrar linhas recebidas",
+        "record-sales-snapshots": "Apenas gerente+ pode registrar snapshots de vendas",
+        "release-tiered-holds": "Apenas gerente+ pode liberar reservas provisórias em níveis",
+        "rotate-letter-access-codes": "Apenas gerente+ pode rotacionar códigos de acesso das cartas",
+        "route-change-orders-to-approvals": "Apenas gerente+ pode encaminhar change orders para aprovações",
+        "route-purchase-orders-to-approvals": "Apenas gerente+ pode encaminhar ordens de compra para aprovações",
+        "seed-draw-schedules": "Apenas gerente+ pode gerar cronogramas de parcelas",
+        "send-booking-offers": "Apenas gerente+ pode enviar ofertas de booking",
+        "send-offer-letters": "Apenas gerente+ pode enviar cartas de oferta",
+        "unpublish-talent-profiles": "Apenas gerente+ pode despublicar perfis de talento",
+        "update-key-results": "Apenas gerente+ pode atualizar resultados-chave",
+        "update-reservations": "Apenas gerente+ pode atualizar reservas",
+        "withdraw-offer-letters": "Apenas gerente+ pode retirar cartas de oferta",
+        "work-the-door": "Apenas gerente+ pode operar a porta"
+      },
+      "manager": {
+        "add-members": "Apenas gerentes e superiores podem adicionar membros.",
+        "archive-projects": "Você precisa de acesso de gerente para arquivar projetos",
+        "assign-reviewers": "Apenas gerentes podem atribuir revisores.",
+        "cancel-events": "Você precisa de acesso de gerente para cancelar eventos",
+        "cancel-purchase-orders": "Você precisa de acesso de gerente para cancelar ordens de compra",
+        "change-roles": "Apenas gerentes e superiores podem alterar funções.",
+        "create-teams": "Apenas gerentes e superiores podem criar times.",
+        "decide-a-time-correction": "Apenas gerentes podem decidir uma correção de ponto.",
+        "decide-time-off-requests": "Você precisa de acesso de gerente para decidir pedidos de folga",
+        "delete-assets": "Você precisa de acesso de gerente para excluir ativos",
+        "delete-clients": "Você precisa de acesso de gerente para excluir clientes",
+        "delete-vendors": "Você precisa de acesso de gerente para excluir fornecedores",
+        "edit-teams": "Apenas gerentes e superiores podem editar times.",
+        "edit-the-role-catalog": "Você precisa de acesso de gerente para editar o catálogo de funções",
+        "import-a-schedule": "Apenas responsáveis, admins e gerentes podem importar um cronograma.",
+        "resolve-scan-misses": "Você precisa de acesso de gerente para resolver falhas de leitura",
+        "review-expenses": "Você precisa de acesso de gerente para revisar despesas",
+        "review-requisitions": "Você precisa de acesso de gerente para revisar requisições",
+        "review-timesheets": "Apenas gerentes podem revisar folhas de ponto.",
+        "send-proposals": "Você precisa de acesso de gerente para enviar propostas",
+        "send-purchase-orders": "Você precisa de acesso de gerente para enviar ordens de compra",
+        "transition-assignments": "Você precisa de acesso de gerente para transicionar atribuições",
+        "void-invoices": "Você precisa de acesso de gerente para anular faturas"
+      },
+      "owner-admin": {
+        "change-a-member-s-role": "Apenas responsáveis e admins podem alterar a função de um membro",
+        "change-compliance-settings": "Apenas responsáveis e admins podem alterar as configurações de compliance",
+        "change-marketplace-settings": "Apenas responsáveis e admins podem alterar as configurações do marketplace",
+        "connect-ticketing-providers": "Apenas responsáveis e admins podem conectar provedores de ticketing",
+        "create-committees": "Apenas responsáveis e admins podem criar comitês",
+        "create-custom-roles": "Apenas responsáveis e admins podem criar funções personalizadas",
+        "create-policies": "Apenas responsáveis e admins podem criar políticas",
+        "disconnect-ticketing-providers": "Apenas responsáveis e admins podem desconectar provedores de ticketing",
+        "invite": "Apenas responsáveis e admins podem convidar.",
+        "manage-accounting-periods": "Apenas responsáveis e admins podem gerenciar períodos contábeis",
+        "manage-domains": "Apenas responsáveis e admins podem gerenciar domínios",
+        "mint-api-keys": "Apenas responsáveis e admins podem emitir chaves de API",
+        "open-a-payroll-run": "Apenas responsáveis e admins podem abrir uma folha de pagamento.",
+        "resend": "Apenas responsáveis e admins podem reenviar.",
+        "revoke": "Apenas responsáveis e admins podem revogar.",
+        "transition-accounting-periods": "Apenas responsáveis e admins podem transicionar períodos contábeis"
+      }
+    },
+    "automation-is-disabled": "A automação está desativada",
+    "bad-acquisition-cost": "Custo de aquisição inválido",
+    "bad-amount": "Valor inválido",
+    "bad-daily-rate": "Diária inválida",
+    "bad-duration": "Duração inválida",
+    "bad-payment-amount": "Valor de pagamento inválido",
+    "bad-received-quantity": "Quantidade recebida inválida",
+    "bad-rejected-quantity": "Quantidade rejeitada inválida",
+    "bad-sla-hours": "Horas de SLA inválidas",
+    "bad-threshold": "Limite inválido",
+    "bad-total-value": "Valor total inválido",
+    "batch-packet-is-missing-its-project": "O pacote do lote está sem o projeto",
+    "blocks-json-is-invalid": "O JSON de blocos é inválido",
+    "calibration-must-be-a-positive-number": "A calibração deve ser um número positivo",
+    "check-the-fields-below": "Verifique os campos abaixo",
+    "checklist-already-started": "Checklist já iniciado",
+    "concurrency": {
+      "application": "A candidatura foi atualizada simultaneamente. Recarregue e tente de novo",
+      "beo": "O BEO foi alterado simultaneamente. Recarregue e tente de novo",
+      "po-status": "O status do PO foi alterado simultaneamente. Recarregue e tente de novo",
+      "proposal-status": "O status da proposta foi alterado simultaneamente. Recarregue e tente de novo",
+      "requisition": "A requisição foi alterada simultaneamente. Recarregue e tente de novo",
+      "rfq": "O RFQ foi alterado simultaneamente. Recarregue e tente de novo",
+      "settlement": "O acerto foi finalizado simultaneamente. Recarregue e tente de novo",
+      "submission": "A submissão foi atualizada simultaneamente. Recarregue e tente de novo"
+    },
+    "config-is-not-valid-json": "A configuração não é um JSON válido",
+    "confirm-that-you-have-reviewed-both-roles-permissions-before": "Confirme que você revisou as permissões das duas funções antes de mesclar",
+    "could-not-decode-file": "Não foi possível decodificar o arquivo",
+    "could-not-derive-a-unique-event-slug": "Não foi possível derivar um slug único para o evento",
+    "could-not-derive-a-unique-project-slug": "Não foi possível derivar um slug único para o projeto",
+    "could-not-enumerate-corpus-sources": "Não foi possível enumerar as fontes do corpus.",
+    "could-not-load-timesheet": "Não foi possível carregar a folha de ponto.",
+    "could-not-resolve-the-embed-source-endpoint-origin": "Não foi possível resolver a origem do endpoint da fonte de embed.",
+    "could-not-resolve-your-party-record-in-this-workspace": "Não foi possível resolver seu registro de parte neste workspace",
+    "could-not-save-the-note": "Não foi possível salvar a nota.",
+    "could-not-save-the-signature": "Não foi possível salvar a assinatura.",
+    "document-body-is-not-a-valid-editor-document": "O corpo do documento não é um documento de editor válido",
+    "document-body-was-not-valid-json": "O corpo do documento não era um JSON válido",
+    "duration-must-be-gte-1-month": "A duração deve ser ≥ 1 mês",
+    "empty-code": "Código vazio.",
+    "end-must-be-after-start": "O término deve ser depois do início",
+    "ends-on-must-be-on-or-after-starts-on": "ends_on deve ser igual ou posterior a starts_on",
+    "enter-a-label-for-the-requirement": "Informe um rótulo para o requisito",
+    "enter-a-scan-code": "Informe um código de leitura",
+    "every-line-needs-a-start-date": "Toda linha precisa de uma data de início",
+    "every-report-must-be-on-this-project-s-roster": "Todo liderado deve estar no elenco deste projeto.",
+    "existing-event-has-invalid-timestamps": "O evento existente tem timestamps inválidos",
+    "failed-to-create-invite": "Falha ao criar o convite",
+    "file-must-be-1-byte-to-25-mb": "O arquivo deve ter de 1 byte a 25 MB",
+    "give-the-role-a-name": "Dê um nome à função",
+    "grant-not-found-or-already-revoked": "Concessão não encontrada ou já revogada",
+    "incident-is-closed-reopen-it-before-adding-corrective-work": "O incidente está fechado. Reabra antes de adicionar trabalho corretivo",
+    "invalid": {
+      "bulk-decision-request": "Solicitação de decisão em massa inválida",
+      "bulk-transition-request": "Solicitação de transição em massa inválida",
+      "cart-payload": "Payload do carrinho inválido",
+      "cursor": "Cursor inválido",
+      "decision": "Decisão inválida",
+      "fee": "Taxa inválida",
+      "ids": "Ids inválidos",
+      "input": "Entrada inválida",
+      "layout-shape": "Formato de layout inválido",
+      "meeting": "Reunião inválida",
+      "note": "Nota inválida.",
+      "request": "Solicitação inválida",
+      "scope": "Escopo inválido",
+      "selection": "Seleção inválida",
+      "split-pct": "% de divisão inválido",
+      "start-or-end-time": "Hora de início ou término inválida",
+      "state": "Status inválido",
+      "target-phase": "Fase de destino inválida",
+      "target-state": "Status de destino inválido",
+      "transition": "Transição inválida",
+      "trigger-kind": "tipo de gatilho inválido"
+    },
+    "label-must-be-1-160-characters": "O rótulo deve ter de 1 a 160 caracteres",
+    "malformed-payload": "Payload malformado",
+    "manager-access-required": "Acesso de gerente necessário",
+    "manager-is-not-in-your-organization": "O gerente não está na sua organização",
+    "manager-role-or-higher-required": "Função de gerente ou superior necessária.",
+    "manager-role-required": "Função de gerente necessária",
+    "markup-must-be-gte-0": "O markup deve ser ≥ 0",
+    "maximum-20-photos-per-upload": "Máximo de 20 fotos por upload",
+    "merging-roles-merges-their-permissions-which-needs-admin-access": "Mesclar funções mescla suas permissões, o que exige acesso de admin",
+    "miss-not-found-or-already-resolved": "Falha de leitura não encontrada ou já resolvida",
+    "missing-concurrency-token-reload-the-page-and-try-again": "Token de concorrência ausente. Recarregue a página e tente de novo.",
+    "missing": {
+      "call": "Falta a chamada",
+      "connection": "Falta a conexão",
+      "dashboard-id": "Falta o id do dashboard",
+      "deal": "Falta o negócio",
+      "entry": "Falta a entrada",
+      "hold": "Falta a reserva provisória",
+      "id": "Falta o id",
+      "offer": "Falta a oferta",
+      "partnership": "Falta a parceria",
+      "posting": "Falta a vaga",
+      "roster-entry": "Falta a entrada do elenco",
+      "steps-payload": "falta o payload de etapas",
+      "talent": "Falta o talento"
+    },
+    "name-is-required": "O nome é obrigatório",
+    "need-at-least-2-options": "São necessárias pelo menos 2 opções",
+    "need-at-least-a-header-row-plus-one-data": "É necessária pelo menos uma linha de cabeçalho mais uma linha de dados.",
+    "no-deliverables-submittals-or-rfis-with-text-to-index": "Não há entregáveis, submissões ou RFIs com texto para indexar.",
+    "not-a-member-of-this-room": "Você não é membro desta sala",
+    "not-authorized": "Não autorizado",
+    "not-found": {
+      "account-in-org": "Conta não encontrada nesta organização",
+      "accreditation": "Credenciamento não encontrado.",
+      "accreditation-categorie": "Categoria de credenciamento não encontrada.",
+      "accreditation-change": "Alteração de credenciamento não encontrada.",
+      "accreditation-in-org": "Credenciamento não encontrado na sua organização",
+      "ad-manifest": "Manifesto de anúncios não encontrado.",
+      "agency-in-org": "Agência não encontrada na sua organização",
+      "application": "Candidatura não encontrada",
+      "asset": "Ativo não encontrado",
+      "asset-2": "Ativo não encontrado.",
+      "asset-in-org": "Ativo não encontrado na sua organização",
+      "assignment-in-org": "Atribuição não encontrada na sua organização",
+      "atom-in-org": "Átomo não encontrado na sua organização",
+      "automation": "Automação não encontrada",
+      "baseline-in-org": "Linha de base não encontrada na sua organização",
+      "batch": "Lote não encontrado",
+      "beo": "BEO não encontrado",
+      "beo-in-org": "BEO não encontrado na sua organização",
+      "block": "Bloco não encontrado.",
+      "budget": "Orçamento não encontrado.",
+      "call": "Chamada não encontrada",
+      "catalog-item-in-org": "Item do catálogo não encontrado na sua organização",
+      "change-order": "Change order não encontrada",
+      "channel": "Canal não encontrado",
+      "client": "Cliente não encontrado.",
+      "client-in-org": "Cliente não encontrado na sua organização",
+      "contract": "Contrato não encontrado",
+      "credential": "Credencial não encontrada.",
+      "crew-member": "Membro da equipe não encontrado.",
+      "crisis-alert": "Alerta de crise não encontrado.",
+      "day-sheet": "Day sheet não encontrado",
+      "deal": "Negócio não encontrado",
+      "deal-in-org": "Negócio não encontrado na sua organização",
+      "delegation": "Delegação não encontrada.",
+      "delegation-entrie": "Entrada de delegação não encontrada.",
+      "delegation-in-org": "Delegação não encontrada na sua organização",
+      "deliverable": "Entregável não encontrado.",
+      "dispatch-run": "Rodada de despacho não encontrada.",
+      "dsar-request": "Solicitação DSAR não encontrada.",
+      "envelope": "Envelope não encontrado",
+      "environmental-event": "Evento ambiental não encontrado.",
+      "estimate": "Orçamento não encontrado",
+      "estimate-2": "Orçamento não encontrado.",
+      "event": "Evento não encontrado",
+      "event-2": "Evento não encontrado.",
+      "event-in-org": "Evento não encontrado na sua organização",
+      "event-listing": "Listagem do evento não encontrada",
+      "expense": "Despesa não encontrada.",
+      "fabrication-order": "Ordem de fabricação não encontrada.",
+      "form-def": "Definição de formulário não encontrada.",
+      "generic": "Não encontrado",
+      "goal": "Meta não encontrada",
+      "grant": "Concessão não encontrada",
+      "guest-list": "Lista de convidados não encontrada",
+      "incident": "Incidente não encontrado",
+      "incident-2": "Incidente não encontrado.",
+      "inspection": "Inspeção não encontrada.",
+      "insurance-policie": "Apólice de seguro não encontrada.",
+      "invoice": "Fatura não encontrada.",
+      "invoice-in-org": "Fatura não encontrada na sua organização",
+      "journal-entry": "Lançamento contábil não encontrado",
+      "kb-article": "Artigo da base de conhecimento não encontrado.",
+      "lead": "Lead não encontrado",
+      "lead-2": "Lead não encontrado.",
+      "location-in-org": "Local não encontrado na sua organização",
+      "major-incident": "Incidente grave não encontrado.",
+      "medical-encounter": "Atendimento médico não encontrado.",
+      "meeting-in-org": "Reunião não encontrada na sua organização",
+      "mileage-log": "Registro de quilometragem não encontrado.",
+      "model": "Modelo não encontrado.",
+      "offer-letter": "Carta de oferta não encontrada",
+      "org-in-session": "Organização não encontrada na sua sessão",
+      "packet": "Pacote não encontrado",
+      "packet-in-org": "Pacote não encontrado na sua organização",
+      "parent-entity-in-org": "Entidade controladora não encontrada na sua organização",
+      "party-in-org": "Parte não encontrada na sua organização",
+      "person-in-org": "Pessoa não encontrada na sua organização",
+      "policy": "Política não encontrada",
+      "program-review": "Revisão de programa não encontrada.",
+      "project": "Projeto não encontrado",
+      "project-2": "Projeto não encontrado",
+      "project-3": "Projeto não encontrado.",
+      "project-in-org": "Projeto não encontrado na sua organização",
+      "project-or-forbidden": "Projeto não encontrado ou permissões insuficientes.",
+      "promoter": "Promotor não encontrado.",
+      "proposal": "Proposta não encontrada",
+      "punch-item": "Item de punch list não encontrado.",
+      "punch-list-in-org": "Punch list não encontrada na sua organização",
+      "purchase-order": "Ordem de compra não encontrada",
+      "purchase-order-2": "Ordem de compra não encontrada.",
+      "purchase-order-in-org": "Ordem de compra não encontrada na sua organização",
+      "questionnaire-in-org": "Questionário não encontrado na sua organização",
+      "rate-card-item": "Item de tabela de preços não encontrado.",
+      "readiness-exercise": "Exercício de prontidão não encontrado.",
+      "receipt": "Recibo não encontrado",
+      "rental": "Locação não encontrada.",
+      "requisition": "Requisição não encontrada",
+      "requisition-2": "Requisição não encontrada.",
+      "requisition-in-org": "Requisição não encontrada na sua organização",
+      "reservation": "Reserva não encontrada",
+      "rfi": "RFI não encontrado.",
+      "rfq": "RFQ não encontrado",
+      "risk": "Risco não encontrado.",
+      "role": "Função não encontrada",
+      "roster": "Elenco não encontrado.",
+      "safeguarding-report": "Relatório de salvaguarda não encontrado.",
+      "settlement": "Acerto não encontrado",
+      "share-link": "Link de compartilhamento não encontrado",
+      "sheet": "Prancha não encontrada.",
+      "sheet-set": "Conjunto de pranchas não encontrado.",
+      "site-plan-in-org": "Planta de site não encontrada na sua organização",
+      "spec-section": "Seção de especificação não encontrada.",
+      "sponsor-entitlement": "Benefício de patrocinador não encontrado.",
+      "submission": "Submissão não encontrada",
+      "submittal": "Submissão não encontrada.",
+      "sustainability-metric": "Métrica de sustentabilidade não encontrada.",
+      "table-in-org": "Mesa não encontrada na sua organização",
+      "takeoff": "Levantamento não encontrado.",
+      "talent-profile-in-org": "Perfil de talento não encontrado na sua organização",
+      "task": "Tarefa não encontrada.",
+      "team-in-org": "Time não encontrado na sua organização",
+      "template-in-org": "Modelo não encontrado na sua organização",
+      "thread": "Tópico não encontrado.",
+      "ticketing-connection-in-org": "Conexão de ticketing não encontrada na sua organização",
+      "time-entrie": "Registro de horas não encontrado.",
+      "timesheet": "Folha de ponto não encontrada.",
+      "tour-in-org": "Turnê não encontrada na sua organização",
+      "trademark": "Marca registrada não encontrada.",
+      "vendor": "Fornecedor não encontrado",
+      "vendor-2": "Fornecedor não encontrado.",
+      "vendor-in-org": "Fornecedor não encontrado na sua organização",
+      "venue": "Local não encontrado.",
+      "venue-in-org": "Local não encontrado na sua organização",
+      "visa-case": "Caso de visto não encontrado.",
+      "work-order": "Ordem de serviço não encontrada",
+      "workforce-deployment": "Mobilização de pessoal não encontrada.",
+      "workforce-member": "Membro da força de trabalho não encontrado."
+    },
+    "offer-can-only-be-accepted-from-sent-or-countered": "A oferta só pode ser aceita a partir de enviada ou contraproposta",
+    "offer-can-t-be-sent-from-its-current-state": "A oferta não pode ser enviada a partir do status atual",
+    "only-a-draft-call-can-be-published": "Apenas uma chamada em rascunho pode ser publicada",
+    "only-a-draft-posting-can-be-published": "Apenas uma vaga em rascunho pode ser publicada",
+    "only-a-live-packet-can-be-sent-go-live": "Apenas um pacote ativo pode ser enviado. Primeiro ative-o no compositor de pacotes",
+    "only-a-pending-guest-can-be-checked-in": "Apenas um convidado pendente pode fazer check-in",
+    "only-a-pending-invite-can-be-resent": "Apenas um convite pendente pode ser reenviado",
+    "only-a-pending-invite-can-be-revoked": "Apenas um convite pendente pode ser revogado",
+    "only-a-published-call-can-be-closed": "Apenas uma chamada publicada pode ser encerrada",
+    "only-a-published-posting-can-be-closed": "Apenas uma vaga publicada pode ser encerrada",
+    "only-a-sent-or-countered-offer-can-be-declined": "Apenas uma oferta enviada ou contraproposta pode ser recusada",
+    "only-an-approved-change-order-can-post-to-budget": "Apenas uma change order aprovada pode ser lançada no orçamento. Primeiro encaminhe pelas aprovações",
+    "only-owner-admin-manager-can-edit-project-branding": "Apenas responsável / admin / gerente pode editar o branding do projeto",
+    "ownership-pct-must-be-between-0-and-100": "O % de participação deve estar entre 0 e 100",
+    "paste-csv-or-tsv-from-the-xpms-budget-tab": "Cole CSV ou TSV da aba de orçamento do XPMS.",
+    "percentage-must-be-between-0-pct-and-100-pct": "O percentual deve estar entre 0% e 100%",
+    "pick-a-crew-member": "Escolha um membro da equipe.",
+    "pick-a-manager-from-the-org-s-directory": "Escolha um gerente do diretório da organização.",
+    "pick-a-position-from-the-org-s-role-catalog": "Escolha uma posição do catálogo de funções da organização.",
+    "pick-a-reviewer": "Escolha um revisor.",
+    "pick-a-valid-decision": "Escolha uma decisão válida.",
+    "pick-a-vendor-to-award-to": "Escolha um fornecedor para adjudicar",
+    "pick-at-least-one-module-the-subcontractor-can-reach": "Escolha pelo menos um módulo que o subcontratado pode acessar.",
+    "pick-at-least-one-photo": "Escolha pelo menos uma foto",
+    "pick-two-different-roles": "Escolha duas funções diferentes",
+    "po-not-found-or-missing-project": "PO não encontrado ou sem projeto",
+    "portal-user-and-account-manager-must-be-different-people": "O usuário do portal e o account manager devem ser pessoas diferentes",
+    "portal-user-is-not-in-your-organization": "O usuário do portal não está na sua organização",
+    "punch-list-belongs-to-a-different-project": "A punch list pertence a outro projeto",
+    "refusing-to-demote-the-only-owner-promote-someone-to": "Não é possível rebaixar o único responsável. Primeiro promova alguém a responsável.",
+    "reply-body-is-required": "O corpo da resposta é obrigatório.",
+    "selected-delegatee-is-not-a-member-of-this-workspace": "O delegado selecionado não é membro deste workspace",
+    "selected-person-is-not-a-member-of-this-workspace": "A pessoa selecionada não é membro deste workspace",
+    "selected-signer-is-not-a-member-of-this-workspace": "O signatário selecionado não é membro deste workspace",
+    "settlement-already-final": "Acerto já finalizado",
+    "snapshot-is-not-valid-json": "O snapshot não é um JSON válido",
+    "someone-else-already-decided-this-one-refresh": "Outra pessoa já decidiu este. Recarregue.",
+    "stage-does-not-belong-to-this-pipeline": "A etapa não pertence a este pipeline",
+    "submission-has-no-talent-profile-to-book": "A submissão não tem perfil de talento para contratar",
+    "submitting-an-advance-requires-advance-request": "Enviar um advance exige advance:request",
+    "that-change-would-create-a-reporting-loop-pick-a": "Essa alteração criaria um ciclo de reporte. Escolha outro gerente.",
+    "that-code-is-already-active-on-another-assignment-void": "Esse código já está ativo em outra atribuição. Anule antes de reemitir.",
+    "that-line-item-does-not-belong-to-this-receipt": "Essa linha não pertence à ordem de compra deste recibo",
+    "that-name-has-no-letters-or-digits-to-key": "Esse nome não tem letras nem dígitos para gerar a chave",
+    "that-person-has-been-separated-reinstate-them-before-rostering": "Essa pessoa foi desligada. Reintegre antes de incluí-la no elenco.",
+    "that-person-is-not-in-this-org-s-directory": "Essa pessoa não está no diretório desta organização.",
+    "that-person-is-not-in-this-organization": "Essa pessoa não está nesta organização.",
+    "that-person-is-separated-re-engage-them-from-people": "Essa pessoa está desligada. Reative-a em Pessoas antes de atribuir.",
+    "that-person-isn-t-a-member-of-this-workspace": "Essa pessoa não é membro deste workspace",
+    "that-project-doesn-t-belong-to-your-org": "Esse projeto não pertence à sua organização.",
+    "that-rate-card-item-is-not-available": "Esse item da tabela de preços não está disponível.",
+    "that-reporting-line-would-create-a-loop-pick-a": "Essa linha de reporte criaria um ciclo. Escolha outro gerente.",
+    "that-request-no-longer-exists": "Essa solicitação não existe mais.",
+    "that-roster-no-longer-exists": "Esse elenco não existe mais.",
+    "that-user-is-already-on-this-team": "Esse usuário já está neste time.",
+    "the-end-of-the-window-has-to-be-after": "O fim da janela deve ser depois do início",
+    "the-manager-must-be-on-this-project-s-roster": "O gerente deve estar no elenco deste projeto.",
+    "the-packet-has-no-audience-contacts-to-send-to": "O pacote não tem contatos de audiência para envio",
+    "the-shift-has-to-end-after-it-starts-for": "O turno deve terminar depois de começar. Para um turno noturno, defina a data de término para o dia seguinte.",
+    "this-call-has-ended": "Esta chamada foi encerrada",
+    "this-subcontractor-is-blocked-required-compliance-documents-are-missing": "Este subcontratado está bloqueado: documentos de compliance obrigatórios estão ausentes ou vencidos.",
+    "this-timesheet-was-decided-by-someone-else-refresh-and": "Esta folha de ponto foi decidida por outra pessoa. Recarregue e revise o status atual.",
+    "this-vendor-already-has-a-response-edit-it-instead": "Este fornecedor já tem uma resposta. Edite-a em vez disso.",
+    "those-times-are-not-valid": "Esses horários não são válidos.",
+    "trigger-config-must-be-an-object": "a configuração do gatilho deve ser um objeto",
+    "unknown-state": "Status desconhecido",
+    "unknown-submission-schema": "Esquema de submissão desconhecido",
+    "unknown-timezone-use-an-iana-name-like-america-new": "Fuso horário desconhecido. Use um nome IANA como America/New_York",
+    "use-the-leave-org-flow-to-change-your-own": "Use o fluxo de saída da organização para alterar sua própria função",
+    "user-is-not-in-an-organization": "O usuário não está em uma organização",
+    "user-isn-t-an-active-member-of-this-org": "O usuário não é membro ativo desta organização. Convide-o para a organização primeiro.",
+    "vendor-already-invited-to-this-questionnaire": "Fornecedor já convidado para este questionário.",
+    "waste-factor-must-be-gte-0": "O fator de perda deve ser ≥ 0",
+    "you-are-not-a-member-of-this-thread": "Você não é membro deste tópico.",
+    "you-can-t-review-your-own-timesheet-another-manager": "Você não pode revisar sua própria folha de ponto. Outro gerente precisa decidir esta.",
+    "you-do-not-have-permission-to-create-meeting-notes": "Você não tem permissão para criar notas de reunião.",
+    "you-do-not-have-permission-to-roster-shifts": "Você não tem permissão para escalar turnos.",
+    "your-account-is-not-linked-to-a-party-record": "Sua conta não está vinculada a um registro de parte nesta organização."
   }
 }

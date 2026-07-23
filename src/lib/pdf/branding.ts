@@ -1,6 +1,6 @@
 import "server-only";
 
-import { resolveBrandContext, BRAND_FALLBACK } from "@/lib/branding";
+import { resolveBrand, BRAND_FALLBACK } from "@/lib/branding";
 
 /** Back-compat: the platform fallback accent when no branding resolves. */
 export const DEFAULT_ACCENT = BRAND_FALLBACK.accent;
@@ -35,7 +35,7 @@ export type PdfBrand = {
 
 /**
  * Resolve PDF branding from org + optional client rows. Delegates to the
- * shared `resolveBrandContext` cascade and flattens to the PDF token shape.
+ * canonical `resolveBrand` cascade and flattens to the PDF token shape.
  * The producer is the from-entity; the client is the bill-to; the accent is
  * the joint (org-level) accent.
  */
@@ -44,7 +44,7 @@ export function resolvePdfBrand(args: {
   client?: { name: string | null; branding?: unknown; logo_url?: string | null } | null;
   project?: { branding?: unknown } | null;
 }): PdfBrand {
-  const ctx = resolveBrandContext({ org: args.org, client: args.client, project: args.project });
+  const ctx = resolveBrand({ org: args.org, client: args.client, project: args.project }).context;
   return {
     producerName: ctx.producer.name,
     producerLogoUrl: ctx.producer.logoUrl,

@@ -9,6 +9,7 @@ import { offerLetterData } from "./offer-binding";
 import type { OfferLetterResolved } from "@/lib/offer-letters/types";
 import { loadInvoiceArtifact } from "./sources/invoice";
 import { resolveDepositPct, PROPOSAL_DEPOSIT_PCT_DEFAULT } from "@/lib/payment-terms";
+import { resolveBrand } from "@/lib/branding";
 
 /**
  * Internal data resolvers — map a real org-scoped record to the merge-field
@@ -755,7 +756,10 @@ export async function resolveDocData(
 
 /**
  * Org/client brand for a document, mapped to the engine's OrgBrand/ClientBrand.
- * Org accent + logo come from the org branding JSON; client from the client row.
+ * Delegates to the canonical `resolveBrand` cascade (src/lib/branding.ts), so
+ * the sanitized `accentColor`/`accentForeground` jsonb keys resolve here too.
+ * (The previous inline cast read the nonexistent `accent`/`accentText` keys —
+ * org accent never reached white-label docs.)
  */
 export async function resolveDocBrand(
   db: DB,
@@ -764,16 +768,9 @@ export async function resolveDocBrand(
 ): Promise<{ org: OrgBrand; client?: ClientBrand }> {
   const [{ data: org }, { data: client }] = await Promise.all([
     db.from("orgs").select("name, name_override, logo_url, branding").eq("id", orgId).maybeSingle(),
-    clientId ? db.from("clients").select("name, logo_url").eq("id", clientId).maybeSingle() : noRow(),
+    clientId ? db.from("clients").select("name, logo_url, branding").eq("id", clientId).maybeSingle() : noRow(),
   ]);
-  const branding = (org?.branding ?? {}) as { accent?: string; accentText?: string };
-  return {
-    org: {
-      name: org?.name_override ?? org?.name ?? undefined,
-      accent: branding.accent,
-      accentText: branding.accentText,
-      logo: org?.logo_url ?? undefined,
-    },
-    client: client ? { name: client.name ?? undefined, logo: client.logo_url ?? undefined } : undefined,
-  };
+  if (!org) return { org: {} };
+  const resolved = resolveBrand({ org, client: client ?? null });
+  return { org: resolved.doc.org, client: resolved.doc.client };
 }

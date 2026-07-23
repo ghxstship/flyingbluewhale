@@ -1,16 +1,43 @@
 /**
- * Branding tokens + the layered Brand Context resolver.
+ * Branding tokens + the layered Brand Context resolver — the ONE resolution
+ * layer every branded surface goes through (Brand Studio canon, L-P3).
  *
- * Three brand identities can co-brand a document:
+ * ── Canonical resolution order ─────────────────────────────────────────────
+ *
+ * Three brand identities can co-brand a surface:
  *   · producer — the authoring org (`orgs.branding` + logo_url + name_override)
- *   · client   — the recipient org (`clients.branding` + logo_url)
- *   · joint    — the subject of the engagement: project/proposal accent,
- *                resolved by cascade (proposal override → project → org → BRAND)
+ *   · client   — the recipient org (`clients.branding` + logo_url) — an
+ *                IDENTITY layer (co-brand lockup / bill-to), never a theme
+ *                override: client branding does not repaint the joint accent.
+ *   · joint    — the subject of the engagement: the accent/type the surface
+ *                actually themes on, resolved by cascade, most specific wins:
+ *
+ *       proposal override  >  project (event kit)  >  org  >  BRAND_FALLBACK
  *
  * SSOT shapes live in jsonb (`orgs.branding`, `clients.branding`,
- * `projects.branding`, `proposals.branding`). `safeBranding()` sanitizes
- * untrusted input; `resolveBrandContext()` produces the flat context every
- * surface (proposal viewer, invoice PDF, email chrome) consumes.
+ * `projects.branding`, `proposals.branding`) — all the same `Branding` shape.
+ * `safeBranding()` sanitizes untrusted jsonb; NOTHING may read the raw jsonb
+ * fields directly (guarded by `src/lib/branding-consumer-canon.test.ts`).
+ *
+ * ── Document white-label modes (`data-brand` on `.doc`) ────────────────────
+ *
+ *   · "atlvs" — full ATLVS ecosystem chrome (default; org tokens still seed
+ *               `--ob-*` so the masthead mark/name are the org's).
+ *   · "co"    — org brand leads, "Powered by ATLVS" attribution line stays.
+ *   · "white" — full white-label: org brand only, zero ATLVS marks.
+ *
+ * In "co"/"white" the kit CSS re-binds `--p-accent` to `--ob-accent`, so the
+ * white-label mode WINS over the platform theme wherever it is set. The doc
+ * token layer (`ResolvedBrand.doc`) carries ONLY explicitly-authored values —
+ * no fallback hex — so an unbranded org keeps the platform token cascade and
+ * the render is pixel-identical to before this layer existed.
+ *
+ * Consumers (all via `resolveBrand` / `resolveBrandContext`):
+ *   · doc engine + string renderer — `resolveDocBrand` (documents/resolvers.ts)
+ *   · PDF renderers — `resolvePdfBrand` (src/lib/pdf/branding.ts)
+ *   · portal chrome — `(portal)/p/[slug]/layout.tsx` (project layer)
+ *   · tenant console chrome — `src/components/TenantShell.tsx` (org layer)
+ *   · public proposal/share token pages + proposal editor.
  */
 import { PRODUCT_ACCENTS } from "@/lib/brand";
 
@@ -167,6 +194,81 @@ export function resolveBrandContext(args: {
     producer,
     client,
     joint: { accent: jointAccent, accentFg: jointFg, secondary: jointSecondary, headingFont, bodyFont },
+  };
+}
+
+// ---------------------------------------------------------------------------
+// resolveBrand — the one entry point (context + doc tokens + CSS vars).
+// ---------------------------------------------------------------------------
+
+/** The three `data-brand` white-label modes the documents kit renders. */
+export const DOC_BRAND_MODES = ["atlvs", "co", "white"] as const;
+export type DocBrandMode = (typeof DOC_BRAND_MODES)[number];
+
+/**
+ * Doc-engine token layer (`--ob-*` / `--cl-*` inline vars). Unlike
+ * `BrandContext`, these carry ONLY explicitly-authored values — `undefined`
+ * means "inherit the platform token cascade", which keeps unbranded orgs
+ * pixel-identical in every `data-brand` mode.
+ */
+export type DocBrandTokens = {
+  org: { name?: string; accent?: string; accentText?: string; logo?: string };
+  client?: { name?: string; logo?: string };
+};
+
+export type ResolvedBrand = {
+  /** Fallback-applied layered context (PDFs and previews need concrete hex). */
+  context: BrandContext;
+  /** The `data-brand` white-label mode this render was asked for. */
+  docMode: DocBrandMode;
+  /** Explicit-only doc tokens for the `--ob-*`/`--cl-*` inline var layer. */
+  doc: DocBrandTokens;
+  /** Joint-layer CSS custom properties (portal/proposal chrome root). */
+  cssVars: Record<string, string>;
+};
+
+/**
+ * The canonical resolver every brand consumer calls. Delegates the cascade to
+ * `resolveBrandContext` (org < project < proposal override; client is an
+ * identity layer) and derives, in one place:
+ *   · `doc` — the explicit-only `--ob-*`/`--cl-*` token payload
+ *   · `cssVars` — the joint-layer chrome override vars
+ *   · `docMode` — the requested white-label mode (default "atlvs")
+ */
+export function resolveBrand(args: {
+  org: Row;
+  client?: Row | null;
+  project?: { branding?: unknown } | null;
+  proposalOverride?: unknown;
+  docMode?: DocBrandMode;
+}): ResolvedBrand {
+  const context = resolveBrandContext(args);
+
+  // Explicit-only doc cascade — same precedence, no fallback hex.
+  const orgB = safeBranding(args.org.branding);
+  const projectB = safeBranding(args.project?.branding);
+  const overrideB = safeBranding(args.proposalOverride);
+  const docAccent = overrideB.accentColor ?? projectB.accentColor ?? orgB.accentColor;
+  const docAccentText = overrideB.accentForeground ?? projectB.accentForeground ?? orgB.accentForeground;
+  const docLogo = context.producer.logoUrl ?? undefined;
+
+  const doc: DocBrandTokens = {
+    org: {
+      name: context.producer.name,
+      accent: docAccent,
+      accentText: docAccentText,
+      logo: docLogo,
+    },
+    client: context.client
+      ? { name: context.client.name, logo: context.client.logoUrl ?? undefined }
+      : undefined,
+  };
+
+  return {
+    context,
+    docMode: args.docMode ?? "atlvs",
+    doc,
+    cssVars: brandContextToCssVars(context),
   };
 }
 

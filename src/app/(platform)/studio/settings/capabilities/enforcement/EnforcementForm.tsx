@@ -14,7 +14,7 @@ export function EnforcementForm({
   enabling,
   losers,
 }: {
-  /** true = flipping TO enforced; false = back to grandfathered. */
+  /** true = flipping TO enforced; false = back to the legacy exemption. */
   enabling: boolean;
   /** How many people the preview says would lose access (enabling only). */
   losers: number;
@@ -46,7 +46,7 @@ export function EnforcementForm({
             ? losers > 0
               ? "Enforce grants anyway"
               : "Enforce grants"
-            : "Back to grandfathered"}
+            : "Back to legacy exempt"}
       </Button>
     </form>
   );

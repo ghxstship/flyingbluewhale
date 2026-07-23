@@ -174,7 +174,7 @@ export default async function Page() {
               <Badge variant={graph.enforced ? "success" : "warning"}>
                 {graph.enforced
                   ? t("console.settings.capabilities.enforced", undefined, "Enforced")
-                  : t("console.settings.capabilities.grandfathered", undefined, "Grandfathered")}
+                  : t("console.settings.capabilities.legacy-exempt", undefined, "Legacy exempt")}
               </Badge>
               {canEdit && (
                 <Link href="/studio/settings/capabilities/enforcement" className="ps-btn ps-btn--sm">

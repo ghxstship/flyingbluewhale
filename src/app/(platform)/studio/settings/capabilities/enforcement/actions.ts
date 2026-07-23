@@ -32,7 +32,7 @@ const FlipSchema = z.object({
  * re-measured at submit time, so a stale tab (grants revoked since the page
  * loaded) still gets an honest refusal.
  *
- * Disabling (back to grandfathered) only ever widens access, so it needs no
+ * Disabling (back to legacy-exempt) only ever widens access, so it needs no
  * acknowledgement — but it still lands here, on a page that shows what it
  * does, and it is still audited.
  */

@@ -90,7 +90,7 @@ export default async function Page() {
             <Badge variant={graph.enforced ? "success" : "warning"}>
               {graph.enforced
                 ? t("console.settings.capabilities.enforced", undefined, "Enforced")
-                : t("console.settings.capabilities.grandfathered", undefined, "Grandfathered")}
+                : t("console.settings.capabilities.legacy-exempt", undefined, "Legacy exempt")}
             </Badge>
             <p className="text-sm text-[var(--p-text-2)]">
               {graph.enforced
@@ -100,9 +100,9 @@ export default async function Page() {
                     "Grants are currently the source of truth. Turning this off restores the legacy blanket: everyone whose role could scan before enforcement scans everything again.",
                   )
                 : t(
-                    "console.settings.capabilities.enforcementPage.currentlyGrandfathered",
+                    "console.settings.capabilities.enforcementPage.currentlyLegacy exempt",
                     undefined,
-                    "The legacy blanket is active: everyone who could scan before this system existed still scans everything. Enforcing makes the grants you configured the only source of scan access.",
+                    "The legacy exemption is active: everyone who could scan before this system existed still scans everything. Enforcing makes the grants you configured the only source of scan access.",
                   )}
             </p>
           </div>

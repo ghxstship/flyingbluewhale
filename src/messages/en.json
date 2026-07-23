@@ -22603,7 +22603,7 @@
      "covered": "Covered By Grants",
      "coveredBody": "These people keep scan access after the flip because a role or personal grant covers them.",
      "currentlyEnforced": "Grants are currently the source of truth. Turning this off restores the legacy blanket: everyone whose role could scan before enforcement scans everything again.",
-     "currentlyGrandfathered": "The legacy blanket is active: everyone who could scan before this system existed still scans everything. Enforcing makes the grants you configured the only source of scan access.",
+     "currentlyLegacy exempt": "The legacy exemption is active: everyone who could scan before this system existed still scans everything. Enforcing makes the grants you configured the only source of scan access.",
      "eyebrow": "Settings · Capabilities",
      "keeps": "Keeps",
      "loses": "Loses",
@@ -22618,7 +22618,7 @@
      "whoRegainsBody": "Turning enforcement off re-synthesizes the legacy blanket. These people would go back to scanning everything, whatever the grant tables say."
     },
     "eyebrow": "Settings · Team & Access",
-    "grandfathered": "Grandfathered",
+    "legacy-exempt": "Legacy exempt",
     "grandfatheredBody": "Grants are not enforced yet. Everyone who could scan before still scans everything, so nothing below has bitten. Configure the grants you want, then review the flip.",
     "matrix": {
      "byRole": "By Role",

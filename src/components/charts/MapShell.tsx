@@ -4,6 +4,7 @@ import * as React from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { ChartShell } from "./ChartShell";
+import { resolveThemeColor } from "@/lib/theme/resolve-token";
 
 export type MapMarker = {
   id: string;
@@ -21,6 +22,11 @@ export type MapRoute = {
   id: string;
   /** [lng,lat] pairs forming the polyline. */
   coords: Array<[number, number]>;
+  /**
+   * CSS-var-friendly color string, e.g. "var(--p-info)". Maplibre paints
+   * routes on canvas where `var()` can't resolve, so MapShell resolves the
+   * token to a concrete rgb() via resolveThemeColor at paint time.
+   */
   color?: string;
   width?: number;
 };
@@ -136,7 +142,9 @@ export function MapShell({
           type: "line",
           source: id,
           paint: {
-            "line-color": r.color ?? "#3b82f6",
+            // Resolved against the live theme at paint time — maplibre's
+            // canvas can't evaluate var()/light-dark() itself.
+            "line-color": resolveThemeColor(r.color ?? "var(--p-info)"),
             "line-width": r.width ?? 3,
           },
         });

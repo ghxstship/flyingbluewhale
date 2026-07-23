@@ -143,7 +143,7 @@ export function getEmergencyCodes(t: TFn): EmergencyCode[] {
 export const chipBg = (tint: string) =>
   tint === "text-1" ? "var(--p-text-1)" : tint === "neutral" ? "var(--p-surface)" : `var(--p-${tint})`;
 export const chipFg = (tint: string, ink?: "dark") =>
-  tint === "neutral" ? "var(--p-text-1)" : ink ? "var(--p-bg)" : "var(--p-accent-contrast, #fff)";
+  tint === "neutral" ? "var(--p-text-1)" : ink ? "var(--p-bg)" : "var(--p-accent-contrast)";
 
 export type EvacSection = Extract<GuideSection, { type: "evacuation" }>;
 export type FireSection = Extract<GuideSection, { type: "fire_safety" }>;

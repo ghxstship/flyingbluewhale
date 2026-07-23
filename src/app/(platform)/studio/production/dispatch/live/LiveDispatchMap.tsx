@@ -34,24 +34,24 @@ export function LiveDispatchMap({ points }: { points: DispatchPoint[] }) {
   const routes: MapRoute[] = [];
 
   for (const p of points) {
-    // Markers are DOM elements inside MapShell, so theme CSS vars resolve.
-    const markerTone = statusColor(p.status);
-    // Route lines are maplibre canvas paint — `line-color` can't resolve a
-    // CSS var, so routes keep concrete hexes (see statusRouteColor).
-    const routeTone = statusRouteColor(p.status);
+    // Markers are DOM elements inside MapShell, so theme CSS vars resolve
+    // natively; route lines are maplibre canvas paint, where MapShell
+    // resolves the same tokens via resolveThemeColor at paint time. One
+    // semantic token source drives both.
+    const tone = statusColor(p.status);
     markers.push({
       id: `${p.id}-origin`,
       lng: p.origin.lng,
       lat: p.origin.lat,
       label: `${p.vehicle} · ${p.origin.name}`,
-      color: markerTone,
+      color: tone,
     });
     markers.push({
       id: `${p.id}-destination`,
       lng: p.destination.lng,
       lat: p.destination.lat,
       label: `${p.vehicle} → ${p.destination.name}`,
-      color: markerTone,
+      color: tone,
     });
     routes.push({
       id: p.id,
@@ -59,7 +59,7 @@ export function LiveDispatchMap({ points }: { points: DispatchPoint[] }) {
         [p.origin.lng, p.origin.lat],
         [p.destination.lng, p.destination.lat],
       ],
-      color: routeTone,
+      color: tone,
       width: 3,
     });
   }
@@ -80,7 +80,10 @@ export function LiveDispatchMap({ points }: { points: DispatchPoint[] }) {
   );
 }
 
-// CN-12 — semantic theme tokens for DOM-rendered markers.
+// CN-12 — semantic theme tokens for markers AND routes. Markers render as
+// DOM elements (vars resolve natively); route lines are maplibre canvas
+// paint, which MapShell resolves through resolveThemeColor at paint time,
+// so both track the live theme/mode from the same tokens.
 function statusColor(status: string): string {
   switch (status) {
     case "in_transit":
@@ -93,23 +96,5 @@ function statusColor(status: string): string {
       return "var(--p-danger)";
     default:
       return "var(--p-text-2)";
-  }
-}
-
-// Maplibre paints route lines on canvas — CSS vars don't resolve in
-// `line-color`, so these stay concrete hexes mirroring the semantic
-// tokens above. Revisit if MapShell grows a computed-style resolver.
-function statusRouteColor(status: string): string {
-  switch (status) {
-    case "in_transit":
-      return "#3b82f6";
-    case "arrived":
-      return "#22c55e";
-    case "delayed":
-      return "#f59e0b";
-    case "cancelled":
-      return "#ef4444";
-    default:
-      return "#94a3b8";
   }
 }

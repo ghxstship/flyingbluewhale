@@ -5,7 +5,7 @@ import { hasSupabase } from "@/lib/env";
 import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { createPositionAction } from "../actions";
-import { PositionForm, type Department } from "../PositionForm";
+import { PositionForm, type Department, type ReportsToOption } from "../PositionForm";
 import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
@@ -23,14 +23,21 @@ export default async function NewPositionPage() {
       </>
     );
   }
-  await requireSession();
+  const session = await requireSession();
   const db = (await createClient()) as unknown as LooseSupabase;
-  const { data: departmentData } = await db
-    .from("dim_department")
-    .select("code, label")
-    .order("code", { ascending: true })
-    .limit(20);
+  const [{ data: departmentData }, { data: positionData }] = await Promise.all([
+    db.from("dim_department").select("code, label").order("code", { ascending: true }).limit(20),
+    db
+      .from("positions")
+      .select("id, title")
+      .eq("org_id", session.orgId)
+      .order("title", { ascending: true })
+      .limit(2000),
+  ]);
   const departments = (departmentData ?? []) as Department[];
+  // A brand-new position has no descendants — every existing position is an
+  // eligible reports-to target.
+  const reportsToOptions = (positionData ?? []) as ReportsToOption[];
 
   return (
     <>
@@ -53,6 +60,7 @@ export default async function NewPositionPage() {
         <PositionForm
           action={createPositionAction}
           departments={departments}
+          reportsToOptions={reportsToOptions}
           submitLabel={t("console.legend.hub.organization.new.submit", undefined, "Create Position")}
         />
       </div>

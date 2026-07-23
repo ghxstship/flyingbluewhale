@@ -10,6 +10,7 @@ import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { urlFor } from "@/lib/urls";
 import type { Department, PositionRow } from "./PositionForm";
+import { OrgChartView, type ChartPositionRow, type SeatHolder } from "./OrgChartView";
 import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
@@ -22,7 +23,19 @@ export const dynamic = "force-dynamic";
 
 type Position = PositionRow & { created_at: string };
 
-export default async function OrganizationPillarPage() {
+type AssignmentJoin = {
+  id: string;
+  position_id: string;
+  parties: { display_name: string } | null;
+};
+
+export default async function OrganizationPillarPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ view?: string }>;
+}) {
+  const { view } = await searchParams;
+  const chartView = view === "chart";
   const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
@@ -38,19 +51,39 @@ export default async function OrganizationPillarPage() {
   const session = await requireSession();
   const db = (await createClient()) as unknown as LooseSupabase;
 
-  const [{ data: positionData }, { data: departmentData }] = await Promise.all([
+  const [{ data: positionData }, { data: departmentData }, { data: assignmentData }] = await Promise.all([
     db
       .from("positions")
-      .select("id, title, department_code, summary, active, created_at")
+      .select("id, title, department_code, summary, active, created_at, reports_to_position_id, seat_count")
       .eq("org_id", session.orgId)
       .order("title", { ascending: true })
       .limit(500),
     db.from("dim_department").select("code, label").order("code", { ascending: true }).limit(20),
+    chartView
+      ? db
+          .from("position_assignments")
+          .select("id, position_id, parties(display_name)")
+          .eq("org_id", session.orgId)
+          .eq("assignment_state", "active")
+          .limit(2000)
+      : Promise.resolve({ data: null }),
   ]);
 
   const positions = (positionData ?? []) as Position[];
   const departments = (departmentData ?? []) as Department[];
   const labelByCode = new Map(departments.map((d) => [d.code, d.label]));
+
+  const holdersByPosition = new Map<string, SeatHolder[]>();
+  for (const a of (assignmentData ?? []) as AssignmentJoin[]) {
+    const bucket = holdersByPosition.get(a.position_id) ?? [];
+    bucket.push({
+      assignmentId: a.id,
+      name:
+        a.parties?.display_name ??
+        t("console.legend.hub.organization.holders.unknown", undefined, "Unknown person"),
+    });
+    holdersByPosition.set(a.position_id, bucket);
+  }
 
   const groups: { key: string; heading: string; rows: Position[] }[] = [];
   for (const dept of departments) {
@@ -97,6 +130,16 @@ export default async function OrganizationPillarPage() {
         ]}
         action={
           <div className="flex items-center gap-2">
+            <Button href="/legend/hub/organization" size="sm" variant={chartView ? "secondary" : "primary"}>
+              {t("console.legend.hub.organization.viewPositions", undefined, "Positions")}
+            </Button>
+            <Button
+              href="/legend/hub/organization?view=chart"
+              size="sm"
+              variant={chartView ? "primary" : "secondary"}
+            >
+              {t("console.legend.hub.organization.viewChart", undefined, "Org chart")}
+            </Button>
             <Button href={urlFor("mobile", "/roster/reporting")} size="sm" variant="secondary">
               {t("console.legend.hub.organization.reportingForest", undefined, "Reporting forest")}
             </Button>
@@ -107,7 +150,15 @@ export default async function OrganizationPillarPage() {
         }
       />
       <div className="page-content space-y-8">
-        {positions.length === 0 ? (
+        {chartView ? (
+          <div className="max-w-3xl">
+            <OrgChartView
+              positions={positions as ChartPositionRow[]}
+              holdersByPosition={holdersByPosition}
+              labelByCode={labelByCode}
+            />
+          </div>
+        ) : positions.length === 0 ? (
           <EmptyState
             title={t("console.legend.hub.organization.emptyTitle", undefined, "No positions yet")}
             description={t(

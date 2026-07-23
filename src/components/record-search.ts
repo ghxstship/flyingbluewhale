@@ -20,6 +20,7 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 
 const SEARCHABLE = {
   clients: { column: "name", softDelete: true },
+  parties: { column: "display_name", softDelete: true },
   projects: { column: "name", softDelete: true },
   vendors: { column: "name", softDelete: true },
 } as const;

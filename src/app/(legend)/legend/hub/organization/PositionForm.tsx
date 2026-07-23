@@ -13,16 +13,23 @@ export type PositionRow = {
   department_code: string | null;
   summary: string | null;
   active: boolean;
+  reports_to_position_id: string | null;
+  seat_count: number;
 };
+
+/** Eligible reports-to targets — the server excludes self + descendants. */
+export type ReportsToOption = { id: string; title: string };
 
 export function PositionForm({
   action,
   departments,
+  reportsToOptions,
   position,
   submitLabel,
 }: {
   action: (prev: State, fd: FormData) => Promise<State>;
   departments: Department[];
+  reportsToOptions: ReportsToOption[];
   position?: PositionRow;
   submitLabel: string;
 }) {
@@ -61,6 +68,45 @@ export function PositionForm({
             "The XPMS department class this position belongs to.",
           )}
         </p>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-[1fr_8rem]">
+        <div>
+          <label htmlFor="reports_to_position_id" className="text-xs font-medium text-[var(--p-text-2)]">
+            {t("console.legend.hub.organization.form.reportsTo", undefined, "Reports to")}
+          </label>
+          <select
+            id="reports_to_position_id"
+            name="reports_to_position_id"
+            defaultValue={position?.reports_to_position_id ?? ""}
+            className="ps-input mt-1.5 w-full"
+          >
+            <option value="">
+              {t("console.legend.hub.organization.form.reportsToNone", undefined, "No one (top of the chart)")}
+            </option>
+            {reportsToOptions.map((o) => (
+              <option key={o.id} value={o.id}>
+                {o.title}
+              </option>
+            ))}
+          </select>
+          <p className="mt-1 text-xs text-[var(--p-text-3)]">
+            {t(
+              "console.legend.hub.organization.form.reportsToHint",
+              undefined,
+              "Where this position sits on the org chart. A position cannot report into its own subtree.",
+            )}
+          </p>
+        </div>
+        <Input
+          label={t("console.legend.hub.organization.form.seats", undefined, "Seats")}
+          name="seat_count"
+          type="number"
+          min={1}
+          max={500}
+          required
+          defaultValue={String(position?.seat_count ?? 1)}
+        />
       </div>
 
       <div>

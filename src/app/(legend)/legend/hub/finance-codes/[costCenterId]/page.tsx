@@ -10,6 +10,7 @@ import { hasSupabase } from "@/lib/env";
 import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { renameCostCenterAction, setCostCenterActiveAction } from "../actions";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -24,10 +25,14 @@ export default async function CostCenterDetailPage({
   params: Promise<{ costCenterId: string }>;
 }) {
   const { costCenterId } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Organization Hub" title="Cost Center" />
+        <ModuleHeader
+          eyebrow={t("console.legend.hub.financeCodes.eyebrow", undefined, "Organization Hub")}
+          title={t("console.legend.hub.financeCodes.detail.title", undefined, "Cost Center")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -47,21 +52,31 @@ export default async function CostCenterDetailPage({
   return (
     <>
       <ModuleHeader
-        eyebrow="Organization Hub"
+        eyebrow={t("console.legend.hub.financeCodes.eyebrow", undefined, "Organization Hub")}
         title={`${row.code} · ${row.name}`}
-        subtitle="Rename the cost center or take it out of circulation. The code itself never changes."
+        subtitle={t(
+          "console.legend.hub.financeCodes.detail.subtitle",
+          undefined,
+          "Rename the cost center or take it out of circulation. The code itself never changes.",
+        )}
         breadcrumbs={[
-          { label: "LEG3ND" },
-          { label: "Organization Hub", href: "/legend/hub" },
-          { label: "Finance Codes", href: "/legend/hub/finance-codes" },
+          { label: t("console.legend.hub.breadcrumb", undefined, "LEG3ND") },
+          { label: t("console.legend.hub.title", undefined, "Organization Hub"), href: "/legend/hub" },
+          { label: t("console.legend.hub.financeCodes.title", undefined, "Finance Codes"), href: "/legend/hub/finance-codes" },
           { label: row.code },
         ]}
         action={
           <div className="flex items-center gap-3">
-            {row.active ? <Badge variant="success">Active</Badge> : <Badge variant="muted">Inactive</Badge>}
+            {row.active ? (
+              <Badge variant="success">{t("console.legend.hub.financeCodes.active", undefined, "Active")}</Badge>
+            ) : (
+              <Badge variant="muted">{t("console.legend.hub.financeCodes.inactive", undefined, "Inactive")}</Badge>
+            )}
             <form action={setCostCenterActiveAction.bind(null, row.id, !row.active)}>
               <Button type="submit" size="sm" variant="secondary">
-                {row.active ? "Deactivate" : "Reactivate"}
+                {row.active
+                  ? t("console.legend.hub.financeCodes.detail.deactivate", undefined, "Deactivate")
+                  : t("console.legend.hub.financeCodes.detail.reactivate", undefined, "Reactivate")}
               </Button>
             </form>
           </div>
@@ -70,20 +85,30 @@ export default async function CostCenterDetailPage({
       <div className="page-content max-w-2xl space-y-4">
         <section className="surface-inset flex items-baseline gap-4 p-4">
           <div>
-            <div className="text-xs font-medium text-[var(--p-text-2)]">Code</div>
+            <div className="text-xs font-medium text-[var(--p-text-2)]">
+              {t("console.legend.hub.financeCodes.detail.code", undefined, "Code")}
+            </div>
             <div className="ps-id text-lg text-[var(--p-text-1)]">{row.code}</div>
           </div>
           <div>
-            <div className="text-xs font-medium text-[var(--p-text-2)]">Scope</div>
+            <div className="text-xs font-medium text-[var(--p-text-2)]">
+              {t("console.legend.hub.financeCodes.detail.scope", undefined, "Scope")}
+            </div>
             <div className="text-sm text-[var(--p-text-1)]">{row.scope}</div>
           </div>
         </section>
         <FormShell
           action={renameCostCenterAction.bind(null, row.id)}
           cancelHref="/legend/hub/finance-codes"
-          submitLabel="Save Name"
+          submitLabel={t("console.legend.hub.financeCodes.detail.submit", undefined, "Save Name")}
         >
-          <Input label="Name" name="name" required maxLength={120} defaultValue={row.name} />
+          <Input
+            label={t("console.legend.hub.financeCodes.detail.name", undefined, "Name")}
+            name="name"
+            required
+            maxLength={120}
+            defaultValue={row.name}
+          />
         </FormShell>
       </div>
     </>

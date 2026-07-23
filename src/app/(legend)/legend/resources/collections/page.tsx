@@ -8,16 +8,21 @@ import { timeAgo } from "@/lib/format";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import type { Resource, ResourceCollection } from "@/lib/legend_resources";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 type CollectionRow = ResourceCollection & { resourceCount: number };
 
 export default async function CollectionsPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="LEG3ND" title="Collections" />
+        <ModuleHeader
+          eyebrow={t("console.legend.resources.eyebrow", undefined, "LEG3ND")}
+          title={t("console.legend.resources.collectionsTitle", undefined, "Collections")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -54,46 +59,58 @@ export default async function CollectionsPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="LEG3ND"
-        title="Collections"
-        subtitle={rows.length === 1 ? "1 collection" : `${rows.length} collections`}
+        eyebrow={t("console.legend.resources.eyebrow", undefined, "LEG3ND")}
+        title={t("console.legend.resources.collectionsTitle", undefined, "Collections")}
+        subtitle={
+          rows.length === 1
+            ? t("console.legend.resources.oneCollection", undefined, "1 collection")
+            : t("console.legend.resources.nCollections", { count: rows.length }, `${rows.length} collections`)
+        }
         breadcrumbs={[
-          { label: "LEG3ND" },
-          { label: "Resources", href: "/legend/resources" },
-          { label: "Collections" },
+          { label: t("console.legend.resources.eyebrow", undefined, "LEG3ND") },
+          { label: t("console.legend.resources.title", undefined, "Resources"), href: "/legend/resources" },
+          { label: t("console.legend.resources.collectionsTitle", undefined, "Collections") },
         ]}
-        action={<Button href="/legend/resources/collections/new">+ New Collection</Button>}
+        action={
+          <Button href="/legend/resources/collections/new">
+            {t("console.legend.resources.newCollectionCta", undefined, "+ New Collection")}
+          </Button>
+        }
       />
       <div className="page-content">
         <DataView<CollectionRow>
           rows={rows}
           rowHref={(r) => `/legend/resources/collections/${r.id}`}
-          emptyLabel="No collections yet"
-          emptyDescription="Group your resources into collections to organize the hub."
+          emptyLabel={t("console.legend.resources.noCollectionsTitle", undefined, "No collections yet")}
+          emptyDescription={t(
+            "console.legend.resources.noCollectionsDescription",
+            undefined,
+            "Group your resources into collections to organize the hub.",
+          )}
           columns={[
             {
               key: "name",
-              header: "Name",
+              header: t("console.legend.resources.collectionColumns.name", undefined, "Name"),
               render: (r) => r.name,
               accessor: (r) => r.name,
             },
             {
               key: "count",
-              header: "Resources",
+              header: t("console.legend.resources.collectionColumns.resources", undefined, "Resources"),
               render: (r) => String(r.resourceCount),
               accessor: (r) => r.resourceCount,
               tabular: true,
             },
             {
               key: "sort",
-              header: "Sort",
+              header: t("console.legend.resources.collectionColumns.sort", undefined, "Sort"),
               render: (r) => String(r.sort_order),
               accessor: (r) => r.sort_order,
               tabular: true,
             },
             {
               key: "created",
-              header: "Added",
+              header: t("console.legend.resources.collectionColumns.added", undefined, "Added"),
               render: (r) => timeAgo(r.created_at),
               accessor: (r) => r.created_at,
             },

@@ -5,6 +5,7 @@ import { requireSession } from "@/lib/auth";
 import { hasSupabase } from "@/lib/env";
 import { listOrgMembers, pointsByUser } from "@/lib/db/legend-people";
 import { MembersDirectory, type DirectoryMember } from "./MembersDirectory";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -13,10 +14,14 @@ export const dynamic = "force-dynamic";
  * (table ⇄ avatar grid) over the org roster with shared contribution points.
  */
 export default async function MembersPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="LEG3ND · Community" title="Members" />
+        <ModuleHeader
+          eyebrow={t("console.legend.community.eyebrow", undefined, "LEG3ND · Community")}
+          title={t("console.legend.community.members", undefined, "Members")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -31,12 +36,12 @@ export default async function MembersPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="LEG3ND · Community"
-        title="Members"
-        subtitle="The cohort, ranked by contribution points."
+        eyebrow={t("console.legend.community.eyebrow", undefined, "LEG3ND · Community")}
+        title={t("console.legend.community.members", undefined, "Members")}
+        subtitle={t("console.legend.community.membersSubtitle", undefined, "The cohort, ranked by contribution points.")}
         action={
           <Link href="/legend/community" className="ps-btn ps-btn--secondary" style={{ minHeight: 44 }}>
-            Back to feed
+            {t("console.legend.community.backToFeed", undefined, "Back to feed")}
           </Link>
         }
       />

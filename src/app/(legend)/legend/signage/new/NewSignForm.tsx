@@ -12,22 +12,28 @@ import {
   type SignageSign,
 } from "@/lib/legend_signage";
 import { PICTOGRAMS } from "@/lib/signage_pictograms";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { createSignAction, type State } from "../actions";
 
 export function NewSignForm({
   action = createSignAction,
   sign,
-  submitLabel = "Create Sign",
+  submitLabel,
 }: {
   action?: (prev: State, fd: FormData) => Promise<State>;
   sign?: SignageSign;
   submitLabel?: string;
 } = {}) {
+  const t = useT();
   return (
-    <FormShell action={action} cancelHref="/legend/signage" submitLabel={submitLabel}>
+    <FormShell
+      action={action}
+      cancelHref="/legend/signage"
+      submitLabel={submitLabel ?? t("console.legend.signage.form.create", undefined, "Create Sign")}
+    >
       <div className="grid gap-4 sm:grid-cols-2">
         <Input
-          label="Code"
+          label={t("console.legend.signage.form.code", undefined, "Code")}
           name="code"
           required
           maxLength={60}
@@ -35,17 +41,19 @@ export function NewSignForm({
           defaultValue={sign?.code ?? ""}
         />
         <Input
-          label="Name"
+          label={t("console.legend.signage.form.name", undefined, "Name")}
           name="name"
           required
           maxLength={160}
-          placeholder="Emergency exit"
+          placeholder={t("console.legend.signage.form.namePlaceholder", undefined, "Emergency exit")}
           defaultValue={sign?.name ?? ""}
         />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="block">
-          <span className="text-xs font-medium text-[var(--p-text-2)]">Standard</span>
+          <span className="text-xs font-medium text-[var(--p-text-2)]">
+            {t("console.legend.signage.form.standard", undefined, "Standard")}
+          </span>
           <select
             name="standard"
             defaultValue={sign?.standard ?? "iso7010"}
@@ -59,7 +67,9 @@ export function NewSignForm({
           </select>
         </label>
         <label className="block">
-          <span className="text-xs font-medium text-[var(--p-text-2)]">Category</span>
+          <span className="text-xs font-medium text-[var(--p-text-2)]">
+            {t("console.legend.signage.form.category", undefined, "Category")}
+          </span>
           <select
             name="category"
             defaultValue={sign?.category ?? "safe_condition"}
@@ -75,7 +85,7 @@ export function NewSignForm({
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <Input
-          label="Pictogram key"
+          label={t("console.legend.signage.form.pictogramKey", undefined, "Pictogram key")}
           name="pictogram_key"
           required
           maxLength={120}
@@ -91,15 +101,17 @@ export function NewSignForm({
           ))}
         </datalist>
         <Input
-          label="Colorway"
+          label={t("console.legend.signage.form.colorway", undefined, "Colorway")}
           name="colorway"
           maxLength={80}
-          placeholder="life-safety green"
+          placeholder={t("console.legend.signage.form.colorwayPlaceholder", undefined, "life-safety green")}
           defaultValue={sign?.colorway ?? ""}
         />
       </div>
       <label className="block">
-        <span className="text-xs font-medium text-[var(--p-text-2)]">Status</span>
+        <span className="text-xs font-medium text-[var(--p-text-2)]">
+          {t("console.legend.signage.form.status", undefined, "Status")}
+        </span>
         <select
           name="sign_state"
           defaultValue={sign?.sign_state ?? "draft"}
@@ -113,7 +125,9 @@ export function NewSignForm({
         </select>
       </label>
       <label className="block">
-        <span className="text-xs font-medium text-[var(--p-text-2)]">Notes</span>
+        <span className="text-xs font-medium text-[var(--p-text-2)]">
+          {t("console.legend.signage.form.notes", undefined, "Notes")}
+        </span>
         <textarea
           name="notes"
           rows={3}

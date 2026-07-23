@@ -16,14 +16,19 @@ import {
   type Resource,
   type ResourceCollection,
 } from "@/lib/legend_resources";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function ResourcesHubPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="LEG3ND" title="Resources" />
+        <ModuleHeader
+          eyebrow={t("console.legend.resources.eyebrow", undefined, "LEG3ND")}
+          title={t("console.legend.resources.title", undefined, "Resources")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -58,28 +63,39 @@ export default async function ResourcesHubPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="LEG3ND"
-        title="Resources"
-        subtitle={resources.length === 1 ? "1 resource" : `${resources.length} resources`}
-        breadcrumbs={[{ label: "LEG3ND" }, { label: "Resources" }]}
+        eyebrow={t("console.legend.resources.eyebrow", undefined, "LEG3ND")}
+        title={t("console.legend.resources.title", undefined, "Resources")}
+        subtitle={
+          resources.length === 1
+            ? t("console.legend.resources.oneResource", undefined, "1 resource")
+            : t("console.legend.resources.nResources", { count: resources.length }, `${resources.length} resources`)
+        }
+        breadcrumbs={[
+          { label: t("console.legend.resources.eyebrow", undefined, "LEG3ND") },
+          { label: t("console.legend.resources.title", undefined, "Resources") },
+        ]}
         action={
           <div className="flex items-center gap-2">
             <Button href="/legend/resources/collections" size="sm" variant="secondary">
-              Collections
+              {t("console.legend.resources.collections", undefined, "Collections")}
             </Button>
-            <Button href="/legend/resources/new">+ New Resource</Button>
+            <Button href="/legend/resources/new">{t("console.legend.resources.newResource", undefined, "+ New Resource")}</Button>
           </div>
         }
       />
       <div className="page-content space-y-8">
         {resources.length === 0 && collections.length === 0 ? (
           <EmptyState
-            title="No resources yet"
-            description="Build a curated library of links, documents, templates, and references, grouped into collections."
-            action={<Button href="/legend/resources/new">+ New Resource</Button>}
+            title={t("console.legend.resources.emptyTitle", undefined, "No resources yet")}
+            description={t(
+              "console.legend.resources.emptyDescription",
+              undefined,
+              "Build a curated library of links, documents, templates, and references, grouped into collections.",
+            )}
+            action={<Button href="/legend/resources/new">{t("console.legend.resources.newResource", undefined, "+ New Resource")}</Button>}
             secondaryAction={
               <Button href="/legend/resources/collections/new" variant="secondary">
-                New Collection
+                {t("console.legend.resources.newCollection", undefined, "New Collection")}
               </Button>
             }
           />
@@ -89,38 +105,46 @@ export default async function ResourcesHubPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="text-sm font-semibold text-[var(--p-text-1)]">
-                    {group.collection ? group.collection.name : "Ungrouped"}
+                    {group.collection
+                      ? group.collection.name
+                      : t("console.legend.resources.ungrouped", undefined, "Ungrouped")}
                   </h2>
                   {group.collection?.description && (
                     <p className="mt-0.5 text-xs text-[var(--p-text-2)]">{group.collection.description}</p>
                   )}
                 </div>
                 <Badge variant="muted">
-                  {group.resources.length === 1 ? "1 item" : `${group.resources.length} items`}
+                  {group.resources.length === 1
+                    ? t("console.legend.resources.oneItem", undefined, "1 item")
+                    : t("console.legend.resources.nItems", { count: group.resources.length }, `${group.resources.length} items`)}
                 </Badge>
               </div>
               <DataView<Resource>
                 tableId={`t:/legend/resources:${group.collection?.id ?? "ungrouped"}`}
                 rows={group.resources}
                 rowHref={(r) => `/legend/resources/${r.id}`}
-                emptyLabel="No resources in this collection"
-                emptyDescription="Add a resource and assign it to this collection."
+                emptyLabel={t("console.legend.resources.emptyCollection", undefined, "No resources in this collection")}
+                emptyDescription={t(
+                  "console.legend.resources.emptyCollectionDescription",
+                  undefined,
+                  "Add a resource and assign it to this collection.",
+                )}
                 columns={[
                   {
                     key: "title",
-                    header: "Title",
+                    header: t("console.legend.resources.columns.title", undefined, "Title"),
                     render: (r) => r.title,
                     accessor: (r) => r.title,
                   },
                   {
                     key: "kind",
-                    header: "Kind",
+                    header: t("console.legend.resources.columns.kind", undefined, "Kind"),
                     render: (r) => RESOURCE_KIND_LABELS[r.kind],
                     accessor: (r) => r.kind,
                   },
                   {
                     key: "tags",
-                    header: "Tags",
+                    header: t("console.legend.resources.columns.tags", undefined, "Tags"),
                     render: (r) =>
                       r.tags.length > 0 ? (
                         <div className="flex flex-wrap gap-1">
@@ -137,13 +161,13 @@ export default async function ResourcesHubPage() {
                   },
                   {
                     key: "state",
-                    header: "Status",
+                    header: t("console.legend.resources.columns.status", undefined, "Status"),
                     render: (r) => <StatusBadge status={r.resource_state} />,
                     accessor: (r) => r.resource_state,
                   },
                   {
                     key: "created",
-                    header: "Added",
+                    header: t("console.legend.resources.columns.added", undefined, "Added"),
                     render: (r) => timeAgo(r.created_at),
                     accessor: (r) => r.created_at,
                   },

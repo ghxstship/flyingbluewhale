@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { type Achievement } from "@/lib/legend_gamification";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -17,10 +18,14 @@ export const dynamic = "force-dynamic";
  * presents the full earned-vs-locked grid with collection-progress metrics.
  */
 export default async function BadgesPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="LEG3ND · Compete" title="Badges" />
+        <ModuleHeader
+          eyebrow={t("console.legend.badges.eyebrow", undefined, "LEG3ND · Compete")}
+          title={t("console.legend.badges.title", undefined, "Badges")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -49,19 +54,27 @@ export default async function BadgesPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="LEG3ND · Compete"
-        title="Badges"
-        subtitle="Your achievement collection, earned across LEG3ND learning and COMPVSS field work."
+        eyebrow={t("console.legend.badges.eyebrow", undefined, "LEG3ND · Compete")}
+        title={t("console.legend.badges.title", undefined, "Badges")}
+        subtitle={t(
+          "console.legend.badges.subtitle",
+          undefined,
+          "Your achievement collection, earned across LEG3ND learning and COMPVSS field work.",
+        )}
       />
 
       <div className="metric-grid mb-6">
-        <MetricCard label="Earned" value={`${earnedCount} / ${total}`} />
-        <MetricCard label="Points Earned" value={pointsEarned} />
-        <MetricCard label="Locked" value={total - earnedCount} />
+        <MetricCard label={t("console.legend.badges.earned", undefined, "Earned")} value={`${earnedCount} / ${total}`} />
+        <MetricCard label={t("console.legend.badges.pointsEarned", undefined, "Points Earned")} value={pointsEarned} />
+        <MetricCard label={t("console.legend.badges.locked", undefined, "Locked")} value={total - earnedCount} />
       </div>
 
       {total === 0 ? (
-        <EmptyState size="compact" title="No badges configured" description="Achievements your org defines will appear here." />
+        <EmptyState
+          size="compact"
+          title={t("console.legend.badges.emptyTitle", undefined, "No badges configured")}
+          description={t("console.legend.badges.emptyDescription", undefined, "Achievements your org defines will appear here.")}
+        />
       ) : (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {achievements.map((a) => (

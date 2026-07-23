@@ -26,12 +26,12 @@ export default async function LocationDetailPage({ params }: { params: Promise<{
   return (
     <DetailShell
       row={row}
-      eyebrow="Organization Hub"
+      eyebrow={t("console.legend.hub.title", undefined, "Organization Hub")}
       title={(r) => r.name}
       subtitle={(r) => r.address}
       breadcrumbs={[
-        { label: "LEG3ND" },
-        { label: "Organization Hub", href: "/legend/hub" },
+        { label: t("console.legend.hub.breadcrumb", undefined, "LEG3ND") },
+        { label: t("console.legend.hub.title", undefined, "Organization Hub"), href: "/legend/hub" },
         {
           label: t("console.locations.detail.breadcrumb.locations", undefined, "Locations"),
           href: "/legend/hub/locations",

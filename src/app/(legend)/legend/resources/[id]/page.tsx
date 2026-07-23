@@ -18,11 +18,13 @@ import {
   type ResourceCollection,
 } from "@/lib/legend_resources";
 import { deleteResourceAction, setResourceStateAction } from "../actions";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function ResourceDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) return notFound();
   const session = await requireSession();
   const db = (await createClient()) as unknown as LooseSupabase;
@@ -55,18 +57,18 @@ export default async function ResourceDetail({ params }: { params: Promise<{ id:
   return (
     <>
       <ModuleHeader
-        eyebrow="Resource"
+        eyebrow={t("console.legend.resources.detail.eyebrow", undefined, "Resource")}
         title={resource.title}
         subtitle={`${RESOURCE_KIND_LABELS[resource.kind]}${collection ? ` · ${collection.name}` : ""}`}
         breadcrumbs={[
-          { label: "LEG3ND" },
-          { label: "Resources", href: "/legend/resources" },
+          { label: t("console.legend.resources.eyebrow", undefined, "LEG3ND") },
+          { label: t("console.legend.resources.title", undefined, "Resources"), href: "/legend/resources" },
           { label: resource.title },
         ]}
         action={
           <div className="flex items-center gap-2">
             <Button href={`/legend/resources/${resource.id}/edit`} size="sm" variant="secondary">
-              Edit
+              {t("console.legend.resources.detail.edit", undefined, "Edit")}
             </Button>
             {RESOURCE_STATES.filter((s) => s !== resource.resource_state).map((s) => (
               <form key={s} action={setResourceStateAction.bind(null, resource.id, s)}>
@@ -77,7 +79,11 @@ export default async function ResourceDetail({ params }: { params: Promise<{ id:
             ))}
             <DeleteForm
               action={deleteResourceAction.bind(null, resource.id)}
-              confirm={`Delete resource "${resource.title}"?`}
+              confirm={t(
+                "console.legend.resources.detail.deleteConfirm",
+                { title: resource.title },
+                `Delete resource "${resource.title}"?`,
+              )}
               undo={{ table: "resources", id: resource.id, redirectTo: "/legend/resources" }}
             />
           </div>
@@ -85,17 +91,21 @@ export default async function ResourceDetail({ params }: { params: Promise<{ id:
       />
       <div className="page-content space-y-8">
         <div className="metric-grid">
-          <Field label="Status">
+          <Field label={t("console.legend.resources.detail.status", undefined, "Status")}>
             <StatusBadge status={resource.resource_state} />
           </Field>
-          <Field label="Kind">{RESOURCE_KIND_LABELS[resource.kind]}</Field>
-          <Field label="Collection">{collection ? collection.name : "Ungrouped"}</Field>
-          <Field label="Added">{timeAgo(resource.created_at)}</Field>
+          <Field label={t("console.legend.resources.detail.kind", undefined, "Kind")}>
+            {RESOURCE_KIND_LABELS[resource.kind]}
+          </Field>
+          <Field label={t("console.legend.resources.detail.collection", undefined, "Collection")}>
+            {collection ? collection.name : t("console.legend.resources.ungrouped", undefined, "Ungrouped")}
+          </Field>
+          <Field label={t("console.legend.resources.detail.added", undefined, "Added")}>{timeAgo(resource.created_at)}</Field>
         </div>
 
         {target && (
           <div className="surface p-5">
-            <h3 className="text-sm font-semibold">Link</h3>
+            <h3 className="text-sm font-semibold">{t("console.legend.resources.detail.link", undefined, "Link")}</h3>
             {resource.url ? (
               <a
                 href={resource.url}
@@ -113,7 +123,7 @@ export default async function ResourceDetail({ params }: { params: Promise<{ id:
 
         {resource.tags.length > 0 && (
           <div className="surface p-5">
-            <h3 className="text-sm font-semibold">Tags</h3>
+            <h3 className="text-sm font-semibold">{t("console.legend.resources.detail.tags", undefined, "Tags")}</h3>
             <div className="mt-2 flex flex-wrap gap-1.5">
               {resource.tags.map((tag) => (
                 <Badge key={tag} variant="muted">
@@ -126,7 +136,7 @@ export default async function ResourceDetail({ params }: { params: Promise<{ id:
 
         {resource.description && (
           <div className="surface p-5">
-            <h3 className="text-sm font-semibold">Description</h3>
+            <h3 className="text-sm font-semibold">{t("console.legend.resources.detail.description", undefined, "Description")}</h3>
             <p className="mt-2 text-sm whitespace-pre-wrap text-[var(--p-text-2)]">{resource.description}</p>
           </div>
         )}

@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import type { LooseSupabase } from "@/lib/supabase/loose";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -30,10 +31,14 @@ function place(l: LocationRow): string {
 }
 
 export default async function LocationsPillarPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Organization Hub" title="Locations" />
+        <ModuleHeader
+          eyebrow={t("console.locations.list.eyebrow", undefined, "Organization Hub")}
+          title={t("console.locations.list.title", undefined, "Locations")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -52,52 +57,64 @@ export default async function LocationsPillarPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Organization Hub"
-        title="Locations"
+        eyebrow={t("console.locations.list.eyebrow", undefined, "Organization Hub")}
+        title={t("console.locations.list.title", undefined, "Locations")}
         subtitle={
           rows.length === 1
-            ? "1 location in the space registry"
-            : `${rows.length} locations in the space registry`
+            ? t("console.locations.list.oneLocation", undefined, "1 location in the space registry")
+            : t(
+                "console.locations.list.nLocations",
+                { count: rows.length },
+                `${rows.length} locations in the space registry`,
+              )
         }
         breadcrumbs={[
-          { label: "LEG3ND" },
-          { label: "Organization Hub", href: "/legend/hub" },
-          { label: "Locations" },
+          { label: t("console.legend.hub.breadcrumb", undefined, "LEG3ND") },
+          { label: t("console.legend.hub.title", undefined, "Organization Hub"), href: "/legend/hub" },
+          { label: t("console.locations.list.title", undefined, "Locations") },
         ]}
         action={
           <Button href="/legend/hub/locations/new" size="sm">
-            + Add Location
+            {t("console.locations.list.addLocation", undefined, "+ Add Location")}
           </Button>
         }
       />
       <div className="page-content">
         {rows.length === 0 ? (
           <EmptyState
-            title="No locations yet"
-            description="Register your offices, venues, and yards. Projects, shifts, and time-clock zones all point at these."
-            action={<Button href="/legend/hub/locations/new">+ Add Location</Button>}
+            title={t("console.locations.list.emptyTitle", undefined, "No locations yet")}
+            description={t(
+              "console.locations.list.emptyDescription",
+              undefined,
+              "Register your offices, venues, and yards. Projects, shifts, and time-clock zones all point at these.",
+            )}
+            action={
+              <Button href="/legend/hub/locations/new">
+                {t("console.locations.list.addLocation", undefined, "+ Add Location")}
+              </Button>
+            }
           />
         ) : (
           <DataView<LocationRow>
             rows={rows}
             rowHref={(l) => `/legend/hub/locations/${l.id}`}
-            emptyLabel="No locations"
+            emptyLabel={t("console.locations.list.emptyLabel", undefined, "No locations")}
             columns={[
               {
                 key: "name",
-                header: "Name",
+                header: t("console.locations.list.columns.name", undefined, "Name"),
                 render: (l) => l.name,
                 accessor: (l) => l.name,
               },
               {
                 key: "address",
-                header: "Address",
+                header: t("console.locations.list.columns.address", undefined, "Address"),
                 render: (l) => l.address ?? "—",
                 accessor: (l) => l.address ?? "",
               },
               {
                 key: "place",
-                header: "City / Region",
+                header: t("console.locations.list.columns.cityRegion", undefined, "City / Region"),
                 render: (l) => place(l),
                 accessor: (l) => place(l),
               },

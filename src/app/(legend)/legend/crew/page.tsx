@@ -9,6 +9,7 @@ import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { pointsByUser } from "@/lib/db/legend-people";
 import { rankCrews, type Crew, type CrewStanding } from "@/lib/legend_crew";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -17,10 +18,14 @@ export const dynamic = "force-dynamic";
  * (rolled up from the shared points ledger). Highlights the viewer's own crew.
  */
 export default async function CrewPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="LEG3ND · Community" title="Crew & Cohorts" />
+        <ModuleHeader
+          eyebrow={t("console.legend.crew.eyebrow", undefined, "LEG3ND · Community")}
+          title={t("console.legend.crew.title", undefined, "Crew & Cohorts")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -63,16 +68,28 @@ export default async function CrewPage() {
 
   return (
     <>
-      <ModuleHeader eyebrow="LEG3ND · Community" title="Crew & Cohorts" subtitle="Learning crews ranked by total contribution points. Climb the board together." />
+      <ModuleHeader
+        eyebrow={t("console.legend.crew.eyebrow", undefined, "LEG3ND · Community")}
+        title={t("console.legend.crew.title", undefined, "Crew & Cohorts")}
+        subtitle={t(
+          "console.legend.crew.subtitle",
+          undefined,
+          "Learning crews ranked by total contribution points. Climb the board together.",
+        )}
+      />
 
       <div className="metric-grid mb-6">
-        <MetricCard label="Crews" value={crews.length} />
-        <MetricCard label="Members" value={members.length} />
-        <MetricCard label="Your crews" value={myCrewIds.size} />
+        <MetricCard label={t("console.legend.crew.crews", undefined, "Crews")} value={crews.length} />
+        <MetricCard label={t("console.legend.crew.members", undefined, "Members")} value={members.length} />
+        <MetricCard label={t("console.legend.crew.yourCrews", undefined, "Your crews")} value={myCrewIds.size} />
       </div>
 
       {ranked.length === 0 ? (
-        <EmptyState size="compact" title="No crews yet" description="Learning crews your org creates will appear here." />
+        <EmptyState
+          size="compact"
+          title={t("console.legend.crew.emptyTitle", undefined, "No crews yet")}
+          description={t("console.legend.crew.emptyDescription", undefined, "Learning crews your org creates will appear here.")}
+        />
       ) : (
         <div className="surface flex flex-col gap-1 p-2">
           {ranked.map((s) => (
@@ -82,7 +99,11 @@ export default async function CrewPage() {
               name={s.crew.name}
               avatarUrl={null}
               points={s.points}
-              subtitle={`${s.memberCount} ${s.memberCount === 1 ? "member" : "members"}`}
+              subtitle={
+                s.memberCount === 1
+                  ? t("console.legend.crew.oneMember", undefined, "1 member")
+                  : t("console.legend.crew.nMembers", { count: s.memberCount }, `${s.memberCount} members`)
+              }
               highlight={myCrewIds.has(s.crew.id)}
             />
           ))}

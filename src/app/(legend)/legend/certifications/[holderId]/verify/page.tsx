@@ -13,6 +13,7 @@ import {
   type AccreditationState,
   type CertificationHolder,
 } from "@/lib/legend_compliance";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -50,6 +51,7 @@ export default async function CertificateVerifyPage({
   params: Promise<{ holderId: string }>;
 }) {
   const { holderId } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase || !UUID_RE.test(holderId)) notFound();
   const session = await getSession();
   const db = (await createClient()) as unknown as LooseSupabase;
@@ -77,9 +79,13 @@ export default async function CertificateVerifyPage({
   return (
     <>
       <ModuleHeader
-        eyebrow="LEG3ND · Verification"
-        title="Certification Record"
-        subtitle="Live standing, computed at the time you loaded this page."
+        eyebrow={t("console.legend.certifications.verify.eyebrow", undefined, "LEG3ND · Verification")}
+        title={t("console.legend.certifications.verify.title", undefined, "Certification Record")}
+        subtitle={t(
+          "console.legend.certifications.verify.subtitle",
+          undefined,
+          "Live standing, computed at the time you loaded this page.",
+        )}
       />
       <div className="mx-auto max-w-xl space-y-4">
         <div
@@ -91,41 +97,64 @@ export default async function CertificateVerifyPage({
           <Badge variant={tone}>{ACCREDITATION_STATE_LABELS[eff]}</Badge>
           <span className="text-sm text-[var(--p-text-2)]">
             {valid
-              ? "This certification holding is in good standing."
-              : "This certification holding is not currently in good standing."}
+              ? t(
+                  "console.legend.certifications.verify.goodStanding",
+                  undefined,
+                  "This certification holding is in good standing.",
+                )
+              : t(
+                  "console.legend.certifications.verify.notGoodStanding",
+                  undefined,
+                  "This certification holding is not currently in good standing.",
+                )}
           </span>
         </div>
 
         <div className="surface p-4">
           <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-sm">
-            <dt className="text-[var(--p-text-3)]">Holder</dt>
-            <dd className="font-medium">{record.holder_name ?? "Credential Holder"}</dd>
-            <dt className="text-[var(--p-text-3)]">Credential</dt>
+            <dt className="text-[var(--p-text-3)]">{t("console.legend.certifications.verify.holder", undefined, "Holder")}</dt>
+            <dd className="font-medium">
+              {record.holder_name ??
+                t("console.legend.certifications.artifact.credentialHolder", undefined, "Credential Holder")}
+            </dd>
+            <dt className="text-[var(--p-text-3)]">
+              {t("console.legend.certifications.verify.credential", undefined, "Credential")}
+            </dt>
             <dd className="font-medium">
               {record.certification_name}
               {record.certification_code && (
                 <span className="ms-2 font-mono text-xs text-[var(--p-text-3)]">{record.certification_code}</span>
               )}
             </dd>
-            <dt className="text-[var(--p-text-3)]">Issued by</dt>
+            <dt className="text-[var(--p-text-3)]">
+              {t("console.legend.certifications.verify.issuedBy", undefined, "Issued by")}
+            </dt>
             <dd>{record.org_name}</dd>
             {record.course_title && (
               <>
-                <dt className="text-[var(--p-text-3)]">Course</dt>
+                <dt className="text-[var(--p-text-3)]">
+                  {t("console.legend.certifications.verify.course", undefined, "Course")}
+                </dt>
                 <dd>{record.course_title}</dd>
               </>
             )}
-            <dt className="text-[var(--p-text-3)]">Issued</dt>
+            <dt className="text-[var(--p-text-3)]">{t("console.legend.certifications.issued", undefined, "Issued")}</dt>
             <dd className="font-mono text-xs">{fmt(record.issued_at)}</dd>
-            <dt className="text-[var(--p-text-3)]">Expires</dt>
-            <dd className="font-mono text-xs">{record.expires_on ? fmt(record.expires_on) : "Never"}</dd>
+            <dt className="text-[var(--p-text-3)]">{t("console.legend.certifications.expires", undefined, "Expires")}</dt>
+            <dd className="font-mono text-xs">
+              {record.expires_on ? fmt(record.expires_on) : t("console.legend.certifications.never", undefined, "Never")}
+            </dd>
             {record.next_recert_due && (
               <>
-                <dt className="text-[var(--p-text-3)]">Recert due</dt>
+                <dt className="text-[var(--p-text-3)]">
+                  {t("console.legend.certifications.recertDue", undefined, "Recert due")}
+                </dt>
                 <dd className="font-mono text-xs">{fmt(record.next_recert_due)}</dd>
               </>
             )}
-            <dt className="text-[var(--p-text-3)]">Record ID</dt>
+            <dt className="text-[var(--p-text-3)]">
+              {t("console.legend.certifications.verify.recordId", undefined, "Record ID")}
+            </dt>
             <dd className="font-mono text-xs">{record.holder_id}</dd>
           </dl>
         </div>
@@ -133,15 +162,19 @@ export default async function CertificateVerifyPage({
         {session ? (
           <div className="flex items-center gap-3 text-sm">
             <Link href={`/legend/certifications/${record.holder_id}`} className="ps-btn ps-btn--secondary">
-              View certificate
+              {t("console.legend.certifications.viewCertificate", undefined, "View certificate")}
             </Link>
             <Link href="/legend/certifications" className="text-[var(--p-text-2)] hover:text-[var(--p-text-1)]">
-              Back to wallet
+              {t("console.legend.certifications.artifact.backToWallet", undefined, "Back to wallet")}
             </Link>
           </div>
         ) : (
           <p className="text-xs text-[var(--p-text-3)]">
-            Verified against the issuing workspace at the time this page loaded.
+            {t(
+              "console.legend.certifications.verify.anonNote",
+              undefined,
+              "Verified against the issuing workspace at the time this page loaded.",
+            )}
           </p>
         )}
       </div>

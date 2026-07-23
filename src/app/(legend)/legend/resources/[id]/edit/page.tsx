@@ -8,15 +8,20 @@ import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import type { Resource, ResourceCollection } from "@/lib/legend_resources";
 import { ResourceForm } from "../../ResourceForm";
 import { updateResourceAction } from "../../actions";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function EditResourcePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="LEG3ND" title="Edit Resource" />
+        <ModuleHeader
+          eyebrow={t("console.legend.resources.eyebrow", undefined, "LEG3ND")}
+          title={t("console.legend.resources.edit.title", undefined, "Edit Resource")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -51,13 +56,13 @@ export default async function EditResourcePage({ params }: { params: Promise<{ i
   return (
     <>
       <ModuleHeader
-        eyebrow="Resource"
-        title="Edit Resource"
+        eyebrow={t("console.legend.resources.detail.eyebrow", undefined, "Resource")}
+        title={t("console.legend.resources.edit.title", undefined, "Edit Resource")}
         breadcrumbs={[
-          { label: "LEG3ND" },
-          { label: "Resources", href: "/legend/resources" },
+          { label: t("console.legend.resources.eyebrow", undefined, "LEG3ND") },
+          { label: t("console.legend.resources.title", undefined, "Resources"), href: "/legend/resources" },
           { label: resource.title, href: `/legend/resources/${resource.id}` },
-          { label: "Edit" },
+          { label: t("console.legend.resources.edit.breadcrumb", undefined, "Edit") },
         ]}
       />
       <div className="page-content max-w-2xl">
@@ -65,7 +70,7 @@ export default async function EditResourcePage({ params }: { params: Promise<{ i
           action={updateResourceAction.bind(null, resource.id)}
           collections={collections}
           resource={resource}
-          submitLabel="Save Resource"
+          submitLabel={t("console.legend.resources.edit.submit", undefined, "Save Resource")}
         />
       </div>
     </>

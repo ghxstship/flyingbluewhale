@@ -14,6 +14,7 @@ import {
   summarizeEnrollments,
   COURSE_STATE_LABELS,
 } from "@/lib/legend_learning";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -24,10 +25,14 @@ export const dynamic = "force-dynamic";
  * each to unlock the next.
  */
 export default async function LearningPathPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="LEG3ND · Learn" title="Learning Path" />
+        <ModuleHeader
+          eyebrow={t("console.legend.path.eyebrow", undefined, "LEG3ND · Learn")}
+          title={t("console.legend.path.title", undefined, "Learning Path")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -73,23 +78,31 @@ export default async function LearningPathPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="LEG3ND · Learn"
-        title="Learning Path"
-        subtitle="Your sequential route through the org's published courses. Complete each unit to unlock the next."
+        eyebrow={t("console.legend.path.eyebrow", undefined, "LEG3ND · Learn")}
+        title={t("console.legend.path.title", undefined, "Learning Path")}
+        subtitle={t(
+          "console.legend.path.subtitle",
+          undefined,
+          "Your sequential route through the org's published courses. Complete each unit to unlock the next.",
+        )}
       />
 
       <div className="metric-grid mb-6">
-        <MetricCard label="Courses" value={String(courses.length)} />
-        <MetricCard label="Completed" value={String(stats.completed)} />
-        <MetricCard label="In Progress" value={String(stats.inProgress)} />
-        <MetricCard label="Avg Progress" value={`${stats.avgProgress}%`} />
+        <MetricCard label={t("console.legend.path.courses", undefined, "Courses")} value={String(courses.length)} />
+        <MetricCard label={t("console.legend.path.completed", undefined, "Completed")} value={String(stats.completed)} />
+        <MetricCard label={t("console.legend.path.inProgress", undefined, "In Progress")} value={String(stats.inProgress)} />
+        <MetricCard label={t("console.legend.path.avgProgress", undefined, "Avg Progress")} value={`${stats.avgProgress}%`} />
       </div>
 
       {courses.length === 0 ? (
         <EmptyState
           size="compact"
-          title="No courses yet"
-          description="Published courses will appear here as your org builds the path."
+          title={t("console.legend.path.emptyTitle", undefined, "No courses yet")}
+          description={t(
+            "console.legend.path.emptyDescription",
+            undefined,
+            "Published courses will appear here as your org builds the path.",
+          )}
         />
       ) : (
         <ol className="space-y-3">
@@ -97,7 +110,9 @@ export default async function LearningPathPage() {
             const enrollment = enrollmentByCourse.get(course.id);
             const lessons = lessonCounts.get(course.id) ?? 0;
             const progress = enrollment?.progress_pct ?? 0;
-            const stateLabel = enrollment ? enrollment.enrollment_state : "Not started";
+            const stateLabel = enrollment
+              ? enrollment.enrollment_state
+              : t("console.legend.path.notStarted", undefined, "Not started");
             return (
               <li key={course.id} className="surface flex gap-4 p-5">
                 <div
@@ -117,7 +132,8 @@ export default async function LearningPathPage() {
                       {course.title}
                     </Link>
                     <span className="font-mono text-xs" style={{ color: "var(--p-text-3)" }}>
-                      {COURSE_STATE_LABELS[course.course_state]} · +{course.points_reward} XP
+                      {COURSE_STATE_LABELS[course.course_state]} ·{" "}
+                      {t("console.legend.path.xpReward", { points: course.points_reward }, `+${course.points_reward} XP`)}
                     </span>
                   </div>
                   {course.summary && (
@@ -125,10 +141,15 @@ export default async function LearningPathPage() {
                       {course.summary}
                     </p>
                   )}
-                  <ProgressBar value={progress} aria-label={`${course.title} progress`} />
+                  <ProgressBar
+                    value={progress}
+                    aria-label={t("console.legend.path.progressAria", { title: course.title }, `${course.title} progress`)}
+                  />
                   <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
                     <span style={{ color: "var(--p-text-3)" }}>
-                      {lessons} {lessons === 1 ? "lesson" : "lessons"}
+                      {lessons === 1
+                        ? t("console.legend.path.oneLesson", undefined, "1 lesson")
+                        : t("console.legend.path.nLessons", { count: lessons }, `${lessons} lessons`)}
                     </span>
                     <span style={{ color: "var(--p-text-2)" }}>{stateLabel}</span>
                   </div>

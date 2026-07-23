@@ -14,6 +14,7 @@ import {
   type CertificationHolder,
 } from "@/lib/legend_compliance";
 import { PrintButton } from "./PrintButton";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +36,7 @@ export default async function CertificateArtifactPage({
   params: Promise<{ holderId: string }>;
 }) {
   const { holderId } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase || !UUID_RE.test(holderId)) notFound();
   const session = await requireSession();
   const db = (await createClient()) as unknown as LooseSupabase;
@@ -62,7 +64,7 @@ export default async function CertificateArtifactPage({
   const holderName =
     (userRow as { name: string | null; email: string } | null)?.name ??
     (userRow as { email: string } | null)?.email ??
-    "Credential Holder";
+    t("console.legend.certifications.artifact.credentialHolder", undefined, "Credential Holder");
   const courseTitle = (courseRow as { title: string } | null)?.title ?? null;
   const orgName = (orgRow as { name: string } | null)?.name ?? null;
 
@@ -75,13 +77,13 @@ export default async function CertificateArtifactPage({
       {/* Chrome — hidden in print. */}
       <div className="flex items-center justify-between gap-3 print:hidden">
         <Link href="/legend/certifications" className="text-sm text-[var(--p-text-2)] hover:text-[var(--p-text-1)]">
-          Back to wallet
+          {t("console.legend.certifications.artifact.backToWallet", undefined, "Back to wallet")}
         </Link>
         <div className="flex items-center gap-2">
           <Link href={`/legend/certifications/${holder.id}/verify`} className="ps-btn ps-btn--secondary">
-            Verification record
+            {t("console.legend.certifications.verificationRecord", undefined, "Verification record")}
           </Link>
-          <PrintButton label="Print / Save PDF" />
+          <PrintButton label={t("console.legend.certifications.artifact.print", undefined, "Print / Save PDF")} />
         </div>
       </div>
 
@@ -91,35 +93,60 @@ export default async function CertificateArtifactPage({
         style={{ printColorAdjust: "exact", WebkitPrintColorAdjust: "exact" }}
       >
         <header className="border-b-2 border-[var(--p-accent)] pb-6">
-          <div className="eyebrow">{orgName ?? "LEG3ND"} · Certification</div>
-          <h1 className="hed-2xl mt-2">Certificate of Achievement</h1>
+          <div className="eyebrow">
+            {t(
+              "console.legend.certifications.artifact.masthead",
+              { org: orgName ?? "LEG3ND" },
+              `${orgName ?? "LEG3ND"} · Certification`,
+            )}
+          </div>
+          <h1 className="hed-2xl mt-2">
+            {t("console.legend.certifications.artifact.title", undefined, "Certificate of Achievement")}
+          </h1>
         </header>
 
         <div className="space-y-6 py-8">
-          <p className="text-sm text-[var(--p-text-2)]">This certifies that</p>
+          <p className="text-sm text-[var(--p-text-2)]">
+            {t("console.legend.certifications.artifact.certifiesThat", undefined, "This certifies that")}
+          </p>
           <div className="hed-xl">{holderName}</div>
           <p className="text-sm text-[var(--p-text-2)]">
-            has satisfied the requirements of
-            {courseTitle ? ` the course "${courseTitle}" and holds` : " and holds"} the credential
+            {courseTitle
+              ? t(
+                  "console.legend.certifications.artifact.satisfiedCourse",
+                  { course: courseTitle },
+                  `has satisfied the requirements of the course "${courseTitle}" and holds the credential`,
+                )
+              : t(
+                  "console.legend.certifications.artifact.satisfied",
+                  undefined,
+                  "has satisfied the requirements of and holds the credential",
+                )}
           </p>
           <div>
-            <div className="text-lg font-semibold text-[var(--p-text-1)]">{cert?.name ?? "Certification"}</div>
+            <div className="text-lg font-semibold text-[var(--p-text-1)]">
+              {cert?.name ?? t("console.legend.certifications.certification", undefined, "Certification")}
+            </div>
             {cert?.code && <div className="mt-1 font-mono text-xs text-[var(--p-text-3)]">{cert.code}</div>}
             {cert?.description && <p className="mt-2 max-w-prose text-sm text-[var(--p-text-2)]">{cert.description}</p>}
           </div>
 
           <dl className="grid max-w-md grid-cols-2 gap-x-6 gap-y-2 text-sm">
-            <dt className="text-[var(--p-text-3)]">Issued</dt>
+            <dt className="text-[var(--p-text-3)]">{t("console.legend.certifications.issued", undefined, "Issued")}</dt>
             <dd className="font-mono">{fmt(holder.issued_at) ?? "—"}</dd>
-            <dt className="text-[var(--p-text-3)]">Expires</dt>
-            <dd className="font-mono">{fmt(holder.expires_on) ?? "Never"}</dd>
+            <dt className="text-[var(--p-text-3)]">{t("console.legend.certifications.expires", undefined, "Expires")}</dt>
+            <dd className="font-mono">{fmt(holder.expires_on) ?? t("console.legend.certifications.never", undefined, "Never")}</dd>
             {holder.last_recert_at && (
               <>
-                <dt className="text-[var(--p-text-3)]">Last recertified</dt>
+                <dt className="text-[var(--p-text-3)]">
+                  {t("console.legend.certifications.artifact.lastRecertified", undefined, "Last recertified")}
+                </dt>
                 <dd className="font-mono">{fmt(holder.last_recert_at)}</dd>
               </>
             )}
-            <dt className="text-[var(--p-text-3)]">Standing</dt>
+            <dt className="text-[var(--p-text-3)]">
+              {t("console.legend.certifications.artifact.standing", undefined, "Standing")}
+            </dt>
             <dd>
               <Badge variant={tone}>{ACCREDITATION_STATE_LABELS[eff]}</Badge>
             </dd>
@@ -127,9 +154,13 @@ export default async function CertificateArtifactPage({
         </div>
 
         <footer className="border-t border-[var(--p-border)] pt-4">
-          <div className="eyebrow">Verification</div>
+          <div className="eyebrow">{t("console.legend.certifications.artifact.verification", undefined, "Verification")}</div>
           <p className="mt-1 font-mono text-xs text-[var(--p-text-2)]">
-            Certificate ID {holder.id} · verify at /legend/certifications/{holder.id}/verify
+            {t(
+              "console.legend.certifications.artifact.verifyLine",
+              { id: holder.id },
+              `Certificate ID ${holder.id} · verify at /legend/certifications/${holder.id}/verify`,
+            )}
           </p>
         </footer>
       </article>

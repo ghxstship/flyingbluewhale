@@ -10,6 +10,7 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { listOrgMembers } from "@/lib/db/legend-people";
 import { POST_CATEGORY_LABELS, type CommunityPost, type PostCategory } from "@/lib/legend_community";
 import { PostComposer } from "./PostComposer";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -18,10 +19,14 @@ export const dynamic = "force-dynamic";
  * <ActivityTimeline> of published posts, with a link to the members directory.
  */
 export default async function CommunityPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="LEG3ND · Community" title="Community" />
+        <ModuleHeader
+          eyebrow={t("console.legend.community.eyebrow", undefined, "LEG3ND · Community")}
+          title={t("console.legend.community.title", undefined, "Community")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -50,9 +55,9 @@ export default async function CommunityPage() {
     const cat = POST_CATEGORY_LABELS[p.category as PostCategory] ?? p.category;
     return {
       id: p.id,
-      actorName: author?.name ?? "Member",
+      actorName: author?.name ?? t("console.legend.community.member", undefined, "Member"),
       actorAvatarUrl: author?.avatar_url ?? null,
-      action: "posted in",
+      action: t("console.legend.community.postedIn", undefined, "posted in"),
       target: cat,
       time: timeAgo(p.created_at),
       body: (
@@ -73,18 +78,21 @@ export default async function CommunityPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="LEG3ND · Community"
-        title="Community"
-        subtitle="Wins, questions, and resources from the cohort."
+        eyebrow={t("console.legend.community.eyebrow", undefined, "LEG3ND · Community")}
+        title={t("console.legend.community.title", undefined, "Community")}
+        subtitle={t("console.legend.community.subtitle", undefined, "Wins, questions, and resources from the cohort.")}
         action={
           <Link href="/legend/community/members" className="ps-btn ps-btn--secondary" style={{ minHeight: 44 }}>
-            Members
+            {t("console.legend.community.members", undefined, "Members")}
           </Link>
         }
       />
       <div className="mx-auto max-w-2xl space-y-6">
         <PostComposer />
-        <ActivityTimeline items={items} emptyLabel="No posts yet. Start the conversation." />
+        <ActivityTimeline
+          items={items}
+          emptyLabel={t("console.legend.community.emptyFeed", undefined, "No posts yet. Start the conversation.")}
+        />
       </div>
     </>
   );

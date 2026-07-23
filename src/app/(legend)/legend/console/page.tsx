@@ -10,6 +10,7 @@ import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { listOrgMembers } from "@/lib/db/legend-people";
 import { AssignForm } from "./AssignForm";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -21,10 +22,14 @@ const DAY_MS = 1000 * 60 * 60 * 24;
  * control. All counts derive from live certification_holders + course_enrollments.
  */
 export default async function TrainingConsolePage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="LEG3ND · Manage" title="Training Console" />
+        <ModuleHeader
+          eyebrow={t("console.legend.trainingConsole.eyebrow", undefined, "LEG3ND · Manage")}
+          title={t("console.legend.trainingConsole.title", undefined, "Training Console")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -84,32 +89,51 @@ export default async function TrainingConsolePage() {
 
   return (
     <>
-      <ModuleHeader eyebrow="LEG3ND · Manage" title="Training Console" subtitle="Org compliance, the learner roster, and course assignment (manager view)." />
+      <ModuleHeader
+        eyebrow={t("console.legend.trainingConsole.eyebrow", undefined, "LEG3ND · Manage")}
+        title={t("console.legend.trainingConsole.title", undefined, "Training Console")}
+        subtitle={t(
+          "console.legend.trainingConsole.subtitle",
+          undefined,
+          "Org compliance, the learner roster, and course assignment (manager view).",
+        )}
+      />
 
       <div className="metric-grid mb-6">
-        <MetricCard label="Members" value={members.length} />
-        <MetricCard label="Valid certs" value={validCerts} />
-        <MetricCard label="Expiring · 30d" value={expiringSoon} />
-        <MetricCard label="Overdue" value={overdue} />
-        <MetricCard label="Active enrollments" value={activeEnrollments} />
+        <MetricCard label={t("console.legend.trainingConsole.members", undefined, "Members")} value={members.length} />
+        <MetricCard label={t("console.legend.trainingConsole.validCerts", undefined, "Valid certs")} value={validCerts} />
+        <MetricCard label={t("console.legend.trainingConsole.expiring30d", undefined, "Expiring · 30d")} value={expiringSoon} />
+        <MetricCard label={t("console.legend.trainingConsole.overdue", undefined, "Overdue")} value={overdue} />
+        <MetricCard
+          label={t("console.legend.trainingConsole.activeEnrollments", undefined, "Active enrollments")}
+          value={activeEnrollments}
+        />
       </div>
 
       <div className="mb-6">
         <AssignForm members={members.map((m) => ({ id: m.id, name: m.name }))} courses={courses} />
       </div>
 
-      <h2 className="eyebrow mb-2">Roster</h2>
+      <h2 className="eyebrow mb-2">{t("console.legend.trainingConsole.roster", undefined, "Roster")}</h2>
       {members.length === 0 ? (
-        <EmptyState size="compact" title="No members" description="Org members appear here once invited." />
+        <EmptyState
+          size="compact"
+          title={t("console.legend.trainingConsole.emptyTitle", undefined, "No members")}
+          description={t("console.legend.trainingConsole.emptyDescription", undefined, "Org members appear here once invited.")}
+        />
       ) : (
         <div className="surface overflow-x-auto">
           <table className="ps-table w-full text-sm">
             <thead>
               <tr className="text-left text-[var(--p-text-2)]">
-                <th className="px-3 py-2 font-medium">Member</th>
-                <th className="px-3 py-2 font-medium">Role</th>
-                <th className="px-3 py-2 font-medium num">Valid certs</th>
-                <th className="px-3 py-2 font-medium num">Courses</th>
+                <th className="px-3 py-2 font-medium">{t("console.legend.trainingConsole.columns.member", undefined, "Member")}</th>
+                <th className="px-3 py-2 font-medium">{t("console.legend.trainingConsole.columns.role", undefined, "Role")}</th>
+                <th className="px-3 py-2 font-medium num">
+                  {t("console.legend.trainingConsole.columns.validCerts", undefined, "Valid certs")}
+                </th>
+                <th className="px-3 py-2 font-medium num">
+                  {t("console.legend.trainingConsole.columns.courses", undefined, "Courses")}
+                </th>
               </tr>
             </thead>
             <tbody>

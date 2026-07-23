@@ -62,15 +62,18 @@ export default async function CatalogsPillarPage({
 }: {
   searchParams: Promise<{ view?: string; filter?: string }>;
 }) {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Organization Hub" title="Catalogs" />
+        <ModuleHeader
+          eyebrow={t("console.legend.hub.title", undefined, "Organization Hub")}
+          title={t("console.settings.catalog.hubTitle", undefined, "Catalogs")}
+        />
         <ConfigureSupabase />
       </>
     );
   }
-  const { t } = await getRequestT();
   const fmt = await getRequestFormatters();
   const sp = await searchParams;
   const view = resolveDataView<CatalogView>(sp, CATALOG_VIEWS, "table");
@@ -127,7 +130,7 @@ export default async function CatalogsPillarPage({
   return (
     <>
       <ModuleHeader
-        eyebrow="Organization Hub"
+        eyebrow={t("console.legend.hub.title", undefined, "Organization Hub")}
         title={t("console.settings.catalog.title", undefined, "Master Catalog")}
         subtitle={t(
           "console.settings.catalog.subtitle",
@@ -135,9 +138,9 @@ export default async function CatalogsPillarPage({
           `${allRows.length} ${itemWord} · the assignable inventory for advancing surfaces`,
         )}
         breadcrumbs={[
-          { label: "LEG3ND" },
-          { label: "Organization Hub", href: "/legend/hub" },
-          { label: "Catalogs" },
+          { label: t("console.legend.hub.breadcrumb", undefined, "LEG3ND") },
+          { label: t("console.legend.hub.title", undefined, "Organization Hub"), href: "/legend/hub" },
+          { label: t("console.settings.catalog.hubTitle", undefined, "Catalogs") },
         ]}
         action={
           <div className="flex items-center gap-3">

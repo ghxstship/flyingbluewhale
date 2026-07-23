@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import Link from "next/link";
 import { QuizQuestion } from "@/components/ui/QuizQuestion";
 import { ProgressBar } from "@/components/ui/ProgressBar";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { submitAttemptAction } from "../../actions";
 
 export type RunnerQuestion = { id: string; prompt: string; options: string[] };
@@ -25,6 +26,7 @@ export function AssessmentRunner({
   passPct: number;
   questions: RunnerQuestion[];
 }) {
+  const t = useT();
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<number[]>(() => questions.map(() => -1));
   const [pending, start] = useTransition();
@@ -37,13 +39,17 @@ export function AssessmentRunner({
     const passed = !!result.passed;
     return (
       <div className="surface space-y-4 p-6 text-center">
-        <p className="eyebrow">Assessment complete</p>
+        <p className="eyebrow">{t("console.legend.learn.assessment.complete", undefined, "Assessment complete")}</p>
         <p className="text-3xl font-bold" style={{ color: passed ? "var(--p-success)" : "var(--p-danger)" }}>
           {result.scorePct}%
         </p>
-        <p className="text-sm text-[var(--p-text-2)]">{passed ? `Passed. Needed ${passPct}%.` : `Not yet. Needed ${passPct}%. Try again.`}</p>
+        <p className="text-sm text-[var(--p-text-2)]">
+          {passed
+            ? t("console.legend.learn.assessment.passed", { passPct }, `Passed. Needed ${passPct}%.`)
+            : t("console.legend.learn.assessment.notYet", { passPct }, `Not yet. Needed ${passPct}%. Try again.`)}
+        </p>
         <Link href={`/legend/learn/${courseId}`} className="ps-btn ps-btn--cta ps-btn--lg" style={{ minHeight: 44 }}>
-          Back to course
+          {t("console.legend.learn.assessment.backToCourse", undefined, "Back to course")}
         </Link>
       </div>
     );
@@ -69,7 +75,10 @@ export function AssessmentRunner({
 
   return (
     <div className="surface space-y-5 p-6">
-      <ProgressBar value={Math.round(((index + 1) / questions.length) * 100)} aria-label="Assessment progress" />
+      <ProgressBar
+        value={Math.round(((index + 1) / questions.length) * 100)}
+        aria-label={t("console.legend.learn.assessment.progressAria", undefined, "Assessment progress")}
+      />
       <QuizQuestion
         prompt={q.prompt}
         options={q.options}
@@ -91,7 +100,7 @@ export function AssessmentRunner({
           className="ps-btn ps-btn--secondary"
           style={{ minHeight: 44 }}
         >
-          Back
+          {t("console.legend.learn.assessment.back", undefined, "Back")}
         </button>
         {last ? (
           <button
@@ -101,7 +110,9 @@ export function AssessmentRunner({
             className="ps-btn ps-btn--cta"
             style={{ minHeight: 44 }}
           >
-            {pending ? "Scoring…" : "Submit"}
+            {pending
+              ? t("console.legend.learn.assessment.scoring", undefined, "Scoring…")
+              : t("console.legend.learn.assessment.submit", undefined, "Submit")}
           </button>
         ) : (
           <button
@@ -111,7 +122,7 @@ export function AssessmentRunner({
             className="ps-btn ps-btn--cta"
             style={{ minHeight: 44 }}
           >
-            Next
+            {t("console.legend.learn.assessment.next", undefined, "Next")}
           </button>
         )}
       </div>

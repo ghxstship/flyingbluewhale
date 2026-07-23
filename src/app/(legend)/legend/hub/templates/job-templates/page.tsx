@@ -28,17 +28,20 @@ type Row = {
 };
 
 export default async function JobTemplatesPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Organization Hub" title="Job Templates" />
+        <ModuleHeader
+          eyebrow={t("console.legend.hub.title", undefined, "Organization Hub")}
+          title={t("console.settings.jobTemplates.title", undefined, "Job Templates")}
+        />
         <ConfigureSupabase />
       </>
     );
   }
   const session = await requireSession();
   const supabase = await createClient();
-  const { t } = await getRequestT();
 
   const { data } = await supabase
     .from("job_templates")
@@ -52,7 +55,7 @@ export default async function JobTemplatesPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Organization Hub"
+        eyebrow={t("console.legend.hub.title", undefined, "Organization Hub")}
         title={t("console.settings.jobTemplates.title", undefined, "Job Templates")}
         subtitle={t(
           "console.settings.jobTemplates.subtitle",
@@ -60,10 +63,10 @@ export default async function JobTemplatesPage() {
           "Reusable scope checklists that seed a work order's task list when a sub is awarded.",
         )}
         breadcrumbs={[
-          { label: "LEG3ND" },
-          { label: "Organization Hub", href: "/legend/hub" },
-          { label: "Templates", href: "/legend/hub/templates" },
-          { label: "Job Templates" },
+          { label: t("console.legend.hub.breadcrumb", undefined, "LEG3ND") },
+          { label: t("console.legend.hub.title", undefined, "Organization Hub"), href: "/legend/hub" },
+          { label: t("console.legend.hub.templates.title", undefined, "Templates"), href: "/legend/hub/templates" },
+          { label: t("console.settings.jobTemplates.title", undefined, "Job Templates") },
         ]}
         action={
           <Button href="/legend/hub/templates/job-templates/new" size="sm">

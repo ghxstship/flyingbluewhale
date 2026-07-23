@@ -12,11 +12,13 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { RESOURCE_KIND_LABELS, type Resource, type ResourceCollection } from "@/lib/legend_resources";
 import { CollectionForm } from "../CollectionForm";
 import { deleteCollectionAction, updateCollectionAction } from "../actions";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function CollectionDetail({ params }: { params: Promise<{ collectionId: string }> }) {
   const { collectionId } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) return notFound();
   const session = await requireSession();
   const db = (await createClient()) as unknown as LooseSupabase;
@@ -46,19 +48,27 @@ export default async function CollectionDetail({ params }: { params: Promise<{ c
   return (
     <>
       <ModuleHeader
-        eyebrow="Collection"
+        eyebrow={t("console.legend.resources.collectionDetail.eyebrow", undefined, "Collection")}
         title={collection.name}
-        subtitle={resources.length === 1 ? "1 resource" : `${resources.length} resources`}
+        subtitle={
+          resources.length === 1
+            ? t("console.legend.resources.oneResource", undefined, "1 resource")
+            : t("console.legend.resources.nResources", { count: resources.length }, `${resources.length} resources`)
+        }
         breadcrumbs={[
-          { label: "LEG3ND" },
-          { label: "Resources", href: "/legend/resources" },
-          { label: "Collections", href: "/legend/resources/collections" },
+          { label: t("console.legend.resources.eyebrow", undefined, "LEG3ND") },
+          { label: t("console.legend.resources.title", undefined, "Resources"), href: "/legend/resources" },
+          { label: t("console.legend.resources.collectionsTitle", undefined, "Collections"), href: "/legend/resources/collections" },
           { label: collection.name },
         ]}
         action={
           <DeleteForm
             action={deleteCollectionAction.bind(null, collection.id)}
-            confirm={`Delete collection "${collection.name}"? Its resources will become ungrouped.`}
+            confirm={t(
+              "console.legend.resources.collectionDetail.deleteConfirm",
+              { name: collection.name },
+              `Delete collection "${collection.name}"? Its resources will become ungrouped.`,
+            )}
             undo={{
               table: "resource_collections",
               id: collection.id,
@@ -69,48 +79,56 @@ export default async function CollectionDetail({ params }: { params: Promise<{ c
       />
       <div className="page-content space-y-8">
         <div className="surface p-6">
-          <h3 className="mb-4 text-sm font-semibold">Edit collection</h3>
+          <h3 className="mb-4 text-sm font-semibold">
+            {t("console.legend.resources.collectionDetail.editHeading", undefined, "Edit collection")}
+          </h3>
           <CollectionForm
             action={updateCollectionAction.bind(null, collection.id)}
             collection={collection}
-            submitLabel="Save Collection"
+            submitLabel={t("console.legend.resources.collectionDetail.submit", undefined, "Save Collection")}
           />
         </div>
 
         <section className="space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-[var(--p-text-1)]">Resources</h2>
+            <h2 className="text-sm font-semibold text-[var(--p-text-1)]">
+              {t("console.legend.resources.title", undefined, "Resources")}
+            </h2>
             <Button href="/legend/resources/new" size="sm" variant="secondary">
-              + New Resource
+              {t("console.legend.resources.newResource", undefined, "+ New Resource")}
             </Button>
           </div>
           <DataView<Resource>
             rows={resources}
             rowHref={(r) => `/legend/resources/${r.id}`}
-            emptyLabel="No resources in this collection"
-            emptyDescription="Create a resource and assign it to this collection."
+            emptyLabel={t("console.legend.resources.emptyCollection", undefined, "No resources in this collection")}
+            emptyDescription={t(
+              "console.legend.resources.collectionDetail.emptyDescription",
+              undefined,
+              "Create a resource and assign it to this collection.",
+            )}
             columns={[
               {
                 key: "title",
-                header: "Title",
+                header: t("console.legend.resources.columns.title", undefined, "Title"),
                 render: (r) => r.title,
                 accessor: (r) => r.title,
               },
               {
                 key: "kind",
-                header: "Kind",
+                header: t("console.legend.resources.columns.kind", undefined, "Kind"),
                 render: (r) => RESOURCE_KIND_LABELS[r.kind],
                 accessor: (r) => r.kind,
               },
               {
                 key: "state",
-                header: "Status",
+                header: t("console.legend.resources.columns.status", undefined, "Status"),
                 render: (r) => <StatusBadge status={r.resource_state} />,
                 accessor: (r) => r.resource_state,
               },
               {
                 key: "created",
-                header: "Added",
+                header: t("console.legend.resources.columns.added", undefined, "Added"),
                 render: (r) => timeAgo(r.created_at),
                 accessor: (r) => r.created_at,
               },

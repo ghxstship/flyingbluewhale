@@ -19,14 +19,19 @@ import {
 } from "@/lib/xmce_engine";
 import type { ComplianceFindingRow, ComplianceRuleRow, ComplianceRunRow } from "../../types";
 import { FindingsTable, type FindingWithRule } from "./FindingsTable";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function RunDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="LEG3ND · XMCE" title="Compliance Run" />
+        <ModuleHeader
+          eyebrow={t("console.legend.engine.eyebrow", undefined, "LEG3ND · XMCE")}
+          title={t("console.legend.engine.run.title", undefined, "Compliance Run")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -83,24 +88,44 @@ export default async function RunDetailPage({ params }: { params: Promise<{ id: 
     <>
       <ModuleHeader
         eyebrow={`LEG3ND · XMCE · ${scopeLabel}`}
-        title={`Run · ${RUN_STATE_LABELS[run.run_state]}`}
-        subtitle={run.finished_at ? `Finished ${timeAgo(run.finished_at)}` : `Started ${timeAgo(run.created_at)}`}
+        title={t("console.legend.engine.run.heading", { state: RUN_STATE_LABELS[run.run_state] }, `Run · ${RUN_STATE_LABELS[run.run_state]}`)}
+        subtitle={
+          run.finished_at
+            ? t("console.legend.engine.run.finishedAgo", { ago: timeAgo(run.finished_at) }, `Finished ${timeAgo(run.finished_at)}`)
+            : t("console.legend.engine.run.startedAgo", { ago: timeAgo(run.created_at) }, `Started ${timeAgo(run.created_at)}`)
+        }
         action={<StatusBadge status={run.run_state} />}
       />
       <div className="page-content space-y-6">
         <div className="metric-grid">
-          <MetricCard label="Rules evaluated" value={summary?.rules_evaluated ?? 0} />
-          <MetricCard label="Findings" value={summary?.findings_total ?? findings.length} />
-          <MetricCard label="Outstanding" value={outstanding} accent={outstanding > 0} />
-          <MetricCard label="Scope" value={scopeLabel} />
+          <MetricCard
+            label={t("console.legend.engine.run.rulesEvaluated", undefined, "Rules evaluated")}
+            value={summary?.rules_evaluated ?? 0}
+          />
+          <MetricCard
+            label={t("console.legend.engine.run.findings", undefined, "Findings")}
+            value={summary?.findings_total ?? findings.length}
+          />
+          <MetricCard
+            label={t("console.legend.engine.run.outstanding", undefined, "Outstanding")}
+            value={outstanding}
+            accent={outstanding > 0}
+          />
+          <MetricCard label={t("console.legend.engine.run.scope", undefined, "Scope")} value={scopeLabel} />
         </div>
 
         <section className="space-y-3">
-          <h2 className="text-sm font-semibold text-[var(--p-text-1)]">Findings</h2>
+          <h2 className="text-sm font-semibold text-[var(--p-text-1)]">
+            {t("console.legend.engine.run.findings", undefined, "Findings")}
+          </h2>
           {findingsWithRule.length === 0 ? (
             <EmptyState
-              title="No findings"
-              description="This run passed clean. No active rules were tripped for the selected scope."
+              title={t("console.legend.engine.run.noFindingsTitle", undefined, "No findings")}
+              description={t(
+                "console.legend.engine.run.noFindingsDescription",
+                undefined,
+                "This run passed clean. No active rules were tripped for the selected scope.",
+              )}
             />
           ) : (
             <FindingsTable runId={run.id} findings={findingsWithRule} />

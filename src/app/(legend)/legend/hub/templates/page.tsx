@@ -7,6 +7,7 @@ import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { urlFor } from "@/lib/urls";
 import { DOC_TEMPLATES } from "@/lib/documents/registry";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -19,10 +20,14 @@ export const dynamic = "force-dynamic";
  * presets are advancing-engine config).
  */
 export default async function TemplatesPillarPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Organization Hub" title="Templates" />
+        <ModuleHeader
+          eyebrow={t("console.legend.hub.templates.eyebrow", undefined, "Organization Hub")}
+          title={t("console.legend.hub.templates.title", undefined, "Templates")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -49,6 +54,9 @@ export default async function TemplatesPillarPage() {
         .is("deleted_at", null),
     ]);
 
+  const nTemplates = (count: number) =>
+    t("console.legend.hub.templates.nTemplates", { count }, `${count} templates`);
+
   const families: {
     href: string;
     title: string;
@@ -58,59 +66,79 @@ export default async function TemplatesPillarPage() {
   }[] = [
     {
       href: urlFor("platform", "/documents"),
-      title: "Document templates",
-      count: `${DOC_TEMPLATES.length} templates`,
-      blurb: "The kit document library: proposals, invoices, riders, run of shows, SOPs, and more. Every merge field record-backed.",
-      linkLabel: "Open in console",
+      title: t("console.legend.hub.templates.doc.title", undefined, "Document templates"),
+      count: nTemplates(DOC_TEMPLATES.length),
+      blurb: t(
+        "console.legend.hub.templates.doc.blurb",
+        undefined,
+        "The kit document library: proposals, invoices, riders, run of shows, SOPs, and more. Every merge field record-backed.",
+      ),
+      linkLabel: t("console.legend.hub.templates.openInConsole", undefined, "Open in console"),
     },
     {
       href: "/legend/hub/templates/job-templates",
-      title: "Job templates",
+      title: t("console.legend.hub.templates.job.title", undefined, "Job templates"),
       count:
         jobTemplateCount == null
-          ? "In the hub"
+          ? t("console.legend.hub.templates.job.inTheHub", undefined, "In the hub")
           : jobTemplateCount === 1
-            ? "1 template"
-            : `${jobTemplateCount} templates`,
-      blurb: "Reusable job shapes for dispatch and subcontractor work orders.",
-      linkLabel: "Open in the hub",
+            ? t("console.legend.hub.templates.oneTemplate", undefined, "1 template")
+            : nTemplates(jobTemplateCount),
+      blurb: t(
+        "console.legend.hub.templates.job.blurb",
+        undefined,
+        "Reusable job shapes for dispatch and subcontractor work orders.",
+      ),
+      linkLabel: t("console.legend.hub.templates.job.open", undefined, "Open in the hub"),
     },
     {
       href: urlFor("mobile", "/templates"),
-      title: "Field templates",
+      title: t("console.legend.hub.templates.field.title", undefined, "Field templates"),
       count:
         fieldTemplateCount == null
-          ? "In the field app"
+          ? t("console.legend.hub.templates.field.inTheFieldApp", undefined, "In the field app")
           : fieldTemplateCount === 1
-            ? "1 template"
-            : `${fieldTemplateCount} templates`,
-      blurb: "Checklists, forms, and inspection shapes the COMPVSS field app runs on site.",
-      linkLabel: "Open in COMPVSS",
+            ? t("console.legend.hub.templates.oneTemplate", undefined, "1 template")
+            : nTemplates(fieldTemplateCount),
+      blurb: t(
+        "console.legend.hub.templates.field.blurb",
+        undefined,
+        "Checklists, forms, and inspection shapes the COMPVSS field app runs on site.",
+      ),
+      linkLabel: t("console.legend.hub.templates.field.open", undefined, "Open in COMPVSS"),
     },
     {
       href: urlFor("platform", "/settings/advancing"),
-      title: "Advance packet presets",
+      title: t("console.legend.hub.templates.advance.title", undefined, "Advance packet presets"),
       count:
         advancePresetCount == null
-          ? "In console"
+          ? t("console.legend.hub.templates.advance.inConsole", undefined, "In console")
           : advancePresetCount === 1
-            ? "1 preset"
-            : `${advancePresetCount} presets`,
-      blurb: "The org preset matrix that seeds every advance campaign's sections per audience.",
-      linkLabel: "Open in console",
+            ? t("console.legend.hub.templates.onePreset", undefined, "1 preset")
+            : t("console.legend.hub.templates.nPresets", { count: advancePresetCount }, `${advancePresetCount} presets`),
+      blurb: t(
+        "console.legend.hub.templates.advance.blurb",
+        undefined,
+        "The org preset matrix that seeds every advance campaign's sections per audience.",
+      ),
+      linkLabel: t("console.legend.hub.templates.openInConsole", undefined, "Open in console"),
     },
   ];
 
   return (
     <>
       <ModuleHeader
-        eyebrow="Organization Hub"
-        title="Templates"
-        subtitle="Configure once, reuse on every project. Four template families, one library."
+        eyebrow={t("console.legend.hub.templates.eyebrow", undefined, "Organization Hub")}
+        title={t("console.legend.hub.templates.title", undefined, "Templates")}
+        subtitle={t(
+          "console.legend.hub.templates.subtitle",
+          undefined,
+          "Configure once, reuse on every project. Four template families, one library.",
+        )}
         breadcrumbs={[
-          { label: "LEG3ND" },
-          { label: "Organization Hub", href: "/legend/hub" },
-          { label: "Templates" },
+          { label: t("console.legend.hub.breadcrumb", undefined, "LEG3ND") },
+          { label: t("console.legend.hub.title", undefined, "Organization Hub"), href: "/legend/hub" },
+          { label: t("console.legend.hub.templates.title", undefined, "Templates") },
         ]}
       />
       <div className="page-content">

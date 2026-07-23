@@ -8,14 +8,19 @@ import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { RuleForm } from "../../RuleForm";
 import type { ComplianceRuleRow } from "../../../types";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function EditRulePage({ params }: { params: Promise<{ id: string }> }) {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="LEG3ND · XMCE" title="Edit Compliance Rule" />
+        <ModuleHeader
+          eyebrow={t("console.legend.engine.eyebrow", undefined, "LEG3ND · XMCE")}
+          title={t("console.legend.engine.rule.editTitle", undefined, "Edit Compliance Rule")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -38,7 +43,7 @@ export default async function EditRulePage({ params }: { params: Promise<{ id: s
 
   return (
     <>
-      <ModuleHeader eyebrow={rule.code} title="Edit Compliance Rule" />
+      <ModuleHeader eyebrow={rule.code} title={t("console.legend.engine.rule.editTitle", undefined, "Edit Compliance Rule")} />
       <div className="page-content max-w-2xl">
         <RuleForm rule={rule} />
       </div>

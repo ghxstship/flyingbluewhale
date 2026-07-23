@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useRef } from "react";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { createPostAction, type State } from "./actions";
 import { POST_CATEGORIES, POST_CATEGORY_LABELS } from "@/lib/legend_community";
 
@@ -11,6 +12,7 @@ import { POST_CATEGORIES, POST_CATEGORY_LABELS } from "@/lib/legend_community";
 export function PostComposer() {
   const [state, action, pending] = useActionState<State, FormData>(createPostAction, null);
   const formRef = useRef<HTMLFormElement>(null);
+  const t = useT();
 
   useEffect(() => {
     if (state?.ok) formRef.current?.reset();
@@ -21,13 +23,24 @@ export function PostComposer() {
       <input
         name="title"
         required
-        placeholder="Share a win, ask a question…"
+        placeholder={t("console.legend.community.composer.titlePlaceholder", undefined, "Share a win, ask a question…")}
         className="ps-input"
         style={{ minHeight: 44 }}
       />
-      <textarea name="body_html" placeholder="Add detail (optional)" className="ps-input" rows={3} />
+      <textarea
+        name="body_html"
+        placeholder={t("console.legend.community.composer.bodyPlaceholder", undefined, "Add detail (optional)")}
+        className="ps-input"
+        rows={3}
+      />
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <select name="category" className="ps-input ps-input--sm" defaultValue="general" aria-label="Category" style={{ minHeight: 44 }}>
+        <select
+          name="category"
+          className="ps-input ps-input--sm"
+          defaultValue="general"
+          aria-label={t("console.legend.community.composer.categoryAria", undefined, "Category")}
+          style={{ minHeight: 44 }}
+        >
           {POST_CATEGORIES.map((c) => (
             <option key={c} value={c}>
               {POST_CATEGORY_LABELS[c]}
@@ -35,7 +48,9 @@ export function PostComposer() {
           ))}
         </select>
         <button type="submit" disabled={pending} className="ps-btn ps-btn--cta" style={{ minHeight: 44 }}>
-          {pending ? "Posting…" : "Post"}
+          {pending
+            ? t("console.legend.community.composer.posting", undefined, "Posting…")
+            : t("console.legend.community.composer.post", undefined, "Post")}
         </button>
       </div>
       {state?.error && (

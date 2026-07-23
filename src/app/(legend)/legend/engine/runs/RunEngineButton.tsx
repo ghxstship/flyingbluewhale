@@ -4,10 +4,12 @@ import { useState, useTransition } from "react";
 import { toast } from "@/lib/hooks/useToast";
 import { Button } from "@/components/ui/Button";
 import { COMPLIANCE_SCOPE_KINDS, SCOPE_KIND_LABELS } from "@/lib/xmce_engine";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { runEngineAction } from "./actions";
 
 export function RunEngineButton() {
   const [pending, startTransition] = useTransition();
+  const t = useT();
   const [scope, setScope] = useState<(typeof COMPLIANCE_SCOPE_KINDS)[number]>("org");
 
   function run() {
@@ -23,7 +25,7 @@ export function RunEngineButton() {
   return (
     <div className="flex items-center gap-2">
       <label className="sr-only" htmlFor="run-scope">
-        Run scope
+        {t("console.legend.engine.runScope", undefined, "Run scope")}
       </label>
       <select
         id="run-scope"
@@ -39,7 +41,7 @@ export function RunEngineButton() {
         ))}
       </select>
       <Button type="button" onClick={run} loading={pending}>
-        Run engine
+        {t("console.legend.engine.runEngine", undefined, "Run engine")}
       </Button>
     </div>
   );

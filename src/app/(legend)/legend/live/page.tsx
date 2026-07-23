@@ -16,6 +16,7 @@ import {
   type LiveSession,
 } from "@/lib/legend_live";
 import { SessionRegisterButton } from "./SessionRegisterButton";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -25,10 +26,14 @@ export const dynamic = "force-dynamic";
  * the viewer's own registrations.
  */
 export default async function LiveSessionsPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="LEG3ND · Learn" title="Live Sessions" />
+        <ModuleHeader
+          eyebrow={t("console.legend.live.eyebrow", undefined, "LEG3ND · Learn")}
+          title={t("console.legend.live.title", undefined, "Live Sessions")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -73,22 +78,37 @@ export default async function LiveSessionsPage() {
 
   return (
     <>
-      <ModuleHeader eyebrow="LEG3ND · Learn" title="Live Sessions" subtitle="Webinars, cohort labs, and instructor-led workshops. Register to reserve your seat." />
+      <ModuleHeader
+        eyebrow={t("console.legend.live.eyebrow", undefined, "LEG3ND · Learn")}
+        title={t("console.legend.live.title", undefined, "Live Sessions")}
+        subtitle={t(
+          "console.legend.live.subtitle",
+          undefined,
+          "Webinars, cohort labs, and instructor-led workshops. Register to reserve your seat.",
+        )}
+      />
 
       <div className="metric-grid mb-6">
-        <MetricCard label="Upcoming" value={upcoming} />
-        <MetricCard label="You're registered" value={myCount} />
-        <MetricCard label="Total sessions" value={sessions.length} />
+        <MetricCard label={t("console.legend.live.upcoming", undefined, "Upcoming")} value={upcoming} />
+        <MetricCard label={t("console.legend.live.youreRegistered", undefined, "You're registered")} value={myCount} />
+        <MetricCard label={t("console.legend.live.totalSessions", undefined, "Total sessions")} value={sessions.length} />
       </div>
 
       {sessions.length === 0 ? (
-        <EmptyState size="compact" title="No sessions scheduled" description="Live sessions your org schedules will appear here." />
+        <EmptyState
+          size="compact"
+          title={t("console.legend.live.emptyTitle", undefined, "No sessions scheduled")}
+          description={t("console.legend.live.emptyDescription", undefined, "Live sessions your org schedules will appear here.")}
+        />
       ) : (
         <ul className="space-y-3">
           {sessions.map((s) => {
             const taken = counts.get(s.id) ?? 0;
             const myState = myReg.get(s.id);
-            const seats = s.capacity != null ? `${taken} / ${s.capacity} seats` : `${taken} registered`;
+            const seats =
+              s.capacity != null
+                ? t("console.legend.live.seats", { taken, capacity: s.capacity }, `${taken} / ${s.capacity} seats`)
+                : t("console.legend.live.nRegistered", { count: taken }, `${taken} registered`);
             return (
               <li key={s.id} className="surface flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="min-w-0">
@@ -99,7 +119,9 @@ export default async function LiveSessionsPage() {
                     </Badge>
                     {myState && (
                       <span className="text-xs font-medium text-[var(--p-success)]">
-                        {myState === "waitlisted" ? "Waitlisted" : "Registered"}
+                        {myState === "waitlisted"
+                          ? t("console.legend.live.waitlisted", undefined, "Waitlisted")
+                          : t("console.legend.live.registered", undefined, "Registered")}
                       </span>
                     )}
                   </div>

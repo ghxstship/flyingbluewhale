@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { requireSession } from "@/lib/auth";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -22,18 +23,32 @@ function loadModel(): Model {
 
 export default async function ArchitecturePage() {
   await requireSession();
+  const { t } = await getRequestT();
   const model = loadModel();
   const totalRoutes = model.shells.reduce((n, s) => n + s.groups.reduce((m, g) => m + g.routes.length, 0), 0);
 
   return (
     <div className="space-y-8">
       <header className="space-y-2">
-        <p className="eyebrow">Ecosystem · Architecture</p>
-        <h1>ATLVS Ecosystem Map</h1>
+        <p className="eyebrow">{t("console.legend.architecture.eyebrow", undefined, "Ecosystem · Architecture")}</p>
+        <h1>{t("console.legend.architecture.title", undefined, "ATLVS Ecosystem Map")}</h1>
         <p className="max-w-2xl text-[var(--p-text-2)]">
-          {model.shells.length} shells · {totalRoutes} routes · {Object.keys(model.archetypes).length} archetypes.
-          Generated from <code className="font-mono text-sm">nav.ts</code> + the route tree. It re-renders whenever the
-          platform IA changes.
+          {t(
+            "console.legend.architecture.stats",
+            {
+              shells: model.shells.length,
+              routes: totalRoutes,
+              archetypes: Object.keys(model.archetypes).length,
+            },
+            `${model.shells.length} shells · ${totalRoutes} routes · ${Object.keys(model.archetypes).length} archetypes.`,
+          )}{" "}
+          {t("console.legend.architecture.generatedFromBefore", undefined, "Generated from")}{" "}
+          <code className="font-mono text-sm">nav.ts</code>{" "}
+          {t(
+            "console.legend.architecture.generatedFromAfter",
+            undefined,
+            "+ the route tree. It re-renders whenever the platform IA changes.",
+          )}
         </p>
         <p className="text-sm text-[var(--p-text-3)]">{model.meta.addressing}</p>
       </header>
@@ -53,7 +68,11 @@ export default async function ArchitecturePage() {
               </div>
               <p className="mt-0.5 text-sm text-[var(--p-text-2)]">{shell.descriptor}</p>
               <p className="mt-1 font-mono text-xs text-[var(--p-text-3)]">
-                {shell.routeGroup} · {shell.groups.length} groups · {routeCount} routes
+                {t(
+                  "console.legend.architecture.shellStats",
+                  { routeGroup: shell.routeGroup, groups: shell.groups.length, routes: routeCount },
+                  `${shell.routeGroup} · ${shell.groups.length} groups · ${routeCount} routes`,
+                )}
               </p>
               <ul className="mt-3 flex flex-wrap gap-1.5">
                 {shell.groups.map((g) => (
@@ -71,7 +90,7 @@ export default async function ArchitecturePage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="eyebrow">Archetypes</h2>
+        <h2 className="eyebrow">{t("console.legend.architecture.archetypes", undefined, "Archetypes")}</h2>
         <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {Object.entries(model.archetypes).map(([key, a]) => (
             <div key={key} className="rounded-[var(--p-r,8px)] border border-[var(--p-border)] p-3">

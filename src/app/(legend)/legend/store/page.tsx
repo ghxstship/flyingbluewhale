@@ -9,7 +9,7 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { formatPrice, creditBalance, ORDER_STATE_LABELS, ORDER_STATE_TONES, type CreditProduct, type OrderState } from "@/lib/legend_store";
 import { BuyButton } from "./BuyButton";
 import { VoucherForm } from "./VoucherForm";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -18,10 +18,14 @@ export const dynamic = "force-dynamic";
  * voucher redemption, the learner's live balance (ledger sum) and order history.
  */
 export default async function StorePage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="LEG3ND · Store" title="Store" />
+        <ModuleHeader
+          eyebrow={t("console.legend.store.eyebrow", undefined, "LEG3ND · Store")}
+          title={t("console.legend.store.title", undefined, "Store")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -54,20 +58,35 @@ export default async function StorePage() {
 
   return (
     <>
-      <ModuleHeader eyebrow="LEG3ND · Store" title="Store" subtitle="Buy credits for courses, exams, and resources." />
+      <ModuleHeader
+        eyebrow={t("console.legend.store.eyebrow", undefined, "LEG3ND · Store")}
+        title={t("console.legend.store.title", undefined, "Store")}
+        subtitle={t("console.legend.store.subtitle", undefined, "Buy credits for courses, exams, and resources.")}
+      />
 
       <div className="mb-6 surface flex items-center justify-between p-4">
-        <span className="text-sm text-[var(--p-text-2)]">Your balance</span>
+        <span className="text-sm text-[var(--p-text-2)]">{t("console.legend.store.yourBalance", undefined, "Your balance")}</span>
         <span className="text-2xl font-bold tabular-nums text-[var(--p-text-1)]">
-          {fmt.number(balance)} <span className="text-sm font-normal text-[var(--p-text-2)]">credits</span>
+          {fmt.number(balance)}{" "}
+          <span className="text-sm font-normal text-[var(--p-text-2)]">
+            {t("console.legend.store.credits", undefined, "credits")}
+          </span>
         </span>
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px]">
         <section className="space-y-3">
-          <h2 className="eyebrow">Credit packs</h2>
+          <h2 className="eyebrow">{t("console.legend.store.creditPacks", undefined, "Credit packs")}</h2>
           {products.length === 0 ? (
-            <EmptyState size="compact" title="No packs available" description="Credit packs configured by your org appear here." />
+            <EmptyState
+              size="compact"
+              title={t("console.legend.store.noPacksTitle", undefined, "No packs available")}
+              description={t(
+                "console.legend.store.noPacksDescription",
+                undefined,
+                "Credit packs configured by your org appear here.",
+              )}
+            />
           ) : (
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {products.map((p) => (
@@ -76,9 +95,12 @@ export default async function StorePage() {
                     <h3 className="text-sm font-semibold text-[var(--p-text-1)]">{p.name}</h3>
                     <span className="text-lg font-bold tabular-nums text-[var(--p-text-1)]">{formatPrice(p.price_cents, p.currency)}</span>
                   </div>
-                  <p className="text-xs text-[var(--p-text-2)]">{fmt.number(p.credits)} credits{p.description ? ` · ${p.description}` : ""}</p>
+                  <p className="text-xs text-[var(--p-text-2)]">
+                    {t("console.legend.store.nCredits", { count: fmt.number(p.credits) }, `${fmt.number(p.credits)} credits`)}
+                    {p.description ? ` · ${p.description}` : ""}
+                  </p>
                   <div className="mt-1">
-                    <BuyButton productId={p.id} label="Buy" />
+                    <BuyButton productId={p.id} label={t("console.legend.store.buy", undefined, "Buy")} />
                   </div>
                 </div>
               ))}
@@ -89,14 +111,17 @@ export default async function StorePage() {
         <aside className="space-y-6">
           <VoucherForm />
           <div>
-            <h2 className="eyebrow mb-2">Order history</h2>
+            <h2 className="eyebrow mb-2">{t("console.legend.store.orderHistory", undefined, "Order history")}</h2>
             {orders.length === 0 ? (
-              <p className="text-sm text-[var(--p-text-2)]">No orders yet.</p>
+              <p className="text-sm text-[var(--p-text-2)]">{t("console.legend.store.noOrders", undefined, "No orders yet.")}</p>
             ) : (
               <ul className="surface divide-y divide-[var(--p-border)]">
                 {orders.map((o) => (
                   <li key={o.id} className="flex items-center justify-between gap-2 px-3 py-2 text-sm">
-                    <span className="text-[var(--p-text-1)]">{fmt.number(o.credits)} cr · {formatPrice(o.amount_cents, o.currency)}</span>
+                    <span className="text-[var(--p-text-1)]">
+                      {t("console.legend.store.nCr", { count: fmt.number(o.credits) }, `${fmt.number(o.credits)} cr`)} ·{" "}
+                      {formatPrice(o.amount_cents, o.currency)}
+                    </span>
                     <Badge variant={ORDER_STATE_TONES[o.order_state]}>{ORDER_STATE_LABELS[o.order_state]}</Badge>
                   </li>
                 ))}

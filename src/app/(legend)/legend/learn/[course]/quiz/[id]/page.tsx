@@ -7,6 +7,7 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getCourse } from "../../../sample";
 import { QuizRunner } from "../QuizRunner";
 import { AssessmentRunner, type RunnerQuestion } from "../AssessmentRunner";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +23,7 @@ const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
  */
 export default async function QuizPage({ params }: { params: Promise<{ course: string; id: string }> }) {
   const { course: courseParam, id } = await params;
+  const { t } = await getRequestT();
 
   // ── Public-funnel preview ────────────────────────────────────────────
   const sample = getCourse(courseParam);
@@ -32,11 +34,14 @@ export default async function QuizPage({ params }: { params: Promise<{ course: s
       <div className="mx-auto max-w-2xl space-y-6">
         <nav className="text-sm text-[var(--p-text-2)]">
           <Link href="/legend/learn" className="hover:text-[var(--p-text-1)]">
-            Learn
+            {t("console.legend.learn.course.breadcrumb", undefined, "Learn")}
           </Link>{" "}
-          / <span className="text-[var(--p-text-1)]">{sample.title}</span> / Quiz
+          / <span className="text-[var(--p-text-1)]">{sample.title}</span> /{" "}
+          {t("console.legend.learn.quiz.breadcrumb", undefined, "Quiz")}
         </nav>
-        <h1 className="text-[var(--p-text-1)]">{sample.title} · Quiz</h1>
+        <h1 className="text-[var(--p-text-1)]">
+          {t("console.legend.learn.quiz.title", { course: sample.title }, `${sample.title} · Quiz`)}
+        </h1>
         <QuizRunner items={sample.quiz} startIndex={startIndex} />
       </div>
     );
@@ -72,12 +77,12 @@ export default async function QuizPage({ params }: { params: Promise<{ course: s
     <div className="mx-auto max-w-2xl space-y-6">
       <nav className="text-sm text-[var(--p-text-2)]">
         <Link href="/legend/learn" className="hover:text-[var(--p-text-1)]">
-          Learn
+          {t("console.legend.learn.course.breadcrumb", undefined, "Learn")}
         </Link>{" "}
         / <Link href={`/legend/learn/${courseParam}`} className="hover:text-[var(--p-text-1)]">
-          Course
+          {t("console.legend.learn.quiz.courseBreadcrumb", undefined, "Course")}
         </Link>{" "}
-        / Assessment
+        / {t("console.legend.learn.quiz.assessmentBreadcrumb", undefined, "Assessment")}
       </nav>
       <h1 className="text-[var(--p-text-1)]">{assessment.title}</h1>
       <AssessmentRunner

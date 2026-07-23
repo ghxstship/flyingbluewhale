@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { requestRecertAction, type State } from "./actions";
 
 /**
@@ -9,8 +10,13 @@ import { requestRecertAction, type State } from "./actions";
  */
 export function RecertButton({ holderId, label }: { holderId: string; label: string }) {
   const [state, action, pending] = useActionState<State, FormData>(requestRecertAction, null);
+  const t = useT();
   if (state?.ok) {
-    return <span className="text-xs font-medium text-[var(--p-success)]">Recert requested</span>;
+    return (
+      <span className="text-xs font-medium text-[var(--p-success)]">
+        {t("console.legend.certifications.recertRequested", undefined, "Recert requested")}
+      </span>
+    );
   }
   return (
     <form action={action} className="flex items-center gap-2">

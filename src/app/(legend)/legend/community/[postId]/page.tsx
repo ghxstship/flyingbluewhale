@@ -12,6 +12,7 @@ import { listOrgMembers } from "@/lib/db/legend-people";
 import { POST_CATEGORY_LABELS, type PostCategory } from "@/lib/legend_community";
 import { CommentComposer } from "./CommentComposer";
 import { AcceptAnswerButton } from "./AcceptAnswerButton";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -26,10 +27,14 @@ type Comment = { id: string; author_id: string | null; body_html: string; create
  */
 export default async function CommunityPostPage({ params }: { params: Promise<{ postId: string }> }) {
   const { postId } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="LEG3ND · Community" title="Post" />
+        <ModuleHeader
+          eyebrow={t("console.legend.community.eyebrow", undefined, "LEG3ND · Community")}
+          title={t("console.legend.community.post.title", undefined, "Post")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -65,7 +70,8 @@ export default async function CommunityPostPage({ params }: { params: Promise<{ 
   const isQuestion = post.category === "questions";
   const isAuthor = post.author_id === session.userId;
   const acceptedId = post.accepted_comment_id as string | null;
-  const authorOf = (id: string | null) => (id ? (memberMap.get(id)?.name ?? "Member") : "Member");
+  const memberFallback = t("console.legend.community.member", undefined, "Member");
+  const authorOf = (id: string | null) => (id ? (memberMap.get(id)?.name ?? memberFallback) : memberFallback);
 
   // Accepted answer floats to the top.
   const ordered = [...comments].sort((a, b) => Number(b.id === acceptedId) - Number(a.id === acceptedId));
@@ -76,7 +82,7 @@ export default async function CommunityPostPage({ params }: { params: Promise<{ 
         eyebrow={`LEG3ND · ${POST_CATEGORY_LABELS[post.category as PostCategory] ?? post.category}`}
         title={post.title}
         breadcrumbs={[
-          { label: "Community", href: "/legend/community" },
+          { label: t("console.legend.community.title", undefined, "Community"), href: "/legend/community" },
           { label: post.title },
         ]}
       />
@@ -94,10 +100,15 @@ export default async function CommunityPostPage({ params }: { params: Promise<{ 
 
         <section className="space-y-3">
           <h2 className="text-sm font-semibold">
-            {isQuestion ? "Answers" : "Comments"} · {comments.length}
+            {isQuestion
+              ? t("console.legend.community.post.answers", undefined, "Answers")
+              : t("console.legend.community.post.comments", undefined, "Comments")}{" "}
+            · {comments.length}
           </h2>
           {ordered.length === 0 ? (
-            <p className="text-sm text-[var(--p-text-2)]">Be the first to reply.</p>
+            <p className="text-sm text-[var(--p-text-2)]">
+              {t("console.legend.community.post.beFirst", undefined, "Be the first to reply.")}
+            </p>
           ) : (
             <ul className="space-y-3">
               {ordered.map((c) => {
@@ -109,8 +120,12 @@ export default async function CommunityPostPage({ params }: { params: Promise<{ 
                   >
                     <div className="mb-1 flex items-center gap-2 text-xs text-[var(--p-text-3)]">
                       <span className="font-medium text-[var(--p-text-2)]">{authorOf(c.author_id)}</span>
-                      {c.author_id && staffIds.has(c.author_id) && <Badge variant="brand">Team</Badge>}
-                      {accepted && <Badge variant="success">Accepted</Badge>}
+                      {c.author_id && staffIds.has(c.author_id) && (
+                        <Badge variant="brand">{t("console.legend.community.post.team", undefined, "Team")}</Badge>
+                      )}
+                      {accepted && (
+                        <Badge variant="success">{t("console.legend.community.post.accepted", undefined, "Accepted")}</Badge>
+                      )}
                       <span className="ms-auto">{timeAgo(c.created_at)}</span>
                     </div>
                     <div className="prose-sm text-[var(--p-text-1)]" dangerouslySetInnerHTML={{ __html: c.body_html }} />
@@ -128,7 +143,7 @@ export default async function CommunityPostPage({ params }: { params: Promise<{ 
         </section>
 
         <Link href="/legend/community" className="inline-block text-xs text-[var(--p-text-3)] hover:underline">
-          ← Back to Community
+          {t("console.legend.community.post.backToCommunity", undefined, "← Back to Community")}
         </Link>
       </div>
     </>

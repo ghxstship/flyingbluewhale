@@ -8,15 +8,20 @@ import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import type { SignageSign } from "@/lib/legend_signage";
 import { NewSignForm } from "../../new/NewSignForm";
 import { updateSignAction } from "../../actions";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function EditSignPage({ params }: { params: Promise<{ signId: string }> }) {
   const { signId } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="LEG3ND" title="Edit Sign" />
+        <ModuleHeader
+          eyebrow={t("console.legend.signage.eyebrow", undefined, "LEG3ND")}
+          title={t("console.legend.signage.edit.title", undefined, "Edit Sign")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -38,20 +43,20 @@ export default async function EditSignPage({ params }: { params: Promise<{ signI
   return (
     <>
       <ModuleHeader
-        eyebrow="Sign"
-        title="Edit Sign"
+        eyebrow={t("console.legend.signage.edit.eyebrow", undefined, "Sign")}
+        title={t("console.legend.signage.edit.title", undefined, "Edit Sign")}
         breadcrumbs={[
-          { label: "LEG3ND", href: "/legend/signage" },
-          { label: "Signage Library", href: "/legend/signage" },
+          { label: t("console.legend.signage.eyebrow", undefined, "LEG3ND"), href: "/legend/signage" },
+          { label: t("console.legend.signage.title", undefined, "Signage Library"), href: "/legend/signage" },
           { label: sign.name, href: `/legend/signage/${sign.id}` },
-          { label: "Edit" },
+          { label: t("console.legend.signage.edit.breadcrumb", undefined, "Edit") },
         ]}
       />
       <div className="page-content max-w-2xl">
         <NewSignForm
           action={updateSignAction.bind(null, sign.id)}
           sign={sign}
-          submitLabel="Save Sign"
+          submitLabel={t("console.legend.signage.edit.submit", undefined, "Save Sign")}
         />
       </div>
     </>

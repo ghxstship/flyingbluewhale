@@ -10,6 +10,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { summarizeEnrollments, ENROLLMENT_STATE_LABELS, type EnrollmentState } from "@/lib/legend_learning";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -32,10 +33,14 @@ function badgeVariant(state: EnrollmentState): "success" | "info" | "default" {
  * In progress (enrolled / in_progress) and Completed, with headline stats.
  */
 export default async function MyLearningPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="LEG3ND · Learn" title="My Learning" />
+        <ModuleHeader
+          eyebrow={t("console.legend.myLearning.eyebrow", undefined, "LEG3ND · Learn")}
+          title={t("console.legend.myLearning.title", undefined, "My Learning")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -82,12 +87,19 @@ export default async function MyLearningPage() {
             href={`/legend/learn/${e.course_id}`}
             className="text-sm font-semibold text-[var(--p-text-1)] hover:text-[var(--p-accent)]"
           >
-            {course?.title ?? "Untitled course"}
+            {course?.title ?? t("console.legend.myLearning.untitledCourse", undefined, "Untitled course")}
           </Link>
           <Badge variant={badgeVariant(e.enrollment_state)}>{ENROLLMENT_STATE_LABELS[e.enrollment_state]}</Badge>
         </div>
         {course?.summary && <p className="text-xs text-[var(--p-text-2)]">{course.summary}</p>}
-        <ProgressBar value={e.progress_pct} aria-label={`${course?.title ?? "Course"} progress`} />
+        <ProgressBar
+          value={e.progress_pct}
+          aria-label={t(
+            "console.legend.myLearning.progressAria",
+            { title: course?.title ?? t("console.legend.myLearning.course", undefined, "Course") },
+            `${course?.title ?? "Course"} progress`,
+          )}
+        />
       </div>
     );
   }
@@ -95,29 +107,33 @@ export default async function MyLearningPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="LEG3ND · Learn"
-        title="My Learning"
-        subtitle="Courses you're enrolled in. Pick up where you left off."
+        eyebrow={t("console.legend.myLearning.eyebrow", undefined, "LEG3ND · Learn")}
+        title={t("console.legend.myLearning.title", undefined, "My Learning")}
+        subtitle={t("console.legend.myLearning.subtitle", undefined, "Courses you're enrolled in. Pick up where you left off.")}
       />
 
       <div className="metric-grid mb-6">
-        <MetricCard label="Enrolled" value={String(stats.enrolled)} />
-        <MetricCard label="In Progress" value={String(stats.inProgress)} />
-        <MetricCard label="Completed" value={String(stats.completed)} />
-        <MetricCard label="Avg Progress" value={`${stats.avgProgress}%`} />
+        <MetricCard label={t("console.legend.myLearning.enrolled", undefined, "Enrolled")} value={String(stats.enrolled)} />
+        <MetricCard label={t("console.legend.myLearning.inProgress", undefined, "In Progress")} value={String(stats.inProgress)} />
+        <MetricCard label={t("console.legend.myLearning.completed", undefined, "Completed")} value={String(stats.completed)} />
+        <MetricCard label={t("console.legend.myLearning.avgProgress", undefined, "Avg Progress")} value={`${stats.avgProgress}%`} />
       </div>
 
       {enrollments.length === 0 ? (
         <EmptyState
           size="compact"
-          title="Nothing enrolled yet"
-          description="Browse the Catalog to enroll in your first course."
+          title={t("console.legend.myLearning.emptyTitle", undefined, "Nothing enrolled yet")}
+          description={t(
+            "console.legend.myLearning.emptyDescription",
+            undefined,
+            "Browse the Catalog to enroll in your first course.",
+          )}
         />
       ) : (
         <div className="space-y-8">
           {inProgress.length > 0 && (
             <section className="space-y-3">
-              <h2 className="eyebrow">In progress</h2>
+              <h2 className="eyebrow">{t("console.legend.myLearning.inProgressHeading", undefined, "In progress")}</h2>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {inProgress.map((e) => (
                   <CourseCard key={e.id} e={e} />
@@ -128,7 +144,7 @@ export default async function MyLearningPage() {
 
           {completed.length > 0 && (
             <section className="space-y-3">
-              <h2 className="eyebrow">Completed</h2>
+              <h2 className="eyebrow">{t("console.legend.myLearning.completedHeading", undefined, "Completed")}</h2>
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {completed.map((e) => (
                   <CourseCard key={e.id} e={e} />

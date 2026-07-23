@@ -10,6 +10,7 @@ import { getCourse } from "../../../sample";
 import type { Lesson } from "@/lib/legend_learning";
 import { LessonComplete } from "./LessonComplete";
 import { LessonMedia } from "./LessonMedia";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -25,6 +26,7 @@ const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
  */
 export default async function LessonPage({ params }: { params: Promise<{ course: string; id: string }> }) {
   const { course: courseParam, id } = await params;
+  const { t } = await getRequestT();
 
   // ── Public-funnel preview (sample fixtures) ──────────────────────────
   const sample = getCourse(courseParam);
@@ -39,7 +41,7 @@ export default async function LessonPage({ params }: { params: Promise<{ course:
       <div className="mx-auto max-w-3xl space-y-6">
         <nav className="text-sm text-[var(--p-text-2)]">
           <Link href="/legend/learn" className="hover:text-[var(--p-text-1)]">
-            Learn
+            {t("console.legend.learn.course.breadcrumb", undefined, "Learn")}
           </Link>{" "}
           / <span className="text-[var(--p-text-1)]">{sample.title}</span>
         </nav>
@@ -67,7 +69,7 @@ export default async function LessonPage({ params }: { params: Promise<{ course:
           </div>
           {!next && firstQuiz && (
             <Link href={`/legend/learn/${sample.slug}/quiz/${firstQuiz.id}`} className="ps-btn ps-btn--cta" style={{ minHeight: 44 }}>
-              Take the quiz
+              {t("console.legend.learn.lesson.takeQuiz", undefined, "Take the quiz")}
             </Link>
           )}
         </div>
@@ -122,7 +124,7 @@ export default async function LessonPage({ params }: { params: Promise<{ course:
     <div className="mx-auto max-w-3xl space-y-6">
       <nav className="text-sm text-[var(--p-text-2)]">
         <Link href="/legend/learn" className="hover:text-[var(--p-text-1)]">
-          Learn
+          {t("console.legend.learn.course.breadcrumb", undefined, "Learn")}
         </Link>{" "}
         / <Link href={`/legend/learn/${courseParam}`} className="hover:text-[var(--p-text-1)]">
           {courseRow.title}
@@ -136,7 +138,11 @@ export default async function LessonPage({ params }: { params: Promise<{ course:
           lessonId={lesson.id}
           src={lesson.media_url}
           kind={lesson.kind}
-          eyebrow={`Lesson ${index + 1} / ${lessons.length}`}
+          eyebrow={t(
+            "console.legend.learn.lesson.eyebrow",
+            { current: index + 1, total: lessons.length },
+            `Lesson ${index + 1} / ${lessons.length}`,
+          )}
           title={lesson.title}
           serverPositionSeconds={serverPosition}
           alreadyDone={alreadyDone}
@@ -147,7 +153,7 @@ export default async function LessonPage({ params }: { params: Promise<{ course:
           {lesson.body_html ? (
             <div className="mt-3 text-[var(--p-text-2)]" dangerouslySetInnerHTML={{ __html: sanitizeHtml(lesson.body_html) }} />
           ) : (
-            <p className="mt-3 text-[var(--p-text-2)]">No content.</p>
+            <p className="mt-3 text-[var(--p-text-2)]">{t("console.legend.learn.lesson.noContent", undefined, "No content.")}</p>
           )}
         </article>
       )}

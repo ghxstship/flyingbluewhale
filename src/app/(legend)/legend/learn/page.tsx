@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { formatDuration, type Course } from "@/lib/legend_learning";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +22,7 @@ export const dynamic = "force-dynamic";
  * `/legend/learn/[course]` keyed by course id.
  */
 export default async function LearnCatalogPage() {
+  const { t } = await getRequestT();
   const session = hasSupabase ? await getSession() : null;
 
   let real: Course[] = [];
@@ -52,16 +54,20 @@ export default async function LearnCatalogPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-8">
       <header className="space-y-3">
-        <p className="eyebrow eyebrow-accent">LEG3ND · Learn</p>
-        <h1>Courses & LMS</h1>
+        <p className="eyebrow eyebrow-accent">{t("console.legend.learn.eyebrow", undefined, "LEG3ND · Learn")}</p>
+        <h1>{t("console.legend.learn.title", undefined, "Courses & LMS")}</h1>
         <p className="text-lg text-[var(--p-text-2)]">
-          Short courses on the standard, the signage system, and field readiness, on the XPMS 2.0 protocol.
+          {t(
+            "console.legend.learn.subtitle",
+            undefined,
+            "Short courses on the standard, the signage system, and field readiness, on the XPMS 2.0 protocol.",
+          )}
         </p>
       </header>
 
       {real.length > 0 && (
         <section className="space-y-3">
-          <h2 className="eyebrow">Your courses</h2>
+          <h2 className="eyebrow">{t("console.legend.learn.yourCourses", undefined, "Your courses")}</h2>
           <ul className="grid gap-4 sm:grid-cols-2">
             {real.map((c) => {
               const e = enrollments.get(c.id);
@@ -76,18 +82,27 @@ export default async function LearnCatalogPage() {
                       <span className="text-lg font-semibold text-[var(--p-text-1)]">{c.title}</span>
                       {e ? (
                         <Badge variant={e.enrollment_state === "completed" ? "success" : "info"}>
-                          {e.enrollment_state === "completed" ? "Completed" : "Enrolled"}
+                          {e.enrollment_state === "completed"
+                            ? t("console.legend.learn.completed", undefined, "Completed")
+                            : t("console.legend.learn.enrolled", undefined, "Enrolled")}
                         </Badge>
                       ) : (
-                        <Badge variant="muted">New</Badge>
+                        <Badge variant="muted">{t("console.legend.learn.new", undefined, "New")}</Badge>
                       )}
                     </div>
                     {c.summary && <p className="text-sm text-[var(--p-text-2)] line-clamp-2">{c.summary}</p>}
                     <p className="mt-auto font-mono text-xs text-[var(--p-text-3)]">
-                      {dur > 0 ? formatDuration(dur) : "Self-paced"}
-                      {c.points_reward > 0 ? ` · ${c.points_reward} pts` : ""}
+                      {dur > 0 ? formatDuration(dur) : t("console.legend.learn.selfPaced", undefined, "Self-paced")}
+                      {c.points_reward > 0
+                        ? ` · ${t("console.legend.learn.pts", { count: c.points_reward }, `${c.points_reward} pts`)}`
+                        : ""}
                     </p>
-                    {e && e.enrollment_state !== "completed" && <ProgressBar value={e.progress_pct} aria-label={`${c.title} progress`} />}
+                    {e && e.enrollment_state !== "completed" && (
+                      <ProgressBar
+                        value={e.progress_pct}
+                        aria-label={t("console.legend.learn.progressAria", { title: c.title }, `${c.title} progress`)}
+                      />
+                    )}
                   </Link>
                 </li>
               );
@@ -97,7 +112,7 @@ export default async function LearnCatalogPage() {
       )}
 
       <section className="space-y-3">
-        {real.length > 0 && <h2 className="eyebrow">Previews</h2>}
+        {real.length > 0 && <h2 className="eyebrow">{t("console.legend.learn.previews", undefined, "Previews")}</h2>}
         <ul className="grid gap-4 sm:grid-cols-2">
           {COURSES.map((c) => (
             <li key={c.slug}>
@@ -108,7 +123,11 @@ export default async function LearnCatalogPage() {
                 <div className="text-lg font-semibold text-[var(--p-text-1)]">{c.title}</div>
                 <p className="mt-1 text-sm text-[var(--p-text-2)]">{c.summary}</p>
                 <p className="mt-3 font-mono text-xs text-[var(--p-text-3)]">
-                  {c.lessons.length} lessons · {c.quiz.length}-question quiz
+                  {t(
+                    "console.legend.learn.previewMeta",
+                    { lessons: c.lessons.length, questions: c.quiz.length },
+                    `${c.lessons.length} lessons · ${c.quiz.length}-question quiz`,
+                  )}
                 </p>
               </Link>
             </li>

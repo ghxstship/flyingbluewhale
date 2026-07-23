@@ -19,6 +19,7 @@ import {
   ACCREDITATION_STATE_TONES,
   type AccreditationState,
 } from "@/lib/legend_compliance";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -68,10 +69,14 @@ function badgeVariant(state: AccreditationState): "default" | "success" | "warni
  * mastery list, and the credential transcript.
  */
 export default async function ProgressPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="LEG3ND · Learn" title="Progress" />
+        <ModuleHeader
+          eyebrow={t("console.legend.progress.eyebrow", undefined, "LEG3ND · Learn")}
+          title={t("console.legend.progress.title", undefined, "Progress")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -131,25 +136,33 @@ export default async function ProgressPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="LEG3ND · Learn"
-        title="Progress"
-        subtitle="Your learning analytics, assessment performance, and full transcript."
+        eyebrow={t("console.legend.progress.eyebrow", undefined, "LEG3ND · Learn")}
+        title={t("console.legend.progress.title", undefined, "Progress")}
+        subtitle={t(
+          "console.legend.progress.subtitle",
+          undefined,
+          "Your learning analytics, assessment performance, and full transcript.",
+        )}
       />
 
       <div className="metric-grid mb-6">
-        <MetricCard label="Courses Completed" value={String(stats.completed)} />
-        <MetricCard label="Avg Assessment" value={`${avgScore}%`} />
-        <MetricCard label="Pass Rate" value={`${pr}%`} />
-        <MetricCard label="Certs Held" value={String(certsHeld)} />
+        <MetricCard label={t("console.legend.progress.coursesCompleted", undefined, "Courses Completed")} value={String(stats.completed)} />
+        <MetricCard label={t("console.legend.progress.avgAssessment", undefined, "Avg Assessment")} value={`${avgScore}%`} />
+        <MetricCard label={t("console.legend.progress.passRate", undefined, "Pass Rate")} value={`${pr}%`} />
+        <MetricCard label={t("console.legend.progress.certsHeld", undefined, "Certs Held")} value={String(certsHeld)} />
       </div>
 
       <section className="mb-8 space-y-2">
-        <h2 className="eyebrow">Mastery</h2>
+        <h2 className="eyebrow">{t("console.legend.progress.mastery", undefined, "Mastery")}</h2>
         {enrollments.length === 0 ? (
           <EmptyState
             size="compact"
-            title="No courses yet"
-            description="Enroll in a course to start building mastery."
+            title={t("console.legend.progress.noCoursesTitle", undefined, "No courses yet")}
+            description={t(
+              "console.legend.progress.noCoursesDescription",
+              undefined,
+              "Enroll in a course to start building mastery.",
+            )}
           />
         ) : (
           <div className="surface flex flex-col gap-3 p-4">
@@ -157,7 +170,7 @@ export default async function ProgressPage() {
               <div key={e.id} className="flex flex-col gap-1">
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-sm text-[var(--p-text-1)]">
-                    {courseTitles.get(e.course_id) ?? "Course"}
+                    {courseTitles.get(e.course_id) ?? t("console.legend.progress.course", undefined, "Course")}
                   </span>
                   <span className="font-mono text-xs text-[var(--p-text-2)]">{e.progress_pct}%</span>
                 </div>
@@ -169,12 +182,16 @@ export default async function ProgressPage() {
       </section>
 
       <section className="space-y-2">
-        <h2 className="eyebrow">Transcript</h2>
+        <h2 className="eyebrow">{t("console.legend.progress.transcript", undefined, "Transcript")}</h2>
         {holders.length === 0 ? (
           <EmptyState
             size="compact"
-            title="No credentials yet"
-            description="Pass a course assessment that grants a certification to start your transcript."
+            title={t("console.legend.progress.noCredentialsTitle", undefined, "No credentials yet")}
+            description={t(
+              "console.legend.progress.noCredentialsDescription",
+              undefined,
+              "Pass a course assessment that grants a certification to start your transcript.",
+            )}
           />
         ) : (
           <div className="surface flex flex-col divide-y divide-[var(--p-border)]">
@@ -182,7 +199,7 @@ export default async function ProgressPage() {
               <div key={h.id} className="flex items-center justify-between gap-3 p-3">
                 <div className="flex flex-col">
                   <span className="text-sm font-medium text-[var(--p-text-1)]">
-                    {certNames.get(h.certification_id) ?? "Certification"}
+                    {certNames.get(h.certification_id) ?? t("console.legend.progress.certification", undefined, "Certification")}
                   </span>
                   <span className="font-mono text-xs text-[var(--p-text-3)]">{h.issued_at.slice(0, 10)}</span>
                 </div>

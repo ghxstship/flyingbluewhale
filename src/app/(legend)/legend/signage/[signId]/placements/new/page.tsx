@@ -6,6 +6,7 @@ import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import type { SignageSign } from "@/lib/legend_signage";
 import { NewPlacementForm } from "./NewPlacementForm";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +14,7 @@ type ProjectOption = { id: string; name: string };
 
 export default async function NewPlacementPage({ params }: { params: Promise<{ signId: string }> }) {
   const { signId } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) return notFound();
   const session = await requireSession();
   const db = (await createClient()) as unknown as LooseSupabase;
@@ -40,12 +42,12 @@ export default async function NewPlacementPage({ params }: { params: Promise<{ s
     <>
       <ModuleHeader
         eyebrow={`${sign.code} · ${sign.name}`}
-        title="New Placement"
+        title={t("console.legend.signage.placement.title", undefined, "New Placement")}
         breadcrumbs={[
-          { label: "LEG3ND", href: "/legend/signage" },
-          { label: "Signage Library", href: "/legend/signage" },
+          { label: t("console.legend.signage.eyebrow", undefined, "LEG3ND"), href: "/legend/signage" },
+          { label: t("console.legend.signage.title", undefined, "Signage Library"), href: "/legend/signage" },
           { label: sign.name, href: `/legend/signage/${signId}` },
-          { label: "New Placement" },
+          { label: t("console.legend.signage.placement.title", undefined, "New Placement") },
         ]}
       />
       <div className="page-content max-w-2xl">

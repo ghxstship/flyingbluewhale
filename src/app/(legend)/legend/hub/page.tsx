@@ -6,6 +6,7 @@ import { hasSupabase } from "@/lib/env";
 import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { DOC_TEMPLATES } from "@/lib/documents/registry";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -22,10 +23,14 @@ export const dynamic = "force-dynamic";
  * redirect in.
  */
 export default async function OrganizationHubPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="LEG3ND" title="Organization Hub" />
+        <ModuleHeader
+          eyebrow={t("console.legend.hub.eyebrow", undefined, "LEG3ND")}
+          title={t("console.legend.hub.title", undefined, "Organization Hub")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -67,68 +72,136 @@ export default async function OrganizationHubPage() {
       .is("deleted_at", null),
   ]);
 
-  const orgName = (org?.name_override as string | null) ?? (org?.name as string | null) ?? "Your organization";
+  const orgName =
+    (org?.name_override as string | null) ??
+    (org?.name as string | null) ??
+    t("console.legend.hub.yourOrganization", undefined, "Your organization");
   const n = (count: number | null | undefined, singular: string, plural: string) =>
     count == null ? plural : count === 1 ? `1 ${singular}` : `${count} ${plural}`;
 
   const pillars: { href: string; title: string; summary: string; blurb: string }[] = [
     {
       href: "/legend/hub/brand",
-      title: "Brand Studio",
-      summary: org?.logo_url ? `${orgName} · logo set` : orgName,
-      blurb: "Identity, logo, colors, and white-label modes. Applied across every shell and document.",
+      title: t("console.legend.hub.pillars.brand.title", undefined, "Brand Studio"),
+      summary: org?.logo_url
+        ? t("console.legend.hub.pillars.brand.logoSet", { orgName }, `${orgName} · logo set`)
+        : orgName,
+      blurb: t(
+        "console.legend.hub.pillars.brand.blurb",
+        undefined,
+        "Identity, logo, colors, and white-label modes. Applied across every shell and document.",
+      ),
     },
     {
       href: "/legend/hub/organization",
-      title: "Organization",
-      summary: n(positionCount, "position", "positions"),
-      blurb: "The position library and reporting lines, classed by XPMS department.",
+      title: t("console.legend.hub.pillars.organization.title", undefined, "Organization"),
+      summary: n(
+        positionCount,
+        t("console.legend.hub.pillars.organization.singular", undefined, "position"),
+        t("console.legend.hub.pillars.organization.plural", undefined, "positions"),
+      ),
+      blurb: t(
+        "console.legend.hub.pillars.organization.blurb",
+        undefined,
+        "The position library and reporting lines, classed by XPMS department.",
+      ),
     },
     {
       href: "/legend/hub/finance-codes",
-      title: "Finance Codes",
-      summary: n(costCenterCount, "cost center", "cost centers"),
-      blurb: "GL codes and cost centers on the XPMS department canon, 0000 through 9000.",
+      title: t("console.legend.hub.pillars.financeCodes.title", undefined, "Finance Codes"),
+      summary: n(
+        costCenterCount,
+        t("console.legend.hub.pillars.financeCodes.singular", undefined, "cost center"),
+        t("console.legend.hub.pillars.financeCodes.plural", undefined, "cost centers"),
+      ),
+      blurb: t(
+        "console.legend.hub.pillars.financeCodes.blurb",
+        undefined,
+        "GL codes and cost centers on the XPMS department canon, 0000 through 9000.",
+      ),
     },
     {
       href: "/legend/hub/locations",
-      title: "Locations",
-      summary: n(locationCount, "location", "locations"),
-      blurb: "Company locations and venues. The canonical space registry.",
+      title: t("console.legend.hub.pillars.locations.title", undefined, "Locations"),
+      summary: n(
+        locationCount,
+        t("console.legend.hub.pillars.locations.singular", undefined, "location"),
+        t("console.legend.hub.pillars.locations.plural", undefined, "locations"),
+      ),
+      blurb: t(
+        "console.legend.hub.pillars.locations.blurb",
+        undefined,
+        "Company locations and venues. The canonical space registry.",
+      ),
     },
     {
       href: "/legend/hub/catalogs",
-      title: "Catalogs",
-      summary: n(catalogCount, "catalog item", "catalog items"),
-      blurb: "The master asset catalog and the signage library. Every assignable thing.",
+      title: t("console.legend.hub.pillars.catalogs.title", undefined, "Catalogs"),
+      summary: n(
+        catalogCount,
+        t("console.legend.hub.pillars.catalogs.singular", undefined, "catalog item"),
+        t("console.legend.hub.pillars.catalogs.plural", undefined, "catalog items"),
+      ),
+      blurb: t(
+        "console.legend.hub.pillars.catalogs.blurb",
+        undefined,
+        "The master asset catalog and the signage library. Every assignable thing.",
+      ),
     },
     {
       href: "/legend/hub/templates",
-      title: "Templates",
-      summary: `${DOC_TEMPLATES.length} doc templates`,
-      blurb: "Document, job, field, and advance-packet templates. Configure once, reuse everywhere.",
+      title: t("console.legend.hub.pillars.templates.title", undefined, "Templates"),
+      summary: t(
+        "console.legend.hub.pillars.templates.count",
+        { count: DOC_TEMPLATES.length },
+        `${DOC_TEMPLATES.length} doc templates`,
+      ),
+      blurb: t(
+        "console.legend.hub.pillars.templates.blurb",
+        undefined,
+        "Document, job, field, and advance-packet templates. Configure once, reuse everywhere.",
+      ),
     },
     {
       href: "/legend/resources",
-      title: "Knowledge",
-      summary: n(resourceCount, "resource", "resources"),
-      blurb: "The Standard, the knowledge base, and curated resources.",
+      title: t("console.legend.hub.pillars.knowledge.title", undefined, "Knowledge"),
+      summary: n(
+        resourceCount,
+        t("console.legend.hub.pillars.knowledge.singular", undefined, "resource"),
+        t("console.legend.hub.pillars.knowledge.plural", undefined, "resources"),
+      ),
+      blurb: t(
+        "console.legend.hub.pillars.knowledge.blurb",
+        undefined,
+        "The Standard, the knowledge base, and curated resources.",
+      ),
     },
     {
       href: "/legend/learn",
-      title: "Academy",
-      summary: n(courseCount, "course", "courses"),
-      blurb: "Courses, certifications, badges, and the leaderboard.",
+      title: t("console.legend.hub.pillars.academy.title", undefined, "Academy"),
+      summary: n(
+        courseCount,
+        t("console.legend.hub.pillars.academy.singular", undefined, "course"),
+        t("console.legend.hub.pillars.academy.plural", undefined, "courses"),
+      ),
+      blurb: t(
+        "console.legend.hub.pillars.academy.blurb",
+        undefined,
+        "Courses, certifications, badges, and the leaderboard.",
+      ),
     },
   ];
 
   return (
     <>
       <ModuleHeader
-        eyebrow="LEG3ND"
-        title="Organization Hub"
-        subtitle="Configure your organization once. Every project inherits it."
-        breadcrumbs={[{ label: "LEG3ND" }, { label: "Organization Hub" }]}
+        eyebrow={t("console.legend.hub.eyebrow", undefined, "LEG3ND")}
+        title={t("console.legend.hub.title", undefined, "Organization Hub")}
+        subtitle={t("console.legend.hub.subtitle", undefined, "Configure your organization once. Every project inherits it.")}
+        breadcrumbs={[
+          { label: t("console.legend.hub.eyebrow", undefined, "LEG3ND") },
+          { label: t("console.legend.hub.title", undefined, "Organization Hub") },
+        ]}
       />
       <div className="page-content">
         <div className="section-grid">

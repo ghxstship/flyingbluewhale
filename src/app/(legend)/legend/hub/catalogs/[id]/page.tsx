@@ -23,7 +23,10 @@ export default async function CatalogItemDetailPage({ params }: { params: Promis
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Organization Hub" title="Catalog Item" />
+        <ModuleHeader
+          eyebrow={t("console.legend.hub.title", undefined, "Organization Hub")}
+          title={t("console.settings.catalog.detail.title", undefined, "Catalog Item")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -94,12 +97,12 @@ export default async function CatalogItemDetailPage({ params }: { params: Promis
   return (
     <>
       <ModuleHeader
-        eyebrow="Organization Hub"
+        eyebrow={t("console.legend.hub.title", undefined, "Organization Hub")}
         title={item.name}
         breadcrumbs={[
-          { label: "LEG3ND" },
-          { label: "Organization Hub", href: "/legend/hub" },
-          { label: "Catalogs", href: "/legend/hub/catalogs" },
+          { label: t("console.legend.hub.breadcrumb", undefined, "LEG3ND") },
+          { label: t("console.legend.hub.title", undefined, "Organization Hub"), href: "/legend/hub" },
+          { label: t("console.settings.catalog.hubTitle", undefined, "Catalogs"), href: "/legend/hub/catalogs" },
           { label: item.name },
         ]}
         subtitle={

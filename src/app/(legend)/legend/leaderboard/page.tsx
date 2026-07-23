@@ -10,6 +10,7 @@ import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { listOrgMembers, pointsByUser } from "@/lib/db/legend-people";
 import { resolveTier, type Achievement } from "@/lib/legend_gamification";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -19,10 +20,14 @@ export const dynamic = "force-dynamic";
  * the achievement catalog with earned/locked state.
  */
 export default async function LeaderboardPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="LEG3ND · Community" title="Leaderboard" />
+        <ModuleHeader
+          eyebrow={t("console.legend.leaderboard.eyebrow", undefined, "LEG3ND · Community")}
+          title={t("console.legend.leaderboard.title", undefined, "Leaderboard")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -55,13 +60,25 @@ export default async function LeaderboardPage() {
 
   return (
     <>
-      <ModuleHeader eyebrow="LEG3ND · Community" title="Leaderboard" subtitle="Points, tiers, and achievements, shared with COMPVSS field." />
+      <ModuleHeader
+        eyebrow={t("console.legend.leaderboard.eyebrow", undefined, "LEG3ND · Community")}
+        title={t("console.legend.leaderboard.title", undefined, "Leaderboard")}
+        subtitle={t("console.legend.leaderboard.subtitle", undefined, "Points, tiers, and achievements, shared with COMPVSS field.")}
+      />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px]">
         <section className="space-y-2">
-          <h2 className="eyebrow">Ranking</h2>
+          <h2 className="eyebrow">{t("console.legend.leaderboard.ranking", undefined, "Ranking")}</h2>
           {ranked.length === 0 ? (
-            <EmptyState size="compact" title="No points yet" description="Complete courses and field work to climb the board." />
+            <EmptyState
+              size="compact"
+              title={t("console.legend.leaderboard.emptyTitle", undefined, "No points yet")}
+              description={t(
+                "console.legend.leaderboard.emptyDescription",
+                undefined,
+                "Complete courses and field work to climb the board.",
+              )}
+            />
           ) : (
             <div className="surface flex flex-col gap-1 p-2">
               {ranked.map((m, i) => (
@@ -81,14 +98,16 @@ export default async function LeaderboardPage() {
 
         <aside className="space-y-6">
           <div>
-            <h2 className="eyebrow mb-2">Your tier</h2>
+            <h2 className="eyebrow mb-2">{t("console.legend.leaderboard.yourTier", undefined, "Your tier")}</h2>
             <LoyaltyTier tier={tier.tier} tone={tier.tone} points={myPoints} nextTier={tier.nextTier} nextThreshold={tier.nextThreshold} />
           </div>
 
           <div>
-            <h2 className="eyebrow mb-2">Achievements</h2>
+            <h2 className="eyebrow mb-2">{t("console.legend.leaderboard.achievements", undefined, "Achievements")}</h2>
             {achievements.length === 0 ? (
-              <p className="text-sm text-[var(--p-text-2)]">No achievements configured yet.</p>
+              <p className="text-sm text-[var(--p-text-2)]">
+                {t("console.legend.leaderboard.noAchievements", undefined, "No achievements configured yet.")}
+              </p>
             ) : (
               <div className="flex flex-col gap-2">
                 {achievements.map((a) => (

@@ -17,7 +17,10 @@ export default async function EditCatalogItemPage({ params }: { params: Promise<
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Organization Hub" title="Edit Catalog Item" />
+        <ModuleHeader
+          eyebrow={t("console.legend.hub.title", undefined, "Organization Hub")}
+          title={t("console.settings.catalog.edit.pageTitle", undefined, "Edit Catalog Item")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -47,14 +50,14 @@ export default async function EditCatalogItemPage({ params }: { params: Promise<
   return (
     <>
       <ModuleHeader
-        eyebrow="Organization Hub"
+        eyebrow={t("console.legend.hub.title", undefined, "Organization Hub")}
         title={t("console.settings.catalog.edit.title", { name: item.name }, `Edit ${item.name}`)}
         breadcrumbs={[
-          { label: "LEG3ND" },
-          { label: "Organization Hub", href: "/legend/hub" },
-          { label: "Catalogs", href: "/legend/hub/catalogs" },
+          { label: t("console.legend.hub.breadcrumb", undefined, "LEG3ND") },
+          { label: t("console.legend.hub.title", undefined, "Organization Hub"), href: "/legend/hub" },
+          { label: t("console.settings.catalog.hubTitle", undefined, "Catalogs"), href: "/legend/hub/catalogs" },
           { label: item.name, href: `/legend/hub/catalogs/${item.id}` },
-          { label: "Edit" },
+          { label: t("console.settings.catalog.edit.breadcrumb", undefined, "Edit") },
         ]}
       />
       <div className="page-content max-w-2xl">

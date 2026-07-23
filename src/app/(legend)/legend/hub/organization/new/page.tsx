@@ -6,14 +6,19 @@ import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { createPositionAction } from "../actions";
 import { PositionForm, type Department } from "../PositionForm";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function NewPositionPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Organization Hub" title="New Position" />
+        <ModuleHeader
+          eyebrow={t("console.legend.hub.organization.eyebrow", undefined, "Organization Hub")}
+          title={t("console.legend.hub.organization.new.title", undefined, "New Position")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -30,18 +35,26 @@ export default async function NewPositionPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Organization Hub"
-        title="New Position"
-        subtitle="Add a position to the library. Rosters and role assignment read from here."
+        eyebrow={t("console.legend.hub.organization.eyebrow", undefined, "Organization Hub")}
+        title={t("console.legend.hub.organization.new.title", undefined, "New Position")}
+        subtitle={t(
+          "console.legend.hub.organization.new.subtitle",
+          undefined,
+          "Add a position to the library. Rosters and role assignment read from here.",
+        )}
         breadcrumbs={[
-          { label: "LEG3ND" },
-          { label: "Organization Hub", href: "/legend/hub" },
-          { label: "Organization", href: "/legend/hub/organization" },
-          { label: "New" },
+          { label: t("console.legend.hub.breadcrumb", undefined, "LEG3ND") },
+          { label: t("console.legend.hub.title", undefined, "Organization Hub"), href: "/legend/hub" },
+          { label: t("console.legend.hub.organization.title", undefined, "Organization"), href: "/legend/hub/organization" },
+          { label: t("console.legend.hub.organization.new.breadcrumb", undefined, "New") },
         ]}
       />
       <div className="page-content max-w-2xl">
-        <PositionForm action={createPositionAction} departments={departments} submitLabel="Create Position" />
+        <PositionForm
+          action={createPositionAction}
+          departments={departments}
+          submitLabel={t("console.legend.hub.organization.new.submit", undefined, "Create Position")}
+        />
       </div>
     </>
   );

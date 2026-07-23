@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { completeLessonAction } from "../../../actions";
 
 /**
@@ -23,6 +24,7 @@ export function LessonComplete({
   alreadyDone: boolean;
 }) {
   const router = useRouter();
+  const t = useT();
   const [pending, start] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
@@ -52,7 +54,11 @@ export function LessonComplete({
         className="ps-btn ps-btn--cta ps-btn--lg"
         style={{ minHeight: 44, justifyContent: "center" }}
       >
-        {pending ? "…" : alreadyDone ? "Completed. Continue" : "Mark complete & continue"}
+        {pending
+          ? "…"
+          : alreadyDone
+            ? t("console.legend.learn.lesson.completedContinue", undefined, "Completed. Continue")
+            : t("console.legend.learn.lesson.markComplete", undefined, "Mark complete & continue")}
       </button>
       {error && (
         <p className="ps-alert ps-alert--danger" role="alert">

@@ -3,6 +3,7 @@
 import * as React from "react";
 import { QuizQuestion } from "@/components/ui/QuizQuestion";
 import { Button } from "@/components/ui/Button";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import type { QuizItem } from "../../sample";
 
 export type QuizRunnerProps = {
@@ -16,6 +17,7 @@ export type QuizRunnerProps = {
  * the catalog at the end.
  */
 export function QuizRunner({ items, startIndex }: QuizRunnerProps): React.ReactElement {
+  const t = useT();
   const [index, setIndex] = React.useState(startIndex);
   const [selected, setSelected] = React.useState<number | undefined>(undefined);
   const [revealed, setRevealed] = React.useState(false);
@@ -27,12 +29,12 @@ export function QuizRunner({ items, startIndex }: QuizRunnerProps): React.ReactE
   if (done || !item) {
     return (
       <div className="space-y-4 rounded-[var(--p-r-lg,12px)] border border-[var(--p-border)] bg-[var(--p-surface)] p-6 text-center">
-        <p className="eyebrow">Quiz complete</p>
+        <p className="eyebrow">{t("console.legend.learn.quiz.complete", undefined, "Quiz complete")}</p>
         <p className="text-2xl font-bold text-[var(--p-text-1)]">
           {score} / {items.length}
         </p>
         <Button href="/legend/learn" variant="cta" className="inline-block">
-          Back to courses
+          {t("console.legend.learn.quiz.backToCourses", undefined, "Back to courses")}
         </Button>
       </div>
     );
@@ -69,11 +71,13 @@ export function QuizRunner({ items, startIndex }: QuizRunnerProps): React.ReactE
       <div className="flex justify-end gap-2">
         {!revealed ? (
           <Button type="button" variant="cta" onClick={check} disabled={selected == null}>
-            Check answer
+            {t("console.legend.learn.quiz.checkAnswer", undefined, "Check answer")}
           </Button>
         ) : (
           <Button type="button" variant="cta" onClick={advance}>
-            {index + 1 >= items.length ? "Finish" : "Next question"}
+            {index + 1 >= items.length
+              ? t("console.legend.learn.quiz.finish", undefined, "Finish")
+              : t("console.legend.learn.quiz.nextQuestion", undefined, "Next question")}
           </Button>
         )}
       </div>

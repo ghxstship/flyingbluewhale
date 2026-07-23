@@ -1,17 +1,17 @@
 {
-  "filesScanned": 3364,
-  "callSitesMatched": 21219,
-  "uniqueKeys": 19057,
-  "collisions": 102,
+  "filesScanned": 3442,
+  "callSitesMatched": 22954,
+  "uniqueKeys": 20453,
+  "collisions": 103,
   "perNamespace": {
-    "console": 11540,
-    "m": 2252,
-    "marketing": 1843,
+    "console": 12774,
+    "m": 2412,
+    "marketing": 1844,
     "p": 1497,
     "me": 530,
     "legal": 335,
     "pdf": 292,
-    "components": 236,
+    "components": 233,
     "auth": 115,
     "dataTable": 90,
     "common": 53,
@@ -37,6 +37,7 @@
     "avatarMenu": 4,
     "formShell": 4,
     "workspace": 4,
+    "dataView": 4,
     "filterBar": 2
   }
 }

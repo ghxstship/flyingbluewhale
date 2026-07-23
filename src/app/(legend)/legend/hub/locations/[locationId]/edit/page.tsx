@@ -21,14 +21,14 @@ export default async function EditLocationPage({ params }: { params: Promise<{ l
   return (
     <>
       <ModuleHeader
-        eyebrow="Organization Hub"
+        eyebrow={t("console.legend.hub.title", undefined, "Organization Hub")}
         title={t("console.locations.edit.title", { name: row.name }, `Edit ${row.name}`)}
         breadcrumbs={[
-          { label: "LEG3ND" },
-          { label: "Organization Hub", href: "/legend/hub" },
-          { label: "Locations", href: "/legend/hub/locations" },
+          { label: t("console.legend.hub.breadcrumb", undefined, "LEG3ND") },
+          { label: t("console.legend.hub.title", undefined, "Organization Hub"), href: "/legend/hub" },
+          { label: t("console.locations.list.title", undefined, "Locations"), href: "/legend/hub/locations" },
           { label: row.name, href: `/legend/hub/locations/${p.locationId}` },
-          { label: "Edit" },
+          { label: t("console.locations.edit.breadcrumb", undefined, "Edit") },
         ]}
       />
       <div className="page-content max-w-xl">

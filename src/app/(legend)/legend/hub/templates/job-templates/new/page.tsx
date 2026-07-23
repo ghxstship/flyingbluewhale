@@ -10,14 +10,14 @@ export default async function NewJobTemplatePage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Organization Hub"
+        eyebrow={t("console.legend.hub.title", undefined, "Organization Hub")}
         title={t("console.settings.jobTemplates.new.title", undefined, "New Job Template")}
         breadcrumbs={[
-          { label: "LEG3ND" },
-          { label: "Organization Hub", href: "/legend/hub" },
-          { label: "Templates", href: "/legend/hub/templates" },
-          { label: "Job Templates", href: "/legend/hub/templates/job-templates" },
-          { label: "New" },
+          { label: t("console.legend.hub.breadcrumb", undefined, "LEG3ND") },
+          { label: t("console.legend.hub.title", undefined, "Organization Hub"), href: "/legend/hub" },
+          { label: t("console.legend.hub.templates.title", undefined, "Templates"), href: "/legend/hub/templates" },
+          { label: t("console.settings.jobTemplates.title", undefined, "Job Templates"), href: "/legend/hub/templates/job-templates" },
+          { label: t("console.settings.jobTemplates.newBreadcrumb", undefined, "New") },
         ]}
       />
       <div className="page-content max-w-xl">

@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { useT } from "@/lib/i18n/LocaleProvider";
 import { registerForSessionAction, cancelRegistrationAction, type State } from "./actions";
 
 /**
@@ -16,6 +17,7 @@ export function SessionRegisterButton({
 }) {
   const action = registered ? cancelRegistrationAction : registerForSessionAction;
   const [state, formAction, pending] = useActionState<State, FormData>(action, null);
+  const t = useT();
   return (
     <form action={formAction} className="flex flex-col items-end gap-1">
       <input type="hidden" name="session_id" value={sessionId} />
@@ -25,7 +27,11 @@ export function SessionRegisterButton({
         className={`ps-btn ${registered ? "ps-btn--secondary" : "ps-btn--primary"}`}
         style={{ minHeight: 36 }}
       >
-        {pending ? "…" : registered ? "Cancel" : "Register"}
+        {pending
+          ? "…"
+          : registered
+            ? t("console.legend.live.cancel", undefined, "Cancel")
+            : t("console.legend.live.register", undefined, "Register")}
       </button>
       {state?.error && (
         <span className="text-xs text-[var(--p-danger)]" role="alert">

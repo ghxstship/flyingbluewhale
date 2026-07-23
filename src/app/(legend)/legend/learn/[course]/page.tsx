@@ -13,6 +13,7 @@ import { LESSON_KIND_LABELS, formatDuration, type Course, type Lesson } from "@/
 import { averageRating, ratingBreakdown, type CourseReview } from "@/lib/legend_reviews";
 import { CourseEnroll } from "./CourseEnroll";
 import { ReviewForm } from "./ReviewForm";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -29,6 +30,7 @@ const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
  */
 export default async function CourseOverviewPage({ params }: { params: Promise<{ course: string }> }) {
   const { course: courseParam } = await params;
+  const { t } = await getRequestT();
 
   // Sample preview slug → there's no overview; route into the first lesson.
   const sample = getCourse(courseParam);
@@ -40,7 +42,7 @@ export default async function CourseOverviewPage({ params }: { params: Promise<{
           <h1 className="text-[var(--p-text-1)]">{sample.title}</h1>
           <p className="text-[var(--p-text-2)]">{sample.summary}</p>
           <Link href={`/legend/learn/${sample.slug}/lesson/${first.id}`} className="ps-btn ps-btn--cta ps-btn--lg" style={{ minHeight: 44 }}>
-            Start preview
+            {t("console.legend.learn.course.startPreview", undefined, "Start preview")}
           </Link>
         </div>
       );
@@ -134,7 +136,7 @@ export default async function CourseOverviewPage({ params }: { params: Promise<{
   if (reviewerIds.length > 0) {
     const { data: reviewers } = await db.from("users").select("id, name, email").in("id", reviewerIds);
     for (const u of (reviewers ?? []) as Array<{ id: string; name: string | null; email: string | null }>) {
-      reviewerNames.set(u.id, u.name || u.email || "Member");
+      reviewerNames.set(u.id, u.name || u.email || t("console.legend.learn.course.member", undefined, "Member"));
     }
   }
   const myReview = reviews.find((r) => r.user_id === session.userId);
@@ -143,10 +145,38 @@ export default async function CourseOverviewPage({ params }: { params: Promise<{
 
   const learnDone = progressPct >= 100;
   const steps: Step[] = [
-    { label: "Learn", description: `${completedLessons.size}/${lessons.length || "—"} lessons`, state: learnDone ? "done" : enrolled ? "current" : "upcoming" },
-    { label: "Assess", description: assessmentRow ? `Pass ≥ ${assessmentRow.pass_pct}%` : "No assessment", state: passedAttempt ? "done" : learnDone ? "current" : "upcoming" },
-    { label: "Certify", description: course.grants_certification_id ? "On pass" : "No certificate", state: certified ? "done" : passedAttempt ? "current" : "upcoming" },
-    { label: "Recert", description: "Tracked in Certifications", state: certified ? "current" : "upcoming" },
+    {
+      label: t("console.legend.learn.course.steps.learn", undefined, "Learn"),
+      description: t(
+        "console.legend.learn.course.steps.learnDescription",
+        { done: completedLessons.size, total: lessons.length || "—" },
+        `${completedLessons.size}/${lessons.length || "—"} lessons`,
+      ),
+      state: learnDone ? "done" : enrolled ? "current" : "upcoming",
+    },
+    {
+      label: t("console.legend.learn.course.steps.assess", undefined, "Assess"),
+      description: assessmentRow
+        ? t(
+            "console.legend.learn.course.steps.assessPass",
+            { pct: assessmentRow.pass_pct },
+            `Pass ≥ ${assessmentRow.pass_pct}%`,
+          )
+        : t("console.legend.learn.course.steps.noAssessment", undefined, "No assessment"),
+      state: passedAttempt ? "done" : learnDone ? "current" : "upcoming",
+    },
+    {
+      label: t("console.legend.learn.course.steps.certify", undefined, "Certify"),
+      description: course.grants_certification_id
+        ? t("console.legend.learn.course.steps.onPass", undefined, "On pass")
+        : t("console.legend.learn.course.steps.noCertificate", undefined, "No certificate"),
+      state: certified ? "done" : passedAttempt ? "current" : "upcoming",
+    },
+    {
+      label: t("console.legend.learn.course.steps.recert", undefined, "Recert"),
+      description: t("console.legend.learn.course.steps.recertDescription", undefined, "Tracked in Certifications"),
+      state: certified ? "current" : "upcoming",
+    },
   ];
 
   const nextLesson = lessons.find((l) => !completedLessons.has(l.id)) ?? lessons[0];
@@ -155,7 +185,7 @@ export default async function CourseOverviewPage({ params }: { params: Promise<{
     <div className="mx-auto max-w-3xl space-y-6">
       <nav className="text-sm text-[var(--p-text-2)]">
         <Link href="/legend/learn" className="hover:text-[var(--p-text-1)]">
-          Learn
+          {t("console.legend.learn.course.breadcrumb", undefined, "Learn")}
         </Link>{" "}
         / <span className="text-[var(--p-text-1)]">{course.title}</span>
       </nav>
@@ -163,7 +193,7 @@ export default async function CourseOverviewPage({ params }: { params: Promise<{
       <header className="space-y-2">
         <div className="flex items-center gap-2">
           <h1 className="text-[var(--p-text-1)]">{course.title}</h1>
-          {certified && <Badge variant="success">Certified</Badge>}
+          {certified && <Badge variant="success">{t("console.legend.learn.course.certified", undefined, "Certified")}</Badge>}
         </div>
         {course.summary && <p className="text-[var(--p-text-2)]">{course.summary}</p>}
       </header>
@@ -174,29 +204,39 @@ export default async function CourseOverviewPage({ params }: { params: Promise<{
 
       {enrolled && (
         <div>
-          <ProgressBar value={progressPct} showLabel aria-label="Course progress" />
+          <ProgressBar
+            value={progressPct}
+            showLabel
+            aria-label={t("console.legend.learn.course.progressAria", undefined, "Course progress")}
+          />
         </div>
       )}
 
       <div className="flex flex-wrap items-center gap-3">
         {!enrolled ? (
-          <CourseEnroll courseId={course.id} label="Enroll" />
+          <CourseEnroll courseId={course.id} label={t("console.legend.learn.course.enroll", undefined, "Enroll")} />
         ) : nextLesson ? (
           <Link href={`/legend/learn/${course.id}/lesson/${nextLesson.id}`} className="ps-btn ps-btn--cta ps-btn--lg" style={{ minHeight: 44 }}>
-            {progressPct > 0 ? "Continue" : "Start course"}
+            {progressPct > 0
+              ? t("console.legend.learn.course.continue", undefined, "Continue")
+              : t("console.legend.learn.course.startCourse", undefined, "Start course")}
           </Link>
         ) : null}
         {enrolled && learnDone && assessmentRow && (
           <Link href={`/legend/learn/${course.id}/quiz/${assessmentRow.id}`} className="ps-btn ps-btn--secondary ps-btn--lg" style={{ minHeight: 44 }}>
-            {passedAttempt ? "Review assessment" : "Take assessment"}
+            {passedAttempt
+              ? t("console.legend.learn.course.reviewAssessment", undefined, "Review assessment")
+              : t("console.legend.learn.course.takeAssessment", undefined, "Take assessment")}
           </Link>
         )}
       </div>
 
       <section className="space-y-2">
-        <h2 className="eyebrow">Lessons</h2>
+        <h2 className="eyebrow">{t("console.legend.learn.course.lessons", undefined, "Lessons")}</h2>
         {lessons.length === 0 ? (
-          <p className="text-sm text-[var(--p-text-2)]">No lessons published yet.</p>
+          <p className="text-sm text-[var(--p-text-2)]">
+            {t("console.legend.learn.course.noLessons", undefined, "No lessons published yet.")}
+          </p>
         ) : (
           <ol className="surface divide-y divide-[var(--p-border)]">
             {lessons.map((l, i) => {
@@ -231,11 +271,13 @@ export default async function CourseOverviewPage({ params }: { params: Promise<{
 
       <section className="space-y-3">
         <div className="flex items-baseline justify-between gap-2">
-          <h2 className="eyebrow">Reviews</h2>
+          <h2 className="eyebrow">{t("console.legend.learn.course.reviews", undefined, "Reviews")}</h2>
           {reviews.length > 0 && (
             <span className="text-sm text-[var(--p-text-2)]">
               <span className="font-bold tabular-nums text-[var(--p-text-1)]">{avgRating.toFixed(1)}</span> ★ · {reviews.length}{" "}
-              {reviews.length === 1 ? "review" : "reviews"}
+              {reviews.length === 1
+                ? t("console.legend.learn.course.reviewSingular", undefined, "review")
+                : t("console.legend.learn.course.reviewPlural", undefined, "reviews")}
             </span>
           )}
         </div>
@@ -257,16 +299,25 @@ export default async function CourseOverviewPage({ params }: { params: Promise<{
         <ReviewForm courseId={course.id} initialRating={myReview?.rating} initialBody={myReview?.body ?? undefined} />
 
         {reviews.length === 0 ? (
-          <EmptyState size="compact" title="No reviews yet" description="Be the first to review this course." />
+          <EmptyState
+            size="compact"
+            title={t("console.legend.learn.course.noReviewsTitle", undefined, "No reviews yet")}
+            description={t("console.legend.learn.course.noReviewsDescription", undefined, "Be the first to review this course.")}
+          />
         ) : (
           <ul className="space-y-2">
             {reviews.map((r) => (
               <li key={r.id} className="surface p-3">
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-sm font-medium text-[var(--p-text-1)]">
-                    {r.user_id === session.userId ? "You" : reviewerNames.get(r.user_id) ?? "Member"}
+                    {r.user_id === session.userId
+                      ? t("console.legend.learn.course.you", undefined, "You")
+                      : reviewerNames.get(r.user_id) ?? t("console.legend.learn.course.member", undefined, "Member")}
                   </span>
-                  <span className="text-xs tabular-nums text-[var(--p-warning)]" aria-label={`${r.rating} out of 5`}>
+                  <span
+                    className="text-xs tabular-nums text-[var(--p-warning)]"
+                    aria-label={t("console.legend.learn.course.ratingAria", { rating: r.rating }, `${r.rating} out of 5`)}
+                  >
                     {"★".repeat(r.rating)}
                     <span className="text-[var(--p-text-3)]">{"★".repeat(5 - r.rating)}</span>
                   </span>

@@ -18,6 +18,7 @@ import {
   type SignageStandard,
 } from "@/lib/legend_signage";
 import { PictogramPreview } from "./PictogramPreview";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -32,10 +33,14 @@ export default async function SignageLibraryPage({
 }: {
   searchParams: Promise<{ q?: string; category?: string; standard?: string }>;
 }) {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="LEG3ND" title="Signage Library" />
+        <ModuleHeader
+          eyebrow={t("console.legend.signage.eyebrow", undefined, "LEG3ND")}
+          title={t("console.legend.signage.title", undefined, "Signage Library")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -85,10 +90,14 @@ export default async function SignageLibraryPage({
   return (
     <>
       <ModuleHeader
-        eyebrow="LEG3ND"
-        title="Signage Library"
-        subtitle={signs.length === 1 ? "1 sign" : `${signs.length} signs`}
-        action={<Button href="/legend/signage/new">+ New Sign</Button>}
+        eyebrow={t("console.legend.signage.eyebrow", undefined, "LEG3ND")}
+        title={t("console.legend.signage.title", undefined, "Signage Library")}
+        subtitle={
+          signs.length === 1
+            ? t("console.legend.signage.oneSign", undefined, "1 sign")
+            : t("console.legend.signage.nSigns", { count: signs.length }, `${signs.length} signs`)
+        }
+        action={<Button href="/legend/signage/new">{t("console.legend.signage.newSign", undefined, "+ New Sign")}</Button>}
       />
       <div className="page-content space-y-4">
         {/* Search + facet row (D-25). GET form keeps this a zero-JS server surface. */}
@@ -97,26 +106,29 @@ export default async function SignageLibraryPage({
             type="search"
             name="q"
             defaultValue={needle}
-            placeholder="Search by name or code"
-            aria-label="Search signs"
+            placeholder={t("console.legend.signage.searchPlaceholder", undefined, "Search by name or code")}
+            aria-label={t("console.legend.signage.searchAria", undefined, "Search signs")}
             className="ps-input max-w-xs"
           />
           {activeCategory && <input type="hidden" name="category" value={activeCategory} />}
           {activeStandard && <input type="hidden" name="standard" value={activeStandard} />}
           <Button type="submit" variant="secondary">
-            Search
+            {t("console.legend.signage.search", undefined, "Search")}
           </Button>
           {filtered && (
             <Link
               href="/legend/signage"
               className="text-xs font-semibold text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
             >
-              Clear
+              {t("console.legend.signage.clear", undefined, "Clear")}
             </Link>
           )}
         </form>
-        <div className="flex flex-wrap items-center gap-1.5" aria-label="Filter by category">
-          <span className="eyebrow me-1">Category</span>
+        <div
+          className="flex flex-wrap items-center gap-1.5"
+          aria-label={t("console.legend.signage.filterByCategoryAria", undefined, "Filter by category")}
+        >
+          <span className="eyebrow me-1">{t("console.legend.signage.category", undefined, "Category")}</span>
           {SIGNAGE_CATEGORIES.map((c) => (
             <Link
               key={c}
@@ -128,8 +140,11 @@ export default async function SignageLibraryPage({
             </Link>
           ))}
         </div>
-        <div className="flex flex-wrap items-center gap-1.5" aria-label="Filter by standard">
-          <span className="eyebrow me-1">Standard</span>
+        <div
+          className="flex flex-wrap items-center gap-1.5"
+          aria-label={t("console.legend.signage.filterByStandardAria", undefined, "Filter by standard")}
+        >
+          <span className="eyebrow me-1">{t("console.legend.signage.standard", undefined, "Standard")}</span>
           {SIGNAGE_STANDARDS.map((s) => (
             <Link
               key={s}
@@ -145,19 +160,27 @@ export default async function SignageLibraryPage({
         {signs.length === 0 ? (
           filtered ? (
             <EmptyState
-              title="No matching signs"
-              description="No signs match this search or filter. Clear the filters to see the full register."
+              title={t("console.legend.signage.noMatchTitle", undefined, "No matching signs")}
+              description={t(
+                "console.legend.signage.noMatchDescription",
+                undefined,
+                "No signs match this search or filter. Clear the filters to see the full register.",
+              )}
               action={
                 <Button href="/legend/signage" variant="secondary">
-                  Clear filters
+                  {t("console.legend.signage.clearFilters", undefined, "Clear filters")}
                 </Button>
               }
             />
           ) : (
             <EmptyState
-              title="No signs yet"
-              description="Build your life-safety and wayfinding catalog on ISO 7010, DOT-AIGA, and ISA pictograms."
-              action={<Button href="/legend/signage/new">+ New Sign</Button>}
+              title={t("console.legend.signage.emptyTitle", undefined, "No signs yet")}
+              description={t(
+                "console.legend.signage.emptyDescription",
+                undefined,
+                "Build your life-safety and wayfinding catalog on ISO 7010, DOT-AIGA, and ISA pictograms.",
+              )}
+              action={<Button href="/legend/signage/new">{t("console.legend.signage.newSign", undefined, "+ New Sign")}</Button>}
             />
           )
         ) : (

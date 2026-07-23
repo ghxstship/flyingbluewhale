@@ -11,6 +11,7 @@ import { LegendSidebar } from "@/components/legend/LegendSidebar";
 import { getSession } from "@/lib/auth";
 import { AppRail } from "@/components/workspace-chrome/AppRail";
 import { resolveAppRail } from "@/components/workspace-chrome/resolveAppRail";
+import { getRequestT } from "@/lib/i18n/request";
 
 /**
  * LEG3ND shell (ADR-0011) — the standalone Knowledge · LMS · resource hub,
@@ -32,6 +33,7 @@ export default async function LegendLayout({ children }: { children: ReactNode }
   // LEG3ND has a public funnel, so the rail only mounts for authenticated users
   // (rule 2: never on public surfaces) with ≥ 2 reachable apps.
   const session = await getSession();
+  const { t } = await getRequestT();
   const rail = session
     ? await resolveAppRail({
         shell: "legend",
@@ -58,7 +60,7 @@ export default async function LegendLayout({ children }: { children: ReactNode }
             <Link
               href="/legend"
               className="atlvs-wordmark text-lg font-semibold text-[var(--p-text-1)]"
-              aria-label="LEG3ND home"
+              aria-label={t("console.legend.layout.homeAria", undefined, "LEG3ND home")}
             >
               L E G 3 N D
             </Link>
@@ -66,7 +68,7 @@ export default async function LegendLayout({ children }: { children: ReactNode }
               href="/legend/profile"
               className="text-sm font-medium text-[var(--p-text-2)] transition-colors hover:text-[var(--p-text-1)]"
             >
-              Profile
+              {t("console.legend.layout.profile", undefined, "Profile")}
             </Link>
           </div>
         </header>

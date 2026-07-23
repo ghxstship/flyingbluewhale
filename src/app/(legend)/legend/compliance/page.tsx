@@ -18,6 +18,7 @@ import {
   type CertificationHolder,
 } from "@/lib/legend_compliance";
 import type { StateTone } from "@/lib/tones";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -46,10 +47,14 @@ const CELL_FG: Record<StateTone, string> = {
  * credential health at a glance. Manager+ only (self-gated).
  */
 export default async function ComplianceMatrixPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="LEG3ND · Compliance" title="Recert Matrix" />
+        <ModuleHeader
+          eyebrow={t("console.legend.compliance.eyebrow", undefined, "LEG3ND · Compliance")}
+          title={t("console.legend.compliance.title", undefined, "Recert Matrix")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -101,15 +106,33 @@ export default async function ComplianceMatrixPage() {
   if (certs.length === 0 || members.length === 0) {
     return (
       <>
-        <ModuleHeader eyebrow="LEG3ND · Compliance" title="Recert Matrix" />
-        <EmptyState title="Nothing to chart yet" description="Add certifications and org members to populate the recert matrix." />
+        <ModuleHeader
+          eyebrow={t("console.legend.compliance.eyebrow", undefined, "LEG3ND · Compliance")}
+          title={t("console.legend.compliance.title", undefined, "Recert Matrix")}
+        />
+        <EmptyState
+          title={t("console.legend.compliance.emptyTitle", undefined, "Nothing to chart yet")}
+          description={t(
+            "console.legend.compliance.emptyDescription",
+            undefined,
+            "Add certifications and org members to populate the recert matrix.",
+          )}
+        />
       </>
     );
   }
 
   return (
     <>
-      <ModuleHeader eyebrow="LEG3ND · Compliance" title="Recert Matrix" subtitle="Org credential health: every member × certification, colored by state." />
+      <ModuleHeader
+        eyebrow={t("console.legend.compliance.eyebrow", undefined, "LEG3ND · Compliance")}
+        title={t("console.legend.compliance.title", undefined, "Recert Matrix")}
+        subtitle={t(
+          "console.legend.compliance.subtitle",
+          undefined,
+          "Org credential health: every member × certification, colored by state.",
+        )}
+      />
 
       <div className="mb-4 flex flex-wrap gap-2">
         {ACCREDITATION_STATES.map((s) => {
@@ -127,7 +150,9 @@ export default async function ComplianceMatrixPage() {
         <table className="w-full border-collapse text-sm">
           <thead>
             <tr>
-              <th className="sticky left-0 z-10 bg-[var(--p-surface)] px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-[var(--p-text-3)]">Member</th>
+              <th className="sticky left-0 z-10 bg-[var(--p-surface)] px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-[var(--p-text-3)]">
+                {t("console.legend.compliance.member", undefined, "Member")}
+              </th>
               {certs.map((c) => (
                 <th key={c.id} className="px-2 py-2 text-center text-xs font-semibold text-[var(--p-text-2)]" title={c.name}>
                   <span className="block max-w-[7rem] truncate">{c.code || c.name}</span>
@@ -156,7 +181,20 @@ export default async function ComplianceMatrixPage() {
                   const eff = effectiveAccreditationState(h, c.recert_window_days, now);
                   const tone = ACCREDITATION_STATE_TONES[eff];
                   return (
-                    <td key={c.id} className="px-2 py-2 text-center" style={{ background: CELL_BG[tone] }} title={`${ACCREDITATION_STATE_LABELS[eff]}${h.expires_on ? ` · expires ${h.expires_on}` : ""}`}>
+                    <td
+                      key={c.id}
+                      className="px-2 py-2 text-center"
+                      style={{ background: CELL_BG[tone] }}
+                      title={
+                        h.expires_on
+                          ? t(
+                              "console.legend.compliance.cellExpires",
+                              { state: ACCREDITATION_STATE_LABELS[eff], date: h.expires_on },
+                              `${ACCREDITATION_STATE_LABELS[eff]} · expires ${h.expires_on}`,
+                            )
+                          : ACCREDITATION_STATE_LABELS[eff]
+                      }
+                    >
                       <span className="text-xs font-medium" style={{ color: CELL_FG[tone] }}>
                         {ACCREDITATION_STATE_LABELS[eff]}
                       </span>

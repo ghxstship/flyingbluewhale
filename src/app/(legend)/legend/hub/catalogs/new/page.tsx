@@ -12,13 +12,13 @@ export default async function NewCatalogItemPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Organization Hub"
+        eyebrow={t("console.legend.hub.title", undefined, "Organization Hub")}
         title={t("console.settings.catalog.new.title", undefined, "New Item")}
         breadcrumbs={[
-          { label: "LEG3ND" },
-          { label: "Organization Hub", href: "/legend/hub" },
-          { label: "Catalogs", href: "/legend/hub/catalogs" },
-          { label: "New" },
+          { label: t("console.legend.hub.breadcrumb", undefined, "LEG3ND") },
+          { label: t("console.legend.hub.title", undefined, "Organization Hub"), href: "/legend/hub" },
+          { label: t("console.settings.catalog.hubTitle", undefined, "Catalogs"), href: "/legend/hub/catalogs" },
+          { label: t("console.settings.catalog.new.breadcrumb", undefined, "New") },
         ]}
       />
       <div className="page-content max-w-2xl">

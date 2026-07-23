@@ -9,6 +9,7 @@ import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { setPositionActiveAction, updatePositionAction } from "../actions";
 import { PositionForm, type Department, type PositionRow } from "../PositionForm";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -18,10 +19,14 @@ export default async function PositionDetailPage({
   params: Promise<{ positionId: string }>;
 }) {
   const { positionId } = await params;
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Organization Hub" title="Position" />
+        <ModuleHeader
+          eyebrow={t("console.legend.hub.organization.eyebrow", undefined, "Organization Hub")}
+          title={t("console.legend.hub.organization.detail.title", undefined, "Position")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -46,25 +51,31 @@ export default async function PositionDetailPage({
   return (
     <>
       <ModuleHeader
-        eyebrow="Organization Hub"
+        eyebrow={t("console.legend.hub.organization.eyebrow", undefined, "Organization Hub")}
         title={row.title}
         subtitle={
           row.department_code
-            ? `${row.department_code} · ${deptLabel ?? "Department"}`
-            : "Unclassified position"
+            ? `${row.department_code} · ${deptLabel ?? t("console.legend.hub.organization.detail.department", undefined, "Department")}`
+            : t("console.legend.hub.organization.detail.unclassified", undefined, "Unclassified position")
         }
         breadcrumbs={[
-          { label: "LEG3ND" },
-          { label: "Organization Hub", href: "/legend/hub" },
-          { label: "Organization", href: "/legend/hub/organization" },
+          { label: t("console.legend.hub.breadcrumb", undefined, "LEG3ND") },
+          { label: t("console.legend.hub.title", undefined, "Organization Hub"), href: "/legend/hub" },
+          { label: t("console.legend.hub.organization.title", undefined, "Organization"), href: "/legend/hub/organization" },
           { label: row.title },
         ]}
         action={
           <div className="flex items-center gap-3">
-            {row.active ? <Badge variant="success">Active</Badge> : <Badge variant="muted">Archived</Badge>}
+            {row.active ? (
+              <Badge variant="success">{t("console.legend.hub.organization.active", undefined, "Active")}</Badge>
+            ) : (
+              <Badge variant="muted">{t("console.legend.hub.organization.archived", undefined, "Archived")}</Badge>
+            )}
             <form action={setPositionActiveAction.bind(null, row.id, !row.active)}>
               <Button type="submit" size="sm" variant="secondary">
-                {row.active ? "Archive" : "Restore"}
+                {row.active
+                  ? t("console.legend.hub.organization.detail.archive", undefined, "Archive")
+                  : t("console.legend.hub.organization.detail.restore", undefined, "Restore")}
               </Button>
             </form>
           </div>
@@ -75,7 +86,7 @@ export default async function PositionDetailPage({
           action={updatePositionAction.bind(null, row.id)}
           departments={departments}
           position={row}
-          submitLabel="Save Position"
+          submitLabel={t("console.legend.hub.organization.detail.submit", undefined, "Save Position")}
         />
       </div>
     </>

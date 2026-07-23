@@ -9,7 +9,7 @@ import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { pointsByUser } from "@/lib/db/legend-people";
 import { resolveTier } from "@/lib/legend_gamification";
-import { getRequestFormatters } from "@/lib/i18n/request";
+import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -19,10 +19,14 @@ export const dynamic = "force-dynamic";
  * (XP, courses completed, certs held, badges earned).
  */
 export default async function ProfilePage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="LEG3ND · Account" title="Profile" />
+        <ModuleHeader
+          eyebrow={t("console.legend.profile.eyebrow", undefined, "LEG3ND · Account")}
+          title={t("console.legend.profile.title", undefined, "Profile")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -62,14 +66,14 @@ export default async function ProfilePage() {
   ).length;
 
   const profile = me as { name: string | null; avatar_url: string | null; email: string | null } | null;
-  const displayName = profile?.name || profile?.email || "Learner";
+  const displayName = profile?.name || profile?.email || t("console.legend.profile.learner", undefined, "Learner");
 
   return (
     <>
       <ModuleHeader
-        eyebrow="LEG3ND · Account"
-        title="Profile"
-        subtitle="Your LEG3ND learner profile, tier, and lifetime stats."
+        eyebrow={t("console.legend.profile.eyebrow", undefined, "LEG3ND · Account")}
+        title={t("console.legend.profile.title", undefined, "Profile")}
+        subtitle={t("console.legend.profile.subtitle", undefined, "Your LEG3ND learner profile, tier, and lifetime stats.")}
       />
 
       <div className="surface mb-6 flex items-center gap-4 p-4">
@@ -81,14 +85,14 @@ export default async function ProfilePage() {
       </div>
 
       <div className="metric-grid mb-6">
-        <MetricCard label="Total XP" value={fmt.number(myPoints)} />
-        <MetricCard label="Courses Completed" value={completedCount} />
-        <MetricCard label="Certs Held" value={certsValidCount} />
-        <MetricCard label="Badges" value={badgesCount ?? 0} />
+        <MetricCard label={t("console.legend.profile.totalXp", undefined, "Total XP")} value={fmt.number(myPoints)} />
+        <MetricCard label={t("console.legend.profile.coursesCompleted", undefined, "Courses Completed")} value={completedCount} />
+        <MetricCard label={t("console.legend.profile.certsHeld", undefined, "Certs Held")} value={certsValidCount} />
+        <MetricCard label={t("console.legend.profile.badges", undefined, "Badges")} value={badgesCount ?? 0} />
       </div>
 
       <div>
-        <h2 className="eyebrow mb-2">Your tier</h2>
+        <h2 className="eyebrow mb-2">{t("console.legend.profile.yourTier", undefined, "Your tier")}</h2>
         <LoyaltyTier
           tier={tier.tier}
           tone={tier.tone}

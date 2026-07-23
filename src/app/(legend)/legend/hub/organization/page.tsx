@@ -10,6 +10,7 @@ import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { urlFor } from "@/lib/urls";
 import type { Department, PositionRow } from "./PositionForm";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -22,10 +23,14 @@ export const dynamic = "force-dynamic";
 type Position = PositionRow & { created_at: string };
 
 export default async function OrganizationPillarPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Organization Hub" title="Organization" />
+        <ModuleHeader
+          eyebrow={t("console.legend.hub.organization.eyebrow", undefined, "Organization Hub")}
+          title={t("console.legend.hub.organization.title", undefined, "Organization")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -53,32 +58,50 @@ export default async function OrganizationPillarPage() {
     if (rows.length > 0) groups.push({ key: dept.code, heading: `${dept.code} · ${dept.label}`, rows });
   }
   const unclassified = positions.filter((p) => !p.department_code || !labelByCode.has(p.department_code));
-  if (unclassified.length > 0) groups.push({ key: "unclassified", heading: "Unclassified", rows: unclassified });
+  if (unclassified.length > 0)
+    groups.push({
+      key: "unclassified",
+      heading: t("console.legend.hub.organization.unclassified", undefined, "Unclassified"),
+      rows: unclassified,
+    });
 
   const activeCount = positions.filter((p) => p.active).length;
+  const positionsLabel = (count: number) =>
+    count === 1
+      ? t("console.legend.hub.organization.onePosition", undefined, "1 position")
+      : t("console.legend.hub.organization.nPositions", { count }, `${count} positions`);
+  const totalLabel = positionsLabel(positions.length);
 
   return (
     <>
       <ModuleHeader
-        eyebrow="Organization Hub"
-        title="Organization"
+        eyebrow={t("console.legend.hub.organization.eyebrow", undefined, "Organization Hub")}
+        title={t("console.legend.hub.organization.title", undefined, "Organization")}
         subtitle={
           positions.length === 0
-            ? "The position library, classed by XPMS department."
-            : `${activeCount} active of ${positions.length === 1 ? "1 position" : `${positions.length} positions`}`
+            ? t(
+                "console.legend.hub.organization.subtitleEmpty",
+                undefined,
+                "The position library, classed by XPMS department.",
+              )
+            : t(
+                "console.legend.hub.organization.subtitleCounts",
+                { active: activeCount, total: totalLabel },
+                `${activeCount} active of ${totalLabel}`,
+              )
         }
         breadcrumbs={[
-          { label: "LEG3ND" },
-          { label: "Organization Hub", href: "/legend/hub" },
-          { label: "Organization" },
+          { label: t("console.legend.hub.breadcrumb", undefined, "LEG3ND") },
+          { label: t("console.legend.hub.title", undefined, "Organization Hub"), href: "/legend/hub" },
+          { label: t("console.legend.hub.organization.title", undefined, "Organization") },
         ]}
         action={
           <div className="flex items-center gap-2">
             <Button href={urlFor("mobile", "/roster/reporting")} size="sm" variant="secondary">
-              Reporting forest
+              {t("console.legend.hub.organization.reportingForest", undefined, "Reporting forest")}
             </Button>
             <Button href="/legend/hub/organization/new" size="sm">
-              + New Position
+              {t("console.legend.hub.organization.newPosition", undefined, "+ New Position")}
             </Button>
           </div>
         }
@@ -86,34 +109,44 @@ export default async function OrganizationPillarPage() {
       <div className="page-content space-y-8">
         {positions.length === 0 ? (
           <EmptyState
-            title="No positions yet"
-            description="Define the positions your organization hires and staffs against. New orgs start with one director per XPMS department class."
-            action={<Button href="/legend/hub/organization/new">+ New Position</Button>}
+            title={t("console.legend.hub.organization.emptyTitle", undefined, "No positions yet")}
+            description={t(
+              "console.legend.hub.organization.emptyDescription",
+              undefined,
+              "Define the positions your organization hires and staffs against. New orgs start with one director per XPMS department class.",
+            )}
+            action={
+              <Button href="/legend/hub/organization/new">
+                {t("console.legend.hub.organization.newPosition", undefined, "+ New Position")}
+              </Button>
+            }
           />
         ) : (
           groups.map((group) => (
             <section key={group.key} className="space-y-3">
               <div className="flex items-center justify-between">
                 <h2 className="text-sm font-semibold text-[var(--p-text-1)]">{group.heading}</h2>
-                <Badge variant="muted">
-                  {group.rows.length === 1 ? "1 position" : `${group.rows.length} positions`}
-                </Badge>
+                <Badge variant="muted">{positionsLabel(group.rows.length)}</Badge>
               </div>
               <DataView<Position>
                 tableId={`t:/legend/hub/organization:${group.key}`}
                 rows={group.rows}
                 rowHref={(p) => `/legend/hub/organization/${p.id}`}
-                emptyLabel="No positions in this department"
+                emptyLabel={t(
+                  "console.legend.hub.organization.emptyDepartment",
+                  undefined,
+                  "No positions in this department",
+                )}
                 columns={[
                   {
                     key: "title",
-                    header: "Title",
+                    header: t("console.legend.hub.organization.columns.title", undefined, "Title"),
                     render: (p) => p.title,
                     accessor: (p) => p.title,
                   },
                   {
                     key: "summary",
-                    header: "Summary",
+                    header: t("console.legend.hub.organization.columns.summary", undefined, "Summary"),
                     render: (p) =>
                       p.summary ? (
                         <span className="line-clamp-1 text-[var(--p-text-2)]">{p.summary}</span>
@@ -124,9 +157,13 @@ export default async function OrganizationPillarPage() {
                   },
                   {
                     key: "active",
-                    header: "Status",
+                    header: t("console.legend.hub.organization.columns.status", undefined, "Status"),
                     render: (p) =>
-                      p.active ? <Badge variant="success">Active</Badge> : <Badge variant="muted">Archived</Badge>,
+                      p.active ? (
+                        <Badge variant="success">{t("console.legend.hub.organization.active", undefined, "Active")}</Badge>
+                      ) : (
+                        <Badge variant="muted">{t("console.legend.hub.organization.archived", undefined, "Archived")}</Badge>
+                      ),
                     accessor: (p) => (p.active ? "active" : "archived"),
                   },
                 ]}

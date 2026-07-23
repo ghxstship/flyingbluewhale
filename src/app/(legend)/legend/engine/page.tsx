@@ -18,14 +18,20 @@ import {
   type ComplianceSeverity,
 } from "@/lib/xmce_engine";
 import type { ComplianceFindingRow, ComplianceRunRow } from "./types";
+import { getRequestT } from "@/lib/i18n/request";
+import { makeT } from "@/lib/i18n/t";
 
 export const dynamic = "force-dynamic";
 
 export default async function EngineHubPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="LEG3ND" title="Compliance Engine" />
+        <ModuleHeader
+          eyebrow={t("console.legend.engine.hubEyebrow", undefined, "LEG3ND")}
+          title={t("console.legend.engine.title", undefined, "Compliance Engine")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -66,40 +72,57 @@ export default async function EngineHubPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="LEG3ND · XMCE"
-        title="Compliance Engine"
-        subtitle="Author compliance rules, run checks, and triage findings."
+        eyebrow={t("console.legend.engine.eyebrow", undefined, "LEG3ND · XMCE")}
+        title={t("console.legend.engine.title", undefined, "Compliance Engine")}
+        subtitle={t("console.legend.engine.subtitle", undefined, "Author compliance rules, run checks, and triage findings.")}
         action={
           <div className="flex items-center gap-2">
             <Button href="/legend/engine/rules" variant="secondary">
-              Rules
+              {t("console.legend.engine.rules", undefined, "Rules")}
             </Button>
-            <Button href="/legend/engine/runs">Runs</Button>
+            <Button href="/legend/engine/runs">{t("console.legend.engine.runs", undefined, "Runs")}</Button>
           </div>
         }
       />
       <div className="page-content space-y-6">
         <div className="metric-grid">
-          <MetricCard label="Active rules" value={rulesActive ?? 0} icon={<ShieldCheck size={16} />} />
-          <MetricCard label="Total runs" value={runsTotal ?? 0} />
-          <MetricCard label="Outstanding findings" value={outstanding.length} />
-          <MetricCard label="High / critical open" value={critical} accent={critical > 0} />
+          <MetricCard
+            label={t("console.legend.engine.activeRules", undefined, "Active rules")}
+            value={rulesActive ?? 0}
+            icon={<ShieldCheck size={16} />}
+          />
+          <MetricCard label={t("console.legend.engine.totalRuns", undefined, "Total runs")} value={runsTotal ?? 0} />
+          <MetricCard
+            label={t("console.legend.engine.outstandingFindings", undefined, "Outstanding findings")}
+            value={outstanding.length}
+          />
+          <MetricCard
+            label={t("console.legend.engine.highCriticalOpen", undefined, "High / critical open")}
+            value={critical}
+            accent={critical > 0}
+          />
         </div>
 
-        <SeverityBreakdown findings={outstanding} />
+        <SeverityBreakdown findings={outstanding} t={t} />
 
         <section className="space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-[var(--p-text-1)]">Recent runs</h2>
+            <h2 className="text-sm font-semibold text-[var(--p-text-1)]">
+              {t("console.legend.engine.recentRuns", undefined, "Recent runs")}
+            </h2>
             <Button href="/legend/engine/runs" variant="ghost" size="sm">
-              View all
+              {t("console.legend.engine.viewAll", undefined, "View all")}
             </Button>
           </div>
           {recentRuns.length === 0 ? (
             <EmptyState
-              title="No runs yet"
-              description="Run the compliance engine against your org or a project to produce findings."
-              action={<Button href="/legend/engine/runs">Go to runs</Button>}
+              title={t("console.legend.engine.noRunsTitle", undefined, "No runs yet")}
+              description={t(
+                "console.legend.engine.noRunsDescription",
+                undefined,
+                "Run the compliance engine against your org or a project to produce findings.",
+              )}
+              action={<Button href="/legend/engine/runs">{t("console.legend.engine.goToRuns", undefined, "Go to runs")}</Button>}
             />
           ) : (
             <div className="surface divide-y divide-[var(--p-border)]">
@@ -126,12 +149,20 @@ export default async function EngineHubPage() {
   );
 }
 
-function SeverityBreakdown({ findings }: { findings: Array<{ severity: ComplianceSeverity }> }) {
+function SeverityBreakdown({
+  findings,
+  t,
+}: {
+  findings: Array<{ severity: ComplianceSeverity }>;
+  t: ReturnType<typeof makeT>;
+}) {
   const order: ComplianceSeverity[] = ["critical", "high", "medium", "low", "info"];
   const counts = order.map((sev) => ({ sev, n: findings.filter((f) => f.severity === sev).length }));
   return (
     <section className="surface p-4">
-      <h2 className="mb-3 text-sm font-semibold text-[var(--p-text-1)]">Outstanding by severity</h2>
+      <h2 className="mb-3 text-sm font-semibold text-[var(--p-text-1)]">
+        {t("console.legend.engine.outstandingBySeverity", undefined, "Outstanding by severity")}
+      </h2>
       <div className="flex flex-wrap gap-2">
         {counts.map(({ sev, n }) => (
           <span
@@ -140,7 +171,9 @@ function SeverityBreakdown({ findings }: { findings: Array<{ severity: Complianc
           >
             <StatusBadge status={sev} />
             <span className="tabular-nums font-medium text-[var(--p-text-1)]">{n}</span>
-            <span className="sr-only">{SEVERITY_LABELS[sev]} findings</span>
+            <span className="sr-only">
+              {t("console.legend.engine.severityFindings", { severity: SEVERITY_LABELS[sev] }, `${SEVERITY_LABELS[sev]} findings`)}
+            </span>
           </span>
         ))}
       </div>

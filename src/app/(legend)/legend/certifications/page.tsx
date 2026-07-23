@@ -16,6 +16,7 @@ import {
   type CertificationHolder,
 } from "@/lib/legend_compliance";
 import { RecertButton } from "./RecertButton";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -26,10 +27,14 @@ export const dynamic = "force-dynamic";
  * learning arc.
  */
 export default async function CertificationsPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="LEG3ND · Learning" title="Certifications" />
+        <ModuleHeader
+          eyebrow={t("console.legend.certifications.eyebrow", undefined, "LEG3ND · Learning")}
+          title={t("console.legend.certifications.title", undefined, "Certifications")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -57,11 +62,19 @@ export default async function CertificationsPage() {
 
   return (
     <>
-      <ModuleHeader eyebrow="LEG3ND · Learning" title="Certifications" subtitle="Your credentials, recert windows, and expiry." />
+      <ModuleHeader
+        eyebrow={t("console.legend.certifications.eyebrow", undefined, "LEG3ND · Learning")}
+        title={t("console.legend.certifications.title", undefined, "Certifications")}
+        subtitle={t("console.legend.certifications.subtitle", undefined, "Your credentials, recert windows, and expiry.")}
+      />
       {holders.length === 0 ? (
         <EmptyState
-          title="No certifications yet"
-          description="Pass a course assessment that grants a certification to start your wallet."
+          title={t("console.legend.certifications.emptyTitle", undefined, "No certifications yet")}
+          description={t(
+            "console.legend.certifications.emptyDescription",
+            undefined,
+            "Pass a course assessment that grants a certification to start your wallet.",
+          )}
         />
       ) : (
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -73,18 +86,22 @@ export default async function CertificationsPage() {
             return (
               <div key={h.id} className="surface flex flex-col gap-2 p-4">
                 <div className="flex items-start justify-between gap-2">
-                  <h3 className="text-sm font-semibold text-[var(--p-text-1)]">{cert?.name ?? "Certification"}</h3>
+                  <h3 className="text-sm font-semibold text-[var(--p-text-1)]">
+                    {cert?.name ?? t("console.legend.certifications.certification", undefined, "Certification")}
+                  </h3>
                   <Badge variant={tone}>{ACCREDITATION_STATE_LABELS[eff]}</Badge>
                 </div>
                 {cert?.code && <p className="font-mono text-xs text-[var(--p-text-3)]">{cert.code}</p>}
                 <dl className="grid grid-cols-2 gap-1 text-xs text-[var(--p-text-2)]">
-                  <dt>Issued</dt>
+                  <dt>{t("console.legend.certifications.issued", undefined, "Issued")}</dt>
                   <dd className="text-right text-[var(--p-text-1)]">{h.issued_at.slice(0, 10)}</dd>
-                  <dt>Expires</dt>
-                  <dd className="text-right text-[var(--p-text-1)]">{h.expires_on ?? "Never"}</dd>
+                  <dt>{t("console.legend.certifications.expires", undefined, "Expires")}</dt>
+                  <dd className="text-right text-[var(--p-text-1)]">
+                    {h.expires_on ?? t("console.legend.certifications.never", undefined, "Never")}
+                  </dd>
                   {h.next_recert_due && (
                     <>
-                      <dt>Recert due</dt>
+                      <dt>{t("console.legend.certifications.recertDue", undefined, "Recert due")}</dt>
                       <dd className="text-right text-[var(--p-text-1)]">{h.next_recert_due}</dd>
                     </>
                   )}
@@ -94,15 +111,20 @@ export default async function CertificationsPage() {
                     href={`/legend/certifications/${h.id}`}
                     className="text-xs font-semibold text-[var(--p-accent-text)] hover:underline"
                   >
-                    View certificate
+                    {t("console.legend.certifications.viewCertificate", undefined, "View certificate")}
                   </Link>
                   <Link
                     href={`/legend/certifications/${h.id}/verify`}
                     className="text-xs font-semibold text-[var(--p-text-2)] hover:text-[var(--p-text-1)]"
                   >
-                    Verification record
+                    {t("console.legend.certifications.verificationRecord", undefined, "Verification record")}
                   </Link>
-                  {recertable && <RecertButton holderId={h.id} label="Request recert" />}
+                  {recertable && (
+                    <RecertButton
+                      holderId={h.id}
+                      label={t("console.legend.certifications.requestRecert", undefined, "Request recert")}
+                    />
+                  )}
                 </div>
               </div>
             );

@@ -2,7 +2,7 @@
 
 import { Avatar } from "@/components/ui/Avatar";
 import { DataView, type DataViewColumn } from "@/components/views/DataView";
-import { useFormatters } from "@/lib/i18n/LocaleProvider";
+import { useFormatters, useT } from "@/lib/i18n/LocaleProvider";
 
 export type DirectoryMember = {
   id: string;
@@ -19,10 +19,11 @@ export type DirectoryMember = {
  */
 export function MembersDirectory({ members }: { members: DirectoryMember[] }) {
   const fmt = useFormatters();
+  const t = useT();
   const columns: DataViewColumn<DirectoryMember>[] = [
     {
       key: "member",
-      header: "Member",
+      header: t("console.legend.community.directory.member", undefined, "Member"),
       render: (m) => (
         <span className="flex items-center gap-2">
           <Avatar size="sm" name={m.name} src={m.avatar_url ?? undefined} />
@@ -33,14 +34,14 @@ export function MembersDirectory({ members }: { members: DirectoryMember[] }) {
     },
     {
       key: "role",
-      header: "Role",
+      header: t("console.legend.community.directory.role", undefined, "Role"),
       render: (m) => <span className="text-[var(--p-text-2)] capitalize">{m.role ?? "—"}</span>,
       accessor: (m) => m.role,
       filterable: true,
     },
     {
       key: "points",
-      header: "Points",
+      header: t("console.legend.community.directory.points", undefined, "Points"),
       numeric: true,
       render: (m) => <span className="font-medium">{fmt.number(m.points)}</span>,
       accessor: (m) => m.points,
@@ -54,7 +55,7 @@ export function MembersDirectory({ members }: { members: DirectoryMember[] }) {
       columns={columns}
       views={["table", "gallery"]}
       defaultView="gallery"
-      emptyLabel="No members yet"
+      emptyLabel={t("console.legend.community.directory.empty", undefined, "No members yet")}
       gallery={{
         columns: 3,
         renderCard: (m) => (
@@ -62,7 +63,9 @@ export function MembersDirectory({ members }: { members: DirectoryMember[] }) {
             <Avatar size="xl" name={m.name} src={m.avatar_url ?? undefined} />
             <div className="text-sm font-semibold text-[var(--p-text-1)]">{m.name}</div>
             {m.role && <div className="text-xs capitalize text-[var(--p-text-2)]">{m.role}</div>}
-            <div className="text-xs font-medium text-[var(--p-accent)]">{fmt.number(m.points)} pts</div>
+            <div className="text-xs font-medium text-[var(--p-accent)]">
+              {t("console.legend.community.directory.pts", { count: fmt.number(m.points) }, `${fmt.number(m.points)} pts`)}
+            </div>
           </div>
         ),
       }}

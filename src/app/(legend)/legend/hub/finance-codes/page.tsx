@@ -9,6 +9,7 @@ import { hasSupabase } from "@/lib/env";
 import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { urlFor } from "@/lib/urls";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -29,10 +30,14 @@ type CostCenter = {
 };
 
 export default async function FinanceCodesPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Organization Hub" title="Finance Codes" />
+        <ModuleHeader
+          eyebrow={t("console.legend.hub.financeCodes.eyebrow", undefined, "Organization Hub")}
+          title={t("console.legend.hub.financeCodes.title", undefined, "Finance Codes")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -51,21 +56,25 @@ export default async function FinanceCodesPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Organization Hub"
-        title="Finance Codes"
-        subtitle="Cost centers on the XPMS department canon. Every budget line and requisition codes against these."
+        eyebrow={t("console.legend.hub.financeCodes.eyebrow", undefined, "Organization Hub")}
+        title={t("console.legend.hub.financeCodes.title", undefined, "Finance Codes")}
+        subtitle={t(
+          "console.legend.hub.financeCodes.subtitle",
+          undefined,
+          "Cost centers on the XPMS department canon. Every budget line and requisition codes against these.",
+        )}
         breadcrumbs={[
-          { label: "LEG3ND" },
-          { label: "Organization Hub", href: "/legend/hub" },
-          { label: "Finance Codes" },
+          { label: t("console.legend.hub.breadcrumb", undefined, "LEG3ND") },
+          { label: t("console.legend.hub.title", undefined, "Organization Hub"), href: "/legend/hub" },
+          { label: t("console.legend.hub.financeCodes.title", undefined, "Finance Codes") },
         ]}
         action={
           <div className="flex items-center gap-2">
             <Button href={urlFor("platform", "/finance")} size="sm" variant="secondary">
-              Finance in console
+              {t("console.legend.hub.financeCodes.financeInConsole", undefined, "Finance in console")}
             </Button>
             <Button href="/legend/hub/finance-codes/new" size="sm">
-              + New Cost Center
+              {t("console.legend.hub.financeCodes.newCostCenter", undefined, "+ New Cost Center")}
             </Button>
           </div>
         }
@@ -73,33 +82,45 @@ export default async function FinanceCodesPage() {
       <div className="page-content">
         {rows.length === 0 ? (
           <EmptyState
-            title="No cost centers yet"
-            description="New organizations start with the 10 XPMS department classes, 0000 Executive through 9000 Technology."
-            action={<Button href="/legend/hub/finance-codes/new">+ New Cost Center</Button>}
+            title={t("console.legend.hub.financeCodes.emptyTitle", undefined, "No cost centers yet")}
+            description={t(
+              "console.legend.hub.financeCodes.emptyDescription",
+              undefined,
+              "New organizations start with the 10 XPMS department classes, 0000 Executive through 9000 Technology.",
+            )}
+            action={
+              <Button href="/legend/hub/finance-codes/new">
+                {t("console.legend.hub.financeCodes.newCostCenter", undefined, "+ New Cost Center")}
+              </Button>
+            }
           />
         ) : (
           <DataView<CostCenter>
             rows={rows}
             rowHref={(c) => `/legend/hub/finance-codes/${c.id}`}
-            emptyLabel="No cost centers"
+            emptyLabel={t("console.legend.hub.financeCodes.emptyLabel", undefined, "No cost centers")}
             columns={[
               {
                 key: "code",
-                header: "Code",
+                header: t("console.legend.hub.financeCodes.columns.code", undefined, "Code"),
                 render: (c) => <span className="ps-id">{c.code}</span>,
                 accessor: (c) => c.code,
               },
               {
                 key: "name",
-                header: "Name",
+                header: t("console.legend.hub.financeCodes.columns.name", undefined, "Name"),
                 render: (c) => c.name,
                 accessor: (c) => c.name,
               },
               {
                 key: "active",
-                header: "Status",
+                header: t("console.legend.hub.financeCodes.columns.status", undefined, "Status"),
                 render: (c) =>
-                  c.active ? <Badge variant="success">Active</Badge> : <Badge variant="muted">Inactive</Badge>,
+                  c.active ? (
+                    <Badge variant="success">{t("console.legend.hub.financeCodes.active", undefined, "Active")}</Badge>
+                  ) : (
+                    <Badge variant="muted">{t("console.legend.hub.financeCodes.inactive", undefined, "Inactive")}</Badge>
+                  ),
                 accessor: (c) => (c.active ? "active" : "inactive"),
               },
             ]}

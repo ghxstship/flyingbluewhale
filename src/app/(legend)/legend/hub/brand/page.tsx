@@ -5,6 +5,7 @@ import { hasSupabase } from "@/lib/env";
 import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import { safeBranding } from "@/lib/branding";
 import { BrandingForm } from "./BrandingForm";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
@@ -14,10 +15,14 @@ export const dynamic = "force-dynamic";
  * The form + WCAG contrast guard moved verbatim from the console.
  */
 export default async function BrandStudioPage() {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="Organization Hub" title="Brand Studio" />
+        <ModuleHeader
+          eyebrow={t("console.legend.hub.brand.eyebrow", undefined, "Organization Hub")}
+          title={t("console.legend.hub.brand.title", undefined, "Brand Studio")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -34,13 +39,17 @@ export default async function BrandStudioPage() {
   return (
     <>
       <ModuleHeader
-        eyebrow="Organization Hub"
-        title="Brand Studio"
-        subtitle="Your identity as every shell, proposal, and PDF renders it. Saved changes apply everywhere."
+        eyebrow={t("console.legend.hub.brand.eyebrow", undefined, "Organization Hub")}
+        title={t("console.legend.hub.brand.title", undefined, "Brand Studio")}
+        subtitle={t(
+          "console.legend.hub.brand.subtitle",
+          undefined,
+          "Your identity as every shell, proposal, and PDF renders it. Saved changes apply everywhere.",
+        )}
         breadcrumbs={[
-          { label: "LEG3ND" },
-          { label: "Organization Hub", href: "/legend/hub" },
-          { label: "Brand Studio" },
+          { label: t("console.legend.hub.breadcrumb", undefined, "LEG3ND") },
+          { label: t("console.legend.hub.title", undefined, "Organization Hub"), href: "/legend/hub" },
+          { label: t("console.legend.hub.brand.title", undefined, "Brand Studio") },
         ]}
       />
       <div className="page-content max-w-4xl space-y-4">

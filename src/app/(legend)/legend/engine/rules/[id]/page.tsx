@@ -13,14 +13,19 @@ import type { LooseSupabase } from "@/lib/supabase/loose";
 import { isFindingOutstanding } from "@/lib/xmce_engine";
 import type { ComplianceFindingRow, ComplianceRuleRow } from "../../types";
 import { DeleteRuleButton } from "./DeleteRuleButton";
+import { getRequestT } from "@/lib/i18n/request";
 
 export const dynamic = "force-dynamic";
 
 export default async function RuleDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { t } = await getRequestT();
   if (!hasSupabase) {
     return (
       <>
-        <ModuleHeader eyebrow="LEG3ND · XMCE" title="Compliance Rule" />
+        <ModuleHeader
+          eyebrow={t("console.legend.engine.eyebrow", undefined, "LEG3ND · XMCE")}
+          title={t("console.legend.engine.rule.title", undefined, "Compliance Rule")}
+        />
         <ConfigureSupabase />
       </>
     );
@@ -63,34 +68,43 @@ export default async function RuleDetailPage({ params }: { params: Promise<{ id:
             <StatusBadge status={rule.severity} />
             <StatusBadge status={rule.rule_state} />
             <Button href={`/legend/engine/rules/${rule.id}/edit`} variant="secondary">
-              Edit
+              {t("console.legend.engine.rule.edit", undefined, "Edit")}
             </Button>
           </div>
         }
       />
       <div className="page-content max-w-3xl space-y-6">
         <section className="surface space-y-3 p-5">
-          <Field label="Description">{rule.description || "—"}</Field>
+          <Field label={t("console.legend.engine.rule.description", undefined, "Description")}>
+            {rule.description || "—"}
+          </Field>
           <div className="grid gap-4 sm:grid-cols-3">
-            <Field label="Severity">
+            <Field label={t("console.legend.engine.rule.severity", undefined, "Severity")}>
               <StatusBadge status={rule.severity} />
             </Field>
-            <Field label="Status">
+            <Field label={t("console.legend.engine.rule.status", undefined, "Status")}>
               <StatusBadge status={rule.rule_state} />
             </Field>
-            <Field label="Added">{timeAgo(rule.created_at)}</Field>
+            <Field label={t("console.legend.engine.rule.added", undefined, "Added")}>{timeAgo(rule.created_at)}</Field>
           </div>
         </section>
 
         <section className="space-y-3">
           <h2 className="text-sm font-semibold text-[var(--p-text-1)]">
-            Findings {findings.length > 0 ? `(${outstanding} outstanding)` : ""}
+            {t("console.legend.engine.rule.findings", undefined, "Findings")}{" "}
+            {findings.length > 0
+              ? t("console.legend.engine.rule.outstandingCount", { count: outstanding }, `(${outstanding} outstanding)`)
+              : ""}
           </h2>
           {findings.length === 0 ? (
             <EmptyState
               size="compact"
-              title="No findings for this rule"
-              description="Findings appear here after a compliance run trips this rule."
+              title={t("console.legend.engine.rule.noFindingsTitle", undefined, "No findings for this rule")}
+              description={t(
+                "console.legend.engine.rule.noFindingsDescription",
+                undefined,
+                "Findings appear here after a compliance run trips this rule.",
+              )}
             />
           ) : (
             <div className="surface divide-y divide-[var(--p-border)]">
@@ -118,8 +132,12 @@ export default async function RuleDetailPage({ params }: { params: Promise<{ id:
 
         <section className="surface flex items-center justify-between gap-3 p-4">
           <div>
-            <div className="text-sm font-medium text-[var(--p-text-1)]">Delete rule</div>
-            <div className="text-xs text-[var(--p-text-2)]">Soft-deletes the rule. Past findings are retained.</div>
+            <div className="text-sm font-medium text-[var(--p-text-1)]">
+              {t("console.legend.engine.rule.deleteRule", undefined, "Delete rule")}
+            </div>
+            <div className="text-xs text-[var(--p-text-2)]">
+              {t("console.legend.engine.rule.deleteHint", undefined, "Soft-deletes the rule. Past findings are retained.")}
+            </div>
           </div>
           <DeleteRuleButton ruleId={rule.id} />
         </section>

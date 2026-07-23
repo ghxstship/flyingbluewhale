@@ -22,7 +22,8 @@ export type QuickActionId =
   | "invite"
   | "inspect"
   | "timeoff"
-  | "po";
+  | "po"
+  | "capture";
 
 export type QuickActionTint = "danger" | "accent" | "info" | "warning" | "success";
 
@@ -52,14 +53,20 @@ export const QUICK_ACTIONS: Record<QuickActionId, QuickActionDef> = {
   inspect: { id: "inspect", labelKey: "m.home.qa.inspect", labelDefault: "Inspect", icon: "ClipboardCheck", tint: "info", href: "/m/inspections" },
   timeoff: { id: "timeoff", labelKey: "m.home.qa.timeoff", labelDefault: "Time Off", icon: "CalendarOff", tint: "success", href: "/m/time-off/new" },
   po: { id: "po", labelKey: "m.home.qa.po", labelDefault: "PO Request", icon: "FileStack", tint: "info", href: "/m/advances/new" },
+  // T1-5 camera-first capture — shoot first, the venue geofence files the
+  // photo. In the AVAILABLE pool (not the kit-fixed default grid).
+  capture: { id: "capture", labelKey: "m.home.qa.capture", labelDefault: "Capture", icon: "Camera", tint: "accent", href: "/m/capture" },
 };
 
 export const QUICK_ACTION_IDS = Object.keys(QUICK_ACTIONS) as QuickActionId[];
 
-/** Default set + order — the current Home grid, preserved exactly. */
+/** Default set + order — the kit Home grid, plus Capture seated directly
+ *  beside Scan (T1-5 ratified expansion: capture is a first-class quick
+ *  action with placement parity to scan). */
 export const DEFAULT_QUICK_ACTIONS: QuickActionId[] = [
   "report",
   "scan",
+  "capture",
   "clock",
   "advance",
   "approve",

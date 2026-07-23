@@ -65,6 +65,7 @@ export type HomeLabels = {
   qaInspect: string;
   qaTimeoff: string;
   qaPo: string;
+  qaCapture: string;
   qaCustomize: string;
   qaCustomizeHint: string;
   qaAvailable: string;
@@ -193,6 +194,7 @@ export function HomeShell({
     inspect: L.qaInspect,
     timeoff: L.qaTimeoff,
     po: L.qaPo,
+    capture: L.qaCapture,
   };
   const persistQa = (next: QuickActionId[]) => {
     setQaIds(next);

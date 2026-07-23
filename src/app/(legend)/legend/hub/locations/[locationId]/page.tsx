@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { DeleteForm } from "@/components/DeleteForm";
 import { getRequestT } from "@/lib/i18n/request";
 import { deleteLocation } from "./edit/actions";
+import { GeofenceSection } from "./GeofenceSection";
 
 /**
  * Location detail (canonical home, decision 6 rider). Moved from
@@ -73,6 +74,17 @@ export default async function LocationDetailPage({ params }: { params: Promise<{
           </div>
         ) : undefined
       }
-    />
+    >
+      {/* T1-5 camera-first capture: the venue's auto-filing circles live on
+          the space registry's canonical detail (this page). */}
+      {row && (
+        <GeofenceSection
+          locationId={locationId}
+          orgId={session.orgId}
+          locationLat={row.lat != null ? Number(row.lat) : null}
+          locationLng={row.lng != null ? Number(row.lng) : null}
+        />
+      )}
+    </DetailShell>
   );
 }

@@ -216,6 +216,7 @@ export default async function MobileHome() {
     qaInspect: t("m.home.qa.inspect", undefined, "Inspect"),
     qaTimeoff: t("m.home.qa.timeoff", undefined, "Time Off"),
     qaPo: t("m.home.qa.po", undefined, "PO Request"),
+    qaCapture: t("m.home.qa.capture", undefined, "Capture"),
     qaCustomize: t("m.home.qa.customize", undefined, "Customize"),
     qaCustomizeHint: t(
       "m.home.qa.customizeHint",

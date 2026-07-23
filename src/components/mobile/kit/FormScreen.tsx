@@ -393,7 +393,17 @@ function FileField({
   // form's values on every mutation. Local state is the source of truth: a
   // File cannot carry custom properties through FormData, so the geotag has
   // nowhere else to live.
-  const [fixes, setFixes] = useState<(PhotoFix | null)[]>([]);
+  //
+  // Seeded to match any INITIAL files (T1-5 capture handoff passes a photo
+  // via FormScreen's `initial`): a null fix per pre-attached file keeps the
+  // index alignment that everything downstream depends on. The wrapper may
+  // also pass the real fix as an initial `{id}__geo` sibling — it survives
+  // untouched unless this field commits, and a commit then degrades the
+  // pre-attached file's fix to null (safe) rather than shifting coordinates
+  // onto the wrong photo (never).
+  const [fixes, setFixes] = useState<(PhotoFix | null)[]>(() =>
+    Array.isArray(value) ? (value as File[]).map(() => null) : [],
+  );
   const inputId = `ff-${f.id}`;
 
   // Object URLs must be revoked or the page leaks a few MB per capture.

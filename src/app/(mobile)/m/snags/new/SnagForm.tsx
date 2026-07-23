@@ -1,11 +1,12 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { FolderOpen } from "lucide-react";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { KIcon } from "@/components/mobile/kit";
+import { appendTranscriptToTextarea, DictationButton, KIcon } from "@/components/mobile/kit";
+import { ATTACH_PARAM, takeStagedCapture, type StagedCapture } from "@/lib/mobile/capture-handoff";
 import { raiseSnag, type State } from "../actions";
 
 export type ProjectOpt = { id: string; name: string };
@@ -26,10 +27,26 @@ export function SnagForm({ projects }: { projects: ProjectOpt[] }) {
   const [pending, startTransition] = useTransition();
   const [state, setState] = useState<State>(null);
   const [photoName, setPhotoName] = useState<string | null>(null);
+  // T1-5 capture handoff — `?photo=<ref>` pre-attaches the shot taken on the
+  // Capture screen. A native file input can't be pre-filled, so the staged
+  // File rides component state and is appended at submit when the input is
+  // still empty (picking a fresh photo always wins).
+  const [staged, setStaged] = useState<StagedCapture | null>(null);
+  useEffect(() => {
+    const ref = new URLSearchParams(window.location.search).get(ATTACH_PARAM);
+    if (!ref) return;
+    void takeStagedCapture(ref).then((s) => {
+      if (s) setStaged(s);
+    });
+  }, []);
 
   function onSubmit(fd: FormData) {
     if (pending) return;
     setState(null);
+    const picked = fd.get("photo");
+    if (staged && !(picked instanceof File && picked.size > 0)) {
+      fd.set("photo", staged.file);
+    }
     startTransition(async () => {
       const res = await raiseSnag(null, fd);
       if (res?.error) {
@@ -73,14 +90,16 @@ export function SnagForm({ projects }: { projects: ProjectOpt[] }) {
               name="photo"
               accept="image/*"
               capture="environment"
-              required
+              required={!staged}
               onChange={(e) => setPhotoName(e.target.files?.[0]?.name ?? null)}
               style={{ paddingTop: 11, paddingBottom: 11 }}
             />
             <div className="hint">
               {photoName
                 ? t("m.snags.new.photoPicked", { name: photoName }, `Attached: ${photoName}`)
-                : t("m.snags.new.photoHint", undefined, "Required. Point the camera at the defect.")}
+                : staged
+                  ? t("m.capture.attachedFromCapture", undefined, "Photo attached from Capture. Pick another to replace it.")
+                  : t("m.snags.new.photoHint", undefined, "Required. Point the camera at the defect.")}
             </div>
             {fieldError("photo") && (
               <div className="hint" style={{ color: "var(--p-danger)" }}>
@@ -156,6 +175,11 @@ export function SnagForm({ projects }: { projects: ProjectOpt[] }) {
               maxLength={4000}
               placeholder={t("m.snags.new.detailsPh", undefined, "Anything the fixer needs to know")}
             />
+            {/* T1-3 dictation — appends to whatever is typed. Renders nothing
+                unless server-side transcription is configured. */}
+            <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 6 }}>
+              <DictationButton onText={(text) => appendTranscriptToTextarea("snag-details", text)} />
+            </div>
           </div>
           {state?.error && (
             <div className="ps-alert ps-alert--danger" role="alert" style={{ marginBottom: 12 }}>

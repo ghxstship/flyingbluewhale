@@ -13754,6 +13754,83 @@ export type Database = {
         }
         Relationships: []
       }
+      field_photo_notes: {
+        Row: {
+          accuracy_m: number | null
+          captured_at: string
+          created_at: string
+          created_by: string
+          file_path: string
+          id: string
+          lat: number | null
+          lng: number | null
+          location_id: string | null
+          note: string | null
+          org_id: string
+          project_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          accuracy_m?: number | null
+          captured_at?: string
+          created_at?: string
+          created_by: string
+          file_path: string
+          id?: string
+          lat?: number | null
+          lng?: number | null
+          location_id?: string | null
+          note?: string | null
+          org_id: string
+          project_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          accuracy_m?: number | null
+          captured_at?: string
+          created_at?: string
+          created_by?: string
+          file_path?: string
+          id?: string
+          lat?: number | null
+          lng?: number | null
+          location_id?: string | null
+          note?: string | null
+          org_id?: string
+          project_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "field_photo_notes_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "field_photo_notes_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "field_photo_notes_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "field_photo_notes_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       field_templates: {
         Row: {
           category: string
@@ -17876,6 +17953,131 @@ export type Database = {
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      kiosk_devices: {
+        Row: {
+          active: boolean
+          created_at: string
+          device_token_hash: string
+          failed_pin_attempts: number
+          id: string
+          label: string
+          last_seen_at: string | null
+          org_id: string
+          pin_locked_until: string | null
+          project_id: string | null
+          registered_by: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          device_token_hash: string
+          failed_pin_attempts?: number
+          id?: string
+          label: string
+          last_seen_at?: string | null
+          org_id: string
+          pin_locked_until?: string | null
+          project_id?: string | null
+          registered_by?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          device_token_hash?: string
+          failed_pin_attempts?: number
+          id?: string
+          label?: string
+          last_seen_at?: string | null
+          org_id?: string
+          pin_locked_until?: string | null
+          project_id?: string | null
+          registered_by?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kiosk_devices_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "kiosk_devices_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "kiosk_devices_registered_by_fkey"
+            columns: ["registered_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      kiosk_worker_pins: {
+        Row: {
+          active: boolean
+          created_at: string
+          last_used_at: string | null
+          org_id: string
+          pin_hash: string
+          pin_lookup_digest: string
+          set_by: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          last_used_at?: string | null
+          org_id: string
+          pin_hash: string
+          pin_lookup_digest: string
+          set_by?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          last_used_at?: string | null
+          org_id?: string
+          pin_hash?: string
+          pin_lookup_digest?: string
+          set_by?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kiosk_worker_pins_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "kiosk_worker_pins_set_by_fkey"
+            columns: ["set_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "kiosk_worker_pins_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
@@ -22239,6 +22441,47 @@ export type Database = {
           },
         ]
       }
+      org_doc_template_settings: {
+        Row: {
+          created_at: string
+          default_brand: string | null
+          doc_type: string
+          enabled: boolean
+          id: string
+          notes: string | null
+          org_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          default_brand?: string | null
+          doc_type: string
+          enabled?: boolean
+          id?: string
+          notes?: string | null
+          org_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          default_brand?: string | null
+          doc_type?: string
+          enabled?: boolean
+          id?: string
+          notes?: string | null
+          org_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "org_doc_template_settings_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       org_domains: {
         Row: {
           created_at: string
@@ -24746,6 +24989,64 @@ export type Database = {
           },
         ]
       }
+      position_assignments: {
+        Row: {
+          assignment_state: Database["public"]["Enums"]["position_assignment_state"]
+          created_at: string
+          ends_on: string | null
+          id: string
+          org_id: string
+          party_id: string
+          position_id: string
+          starts_on: string | null
+          updated_at: string
+        }
+        Insert: {
+          assignment_state?: Database["public"]["Enums"]["position_assignment_state"]
+          created_at?: string
+          ends_on?: string | null
+          id?: string
+          org_id: string
+          party_id: string
+          position_id: string
+          starts_on?: string | null
+          updated_at?: string
+        }
+        Update: {
+          assignment_state?: Database["public"]["Enums"]["position_assignment_state"]
+          created_at?: string
+          ends_on?: string | null
+          id?: string
+          org_id?: string
+          party_id?: string
+          position_id?: string
+          starts_on?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "position_assignments_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "position_assignments_party_id_fkey"
+            columns: ["party_id"]
+            isOneToOne: false
+            referencedRelation: "parties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "position_assignments_position_id_fkey"
+            columns: ["position_id"]
+            isOneToOne: false
+            referencedRelation: "positions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       positions: {
         Row: {
           active: boolean
@@ -24753,6 +25054,8 @@ export type Database = {
           department_code: string | null
           id: string
           org_id: string
+          reports_to_position_id: string | null
+          seat_count: number
           summary: string | null
           title: string
           updated_at: string
@@ -24763,6 +25066,8 @@ export type Database = {
           department_code?: string | null
           id?: string
           org_id: string
+          reports_to_position_id?: string | null
+          seat_count?: number
           summary?: string | null
           title: string
           updated_at?: string
@@ -24773,6 +25078,8 @@ export type Database = {
           department_code?: string | null
           id?: string
           org_id?: string
+          reports_to_position_id?: string | null
+          seat_count?: number
           summary?: string | null
           title?: string
           updated_at?: string
@@ -24790,6 +25097,13 @@ export type Database = {
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "positions_reports_to_position_id_fkey"
+            columns: ["reports_to_position_id"]
+            isOneToOne: false
+            referencedRelation: "positions"
             referencedColumns: ["id"]
           },
         ]
@@ -37728,6 +38042,7 @@ export type Database = {
           geofence_out_state: string | null
           geofence_state: string | null
           id: string
+          kiosk_device_id: string | null
           org_id: string
           project_id: string | null
           pulse_note: string | null
@@ -37767,6 +38082,7 @@ export type Database = {
           geofence_out_state?: string | null
           geofence_state?: string | null
           id?: string
+          kiosk_device_id?: string | null
           org_id: string
           project_id?: string | null
           pulse_note?: string | null
@@ -37806,6 +38122,7 @@ export type Database = {
           geofence_out_state?: string | null
           geofence_state?: string | null
           id?: string
+          kiosk_device_id?: string | null
           org_id?: string
           project_id?: string | null
           pulse_note?: string | null
@@ -37856,6 +38173,13 @@ export type Database = {
             columns: ["cost_code_id"]
             isOneToOne: false
             referencedRelation: "cost_codes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "time_entries_kiosk_device_id_fkey"
+            columns: ["kiosk_device_id"]
+            isOneToOne: false
+            referencedRelation: "kiosk_devices"
             referencedColumns: ["id"]
           },
           {
@@ -41024,6 +41348,70 @@ export type Database = {
             columns: ["venue_id"]
             isOneToOne: false
             referencedRelation: "venues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      venue_geofences: {
+        Row: {
+          active: boolean
+          center_lat: number
+          center_lng: number
+          created_at: string
+          id: string
+          label: string | null
+          location_id: string
+          org_id: string
+          project_id: string | null
+          radius_m: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          center_lat: number
+          center_lng: number
+          created_at?: string
+          id?: string
+          label?: string | null
+          location_id: string
+          org_id: string
+          project_id?: string | null
+          radius_m?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          center_lat?: number
+          center_lng?: number
+          created_at?: string
+          id?: string
+          label?: string | null
+          location_id?: string
+          org_id?: string
+          project_id?: string | null
+          radius_m?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "venue_geofences_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "venue_geofences_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "orgs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "venue_geofences_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
             referencedColumns: ["id"]
           },
         ]
@@ -44495,6 +44883,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "time_entries_kiosk_device_id_fkey"
+            columns: ["kiosk_device_id"]
+            isOneToOne: false
+            referencedRelation: "kiosk_devices"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "time_entries_org_id_fkey"
             columns: ["org_id"]
             isOneToOne: false
@@ -47947,6 +48342,7 @@ export type Database = {
       placement_state: "planned" | "installed" | "removed"
       platform_role: "owner" | "admin" | "manager" | "member"
       po_status: "draft" | "sent" | "acknowledged" | "fulfilled" | "cancelled"
+      position_assignment_state: "active" | "ended"
       production_phase:
         | "DISCOVERY"
         | "DESIGN"
@@ -49226,6 +49622,7 @@ export const Constants = {
       placement_state: ["planned", "installed", "removed"],
       platform_role: ["owner", "admin", "manager", "member"],
       po_status: ["draft", "sent", "acknowledged", "fulfilled", "cancelled"],
+      position_assignment_state: ["active", "ended"],
       production_phase: [
         "DISCOVERY",
         "DESIGN",

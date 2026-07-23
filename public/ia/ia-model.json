@@ -2700,6 +2700,12 @@
               ]
             },
             {
+              "path": "/m/photos",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/m/punch",
               "arch": [
                 "FIELD"

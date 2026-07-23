@@ -1774,6 +1774,12 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Time", href: "/m/time" },
   { label: "Handover", href: "/m/handover" },
   { label: "Daily Log", href: "/m/daily-log" },
+  // T1-5 camera-first capture: shoot first, the venue geofence files the
+  // photo into the right project's daily log (picker only when ambiguous).
+  { label: "Capture", href: "/m/capture" },
+  // T1-5 expansion: the standalone geotagged photo-note artifacts filed by
+  // Capture's "Photo note" destination. Drawer-navigated, no tab.
+  { label: "Photo Notes", href: "/m/photos" },
   // Kit 29 (ratified 2026-07-17): /m/punch IS the inspection punch list —
   // the field view of the /studio/punch `punch_items` store. The former
   // occupant (a duplicate punch-in/out time surface) yielded; punching in
@@ -1863,6 +1869,10 @@ export const moreNavGroups: MoreNavGroup[] = [
     label: "My Work",
     links: [
       { href: "/m/tasks", label: "My Tasks", icon: "ListChecks", sub: "Work Assigned To You" },
+      // T1-5: camera-first capture — the shutter is the intake; the venue
+      // geofence picks the project (daily-log photo pipeline underneath).
+      { href: "/m/capture", label: "Capture", icon: "Camera", sub: "Shoot A Site Photo, We File It" },
+      { href: "/m/photos", label: "Photo Notes", icon: "StickyNote", sub: "Standalone Geotagged Site Photos" },
       { href: "/m/schedule", label: "My Calendar", icon: "CalendarDays", sub: "Your Shifts & Events" },
       { href: "/m/time", label: "My Time", icon: "Timer", sub: "Clock In/Out & My Timesheets" },
       { href: "/m/assets", label: "My Gear", icon: "Package", sub: "Gear Assigned To You" },

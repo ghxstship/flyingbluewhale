@@ -38,7 +38,7 @@ export function PublicSign({ token, labels, disabled = false }: PublicSignProps)
             name="signed_name"
             required
             disabled={disabled}
-            className="w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm disabled:opacity-60"
+            className="ps-input w-full"
           />
         </label>
         <label className="text-sm">
@@ -46,7 +46,7 @@ export function PublicSign({ token, labels, disabled = false }: PublicSignProps)
           <input
             name="signed_title"
             disabled={disabled}
-            className="w-full rounded-md border border-[var(--p-border)] bg-[var(--p-bg)] px-3 py-2 text-sm disabled:opacity-60"
+            className="ps-input w-full"
           />
         </label>
       </div>

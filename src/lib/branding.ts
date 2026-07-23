@@ -96,11 +96,17 @@ export type BrandContext = {
   joint: BrandJoint;
 };
 
-/** Platform fallback — accent sourced from the canonical PRODUCT_ACCENTS owner. */
+/**
+ * Platform fallback — the white-label cold-start seed. Accent sourced from the
+ * canonical PRODUCT_ACCENTS owner; `accentFg`/`secondary` mirror tokens.json
+ * (accent.atlvs.light: accent-cta-contrast + accent-cta — the deepened AA
+ * companion used for deck gradients / balance cards). Re-seeded 2026-07-22
+ * (owner ruling 4): the stale pre-v8.0 copper #6D4A2A is retired.
+ */
 export const BRAND_FALLBACK = {
   accent: PRODUCT_ACCENTS.atlvs,
   accentFg: "#FFFFFF",
-  secondary: "#6D4A2A",
+  secondary: "#AD220A",
 } as const;
 
 type Row = { name?: string | null; name_override?: string | null; branding?: unknown; logo_url?: string | null };

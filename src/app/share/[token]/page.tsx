@@ -6,7 +6,7 @@ import { verifyShareToken } from "@/lib/share/tokens";
 import { consumeShareLink } from "@/lib/share/links";
 import { urlFor } from "@/lib/urls";
 import { BRAND } from "@/lib/brand";
-import { resolveBrandContext, brandContextToCssVars } from "@/lib/branding";
+import { BRAND_FALLBACK, resolveBrandContext, brandContextToCssVars } from "@/lib/branding";
 import { ProposalBlockRenderer } from "@/components/proposals/ProposalBlockRenderer";
 import { GuideView } from "@/components/guides/GuideView";
 import type { ProposalBlock } from "@/lib/proposals/types";
@@ -120,8 +120,8 @@ async function SharedProposal({ resourceId, orgId }: { resourceId: string; orgId
 
   const blocks = (proposal.blocks ?? []) as ProposalBlock[];
   const theme = (proposal.theme as { primary: string; secondary: string }) ?? {
-    primary: "#D4782A",
-    secondary: "#6D4A2A",
+    primary: BRAND_FALLBACK.accent,
+    secondary: BRAND_FALLBACK.secondary,
   };
 
   const [{ data: org }, { data: client }, { data: project }] = await Promise.all([

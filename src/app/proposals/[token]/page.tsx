@@ -9,7 +9,7 @@ import type { ProposalBlock } from "@/lib/proposals/types";
 import type { Proposal } from "@/lib/supabase/types";
 import { resolveProposalShareLink } from "@/lib/proposals/share";
 import { BRAND } from "@/lib/brand";
-import { resolveBrandContext, brandContextToCssVars } from "@/lib/branding";
+import { BRAND_FALLBACK, resolveBrandContext, brandContextToCssVars } from "@/lib/branding";
 
 export const dynamic = "force-dynamic";
 
@@ -46,8 +46,8 @@ export default async function PublicProposalPage({ params }: { params: Promise<{
 
   const blocks = (proposal.blocks ?? []) as ProposalBlock[];
   const theme = (proposal.theme as { primary: string; secondary: string }) ?? {
-    primary: "#D4782A",
-    secondary: "#6D4A2A",
+    primary: BRAND_FALLBACK.accent,
+    secondary: BRAND_FALLBACK.secondary,
   };
   const signatureBlock = blocks.find((b) => b.type === "signature_block") as
     | Extract<ProposalBlock, { type: "signature_block" }>

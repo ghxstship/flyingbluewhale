@@ -506,33 +506,63 @@ describe("Design system — component primitive adoption", () => {
     ).toBe(true);
   });
 
-  it("GH-1 — raw hex colors in TSX may only shrink (pinned legacy debt)", () => {
+  it("GH-1 — raw hex colors in TSX are ZERO outside the sanctioned roster", () => {
     // The palette guard above matches Tailwind CLASS literals only; raw hex in
     // JSX props, SVG attributes, and inline TS constants sailed past it (lane-F
     // GH-1: StagePlotCanvas slate hexes, MapShell fallback blue). This ratchet
-    // scans every non-test TSX line for hex color literals.
+    // scans every TSX line for hex color literals.
     //
     // Sanctioned media that genuinely cannot consume CSS variables are EXEMPT:
     //   - src/lib/pdf/**            (@react-pdf/renderer)
     //   - src/app/og/** + opengraph-image (satori image generation)
     //   - */print/page.tsx          (print-sheet palettes, W7 consolidates)
-    //   - email/social/OAuth mirrors (guarded for tokens.json containment by
-    //     coldstart-fallback-tokens.test.ts instead)
     //
-    // Everything else is legacy debt pinned at the 2026-07-22 count. The pin
-    // may ONLY SHRINK — new raw hexes fail immediately; when you fix a spot,
-    // lower the pin. Target: 0 (remediation waves W2/W5 + owner ruling 4
-    // re-seeds the branding/proposal seed hexes).
-    const LEGACY_HEX_PIN = 58;
+    // HEX DEBT IS ZERO as of 2026-07-22 (owner directive; ruling 4 re-seeds
+    // landed, map-engine hexes replaced by resolveThemeColor). The pin stays 0:
+    // every new raw hex must be tokenized (var(--p-*) / var(--chart-*)),
+    // re-seeded from BRAND_FALLBACK / PRODUCT_ACCENTS, or formally sanctioned
+    // below WITH a reason comment.
+    const LEGACY_HEX_PIN = 0;
     const HEX_RE = /#[0-9a-fA-F]{6}\b|#[0-9a-fA-F]{3}\b(?![0-9a-fA-F])/;
     const EXEMPT_RE = [/^src\/lib\/pdf\//, /^src\/app\/og\//, /^src\/app\/opengraph-image/, /print\/page\.tsx$/];
     const ALLOW = new Set<string>([
       // The /aurora northern-lights band is the SANCTIONED page-scoped brand
       // moment (plan §2b; audit ruling): its hexes are the identity, not debt.
       "src/app/(marketing)/aurora/page.tsx",
-      "src/components/email/blocks.ts",
+      // Social-card SVG mirror — fixed export art, guarded for tokens.json
+      // containment by coldstart-fallback-tokens.test.ts.
       "src/components/social/SocialCard.tsx",
+      // OAuth provider marks — third-party brand colors are contractual
+      // (Google/Apple brand guidelines), never themeable.
       "src/components/auth/OAuthButtons.tsx",
+      // Next.js global-error replaces the root layout entirely — the theme
+      // CSS pipeline is NOT guaranteed to be loaded, so the crash page
+      // carries its own self-contained inline palette by contract.
+      "src/app/global-error.tsx",
+      // viewport themeColor meta — browsers consume the literal color from
+      // the meta tag pre-CSS; a var() can never resolve there.
+      "src/app/layout.tsx",
+      // Brand-kit palette DOCUMENTATION — swatch demos + doc-copy strings
+      // that quote the canon hexes for designers; the page's own paint is
+      // tokenized. Documentation, not paint.
+      "src/app/(marketing)/brand-kit/foundations/page.tsx",
+      // White-label input teaching copy — the i18n hint fallback quotes an
+      // example hex ("Hex like #E23414"); placeholders resolve from
+      // BRAND_FALLBACK. Doc copy, not paint.
+      "src/app/(platform)/studio/projects/[projectId]/branding/BrandingForm.tsx",
+      // Canvas 2D signature ink — the stroke is baked into the exported /
+      // persisted signature image; canvas cannot consume CSS vars.
+      "src/components/mobile/kit/FormScreen.tsx",
+      "src/app/proposals/heat/HeatProposalView.tsx",
+      // Site-plan markup default ink — persisted DATA on drawing_markups
+      // rows (mirrors the API route default), not UI paint.
+      "src/app/(platform)/studio/site-plans/[id]/markup-client.tsx",
+      // Ratified rose/fixed-dark COMPVSS card canon + QR quiet-zone
+      // contrast (ISO scannability requires literal black/white).
+      "src/components/mobile/kit/RoseCard.tsx",
+      // Ratified fixed-dark onboarding canon + third-party brand marks
+      // (Google / Bluesky logos keep their trademark colors) + QR contrast.
+      "src/components/mobile/onboarding/CompvssOnboarding.tsx",
     ]);
     const offenders: string[] = [];
     for (const file of ALL_FILES) {
@@ -546,10 +576,94 @@ describe("Design system — component primitive adoption", () => {
     }
     expect(
       offenders.length,
-      `Raw hex color literals in TSX grew past the pinned legacy count (${LEGACY_HEX_PIN}). ` +
-        `New paint must route through var(--p-*) / var(--chart-*). If you cleaned spots, shrink the pin.\n` +
+      `Raw hex color literals in TSX (pin is ${LEGACY_HEX_PIN} — hex debt is zero). ` +
+        `New paint must route through var(--p-*) / var(--chart-*), re-seed from BRAND_FALLBACK/PRODUCT_ACCENTS, ` +
+        `or be formally sanctioned in the ALLOW roster with a reason.\n` +
         offenders.join("\n"),
     ).toBeLessThanOrEqual(LEGACY_HEX_PIN);
+  });
+
+  it("GH-1b — raw hex colors in .ts are ZERO outside the sanctioned roster", () => {
+    // Companion ratchet to GH-1: the same hex regex over every non-test .ts
+    // file. Inline TS constants (seed themes, map paints, band palettes) are
+    // where hex debt hid after the TSX sweep. Pin is 0 — same discipline:
+    // tokenize, re-seed from BRAND_FALLBACK/PRODUCT_ACCENTS, or sanction
+    // below WITH a reason comment.
+    const LEGACY_HEX_PIN_TS = 0;
+    const HEX_RE = /#[0-9a-fA-F]{6}\b|#[0-9a-fA-F]{3}\b(?![0-9a-fA-F])/;
+    const EXEMPT_RE = [
+      // @react-pdf/renderer — cannot consume CSS variables.
+      /^src\/lib\/pdf\//,
+      // Token/theme SSOT layer — themes.config swatches, kit configs. The
+      // color values ARE the tokens here (guarded by tokens-contract /
+      // contrast / dataviz suites).
+      /^src\/app\/theme\//,
+    ];
+    const ALLOW = new Set<string>([
+      // --- Email HTML medium: mail clients cannot resolve CSS variables; ---
+      // --- chrome mirrors tokens.json (coldstart-fallback-tokens guard). ---
+      // Email block library (the guarded mirror).
+      "src/components/email/blocks.ts",
+      // Transactional email chrome (wrapEmailHtml + header/footer palette).
+      "src/lib/email.ts",
+      // Offer-letter email/document HTML composition.
+      "src/lib/offer-letters/compose.ts",
+      // Invite email bodies (inline-styled HTML for mail clients).
+      "src/app/(legend)/legend/start/actions.ts",
+      "src/app/(platform)/studio/people/invites/actions.ts",
+      // Signature receipt email body.
+      "src/app/proposals/[token]/actions.ts",
+      // --- Print medium ---
+      // Print-sheet palette SSOT — @media print sheets need concrete ink.
+      "src/lib/print/print-palette.ts",
+      // --- Brand SSOT constants (sRGB mirrors of tokens.json) ---
+      // PRODUCT_ACCENTS — the canonical per-product accent owner, guarded
+      // by brand-accent-tokens.test.ts.
+      "src/lib/brand.ts",
+      // BRAND_FALLBACK — the white-label cold-start seed (canon values).
+      "src/lib/branding.ts",
+      // --- Theme utilities that must handle literal color math ---
+      // AA ink chooser — #000/#FFF are the mathematical ink poles.
+      "src/lib/theme/contrast-util.ts",
+      // The sanctioned var()→rgb() resolver for canvas consumers (maplibre);
+      // carries the SSR/pre-hydration literal fallbacks by design.
+      "src/lib/theme/resolve-token.ts",
+      // --- Persisted design DATA (written to rows, not painted as UI) ---
+      // Site-plan discipline band default colors (drawing data seeds).
+      "src/lib/siteplan/bands.ts",
+      // Markup default ink persisted onto drawing_markups rows.
+      "src/app/api/v1/drawings/[siteplanId]/markups/route.ts",
+      // XPMS department identity accents — multi-hue design data (like the
+      // --identity-* avatar palette), not brand accents.
+      "src/lib/xpms/index.ts",
+      // Miami HEAT client brand palette — white-label CLIENT data.
+      "src/app/proposals/heat/data.ts",
+      // --- Media that cannot consume CSS variables ---
+      // Canvas JPEG compositing base (white under transparent captures).
+      "src/lib/mobile/image-pdf.ts",
+      // Middleware hold page — standalone HTML served before any theme CSS
+      // exists (proxy runs ahead of the app shell).
+      "src/proxy.ts",
+    ]);
+    const offenders: string[] = [];
+    for (const file of ALL_FILES) {
+      const relPath = relative(REPO_ROOT, file);
+      if (!relPath.endsWith(".ts") || relPath.endsWith(".d.ts")) continue;
+      // Test files reference hexes as fixture data (contrast/dataviz suites).
+      if (/\.test\.ts$/.test(relPath)) continue;
+      if (ALLOW.has(relPath) || EXEMPT_RE.some((re) => re.test(relPath))) continue;
+      const lines = stripCommentsPreservingLines(readFileSync(file, "utf8")).split("\n");
+      for (let i = 0; i < lines.length; i++) {
+        if (HEX_RE.test(lines[i]!)) offenders.push(`${relPath}:${i + 1}`);
+      }
+    }
+    expect(
+      offenders.length,
+      `Raw hex color literals in .ts (pin is ${LEGACY_HEX_PIN_TS} — hex debt is zero). ` +
+        `New paint must route through var(--p-*) / var(--chart-*), re-seed from BRAND_FALLBACK/PRODUCT_ACCENTS, ` +
+        `or be formally sanctioned in the ALLOW roster with a reason.\n` +
+        offenders.join("\n"),
+    ).toBeLessThanOrEqual(LEGACY_HEX_PIN_TS);
   });
 
   it("kit v7.1 — platform contracts (forced-colors / prefers-contrast / print / RTL) are present + imported", () => {

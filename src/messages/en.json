@@ -7367,6 +7367,18 @@
     "byId": "By Unit ID",
     "byStatus": "By Status",
     "count": "{count} units"
+   },
+   "dictation": {
+    "start": "Dictate",
+    "recording": "Recording",
+    "cancel": "Cancel dictation",
+    "stop": "Stop and transcribe",
+    "transcribing": "Transcribing {size}…",
+    "offline": "Dictation needs a connection. You can still type.",
+    "denied": "Microphone is blocked. Allow mic access for this site to dictate.",
+    "failed": "Couldn't transcribe that. Try again.",
+    "empty": "Didn't catch any speech. Try again.",
+    "dismiss": "Dismiss"
    }
   },
   "scan": {

@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useT } from "@/lib/i18n/LocaleProvider";
-import { KIcon } from "@/components/mobile/kit";
+import { appendTranscriptToTextarea, DictationButton, KIcon } from "@/components/mobile/kit";
 import { quickFileIncident } from "../actions";
 
 /**
@@ -65,6 +65,11 @@ export function QuickFileForm({ followUpOf }: { followUpOf?: { id: string; summa
             autoFocus
             placeholder={t("m.incident.quick.placeholder", undefined, "Describe the incident…")}
           />
+          {/* T1-3 dictation — appends the transcript to whatever is typed.
+              Renders nothing unless server-side transcription is configured. */}
+          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 6 }}>
+            <DictationButton onText={(text) => appendTranscriptToTextarea("qf-summary", text)} />
+          </div>
         </div>
         {error && (
           <div className="ps-alert ps-alert--danger" style={{ marginBottom: 12 }}>

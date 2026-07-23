@@ -2694,6 +2694,12 @@
               ]
             },
             {
+              "path": "/m/capture",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/m/punch",
               "arch": [
                 "FIELD"

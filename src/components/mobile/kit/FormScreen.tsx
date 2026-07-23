@@ -10,6 +10,7 @@ import { downscaleAll, downscaleImage } from "@/lib/mobile/image";
 import { getPosition } from "@/lib/geo/position";
 import type { PhotoFix } from "@/lib/mobile/photo-geo";
 import { SignaturePad } from "@/components/ui/SignaturePad";
+import { DictationButton } from "./DictationButton";
 import { FORMS } from "./forms";
 import { Sheet } from "./Sheet";
 import type { FormDef, FormField } from "./forms";
@@ -664,7 +665,24 @@ function Field({
   let control: React.ReactNode;
   if (f.type === "avatar") control = <AvatarField value={value} setValue={setValue} />;
   else if (f.type === "sign") control = <SignField f={f} value={value} setValue={setValue} />;
-  else if (f.type === "textarea") control = <textarea {...common} placeholder={f.placeholder} />;
+  else if (f.type === "textarea")
+    // Dictation (T1-3): opt-in per field def. The transcript APPENDS to
+    // whatever is typed — dictating never clobbers the worker's text.
+    control = f.dictation ? (
+      <div>
+        <textarea {...common} placeholder={f.placeholder} />
+        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 6 }}>
+          <DictationButton
+            onText={(text) => {
+              const cur = typeof value === "string" && value ? `${value.replace(/\s+$/, "")} ` : "";
+              setValue(cur + text);
+            }}
+          />
+        </div>
+      </div>
+    ) : (
+      <textarea {...common} placeholder={f.placeholder} />
+    );
   else if (f.type === "select")
     control =
       (f.options || []).length > PICKER_DRAWER_THRESHOLD ? (

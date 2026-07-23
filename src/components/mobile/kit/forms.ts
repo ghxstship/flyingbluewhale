@@ -49,6 +49,14 @@ export type FormField = {
    * Always best-effort even when on — see FileField.
    */
   geotag?: boolean;
+  /**
+   * Mount the dictation affordance on this textarea (`type: "textarea"`
+   * only) — T1-3. Opt-in for the long narrative fields where a gloved
+   * worker is describing something (incident, handover, lost & found);
+   * short context notes stay type-only. The button is additionally gated
+   * server-side: it renders nothing unless transcription is configured.
+   */
+  dictation?: boolean;
 };
 
 export type FormDef = {
@@ -94,8 +102,8 @@ export const FORMS: Forms = {
       { id: "injury", label: "Injuries Involved", type: "switch" },
       { id: "where", label: "Location", type: "text", placeholder: "e.g. Gate 3 · NE corner", required: true },
       { id: "when", label: "Time Of Incident", type: "time" },
-      { id: "what", label: "What Happened", type: "textarea", placeholder: "Describe the incident…", required: true },
-      { id: "action", label: "Immediate Action Taken", type: "textarea", placeholder: "What did you do?" },
+      { id: "what", label: "What Happened", type: "textarea", placeholder: "Describe the incident…", required: true, dictation: true },
+      { id: "action", label: "Immediate Action Taken", type: "textarea", placeholder: "What did you do?", dictation: true },
       { id: "photo", label: "Photos", type: "photo", geotag: true },
       { id: "anon", label: "Submit Anonymously", type: "switch" },
     ],
@@ -107,7 +115,7 @@ export const FORMS: Forms = {
       { id: "kind", label: "Type", type: "seg", options: ["Found", "Lost"], default: "Found", required: true },
       { id: "item", label: "Item", type: "text", placeholder: "e.g. Black backpack", required: true },
       { id: "where", label: "Location", type: "text", placeholder: "Where it was found / lost", required: true },
-      { id: "what", label: "Description", type: "textarea", placeholder: "Color, brand, contents…", required: true },
+      { id: "what", label: "Description", type: "textarea", placeholder: "Color, brand, contents…", required: true, dictation: true },
       { id: "holding", label: "Now Held At", type: "text", placeholder: "e.g. Gate office" },
       { id: "photo", label: "Photos", type: "photo", geotag: true },
     ],
@@ -202,8 +210,8 @@ export const FORMS: Forms = {
     fields: [
       { id: "relief", label: "Handing Off To", type: "text", required: true, placeholder: "Who is taking over the shift?" },
       { id: "status", label: "Post Status", type: "seg", options: ["All Clear", "Watch Items", "Issues"], default: "All Clear", required: true },
-      { id: "summary", label: "Shift Summary", type: "textarea", placeholder: "What happened, headcounts, incidents…", required: true },
-      { id: "open", label: "Open Items For Next Crew", type: "textarea", placeholder: "Anything outstanding to hand off" },
+      { id: "summary", label: "Shift Summary", type: "textarea", placeholder: "What happened, headcounts, incidents…", required: true, dictation: true },
+      { id: "open", label: "Open Items For Next Crew", type: "textarea", placeholder: "Anything outstanding to hand off", dictation: true },
       { id: "assets", label: "Assets / Keys Passed", type: "text", placeholder: "Radios, credentials, keys returned or passed" },
       { id: "photo", label: "Photos", type: "photo", geotag: true },
     ],

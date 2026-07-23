@@ -43,6 +43,9 @@ export type { SheetHeadProps } from "./SheetHead";
 export { Sheet } from "./Sheet";
 export type { SheetProps } from "./Sheet";
 
+export { DictationButton, appendTranscriptToTextarea } from "./DictationButton";
+export type { DictationButtonProps } from "./DictationButton";
+
 export { SyncBadge } from "./SyncBadge";
 export type { SyncBadgeProps, SyncBadgeState } from "./SyncBadge";
 

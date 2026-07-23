@@ -627,6 +627,24 @@ paths:
         "401": { $ref: "#/components/responses/Unauthorized" }
         "403": { $ref: "#/components/responses/Forbidden" }
         "429": { $ref: "#/components/responses/RateLimited" }
+  /api/v1/ai/transcribe:
+    get:
+      summary: Feature probe — whether server-side speech-to-text is configured ({ enabled }).
+      operationId: getAiTranscribe
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    post:
+      summary: Transcribe a raw audio body (audio/webm or audio/mp4, max 10 MB) to text for field dictation.
+      operationId: postAiTranscribe
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
+        "503": { description: Transcription not configured, content: { application/json: { schema: { $ref: "#/components/schemas/ApiError" } } } }
   /api/v1/ai/propose:
     post:
       summary: Generate an AI proposal draft (persists an ai_proposal_drafts row).

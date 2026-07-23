@@ -8,7 +8,7 @@
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
 
-**Page routes:** 1286 · **API route handlers:** 157 · **Distinct nav hrefs:** 584
+**Page routes:** 1287 · **API route handlers:** 158 · **Distinct nav hrefs:** 585
 
 ## Legend
 
@@ -26,13 +26,13 @@
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
 | ATLVS — Operator Console | platformNav rail | 801 | 254 | 545 | 0 | 2 |
-| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 115 | 91 | 23 | 0 | 1 |
+| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 116 | 92 | 23 | 0 | 1 |
 | GVTEWAY — External Portal | portalNav rail | 156 | 129 | 23 | 0 | 4 |
 | LEG3ND — Knowledge Shell | legendNav rail | 63 | 29 | 34 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 97 | 34 | 54 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 14 | 2 | 0 | 0 | 12 |
-| **TOTAL** | | **1286** | **558** | **685** | **0** | **43** |
+| **TOTAL** | | **1287** | **559** | **685** | **0** | **43** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -1360,7 +1360,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## COMPVSS — Field PWA (`/m`)
 
-115 routes — ● 91 nav · ○ 23 linked · ⚠ 0 orphan
+116 routes — ● 92 nav · ○ 23 linked · ⚠ 0 orphan
 
 <details><summary><code>activity</code> · 1 route</summary>
 
@@ -1398,6 +1398,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ● `/m/briefings`
 ○ `/m/briefings/[briefingId]`
+
+</details>
+
+<details><summary><code>capture</code> · 1 route</summary>
+
+● `/m/capture`
 
 </details>
 
@@ -2779,7 +2785,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ---
 
-## API surface (`/api/v1`) — 157 route handlers
+## API surface (`/api/v1`) — 158 route handlers
 
 
 <details><summary><code>/api/v1/accreditation</code> · 1</summary>
@@ -2801,7 +2807,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>/api/v1/ai</code> · 6</summary>
+<details><summary><code>/api/v1/ai</code> · 7</summary>
 
 - `/api/v1/ai/chat`
 - `/api/v1/ai/conversations`
@@ -2809,6 +2815,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 - `/api/v1/ai/copilot`
 - `/api/v1/ai/embed-source`
 - `/api/v1/ai/propose`
+- `/api/v1/ai/transcribe`
 
 </details>
 

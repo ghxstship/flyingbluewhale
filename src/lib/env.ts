@@ -32,6 +32,16 @@ const schema = z.object({
   // local cookies survive process restarts. Rotating this value revokes
   // every outstanding access token.
   GUIDE_ACCESS_SECRET: z.string().optional(),
+  // Speech-to-text for COMPVSS field dictation (T1-3, MOBILE_BEST_PRACTICES
+  // Rank 3). The Anthropic SDK has no audio input, so transcription rides a
+  // Whisper-compatible HTTP endpoint. OPENAI_API_KEY unset = the dictation
+  // affordance stays hidden everywhere (the transcribe route 503s and the
+  // kit button renders nothing). TRANSCRIBE_API_URL / TRANSCRIBE_MODEL
+  // re-point the same contract at any OpenAI-audio-compatible provider
+  // (Groq, Fireworks, a self-hosted whisper.cpp server, …).
+  OPENAI_API_KEY: z.string().optional(),
+  TRANSCRIBE_API_URL: z.string().url().optional().or(z.literal("")),
+  TRANSCRIBE_MODEL: z.string().optional(),
   // Video huddle provider (F6). Both must be set for live media — the
   // provider adapter (src/lib/video/provider.ts) mints the join token from
   // these. Unset = the huddle UI shows a "configure a provider" state
@@ -60,6 +70,9 @@ export const env = schema.parse({
   WEATHER_DISABLED: process.env.WEATHER_DISABLED,
   LOG_LEVEL: process.env.LOG_LEVEL as "trace" | "debug" | "info" | "warn" | "error" | undefined,
   GUIDE_ACCESS_SECRET: process.env.GUIDE_ACCESS_SECRET,
+  OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+  TRANSCRIBE_API_URL: process.env.TRANSCRIBE_API_URL,
+  TRANSCRIBE_MODEL: process.env.TRANSCRIBE_MODEL,
   VIDEO_PROVIDER_URL: process.env.VIDEO_PROVIDER_URL,
   VIDEO_PROVIDER_KEY: process.env.VIDEO_PROVIDER_KEY,
 });
@@ -71,3 +84,5 @@ export const hasUpstash = Boolean(env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDI
 export const isWeatherEnabled = !env.WEATHER_DISABLED;
 // F6 — live video media activates only when both provider creds are set.
 export const hasVideoProvider = Boolean(env.VIDEO_PROVIDER_URL && env.VIDEO_PROVIDER_KEY);
+// T1-3 — field dictation activates only when a transcription key is set.
+export const hasTranscription = Boolean(env.OPENAI_API_KEY);

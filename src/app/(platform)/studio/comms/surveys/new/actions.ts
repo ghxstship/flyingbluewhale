@@ -35,7 +35,7 @@ export async function createSurveyAction(_: State, fd: FormData): Promise<State>
   // datetime-local submits a naive local timestamp; Date() interprets it in
   // the server's zone and toISOString() normalizes to UTC. Empty → no deadline.
   const closesAt = parsed.data.closes_at ? new Date(parsed.data.closes_at) : null;
-  if (closesAt && Number.isNaN(closesAt.getTime())) return actionFail("Invalid close date.", fd);
+  if (closesAt && Number.isNaN(closesAt.getTime())) return actionFail(actionErrorMessage("invalid.close-date", "Invalid close date."), fd);
   const { data: survey, error } = await supabase
     .from("surveys")
     .insert({

@@ -2895,6 +2895,15 @@ paths:
         "403": { $ref: "#/components/responses/Forbidden" }
         "429": { $ref: "#/components/responses/RateLimited" }
 
+  /api/v1/webhooks/resend:
+    post:
+      summary: Resend outbound-email events webhook (svix-signed, RESEND_WEBHOOK_SECRET). Maps delivered/opened/bounced events onto the advancing merge-engine recipient funnel.
+      operationId: postWebhooksResend
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "503": { description: Endpoint inactive (RESEND_WEBHOOK_SECRET unset). }
+
   /api/v1/documents:
     get:
       operationId: getDocuments

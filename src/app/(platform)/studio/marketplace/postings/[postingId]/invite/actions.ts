@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
+import { actionErrorMessage } from "@/lib/errors";
 import { createClient } from "@/lib/supabase/server";
 import { writeInbox } from "@/lib/inbox";
 import { sendNotificationEmailToUsers } from "@/lib/email";
@@ -33,7 +34,7 @@ export type State = { error?: string; ok?: true; invited?: number } | null;
 export async function inviteTalentAction(_prev: State, fd: FormData): Promise<State> {
   const session = await requireSession();
   if (!isManagerPlus(session)) {
-    return { error: "Only manager+ can invite talent" };
+    return { error: actionErrorMessage("auth.manager-plus.invite-talent", "Only manager+ can invite talent") };
   }
   const parsed = Schema.safeParse({
     posting_id: fd.get("posting_id"),
@@ -49,10 +50,10 @@ export async function inviteTalentAction(_prev: State, fd: FormData): Promise<St
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
-  if (!posting) return { error: "Posting not found" };
+  if (!posting) return { error: actionErrorMessage("not-found.posting", "Posting not found") };
   const p = posting as { id: string; title: string; public_slug: string; job_posting_phase: string };
   if (p.job_posting_phase !== "published") {
-    return { error: "Publish the posting before inviting talent" };
+    return { error: actionErrorMessage("publish-the-posting-before-inviting-talent", "Publish the posting before inviting talent") };
   }
 
   const { data: talent } = await supabase
@@ -64,7 +65,7 @@ export async function inviteTalentAction(_prev: State, fd: FormData): Promise<St
     .is("deleted_at", null);
   const invitees = (talent ?? []) as Array<{ id: string; act_name: string; user_id: string }>;
   if (invitees.length === 0) {
-    return { error: "None of the selected acts have a claimed account to notify" };
+    return { error: actionErrorMessage("none-of-the-selected-acts-have-a-claimed-account", "None of the selected acts have a claimed account to notify") };
   }
 
   const href = `/marketplace/gigs/${p.public_slug}`;

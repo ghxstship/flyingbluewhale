@@ -94,9 +94,12 @@ export async function upsertGuideAction(projectId: string, _: State, fd: FormDat
     .eq("org_id", session.orgId)
     .eq("project_id", projectId)
     .eq("persona", parsed.data.persona)
+    .is("deleted_at", null)
     .maybeSingle();
 
   const nowPublished = parsed.data.published === "on";
+  // soft-delete-exempt: upsert-returning — .select("id") reads back the row
+  // just written, never an archived one.
   const { data: saved, error } = await supabase
     .from("event_guides")
     .upsert(
@@ -167,6 +170,7 @@ export async function saveGuideAsTemplateAction(
     .eq("org_id", session.orgId)
     .eq("project_id", projectId)
     .eq("persona", persona)
+    .is("deleted_at", null)
     .maybeSingle();
   if (!guide) return { error: actionErrorMessage("not-found.guide", "Guide not found") };
 
@@ -274,6 +278,7 @@ export async function togglePublishedAction(projectId: string, persona: GuidePer
     .eq("org_id", session.orgId)
     .eq("project_id", projectId)
     .eq("persona", persona)
+    .is("deleted_at", null)
     .select("id")
     .maybeSingle();
   if (error) return { error: error.message };

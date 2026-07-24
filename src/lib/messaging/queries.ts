@@ -97,6 +97,8 @@ export async function resolvePartyNames(partyIds: string[]): Promise<Map<string,
   const ids = [...new Set(partyIds.filter(Boolean))];
   if (ids.length === 0) return names;
   const supabase = await createClient();
+  // soft-delete-exempt: resolving display names of historical FK ids — an
+  // archived party still needs a name on old messages.
   const { data } = await (supabase as unknown as LooseSupabase)
     .from("parties")
     .select("id, display_name")

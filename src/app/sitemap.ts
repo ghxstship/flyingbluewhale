@@ -48,7 +48,14 @@ const INDUSTRY_SLUGS = [
   "broadcast-tv-film",
 ];
 
-const SOLUTION_APPS = ["atlvs", "gvteway", "compvss"];
+const SOLUTION_APPS = ["atlvs", "gvteway", "compvss", "legend"];
+
+/**
+ * The four apex product pages ((marketing)/<brand>). Top of the product
+ * funnel — every brand slug has one since the 2026-07-24 LEG3ND shell
+ * normalization gave /legend back to the marketing shell.
+ */
+const PRODUCT_PAGES = ["/atlvs", "/compvss", "/gvteway", "/legend"];
 
 const MARKETPLACE_SECTIONS = ["rfqs", "gigs", "calls", "talent", "crew", "vendors", "agencies"];
 
@@ -139,6 +146,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const staticRoutes: SitemapEntry[] = [
     { path: "", priority: 1.0, changeFrequency: "weekly" },
+    ...PRODUCT_PAGES.map(
+      (path): SitemapEntry => ({ path, priority: 0.9, changeFrequency: "monthly" }),
+    ),
     { path: "/pricing", priority: 0.9, changeFrequency: "monthly" },
     { path: "/solutions", priority: 0.9, changeFrequency: "monthly" },
     { path: "/features", priority: 0.8, changeFrequency: "monthly" },

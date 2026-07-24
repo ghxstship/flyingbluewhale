@@ -23,6 +23,9 @@
  *       app.atlvs.pro            → platform (rewrites to /studio/*)
  *       gvteway.atlvs.pro        → portal   (rewrites to /p/*)
  *       compvss.atlvs.pro        → mobile   (rewrites to /m/*)
+ *       legend.atlvs.pro         → legend   (rewrites to /legend/*; the
+ *                                  root lands on /legend/hub — bare /legend
+ *                                  is the marketing shell's product page)
  *
  *     ATLVS is the parent brand; the operator console lives at `app.` (the
  *     Linear/Notion/Slack pattern) rather than `atlvs.atlvs.pro`. Portal and

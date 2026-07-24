@@ -8,7 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import { getRequestT } from "@/lib/i18n/request";
 import { timeAgo } from "@/lib/format";
-import { createWorkOrderFromTemplate } from "./actions";
+import { archiveJobTemplateAction, createWorkOrderFromTemplate, duplicateJobTemplateAction } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -111,6 +111,16 @@ export default async function JobTemplatesPage() {
                 <span className="font-mono text-xs text-[var(--p-text-2)]">
                   {(r.steps?.[0]?.count ?? 0)} {t("console.settings.jobTemplates.steps", undefined, "steps")}
                 </span>
+                <form action={archiveJobTemplateAction.bind(null, r.id)}>
+                  <button type="submit" className="ps-btn ps-btn--tertiary ps-btn--sm">
+                    {t("console.settings.jobTemplates.archive", undefined, "Archive")}
+                  </button>
+                </form>
+                <form action={duplicateJobTemplateAction.bind(null, r.id)}>
+                  <button type="submit" className="ps-btn ps-btn--tertiary ps-btn--sm">
+                    {t("console.settings.jobTemplates.duplicate", undefined, "Duplicate")}
+                  </button>
+                </form>
                 <form action={createWorkOrderFromTemplate.bind(null, r.id)}>
                   <button type="submit" className="ps-btn ps-btn--secondary ps-btn--sm">
                     {t("console.settings.jobTemplates.createWorkOrder", undefined, "Create Work Order")}

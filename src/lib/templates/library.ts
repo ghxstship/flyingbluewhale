@@ -36,6 +36,7 @@ export {
   storesForFamily,
   type TemplateFamily,
   type TemplateLibraryItem,
+  type TemplateVersionEntry,
 } from "./library-shared";
 
 function haystack(...parts: Array<string | null | undefined>): string {

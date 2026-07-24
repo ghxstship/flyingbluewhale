@@ -23,6 +23,8 @@ const LIBRARY_PATH = "/legend/hub/templates";
 const DELIVERABLE_TYPES = Constants.public.Enums.deliverable_type;
 
 const CreateSchema = z.object({
+  // Present = update that row; absent = create.
+  template_id: z.string().uuid().optional().or(z.literal("")),
   name: z.string().min(1).max(200),
   type: z.enum(DELIVERABLE_TYPES as unknown as [string, ...string[]]),
   description: z.string().max(2000).optional().or(z.literal("")),
@@ -44,24 +46,48 @@ export async function createDeliverableTemplateAction(_: State, fd: FormData): P
   if (!parsed.success) return formFail(parsed.error, fd);
 
   const supabase = await createClient();
-  // soft-delete-exempt: insert-returning — .select("id") reads back the row just created
-  const { data, error } = await supabase
-    .from("deliverable_templates")
-    .insert({
-      org_id: session.orgId,
-      name: parsed.data.name,
-      type: parsed.data.type as DeliverableType,
-      description: parsed.data.description || null,
-      created_by: session.userId,
-    })
-    .select("id")
-    .single();
-  if (error) return { error: error.message };
+  const templateId = parsed.data.template_id || null;
+  let savedId: string;
+  if (templateId) {
+    // Update path — org rows only (global seeds are platform-owned).
+    const { data, error } = await supabase
+      .from("deliverable_templates")
+      .update({
+        name: parsed.data.name,
+        type: parsed.data.type as DeliverableType,
+        description: parsed.data.description || null,
+      })
+      .eq("id", templateId)
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .select("id");
+    if (error) return { error: error.message };
+    // RLS returns no error on a filtered-out row — read the write back.
+    if (!data || data.length === 0) {
+      return { error: actionErrorMessage("not-found.template-in-org", "Template not found in your organization") };
+    }
+    savedId = data[0]!.id;
+  } else {
+    // soft-delete-exempt: insert-returning — .select("id") reads back the row just created
+    const { data, error } = await supabase
+      .from("deliverable_templates")
+      .insert({
+        org_id: session.orgId,
+        name: parsed.data.name,
+        type: parsed.data.type as DeliverableType,
+        description: parsed.data.description || null,
+        created_by: session.userId,
+      })
+      .select("id")
+      .single();
+    if (error) return { error: error.message };
+    savedId = data.id;
+  }
 
   await recordTemplateVersion(supabase, {
     orgId: session.orgId,
     family: "deliverable",
-    templateId: data.id,
+    templateId: savedId,
     snapshot: {
       name: parsed.data.name,
       type: parsed.data.type,

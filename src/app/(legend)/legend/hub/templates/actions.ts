@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { actionErrorMessage } from "@/lib/errors";
 import { getDocTemplate } from "@/lib/documents/registry";
 import { DOC_BRAND_MODES } from "@/lib/documents/org-settings";
+import { recordTemplateVersion } from "@/lib/templates/versions";
 
 const LIBRARY_PATH = "/legend/hub/templates";
 const DOCUMENTS_HUB_PATH = "/studio/documents";
@@ -110,6 +111,106 @@ export async function setGuideTemplateStateAction(
   if (!data || data.length === 0) {
     return { error: actionErrorMessage("not-found.template-in-org", "Template not found in your organization") };
   }
+
+  revalidatePath(LIBRARY_PATH);
+  return { ok: true };
+}
+
+/** Clone an org guide template — lands as a fresh DRAFT with v1 history. */
+export async function duplicateGuideTemplateAction(templateId: string): Promise<DocSettingState> {
+  const session = await requireSession();
+  if (!isManagerPlus(session) && !can(session, "templates:write")) {
+    return { error: actionErrorMessage("auth.manager-plus.manage-templates", "Only manager+ can manage templates") };
+  }
+  const parsed = z.string().uuid().safeParse(templateId);
+  if (!parsed.success) return { error: actionErrorMessage("invalid.input", "Invalid input") };
+
+  const supabase = await createClient();
+  const { data: src } = await supabase
+    .from("org_guide_templates")
+    .select("persona, name, description, config, source_project_id")
+    .eq("id", parsed.data)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null)
+    .maybeSingle();
+  if (!src) {
+    return { error: actionErrorMessage("not-found.template-in-org", "Template not found in your organization") };
+  }
+
+  // soft-delete-exempt: insert-returning — .select("id") reads back the row just created
+  const { data: copy, error } = await supabase
+    .from("org_guide_templates")
+    .insert({
+      org_id: session.orgId,
+      persona: src.persona,
+      name: `${src.name} (Copy)`,
+      description: src.description,
+      config: src.config ?? {},
+      template_state: "draft",
+      source_project_id: src.source_project_id,
+      created_by: session.userId,
+    })
+    .select("id")
+    .single();
+  if (error) return { error: error.message };
+
+  await recordTemplateVersion(supabase, {
+    orgId: session.orgId,
+    family: "guide",
+    templateId: copy.id,
+    snapshot: {
+      name: `${src.name} (Copy)`,
+      description: src.description,
+      persona: src.persona,
+      config: src.config ?? {},
+    },
+    changedBy: session.userId,
+  });
+
+  revalidatePath(LIBRARY_PATH);
+  return { ok: true };
+}
+
+const RenameSchema = z.object({
+  template_id: z.string().uuid(),
+  name: z.string().trim().min(1).max(200),
+});
+
+/** Rename an org guide template; the change lands in the version journal. */
+export async function renameGuideTemplateAction(templateId: string, name: string): Promise<DocSettingState> {
+  const session = await requireSession();
+  if (!isManagerPlus(session) && !can(session, "templates:write")) {
+    return { error: actionErrorMessage("auth.manager-plus.manage-templates", "Only manager+ can manage templates") };
+  }
+  const parsed = RenameSchema.safeParse({ template_id: templateId, name });
+  if (!parsed.success) return { error: actionErrorMessage("invalid.input", "Invalid input") };
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("org_guide_templates")
+    .update({ name: parsed.data.name })
+    .eq("id", parsed.data.template_id)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null)
+    .select("persona, description, config");
+  if (error) return { error: error.message };
+  const row = data?.[0];
+  if (!row) {
+    return { error: actionErrorMessage("not-found.template-in-org", "Template not found in your organization") };
+  }
+
+  await recordTemplateVersion(supabase, {
+    orgId: session.orgId,
+    family: "guide",
+    templateId: parsed.data.template_id,
+    snapshot: {
+      name: parsed.data.name,
+      description: row.description,
+      persona: row.persona,
+      config: row.config ?? {},
+    },
+    changedBy: session.userId,
+  });
 
   revalidatePath(LIBRARY_PATH);
   return { ok: true };

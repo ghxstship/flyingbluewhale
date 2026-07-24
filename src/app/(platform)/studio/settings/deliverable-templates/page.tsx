@@ -18,8 +18,13 @@ import { archiveDeliverableTemplateAction, createDeliverableTemplateAction } fro
  * global seeds), inline create, archive. The LEG3ND library's deliverable
  * family deep-links here.
  */
-export default async function DeliverableTemplatesPage() {
+export default async function DeliverableTemplatesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ edit?: string }>;
+}) {
   const session = await requireSession();
+  const { edit } = await searchParams;
   const { t } = await getRequestT();
   const supabase = await createClient();
   const { data } = await supabase
@@ -31,6 +36,8 @@ export default async function DeliverableTemplatesPage() {
     .limit(300);
   const rows = data ?? [];
   const canManage = isManagerPlus(session) || can(session, "templates:write");
+  // ?edit=<id> prefills the form below with an org row (update path).
+  const editing = edit ? (rows.find((r) => r.id === edit && r.org_id === session.orgId) ?? null) : null;
 
   return (
     <>
@@ -83,17 +90,22 @@ export default async function DeliverableTemplatesPage() {
                   {canManage && (
                     <td className="text-right">
                       {r.org_id === session.orgId && (
-                        <form
-                          action={async () => {
-                            "use server";
-                            const res = await archiveDeliverableTemplateAction(r.id);
-                            if (res.error) throw new Error(res.error);
-                          }}
-                        >
-                          <Button type="submit" variant="secondary">
-                            {t("console.settings.deliverableTemplates.archive", undefined, "Archive")}
+                        <div className="flex items-center justify-end gap-2">
+                          <Button href={`/studio/settings/deliverable-templates?edit=${r.id}`} variant="secondary">
+                            {t("common.edit", undefined, "Edit")}
                           </Button>
-                        </form>
+                          <form
+                            action={async () => {
+                              "use server";
+                              const res = await archiveDeliverableTemplateAction(r.id);
+                              if (res.error) throw new Error(res.error);
+                            }}
+                          >
+                            <Button type="submit" variant="secondary">
+                              {t("console.settings.deliverableTemplates.archive", undefined, "Archive")}
+                            </Button>
+                          </form>
+                        </div>
                       )}
                     </td>
                   )}
@@ -106,26 +118,42 @@ export default async function DeliverableTemplatesPage() {
         {canManage && (
           <div className="surface max-w-2xl p-5">
             <h2 className="text-sm font-semibold">
-              {t("console.settings.deliverableTemplates.newHeading", undefined, "New Deliverable Template")}
+              {editing
+                ? t("console.settings.deliverableTemplates.editHeading", undefined, "Edit Deliverable Template")
+                : t("console.settings.deliverableTemplates.newHeading", undefined, "New Deliverable Template")}
             </h2>
             <div className="mt-3">
               <FormShell
+                key={editing?.id ?? "new"}
                 action={createDeliverableTemplateAction}
-                submitLabel={t("console.settings.deliverableTemplates.submit", undefined, "Create Template")}
+                cancelHref={editing ? "/studio/settings/deliverable-templates" : undefined}
+                submitLabel={
+                  editing
+                    ? t("console.settings.deliverableTemplates.save", undefined, "Save Template")
+                    : t("console.settings.deliverableTemplates.submit", undefined, "Create Template")
+                }
               >
+                {editing && <input type="hidden" name="template_id" value={editing.id} />}
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   <Input
                     label={t("console.settings.deliverableTemplates.name.label", undefined, "Name")}
                     name="name"
                     required
                     maxLength={200}
+                    defaultValue={editing?.name}
                   />
                   <div>
                     <label htmlFor="type" className="text-xs font-medium text-[var(--p-text-2)]">
                       {t("console.settings.deliverableTemplates.type.label", undefined, "Deliverable type")}{" "}
                       <span className="text-[var(--p-danger)]">*</span>
                     </label>
-                    <select id="type" name="type" required defaultValue="custom" className="ps-input mt-1.5 w-full">
+                    <select
+                      id="type"
+                      name="type"
+                      required
+                      defaultValue={editing?.type ?? "custom"}
+                      className="ps-input mt-1.5 w-full"
+                    >
                       {Constants.public.Enums.deliverable_type.map((v) => (
                         <option key={v} value={v}>
                           {toTitle(v.replace(/_/g, " "))}
@@ -138,6 +166,7 @@ export default async function DeliverableTemplatesPage() {
                   label={t("console.settings.deliverableTemplates.description.label", undefined, "Description")}
                   name="description"
                   maxLength={2000}
+                  defaultValue={editing?.description ?? undefined}
                 />
               </FormShell>
             </div>

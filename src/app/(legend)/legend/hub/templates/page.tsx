@@ -22,6 +22,7 @@ import {
   TEMPLATE_FAMILIES,
   type TemplateFamily,
   type TemplateLibraryItem,
+  type TemplateVersionEntry,
 } from "@/lib/templates/library";
 import { TemplateLibrary } from "./TemplateLibrary";
 
@@ -207,6 +208,35 @@ export default async function TemplatesPillarPage() {
     audienceCounts.set(row.audience_type, (audienceCounts.get(row.audience_type) ?? 0) + 1);
   }
 
+  // Version history (template_versions journal) — batched: every version row
+  // for this org (template edits are low-volume config writes), author names
+  // resolved in one users read. Keyed "family:templateId" for the island.
+  const { data: versionRows } = await supabase
+    .from("template_versions")
+    .select("family, template_id, version, created_at, changed_by")
+    .eq("org_id", session.orgId)
+    .order("version", { ascending: false })
+    .limit(1000);
+  const changerIds = Array.from(
+    new Set((versionRows ?? []).map((v) => v.changed_by).filter((v): v is string => !!v)),
+  );
+  const changerNames = new Map<string, string>();
+  if (changerIds.length > 0) {
+    // soft-delete-exempt: resolving display names of historical FKs — a
+    // departed author must still label the versions they wrote.
+    const { data: users } = await supabase.from("users").select("id, name, email").in("id", changerIds);
+    for (const u of users ?? []) changerNames.set(u.id, u.name || u.email);
+  }
+  const versionsByKey: Record<string, TemplateVersionEntry[]> = {};
+  for (const v of versionRows ?? []) {
+    const key = `${v.family}:${v.template_id}`;
+    (versionsByKey[key] ??= []).push({
+      version: v.version,
+      createdAt: v.created_at,
+      changedBy: v.changed_by ? (changerNames.get(v.changed_by) ?? null) : null,
+    });
+  }
+
   const items: TemplateLibraryItem[] = [
     ...buildDocItems(docSettings),
     ...buildJobItems(
@@ -325,6 +355,7 @@ export default async function TemplatesPillarPage() {
           canManage={isManagerPlus(session) || can(session, "templates:write")}
           createHrefs={createHrefs}
           homeHrefs={homeHrefs}
+          versionsByKey={versionsByKey}
         />
       </div>
     </>

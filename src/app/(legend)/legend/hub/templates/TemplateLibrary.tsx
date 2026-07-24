@@ -7,12 +7,19 @@ import { useT } from "@/lib/i18n/LocaleProvider";
 import { resolveActionError } from "@/lib/errors";
 import { Badge } from "@/components/ui/Badge";
 import { DOC_BRAND_MODES } from "@/lib/documents/org-settings";
+import { useFormatters } from "@/lib/i18n/LocaleProvider";
 import {
   TEMPLATE_FAMILIES,
   type TemplateFamily,
   type TemplateLibraryItem,
+  type TemplateVersionEntry,
 } from "@/lib/templates/library-shared";
-import { setDocTemplateSettingAction, setGuideTemplateStateAction } from "./actions";
+import {
+  duplicateGuideTemplateAction,
+  renameGuideTemplateAction,
+  setDocTemplateSettingAction,
+  setGuideTemplateStateAction,
+} from "./actions";
 
 /**
  * The ONE template library (L-P2) — a client island over the merged
@@ -32,18 +39,23 @@ type Props = {
   canManage: boolean;
   createHrefs: Record<TemplateFamily, string | null>;
   homeHrefs: Record<TemplateFamily, string | null>;
+  /** Version history per "family:templateId" (template_versions journal). */
+  versionsByKey: Record<string, TemplateVersionEntry[]>;
 };
 
 const FAMILY_ORDER: TemplateFamily[] = [...TEMPLATE_FAMILIES];
 
-export function TemplateLibrary({ items, canManage, createHrefs, homeHrefs }: Props) {
+export function TemplateLibrary({ items, canManage, createHrefs, homeHrefs, versionsByKey }: Props) {
   const t = useT();
+  const fmt = useFormatters();
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [family, setFamily] = useState<TemplateFamily | "all">("all");
   const [newOpen, setNewOpen] = useState(false);
   const [pending, startTransition] = useTransition();
   const [actionError, setActionError] = useState<string | null>(null);
+  const [renaming, setRenaming] = useState<string | null>(null);
+  const [renameValue, setRenameValue] = useState("");
 
   const familyLabel: Record<TemplateFamily, string> = {
     doc: t("console.legend.hub.templates.family.doc", undefined, "Document templates"),
@@ -170,6 +182,25 @@ export function TemplateLibrary({ items, canManage, createHrefs, homeHrefs }: Pr
     startTransition(async () => {
       const res = await setGuideTemplateStateAction(templateId, state);
       if (res?.error) setActionError(resolveActionError(res.error, t));
+      router.refresh();
+    });
+  };
+
+  const duplicateGuide = (templateId: string) => {
+    setActionError(null);
+    startTransition(async () => {
+      const res = await duplicateGuideTemplateAction(templateId);
+      if (res?.error) setActionError(resolveActionError(res.error, t));
+      router.refresh();
+    });
+  };
+
+  const renameGuide = (templateId: string) => {
+    setActionError(null);
+    startTransition(async () => {
+      const res = await renameGuideTemplateAction(templateId, renameValue);
+      if (res?.error) setActionError(resolveActionError(res.error, t));
+      else setRenaming(null);
       router.refresh();
     });
   };
@@ -425,38 +456,113 @@ export function TemplateLibrary({ items, canManage, createHrefs, homeHrefs }: Pr
                   )}
                   {item.family === "guide" && canManage && (
                     <div className="mt-1 flex flex-wrap items-center gap-2 border-t border-[var(--p-border)] pt-2">
-                      {item.state !== "published" && (
-                        <button
-                          type="button"
-                          disabled={pending}
-                          onClick={() => setGuideState(item.id, "published")}
-                          className="ps-btn ps-btn--sm"
-                        >
-                          {t("console.legend.hub.templates.publishGuide", undefined, "Publish")}
-                        </button>
-                      )}
-                      {item.state === "published" && (
-                        <button
-                          type="button"
-                          disabled={pending}
-                          onClick={() => setGuideState(item.id, "draft")}
-                          className="ps-btn ps-btn--sm ps-btn--tertiary"
-                        >
-                          {t("console.legend.hub.templates.unpublishGuide", undefined, "Unpublish")}
-                        </button>
-                      )}
-                      {item.state !== "archived" && (
-                        <button
-                          type="button"
-                          disabled={pending}
-                          onClick={() => setGuideState(item.id, "archived")}
-                          className="ps-btn ps-btn--sm ps-btn--tertiary"
-                        >
-                          {t("console.legend.hub.templates.archiveGuide", undefined, "Archive")}
-                        </button>
+                      {renaming === item.id ? (
+                        <>
+                          <input
+                            value={renameValue}
+                            onChange={(e) => setRenameValue(e.target.value)}
+                            maxLength={200}
+                            aria-label={t("console.legend.hub.templates.renameAria", undefined, "Template name")}
+                            className="ps-input ps-input--sm w-40"
+                          />
+                          <button
+                            type="button"
+                            disabled={pending || renameValue.trim().length === 0}
+                            onClick={() => renameGuide(item.id)}
+                            className="ps-btn ps-btn--sm"
+                          >
+                            {t("console.legend.hub.templates.renameSave", undefined, "Save")}
+                          </button>
+                          <button
+                            type="button"
+                            disabled={pending}
+                            onClick={() => setRenaming(null)}
+                            className="ps-btn ps-btn--sm ps-btn--tertiary"
+                          >
+                            {t("console.legend.hub.templates.renameCancel", undefined, "Cancel")}
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          {item.state !== "published" && (
+                            <button
+                              type="button"
+                              disabled={pending}
+                              onClick={() => setGuideState(item.id, "published")}
+                              className="ps-btn ps-btn--sm"
+                            >
+                              {t("console.legend.hub.templates.publishGuide", undefined, "Publish")}
+                            </button>
+                          )}
+                          {item.state === "published" && (
+                            <button
+                              type="button"
+                              disabled={pending}
+                              onClick={() => setGuideState(item.id, "draft")}
+                              className="ps-btn ps-btn--sm ps-btn--tertiary"
+                            >
+                              {t("console.legend.hub.templates.unpublishGuide", undefined, "Unpublish")}
+                            </button>
+                          )}
+                          {item.state !== "archived" && (
+                            <button
+                              type="button"
+                              disabled={pending}
+                              onClick={() => setGuideState(item.id, "archived")}
+                              className="ps-btn ps-btn--sm ps-btn--tertiary"
+                            >
+                              {t("console.legend.hub.templates.archiveGuide", undefined, "Archive")}
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            disabled={pending}
+                            onClick={() => duplicateGuide(item.id)}
+                            className="ps-btn ps-btn--sm ps-btn--tertiary"
+                          >
+                            {t("console.legend.hub.templates.duplicateGuide", undefined, "Duplicate")}
+                          </button>
+                          <button
+                            type="button"
+                            disabled={pending}
+                            onClick={() => {
+                              setRenaming(item.id);
+                              setRenameValue(item.title);
+                            }}
+                            className="ps-btn ps-btn--sm ps-btn--tertiary"
+                          >
+                            {t("console.legend.hub.templates.renameGuide", undefined, "Rename")}
+                          </button>
+                        </>
                       )}
                     </div>
                   )}
+                  {(() => {
+                    const history = versionsByKey[`${item.family}:${item.id}`];
+                    if (!history || history.length === 0) return null;
+                    return (
+                      <details className="mt-1 border-t border-[var(--p-border)] pt-2 text-xs">
+                        <summary className="focus-ring cursor-pointer text-[var(--p-text-2)]">
+                          {history.length === 1
+                            ? t("console.legend.hub.templates.oneVersion", undefined, "1 version")
+                            : t(
+                                "console.legend.hub.templates.nVersions",
+                                { count: history.length },
+                                `${history.length} versions`,
+                              )}
+                        </summary>
+                        <ul className="mt-1.5 space-y-1">
+                          {history.map((v) => (
+                            <li key={v.version} className="flex items-center gap-2 text-[var(--p-text-3)]">
+                              <span className="ps-id">v{v.version}</span>
+                              <span>{fmt.date(new Date(v.createdAt))}</span>
+                              {v.changedBy && <span>· {v.changedBy}</span>}
+                            </li>
+                          ))}
+                        </ul>
+                      </details>
+                    );
+                  })()}
                 </li>
               ))}
             </ul>

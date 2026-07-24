@@ -71,6 +71,78 @@ export async function createJobTemplateAction(_: State, fd: FormData): Promise<S
 }
 
 /**
+ * Archive a job template (soft delete). Read the write back — an RLS-filtered
+ * UPDATE returns no error, just zero rows.
+ */
+export async function archiveJobTemplateAction(templateId: string): Promise<void> {
+  const session = await requireSession();
+  const denied = assertLegendWrite(session);
+  if (denied) throw new Error(denied.error);
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("job_templates")
+    .update({ deleted_at: new Date().toISOString() })
+    .eq("id", templateId)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null)
+    .select("id");
+  if (error) throw new Error(error.message);
+  if (!data || data.length === 0) return;
+  revalidatePath("/legend/hub/templates/job-templates");
+  revalidatePath("/legend/hub/templates");
+}
+
+/**
+ * Clone a job template — copies the row AND its checklist steps, lands as
+ * "<name> (Copy)" with v1 in the version journal. RLS enforces the write
+ * band; the persona floor is asserted here like every legend write.
+ */
+export async function duplicateJobTemplateAction(templateId: string): Promise<void> {
+  const session = await requireSession();
+  const denied = assertLegendWrite(session);
+  if (denied) throw new Error(denied.error);
+  const supabase = await createClient();
+
+  const { data: src } = await supabase
+    .from("job_templates")
+    .select("id, name, trade, steps:job_template_steps(position, label, requires_photo)")
+    .eq("id", templateId)
+    .eq("org_id", session.orgId)
+    .is("deleted_at", null)
+    .maybeSingle();
+  if (!src) return;
+
+  const { data: copy, error } = await supabase
+    .from("job_templates")
+    .insert({ org_id: session.orgId, name: `${src.name} (Copy)`, trade: src.trade })
+    .select("id")
+    .single();
+  if (error || !copy) return;
+
+  const steps = (src.steps ?? [])
+    .slice()
+    .sort((a, b) => a.position - b.position)
+    .map((s) => ({
+      job_template_id: copy.id,
+      position: s.position,
+      label: s.label,
+      requires_photo: s.requires_photo,
+    }));
+  if (steps.length) await supabase.from("job_template_steps").insert(steps);
+
+  await recordTemplateVersion(supabase, {
+    orgId: session.orgId,
+    family: "job",
+    templateId: copy.id,
+    snapshot: { name: `${src.name} (Copy)`, trade: src.trade, steps: steps.map((s) => s.label) },
+    changedBy: session.userId,
+  });
+
+  revalidatePath("/legend/hub/templates/job-templates");
+  revalidatePath("/legend/hub/templates");
+}
+
+/**
  * Create a work order from a job template (kit 21 remediation R2, ADR-0015;
  * clone-to-start). Seeds a `work_orders` row pre-filled from the template
  * (name + trade) and stamps the template's `last_used_at`. Mirrors the kit's

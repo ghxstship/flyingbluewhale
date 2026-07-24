@@ -92,3 +92,10 @@ export type TemplateLibraryItem = {
   /** Precomputed lowercase haystack for the unified search. */
   searchText: string;
 };
+
+/** One row of a template's version history (template_versions journal). */
+export type TemplateVersionEntry = {
+  version: number;
+  createdAt: string;
+  changedBy: string | null;
+};

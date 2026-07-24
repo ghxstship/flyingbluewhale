@@ -55,7 +55,7 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
   const t = useT();
   const fmt = useFormatters();
   const [templates, setTemplates] = useState<Template[]>(initial);
-  const [mode, setMode] = useState<"list" | "new" | { edit: string }>("list");
+  const [mode, setMode] = useState<"list" | "new" | { edit: string } | { duplicate: string }>("list");
   const [form, setForm] = useState<Partial<Template>>({
     slug: "",
     name: "",
@@ -65,18 +65,31 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
   const [isPending, startTransition] = useTransition();
 
   const active = typeof mode === "object" && "edit" in mode ? mode.edit : null;
+  // Duplicate = the create flow prefilled from a source row; the POST path
+  // (which already journals a template_versions v1) does the rest.
+  const dupSource = typeof mode === "object" && "duplicate" in mode ? mode.duplicate : null;
+  const isCreate = mode === "new" || dupSource !== null;
 
   useEffect(() => {
     if (mode === "new") {
       setForm({ slug: "", name: "", subject: "", body_html: "", body_text: "" });
+    } else if (dupSource) {
+      const tpl = templates.find((x) => x.id === dupSource);
+      if (tpl) {
+        setForm({
+          ...tpl,
+          slug: `${tpl.slug}-copy`,
+          name: `${tpl.name} (Copy)`,
+        });
+      }
     } else if (active) {
       const tpl = templates.find((x) => x.id === active);
       if (tpl) setForm({ ...tpl });
     }
-  }, [mode, active, templates]);
+  }, [mode, active, dupSource, templates]);
 
   const save = useCallback(() => {
-    if (mode === "new") {
+    if (isCreate) {
       if (!form.slug || !form.name || !form.subject || !form.body_html) {
         toast.error(
           t("console.settings.emailTemplates.requiredToast", undefined, "Slug, name, subject, and body are required"),
@@ -135,7 +148,7 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
         }
       });
     }
-  }, [mode, form, active, t]);
+  }, [isCreate, form, active, t]);
 
   if (mode === "list") {
     return (
@@ -193,13 +206,22 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
                   <td>{tpl.is_active ? t("common.yes", undefined, "Yes") : t("common.no", undefined, "No")}</td>
                   <td className="font-mono text-xs">{fmt.date(new Date(tpl.updated_at))}</td>
                   <td>
-                    <button
-                      type="button"
-                      onClick={() => setMode({ edit: tpl.id })}
-                      className="text-xs text-[var(--p-accent)] hover:underline"
-                    >
-                      {t("common.edit", undefined, "Edit")}
-                    </button>
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setMode({ edit: tpl.id })}
+                        className="text-xs text-[var(--p-accent)] hover:underline"
+                      >
+                        {t("common.edit", undefined, "Edit")}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setMode({ duplicate: tpl.id })}
+                        className="text-xs text-[var(--p-accent)] hover:underline"
+                      >
+                        {t("console.settings.emailTemplates.duplicate", undefined, "Duplicate")}
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -214,7 +236,7 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
     <div className="surface space-y-3 p-5">
       <div className="flex items-center justify-between">
         <div className="text-sm font-semibold">
-          {mode === "new"
+          {isCreate
             ? t("console.settings.emailTemplates.newTemplate", undefined, "New Template")
             : t("console.settings.emailTemplates.editTemplate", undefined, "Edit template")}
         </div>
@@ -233,7 +255,7 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
           value={form.slug ?? ""}
           onChange={(e) => setForm({ ...form, slug: e.target.value })}
           placeholder="proposal.share"
-          disabled={mode !== "new"}
+          disabled={!isCreate}
         />
         <Input
           label={t("console.settings.emailTemplates.colName", undefined, "Name")}
@@ -256,7 +278,7 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
         onChange={(v) => setForm({ ...form, body_html: v })}
       />
 
-      {mode !== "new" && (
+      {!isCreate && (
         <label className="flex items-center gap-2 text-xs">
           <input
             type="checkbox"
@@ -290,7 +312,32 @@ export function EmailTemplatesPanel({ initial }: { initial: Template[] }) {
 
       <MergeTagCatalog />
 
-      <div className="flex justify-end gap-2">
+      <div className="flex items-center justify-end gap-2">
+        {active && (
+          <button
+            type="button"
+            disabled={isPending}
+            onClick={() => {
+              startTransition(async () => {
+                const r = await fetch(`/api/v1/email-templates/${active}`, { method: "DELETE" });
+                const body = await r.json().catch(() => ({}));
+                if (!r.ok || body.ok === false) {
+                  toast.error(
+                    body.error?.message ??
+                      t("console.settings.emailTemplates.deleteFailedToast", undefined, "Delete failed"),
+                  );
+                  return;
+                }
+                setTemplates((ts) => ts.filter((tpl) => tpl.id !== active));
+                setMode("list");
+                toast.success(t("console.settings.emailTemplates.deletedToast", undefined, "Template deleted"));
+              });
+            }}
+            className="ps-btn ps-btn--tertiary mr-auto text-[var(--p-danger-text)]"
+          >
+            {t("console.settings.emailTemplates.deleteTemplate", undefined, "Delete template")}
+          </button>
+        )}
         <Button type="button" onClick={save} disabled={isPending}>
           {isPending
             ? t("common.saving", undefined, "Saving…")

@@ -3,6 +3,7 @@ import { z } from "zod";
 import { apiError, apiOk, parseJson } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { recordTemplateVersion } from "@/lib/templates/versions";
 import type { Database } from "@/lib/supabase/database.types";
 
 type EmailTemplateUpdate = Database["public"]["Tables"]["email_templates"]["Update"];
@@ -42,6 +43,23 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       .maybeSingle();
     if (error) return apiError("internal", error.message);
     if (!data) return apiError("not_found", "Template not found");
+
+    await recordTemplateVersion(supabase, {
+      orgId: session.orgId,
+      family: "email",
+      templateId: data.id,
+      snapshot: {
+        slug: data.slug,
+        name: data.name,
+        subject: data.subject,
+        body_html: data.body_html,
+        body_text: data.body_text,
+        merge_tags: data.merge_tags,
+        is_active: data.is_active,
+      },
+      changedBy: session.userId,
+    });
+
     return apiOk({ template: data });
   });
 }

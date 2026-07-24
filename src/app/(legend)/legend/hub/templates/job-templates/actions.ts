@@ -6,6 +6,7 @@ import { requireSession } from "@/lib/auth";
 import { assertLegendWrite } from "@/lib/legend_access";
 import { createClient } from "@/lib/supabase/server";
 import { actionFail, formFail } from "@/lib/forms/fail";
+import { recordTemplateVersion } from "@/lib/templates/versions";
 import { urlFor } from "@/lib/urls";
 
 /**
@@ -55,6 +56,15 @@ export async function createJobTemplateAction(_: State, fd: FormData): Promise<S
     const { error: stepErr } = await supabase.from("job_template_steps").insert(steps);
     if (stepErr) return actionFail(stepErr.message, fd);
   }
+
+  await recordTemplateVersion(supabase, {
+    orgId: session.orgId,
+    family: "job",
+    templateId: data!.id,
+    snapshot: { name: parsed.data.name, trade: parsed.data.trade || null, steps: lines },
+    changedBy: session.userId,
+  });
+
   revalidatePath("/legend/hub/templates/job-templates");
   revalidatePath("/legend/hub/templates");
   redirect("/legend/hub/templates/job-templates");

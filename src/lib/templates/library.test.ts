@@ -4,10 +4,18 @@ import { describe, expect, it } from "vitest";
 import { DOC_TEMPLATES } from "@/lib/documents/registry";
 import { EMPTY_DOC_SETTINGS, toDocSettingsMap } from "@/lib/documents/org-settings";
 import {
+  AUTHORED_FAMILIES,
   buildAdvanceItems,
+  buildDeliverableItems,
   buildDocItems,
+  buildEmailItems,
   buildFieldItems,
+  buildGuideItems,
+  buildInspectionItems,
   buildJobItems,
+  buildNotificationItems,
+  buildProjectItems,
+  buildProposalItems,
   familyCreateHref,
   storesForFamily,
   TEMPLATE_FAMILIES,
@@ -21,11 +29,11 @@ import {
  * 1. Every `*_templates` / `*_presets` table that exists in the schema
  *    (scanned from supabase/migrations) must appear in TEMPLATE_STORES —
  *    either mapped to a library family or explicitly excluded with a reason.
- *    A fifth template store CANNOT ship without deciding whether it joins
+ *    A new template store CANNOT ship without deciding whether it joins
  *    the library at /legend/hub/templates.
- * 2. All four contracted families are present, each fed by at least one
- *    store, each with a working item builder and a creation route (or an
- *    honest null for the registry-fixed doc family).
+ * 2. All contracted families are present, each fed by at least one store,
+ *    each with a working item builder and a creation route (or an honest
+ *    null for the registry-fixed / captured-from-record families).
  * 3. The doc family covers the ENTIRE registry (counts vs source).
  */
 
@@ -62,8 +70,20 @@ describe("unified template library ratchet (L-P2)", () => {
     expect(phantom, `TEMPLATE_STORES entries with no backing table: ${phantom.join(", ")}`).toEqual([]);
   });
 
-  it("covers all four contracted families, each fed by at least one store", () => {
-    expect([...TEMPLATE_FAMILIES]).toEqual(["doc", "job", "field", "advance"]);
+  it("covers all contracted families, each fed by at least one store", () => {
+    expect([...TEMPLATE_FAMILIES]).toEqual([
+      "doc",
+      "job",
+      "field",
+      "advance",
+      "guide",
+      "proposal",
+      "project",
+      "inspection",
+      "email",
+      "deliverable",
+      "notification",
+    ]);
     for (const family of TEMPLATE_FAMILIES) {
       expect(storesForFamily(family).length, `family "${family}" has no backing store`).toBeGreaterThan(0);
     }
@@ -111,10 +131,54 @@ describe("unified template library ratchet (L-P2)", () => {
     expect(advance[0]).toMatchObject({ family: "advance", sectionCount: 5, title: "vendor" });
   });
 
-  it("every family has a creation route, except the registry-fixed doc family", () => {
-    expect(familyCreateHref("doc")).toBeNull();
-    for (const family of TEMPLATE_FAMILIES.filter((f) => f !== "doc")) {
-      expect(familyCreateHref(family), `family "${family}" has no creation route`).toBeTruthy();
+  it("expansion builders (guide/proposal/project/inspection/email/deliverable/notification) produce items", () => {
+    const guide = buildGuideItems([
+      { id: "g1", name: "Artist KBYG", persona: "artist", description: null, templateState: "published" },
+    ]);
+    expect(guide[0]).toMatchObject({ family: "guide", state: "published", subtitle: "artist" });
+    // Guide templates are managed inline in the library — no deep link.
+    expect(guide[0]!.href).toBe("");
+
+    const proposal = buildProposalItems([
+      { id: "p1", name: "Festival SOW", scope: "general", isSystem: true, blockCount: 12 },
+    ]);
+    expect(proposal[0]).toMatchObject({ family: "proposal", system: true, blockCount: 12 });
+
+    const project = buildProjectItems([
+      { id: "pt1", name: "Arena Build", category: "event", tagline: null, isOfficial: true, enabled: true },
+    ]);
+    expect(project[0]).toMatchObject({ family: "project", system: true, subtitle: "event" });
+
+    const inspection = buildInspectionItems([
+      { id: "i1", name: "Rigging Pre-Show", category: "rigging", itemCount: 9 },
+    ]);
+    expect(inspection[0]).toMatchObject({ family: "inspection", stepCount: 9 });
+
+    const email = buildEmailItems([{ id: "e1", slug: "proposal_sent", name: "Proposal Sent", isActive: true }]);
+    expect(email[0]).toMatchObject({ family: "email", enabled: true, subtitle: "proposal_sent" });
+
+    const deliverable = buildDeliverableItems([
+      { id: "d1", name: "Stage Plot Spec", type: "stage_plot", isGlobal: false },
+    ]);
+    expect(deliverable[0]).toMatchObject({ family: "deliverable", system: false });
+    expect(deliverable[0]!.href).toBe("");
+
+    const notification = buildNotificationItems([
+      { id: "n1", templateKey: "assignment.state", channel: "push", version: 3, state: "active", isPlatform: true },
+    ]);
+    expect(notification[0]).toMatchObject({ family: "notification", version: 3, system: true, state: "active" });
+  });
+
+  it("authoring families have a creation route; captured/registry-fixed families are honestly null", () => {
+    for (const family of TEMPLATE_FAMILIES) {
+      if ((AUTHORED_FAMILIES as readonly string[]).includes(family)) {
+        expect(familyCreateHref(family), `family "${family}" has no creation route`).toBeTruthy();
+      } else {
+        // doc: registry-fixed. guide: captured from a project guide.
+        // proposal/project: seeded system rows + captured from records.
+        // deliverable: seeded per-project. notification: platform-seeded.
+        expect(familyCreateHref(family), `family "${family}" should not offer a blank-authoring route`).toBeNull();
+      }
     }
   });
 });

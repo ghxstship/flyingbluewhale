@@ -1,16 +1,24 @@
 import { ModuleHeader } from "@/components/Shell";
-import { isManagerPlus, requireSession } from "@/lib/auth";
+import { isManagerPlus, can, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import { urlFor } from "@/lib/urls";
 import { getRequestT } from "@/lib/i18n/request";
 import { getOrgDocSettings } from "@/lib/documents/org-settings";
+import type { LooseSupabase } from "@/lib/supabase/loose";
 import {
   buildAdvanceItems,
+  buildDeliverableItems,
   buildDocItems,
+  buildEmailItems,
   buildFieldItems,
+  buildGuideItems,
+  buildInspectionItems,
   buildJobItems,
+  buildNotificationItems,
+  buildProjectItems,
+  buildProposalItems,
   familyCreateHref,
   TEMPLATE_FAMILIES,
   type TemplateFamily,
@@ -21,12 +29,14 @@ import { TemplateLibrary } from "./TemplateLibrary";
 export const dynamic = "force-dynamic";
 
 /**
- * The ONE template library (L-P2). All four template families in one surface
- * with real data: the code-defined doc registry (with per-type merge-field
- * meta + the org configurator over org_doc_template_settings), hub-native job
- * templates inline, COMPVSS field templates, and the advance-packet preset
- * matrix. Unified search/filter across families rides the client island;
- * every item deep-links to its native editor/preview.
+ * The ONE template library (L-P2, expanded 2026-07-24). Every template family
+ * in the product in one surface with real data: the code-defined doc registry
+ * (with per-type merge-field meta + the org configurator over
+ * org_doc_template_settings), hub-native job templates, COMPVSS field
+ * templates, the advance-packet preset matrix, org guide templates (Boarding
+ * Pass), proposal/project/inspection/email/deliverable/notification stores.
+ * Unified search/filter across families rides the client island; every item
+ * deep-links to its native editor/preview where one exists.
  *
  * Configurator enforcement rule: a DISABLED doc type is hidden from creation
  * pickers (here + the /studio/documents hub) but stays renderable for
@@ -47,8 +57,23 @@ export default async function TemplatesPillarPage() {
   }
   const session = await requireSession();
   const supabase = await createClient();
+  // org_guide_templates is not in the generated client types yet (types regen
+  // is deferred while another migration is in flight) — loose for that one.
+  const loose = supabase as unknown as LooseSupabase;
 
-  const [jobRes, fieldRes, advanceRes, docSettings] = await Promise.all([
+  const [
+    jobRes,
+    fieldRes,
+    advanceRes,
+    docSettings,
+    guideRes,
+    proposalRes,
+    projectRes,
+    inspectionRes,
+    emailRes,
+    deliverableRes,
+    notificationRes,
+  ] = await Promise.all([
     supabase
       .from("job_templates")
       .select("id, name, trade, steps:job_template_steps(count)")
@@ -70,6 +95,52 @@ export default async function TemplatesPillarPage() {
       .is("deleted_at", null)
       .limit(500),
     getOrgDocSettings(supabase, session.orgId),
+    loose
+      .from("org_guide_templates")
+      .select("id, name, persona, description, template_state")
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .order("updated_at", { ascending: false })
+      .limit(200),
+    // System rows (org_id NULL) + this org's rows — RLS scopes visibility.
+    supabase
+      .from("proposal_templates")
+      .select("id, name, scope, is_system, blocks")
+      .is("deleted_at", null)
+      .order("is_system", { ascending: false })
+      .order("updated_at", { ascending: false })
+      .limit(200),
+    supabase
+      .from("project_templates")
+      .select("id, name, category, tagline, is_official, enabled")
+      .order("is_official", { ascending: false })
+      .order("name", { ascending: true })
+      .limit(200),
+    supabase
+      .from("inspection_templates")
+      .select("id, name, category, items:inspection_template_items(count)")
+      .eq("org_id", session.orgId)
+      .order("name", { ascending: true })
+      .limit(200),
+    supabase
+      .from("email_templates")
+      .select("id, slug, name, is_active")
+      .eq("org_id", session.orgId)
+      .is("deleted_at", null)
+      .order("slug", { ascending: true })
+      .limit(200),
+    supabase
+      .from("deliverable_templates")
+      .select("id, name, type, is_global")
+      .is("deleted_at", null)
+      .order("name", { ascending: true })
+      .limit(200),
+    // Platform defaults (org_id NULL) + org overrides — RLS scopes visibility.
+    supabase
+      .from("notification_templates")
+      .select("id, org_id, template_key, channel, version, status")
+      .order("template_key", { ascending: true })
+      .limit(300),
   ]);
 
   const jobRows = (jobRes.data ?? []) as unknown as Array<{
@@ -86,6 +157,54 @@ export default async function TemplatesPillarPage() {
     use_count: number;
   }>;
   const presetRows = (advanceRes.data ?? []) as Array<{ audience_type: string }>;
+  const guideRows = (guideRes.data ?? []) as unknown as Array<{
+    id: string;
+    name: string;
+    persona: string;
+    description: string | null;
+    template_state: string;
+  }>;
+  const proposalRows = (proposalRes.data ?? []) as unknown as Array<{
+    id: string;
+    name: string;
+    scope: string;
+    is_system: boolean;
+    blocks: unknown;
+  }>;
+  const projectRows = (projectRes.data ?? []) as unknown as Array<{
+    id: string;
+    name: string;
+    category: string;
+    tagline: string | null;
+    is_official: boolean;
+    enabled: boolean;
+  }>;
+  const inspectionRows = (inspectionRes.data ?? []) as unknown as Array<{
+    id: string;
+    name: string;
+    category: string;
+    items: { count: number }[] | null;
+  }>;
+  const emailRows = (emailRes.data ?? []) as unknown as Array<{
+    id: string;
+    slug: string;
+    name: string;
+    is_active: boolean;
+  }>;
+  const deliverableRows = (deliverableRes.data ?? []) as unknown as Array<{
+    id: string;
+    name: string;
+    type: string;
+    is_global: boolean;
+  }>;
+  const notificationRows = (notificationRes.data ?? []) as unknown as Array<{
+    id: string;
+    org_id: string | null;
+    template_key: string;
+    channel: string;
+    version: number;
+    status: string;
+  }>;
 
   const audienceCounts = new Map<string, number>();
   for (const row of presetRows) {
@@ -117,16 +236,75 @@ export default async function TemplatesPillarPage() {
         sectionCount,
       })),
     ),
+    ...buildGuideItems(
+      guideRows.map((r) => ({
+        id: r.id,
+        name: r.name,
+        persona: r.persona,
+        description: r.description,
+        templateState: r.template_state,
+      })),
+    ),
+    ...buildProposalItems(
+      proposalRows.map((r) => ({
+        id: r.id,
+        name: r.name,
+        scope: r.scope,
+        isSystem: r.is_system,
+        blockCount: Array.isArray(r.blocks) ? r.blocks.length : 0,
+      })),
+    ),
+    ...buildProjectItems(
+      projectRows.map((r) => ({
+        id: r.id,
+        name: r.name,
+        category: r.category,
+        tagline: r.tagline,
+        isOfficial: r.is_official,
+        enabled: r.enabled,
+      })),
+    ),
+    ...buildInspectionItems(
+      inspectionRows.map((r) => ({
+        id: r.id,
+        name: r.name,
+        category: r.category,
+        itemCount: r.items?.[0]?.count ?? 0,
+      })),
+    ),
+    ...buildEmailItems(
+      emailRows.map((r) => ({ id: r.id, slug: r.slug, name: r.name, isActive: r.is_active })),
+    ),
+    ...buildDeliverableItems(
+      deliverableRows.map((r) => ({ id: r.id, name: r.name, type: r.type, isGlobal: r.is_global })),
+    ),
+    ...buildNotificationItems(
+      notificationRows.map((r) => ({
+        id: r.id,
+        templateKey: r.template_key,
+        channel: r.channel,
+        version: r.version,
+        state: r.status,
+        isPlatform: r.org_id === null,
+      })),
+    ),
   ];
 
   const createHrefs = Object.fromEntries(
     TEMPLATE_FAMILIES.map((f) => [f, familyCreateHref(f)]),
   ) as Record<TemplateFamily, string | null>;
-  const homeHrefs: Record<TemplateFamily, string> = {
+  const homeHrefs: Record<TemplateFamily, string | null> = {
     doc: urlFor("platform", "/documents"),
     job: "/legend/hub/templates/job-templates",
     field: urlFor("mobile", "/templates"),
     advance: urlFor("platform", "/settings/advancing"),
+    guide: null,
+    proposal: urlFor("platform", "/proposals/templates"),
+    project: urlFor("platform", "/templates"),
+    inspection: urlFor("platform", "/inspections/templates"),
+    email: urlFor("platform", "/settings/email-templates"),
+    deliverable: null,
+    notification: null,
   };
 
   return (
@@ -137,7 +315,7 @@ export default async function TemplatesPillarPage() {
         subtitle={t(
           "console.legend.hub.templates.subtitle",
           undefined,
-          "Configure once, reuse on every project. Four template families, one library.",
+          "Configure once, reuse on every project. Every template family, one library.",
         )}
         breadcrumbs={[
           { label: t("console.legend.hub.breadcrumb", undefined, "LEG3ND") },
@@ -148,7 +326,7 @@ export default async function TemplatesPillarPage() {
       <div className="page-content">
         <TemplateLibrary
           items={items}
-          canManage={isManagerPlus(session)}
+          canManage={isManagerPlus(session) || can(session, "templates:write")}
           createHrefs={createHrefs}
           homeHrefs={homeHrefs}
         />

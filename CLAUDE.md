@@ -198,8 +198,15 @@ Per-role Know-Before-You-Go — same Boarding Pass pattern, shared schema, role-
 - **CMS:** `/studio/projects/[projectId]/guides` — index + `[persona]` editor.
 - **Rendering:** `/p/[slug]/guide` (portal) and `/m/guide` (mobile), both auto-scoped to the viewer's session persona via `mapSessionToGuidePersona()`.
 - **Component:** `<GuideView>` in `src/components/guides/GuideView.tsx`.
+- **Org guide templates (2026-07-24):** `org_guide_templates` (LDP `template_state` draft/published/archived; `event_guides.template_id` = provenance). "Save as org template" + "Use for this project" live on the guides index; publish/archive in the LEG3ND library.
 
-## Environment
+## Template management (2026-07-24)
+
+The LEG3ND unified template library (`/legend/hub/templates`, L-P2) covers **every** template family — 11 families over `TEMPLATE_STORES` in `src/lib/templates/library-shared.ts` (ratcheted by `library.test.ts`: a new `*_templates`/`*_presets` table cannot ship unmapped): doc (29-type code registry + `org_doc_template_settings` configurator) · job · field · advance · guide (`org_guide_templates`) · proposal (`proposal_templates`) · project (`project_templates`) · inspection · email · deliverable · notification. Cross-cutting machinery:
+
+- **Version history:** `template_versions` (migration `20260724134606`) — one generic append-only snapshot journal (org × family × template × version, SELECT+INSERT-only RLS). Write paths call `recordTemplateVersion()` (`src/lib/templates/versions.ts`, best-effort, never fails the write): job create, field create/duplicate, email POST/PATCH, guide capture.
+- **Provenance:** records remember their template — `proposals.template_id`, `projects.template_id`, `event_guides.template_id` (migration `20260724134607` + `20260724134546`; inspections/notification_instances already had it). ON DELETE SET NULL: history survives template deletion.
+- **Capability grants (ADR-0015):** `templates:write` (shape content) + `templates:publish` (flip what projects inherit) in `src/lib/rbac/capabilities.ts` — additive over the manager-band floor, shift-derivation EXCLUDED. Honored in the library configurator, guide template actions, and the guides-page capture/seed flows.
 
 `.env.local` keys:
 

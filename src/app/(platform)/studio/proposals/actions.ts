@@ -109,7 +109,10 @@ export async function createProposalAction(_: State, fd: FormData): Promise<Stat
     }
   }
 
-  const { data, error } = await supabase
+  // Loose: proposals.template_id (provenance, migration 20260724134607) is
+  // not in the generated client types yet (regen deferred while another
+  // migration is in flight).
+  const { data, error } = await (supabase as unknown as LooseSupabase)
     .from("proposals")
     .insert({
       org_id: session.orgId,
@@ -122,6 +125,8 @@ export async function createProposalAction(_: State, fd: FormData): Promise<Stat
       created_by: session.userId,
       blocks: seedBlocks as never,
       theme: seedTheme as never,
+      // Provenance: which template seeded this proposal (null when blank).
+      template_id: templateId,
     })
     .select()
     .single();

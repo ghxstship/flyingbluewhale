@@ -78,8 +78,15 @@ export async function applyProjectTemplate(opts: {
     // LooseSupabase cast this helper used to compile through).
     project_state: "draft" as const,
     created_by: opts.createdBy,
+    // Provenance: which blueprint materialized this project (migration
+    // 20260724134607). Not in the generated types yet — hence the cast below.
+    template_id: opts.templateId,
   };
-  const { data: project, error: pErr } = await admin.from("projects").insert(insertProject).select("id").single();
+  const { data: project, error: pErr } = await admin
+    .from("projects")
+    .insert(insertProject as never)
+    .select("id")
+    .single();
   if (pErr || !project) throw new Error(pErr?.message ?? "Failed to create project from template");
   const projectId = (project as { id: string }).id;
 

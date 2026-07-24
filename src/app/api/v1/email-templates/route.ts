@@ -3,6 +3,7 @@ import { z } from "zod";
 import { apiCreated, apiError, apiOk, parseJson } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { recordTemplateVersion } from "@/lib/templates/versions";
 
 /** /api/v1/email-templates — Opportunity #21. */
 
@@ -61,6 +62,23 @@ export async function POST(req: NextRequest) {
       if (/duplicate key/i.test(error.message)) return apiError("conflict", "Template slug already exists");
       return apiError("internal", error.message);
     }
+
+    await recordTemplateVersion(supabase, {
+      orgId: session.orgId,
+      family: "email",
+      templateId: data.id,
+      snapshot: {
+        slug: input.slug,
+        name: input.name,
+        subject: input.subject,
+        body_html: input.bodyHtml,
+        body_text: input.bodyText ?? null,
+        merge_tags: input.mergeTags,
+        is_active: input.isActive,
+      },
+      changedBy: session.userId,
+    });
+
     return apiCreated({ template: data });
   });
 }

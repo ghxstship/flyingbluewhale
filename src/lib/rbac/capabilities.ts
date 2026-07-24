@@ -58,8 +58,26 @@ export type ScanCapability = (typeof SCAN_CAPABILITIES)[number];
 export const ASSET_CAPABILITIES = ["asset:custody"] as const;
 export type AssetCapability = (typeof ASSET_CAPABILITIES)[number];
 
+/**
+ * Template management — curating the org's reusable template library
+ * (/legend/hub/templates and each family's native surface).
+ *
+ * The base gate everywhere is the manager band. These grants let an org
+ * delegate template curation without a role promotion — the "brand/ops
+ * coordinator maintains the library" case. Two capabilities on purpose:
+ * `templates:write` shapes content (create/edit/configure/archive);
+ * `templates:publish` flips what every project inherits (publish/unpublish),
+ * which some orgs will want held tighter than editing.
+ */
+export const TEMPLATE_CAPABILITIES = ["templates:write", "templates:publish"] as const;
+export type TemplateCapability = (typeof TEMPLATE_CAPABILITIES)[number];
+
 /** Every capability that may be granted as an add-on. */
-export const GRANTABLE_CAPABILITIES = [...SCAN_CAPABILITIES, ...ASSET_CAPABILITIES] as const;
+export const GRANTABLE_CAPABILITIES = [
+  ...SCAN_CAPABILITIES,
+  ...ASSET_CAPABILITIES,
+  ...TEMPLATE_CAPABILITIES,
+] as const;
 export type GrantableCapability = (typeof GRANTABLE_CAPABILITIES)[number];
 
 const GRANTABLE = new Set<string>(GRANTABLE_CAPABILITIES);
@@ -82,6 +100,8 @@ export const CAPABILITY_LABEL: Record<GrantableCapability, string> = {
   "scan:product": "Scan products",
   "scan:document": "Scan documents",
   "asset:custody": "Take gear out and bring it back",
+  "templates:write": "Edit the template library",
+  "templates:publish": "Publish org templates",
 };
 
 export const CAPABILITY_DESCRIPTION: Record<GrantableCapability, string> = {
@@ -91,6 +111,10 @@ export const CAPABILITY_DESCRIPTION: Record<GrantableCapability, string> = {
   "scan:document": "Capture documents and envelopes.",
   "asset:custody":
     "Check gear out and back in without a manager. Retiring or writing off an asset always stays manager-only.",
+  "templates:write":
+    "Create, edit, configure and archive the org's reusable templates without a manager role.",
+  "templates:publish":
+    "Publish or unpublish org templates — what every project inherits. Grant deliberately.",
 };
 
 /**
@@ -123,7 +147,13 @@ export const SHIFT_DERIVABLE_BY_DEFAULT: readonly GrantableCapability[] = [
  * admin action refuses to set `shift_derivable` on an excluded capability so
  * the flag can't be configured into a no-op.
  */
-export const SHIFT_DERIVATION_EXCLUDED: readonly GrantableCapability[] = ["scan:credential"];
+export const SHIFT_DERIVATION_EXCLUDED: readonly GrantableCapability[] = [
+  "scan:credential",
+  // Template curation is org configuration, not shift work — rostering someone
+  // onto a shift must never let them reshape what every project inherits.
+  "templates:write",
+  "templates:publish",
+];
 
 /**
  * May a role grant for `capability` confer that capability via a shift?

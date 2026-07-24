@@ -1,11 +1,18 @@
 /**
  * Unified template library (L-P2) — server-side builders for the merged
- * four-family index the LEG3ND library (/legend/hub/templates) renders:
+ * family index the LEG3ND library (/legend/hub/templates) renders:
  *
- *   doc     — the 29-type code-defined document registry (DOC_TEMPLATES)
- *   job     — job_templates (hub-native scope checklists)
- *   field   — field_templates (COMPVSS kit-31 field library)
- *   advance — org_advance_presets (the advance-packet preset matrix)
+ *   doc          — the 29-type code-defined document registry (DOC_TEMPLATES)
+ *   job          — job_templates (hub-native scope checklists)
+ *   field        — field_templates (COMPVSS kit-31 field library)
+ *   advance      — org_advance_presets (the advance-packet preset matrix)
+ *   guide        — org_guide_templates (Boarding Pass guide configs)
+ *   proposal     — proposal_templates (system + org block/theme catalogs)
+ *   project      — project_templates (project blueprints)
+ *   inspection   — inspection_templates (inspection shapes)
+ *   email        — email_templates (org overrides of the kit comm defaults)
+ *   deliverable  — deliverable_templates (advancing doc-spec seeds)
+ *   notification — notification_templates (system notification copy)
  *
  * Family vocabulary + the ratcheted store map live in ./library-shared.ts
  * (client-safe). This module is server-only by inclusion (the doc resolvers
@@ -45,6 +52,10 @@ const BASE: Omit<TemplateLibraryItem, "family" | "id" | "title" | "href" | "sear
   stepCount: null,
   useCount: null,
   sectionCount: null,
+  blockCount: null,
+  system: false,
+  state: null,
+  version: null,
 };
 
 /** Doc family — every registry template, annotated per the org's settings. */
@@ -124,10 +135,171 @@ export function buildAdvanceItems(groups: readonly AdvancePresetGroup[]): Templa
   }));
 }
 
+export type GuideTemplateRow = {
+  id: string;
+  name: string;
+  persona: string;
+  description: string | null;
+  templateState: string;
+};
+
+/** Guide family — org_guide_templates. Managed inline in the library. */
+export function buildGuideItems(rows: readonly GuideTemplateRow[]): TemplateLibraryItem[] {
+  return rows.map((r) => ({
+    ...BASE,
+    family: "guide" as const,
+    id: r.id,
+    title: r.name,
+    subtitle: r.description ?? r.persona,
+    // Managed inline in the library (publish/archive); seeded from
+    // /studio/projects/[projectId]/guides. No separate editor surface.
+    href: "",
+    state: r.templateState,
+    searchText: haystack(r.name, r.persona, r.description, "guide boarding pass"),
+  }));
+}
+
+export type ProposalTemplateRow = {
+  id: string;
+  name: string;
+  scope: string;
+  isSystem: boolean;
+  blockCount: number;
+};
+
+export function buildProposalItems(rows: readonly ProposalTemplateRow[]): TemplateLibraryItem[] {
+  return rows.map((r) => ({
+    ...BASE,
+    family: "proposal" as const,
+    id: r.id,
+    title: r.name,
+    subtitle: r.scope,
+    href: urlFor("platform", `/proposals/templates/${r.id}`),
+    system: r.isSystem,
+    blockCount: r.blockCount,
+    searchText: haystack(r.name, r.scope, "proposal"),
+  }));
+}
+
+export type ProjectTemplateRow = {
+  id: string;
+  name: string;
+  category: string;
+  tagline: string | null;
+  isOfficial: boolean;
+  enabled: boolean;
+};
+
+export function buildProjectItems(rows: readonly ProjectTemplateRow[]): TemplateLibraryItem[] {
+  return rows.map((r) => ({
+    ...BASE,
+    family: "project" as const,
+    id: r.id,
+    title: r.name,
+    subtitle: r.tagline ?? r.category,
+    href: urlFor("platform", `/templates/${r.id}`),
+    system: r.isOfficial,
+    enabled: r.enabled,
+    searchText: haystack(r.name, r.category, r.tagline, "project blueprint"),
+  }));
+}
+
+export type InspectionTemplateRow = {
+  id: string;
+  name: string;
+  category: string;
+  itemCount: number;
+};
+
+export function buildInspectionItems(rows: readonly InspectionTemplateRow[]): TemplateLibraryItem[] {
+  return rows.map((r) => ({
+    ...BASE,
+    family: "inspection" as const,
+    id: r.id,
+    title: r.name,
+    subtitle: r.category,
+    href: urlFor("platform", "/inspections/templates"),
+    stepCount: r.itemCount,
+    searchText: haystack(r.name, r.category, "inspection"),
+  }));
+}
+
+export type EmailTemplateRow = {
+  id: string;
+  slug: string;
+  name: string;
+  isActive: boolean;
+};
+
+export function buildEmailItems(rows: readonly EmailTemplateRow[]): TemplateLibraryItem[] {
+  return rows.map((r) => ({
+    ...BASE,
+    family: "email" as const,
+    id: r.id,
+    title: r.name,
+    subtitle: r.slug,
+    href: urlFor("platform", "/settings/email-templates"),
+    enabled: r.isActive,
+    searchText: haystack(r.name, r.slug, "email"),
+  }));
+}
+
+export type DeliverableTemplateRow = {
+  id: string;
+  name: string;
+  type: string;
+  isGlobal: boolean;
+};
+
+export function buildDeliverableItems(rows: readonly DeliverableTemplateRow[]): TemplateLibraryItem[] {
+  return rows.map((r) => ({
+    ...BASE,
+    family: "deliverable" as const,
+    id: r.id,
+    title: r.name,
+    subtitle: r.type,
+    // Seeded into per-project advancing doc specs; no org editor surface yet.
+    href: "",
+    system: r.isGlobal,
+    searchText: haystack(r.name, r.type, "deliverable doc spec"),
+  }));
+}
+
+export type NotificationTemplateRow = {
+  id: string;
+  templateKey: string;
+  channel: string;
+  version: number;
+  state: string;
+  isPlatform: boolean;
+};
+
+export function buildNotificationItems(
+  rows: readonly NotificationTemplateRow[],
+): TemplateLibraryItem[] {
+  return rows.map((r) => ({
+    ...BASE,
+    family: "notification" as const,
+    id: r.id,
+    title: r.templateKey,
+    subtitle: r.channel,
+    // Engine-consumed copy store; the library is its first org-facing surface.
+    href: "",
+    system: r.isPlatform,
+    state: r.state,
+    version: r.version,
+    searchText: haystack(r.templateKey, r.channel, "notification"),
+  }));
+}
+
 /**
  * Cross-family creation routes for the "New template" affordance. `null`
- * means the family's templates are registry-fixed (code-defined) — the
- * affordance explains that honestly instead of offering a dead-end form.
+ * means the family's templates are registry-fixed (doc), platform-seeded
+ * (notification), or captured from a live record instead of authored blank
+ * (guide: "Save as org template" on a project guide; proposal/project:
+ * seeded system rows + org rows captured from records; deliverable: seeded
+ * per-project) — the affordance explains that honestly instead of offering
+ * a dead-end form.
  */
 export function familyCreateHref(family: TemplateFamily): string | null {
   switch (family) {
@@ -139,5 +311,28 @@ export function familyCreateHref(family: TemplateFamily): string | null {
       return urlFor("mobile", "/templates");
     case "advance":
       return urlFor("platform", "/settings/advancing");
+    case "guide":
+      return null;
+    case "proposal":
+      return null;
+    case "project":
+      return null;
+    case "inspection":
+      return urlFor("platform", "/inspections/templates/new");
+    case "email":
+      return urlFor("platform", "/settings/email-templates");
+    case "deliverable":
+      return null;
+    case "notification":
+      return null;
   }
 }
+
+/** Families whose "New template" is a real authoring route (vs null above). */
+export const AUTHORED_FAMILIES: readonly TemplateFamily[] = [
+  "job",
+  "field",
+  "advance",
+  "inspection",
+  "email",
+] as const;

@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { recordTemplateVersion } from "@/lib/templates/versions";
 import { log } from "@/lib/log";
 
 /**
@@ -91,19 +92,31 @@ export async function createFieldTemplate(_prev: State, fd: FormData): Promise<S
     projectId = (proj as { id: string } | null)?.id ?? null;
   }
 
-  const { error } = await supabase.from("field_templates").insert({
-    org_id: session.orgId,
-    project_id: projectId,
-    name: v.name,
-    category,
-    summary: v.notes || null,
-    source: SOURCE_BY_LABEL[v.source ?? ""] ?? "blank",
-    created_by: session.userId,
-  });
+  const { data: created, error } = await supabase
+    .from("field_templates")
+    .insert({
+      org_id: session.orgId,
+      project_id: projectId,
+      name: v.name,
+      category,
+      summary: v.notes || null,
+      source: SOURCE_BY_LABEL[v.source ?? ""] ?? "blank",
+      created_by: session.userId,
+    })
+    .select("id")
+    .single();
   if (error) {
     log.error("m.templates.create_failed", { err: error.message });
     return { error: error.message };
   }
+
+  await recordTemplateVersion(supabase, {
+    orgId: session.orgId,
+    family: "field",
+    templateId: (created as { id: string }).id,
+    snapshot: { name: v.name, category, summary: v.notes || null, config: {}, project_id: projectId },
+    changedBy: session.userId,
+  });
 
   revalidatePath("/m/templates");
   return null;
@@ -142,17 +155,36 @@ export async function duplicateFieldTemplate(id: string): Promise<{ error?: stri
   if (!row) return { error: "Template not found." };
   const r = row as { name: string; category: string; summary: string | null; config: unknown; project_id: string | null };
 
-  const { error } = await supabase.from("field_templates").insert({
-    org_id: session.orgId,
-    project_id: r.project_id,
-    name: `${r.name} (Copy)`,
-    category: r.category,
-    summary: r.summary,
-    config: (r.config ?? {}) as Record<string, never>,
-    source: "duplicate",
-    created_by: session.userId,
-  });
+  const { data: copy, error } = await supabase
+    .from("field_templates")
+    .insert({
+      org_id: session.orgId,
+      project_id: r.project_id,
+      name: `${r.name} (Copy)`,
+      category: r.category,
+      summary: r.summary,
+      config: (r.config ?? {}) as Record<string, never>,
+      source: "duplicate",
+      created_by: session.userId,
+    })
+    .select("id")
+    .single();
   if (error) return { error: error.message };
+
+  await recordTemplateVersion(supabase, {
+    orgId: session.orgId,
+    family: "field",
+    templateId: (copy as { id: string }).id,
+    snapshot: {
+      name: `${r.name} (Copy)`,
+      category: r.category,
+      summary: r.summary,
+      config: r.config ?? {},
+      project_id: r.project_id,
+    },
+    changedBy: session.userId,
+  });
+
   revalidatePath("/m/templates");
   return {};
 }

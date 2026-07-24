@@ -12,14 +12,16 @@ import {
   type TemplateFamily,
   type TemplateLibraryItem,
 } from "@/lib/templates/library-shared";
-import { setDocTemplateSettingAction } from "./actions";
+import { setDocTemplateSettingAction, setGuideTemplateStateAction } from "./actions";
 
 /**
  * The ONE template library (L-P2) — a client island over the merged
- * four-family index built server-side. Unified search + family filter;
- * sections per family; every item deep-links to its native editor/preview.
- * Manager+ additionally gets the doc-family configurator (per-type enabled
- * toggle + default brand select over org_doc_template_settings).
+ * family index built server-side. Unified search + family filter;
+ * sections per family; every item deep-links to its native editor/preview
+ * where one exists. Manager+ additionally gets the doc-family configurator
+ * (per-type enabled toggle + default brand select over
+ * org_doc_template_settings) and the guide-family lifecycle controls
+ * (publish/archive over org_guide_templates.template_state).
  *
  * Enforcement rule surfaced here verbatim: a disabled doc type is hidden
  * from creation pickers but stays renderable for existing records.
@@ -29,7 +31,7 @@ type Props = {
   items: TemplateLibraryItem[];
   canManage: boolean;
   createHrefs: Record<TemplateFamily, string | null>;
-  homeHrefs: Record<TemplateFamily, string>;
+  homeHrefs: Record<TemplateFamily, string | null>;
 };
 
 const FAMILY_ORDER: TemplateFamily[] = [...TEMPLATE_FAMILIES];
@@ -48,6 +50,13 @@ export function TemplateLibrary({ items, canManage, createHrefs, homeHrefs }: Pr
     job: t("console.legend.hub.templates.family.job", undefined, "Job templates"),
     field: t("console.legend.hub.templates.family.field", undefined, "Field templates"),
     advance: t("console.legend.hub.templates.family.advance", undefined, "Advance packet presets"),
+    guide: t("console.legend.hub.templates.family.guide", undefined, "Guide templates"),
+    proposal: t("console.legend.hub.templates.family.proposal", undefined, "Proposal templates"),
+    project: t("console.legend.hub.templates.family.project", undefined, "Project blueprints"),
+    inspection: t("console.legend.hub.templates.family.inspection", undefined, "Inspection templates"),
+    email: t("console.legend.hub.templates.family.email", undefined, "Email templates"),
+    deliverable: t("console.legend.hub.templates.family.deliverable", undefined, "Deliverable templates"),
+    notification: t("console.legend.hub.templates.family.notification", undefined, "Notification templates"),
   };
   const familyBlurb: Record<TemplateFamily, string> = {
     doc: t(
@@ -70,12 +79,54 @@ export function TemplateLibrary({ items, canManage, createHrefs, homeHrefs }: Pr
       undefined,
       "Per-audience section matrices that seed every advance campaign.",
     ),
+    guide: t(
+      "console.legend.hub.templates.family.guideBlurb",
+      undefined,
+      "Boarding Pass configs captured from a project guide. Published templates seed new project guides.",
+    ),
+    proposal: t(
+      "console.legend.hub.templates.family.proposalBlurb",
+      undefined,
+      "Block and theme catalogs that pre-fill new proposals. System rows ship with the platform.",
+    ),
+    project: t(
+      "console.legend.hub.templates.family.projectBlurb",
+      undefined,
+      "Blueprints that materialize a working project: deliverables, tasks, guides in one click.",
+    ),
+    inspection: t(
+      "console.legend.hub.templates.family.inspectionBlurb",
+      undefined,
+      "Inspection shapes with itemized checkpoints, instantiated per inspection.",
+    ),
+    email: t(
+      "console.legend.hub.templates.family.emailBlurb",
+      undefined,
+      "Your org's overrides of the kit's transactional email defaults.",
+    ),
+    deliverable: t(
+      "console.legend.hub.templates.family.deliverableBlurb",
+      undefined,
+      "Advancing doc-spec seeds applied inside a project's advancing workflow.",
+    ),
+    notification: t(
+      "console.legend.hub.templates.family.notificationBlurb",
+      undefined,
+      "Versioned per-channel notification copy the engine renders. Platform rows are the defaults.",
+    ),
   };
   const familyOpenLabel: Record<TemplateFamily, string> = {
     doc: t("console.legend.hub.templates.family.docOpen", undefined, "Open document library"),
     job: t("console.legend.hub.templates.family.jobOpen", undefined, "Open job templates"),
     field: t("console.legend.hub.templates.family.fieldOpen", undefined, "Open in COMPVSS"),
     advance: t("console.legend.hub.templates.family.advanceOpen", undefined, "Open preset matrix"),
+    guide: t("console.legend.hub.templates.family.guideOpen", undefined, "Managed here"),
+    proposal: t("console.legend.hub.templates.family.proposalOpen", undefined, "Open proposal templates"),
+    project: t("console.legend.hub.templates.family.projectOpen", undefined, "Open blueprint gallery"),
+    inspection: t("console.legend.hub.templates.family.inspectionOpen", undefined, "Open inspection templates"),
+    email: t("console.legend.hub.templates.family.emailOpen", undefined, "Open email templates"),
+    deliverable: t("console.legend.hub.templates.family.deliverableOpen", undefined, "Managed here"),
+    notification: t("console.legend.hub.templates.family.notificationOpen", undefined, "Managed here"),
   };
   const familyHome = homeHrefs;
 
@@ -113,6 +164,17 @@ export function TemplateLibrary({ items, canManage, createHrefs, homeHrefs }: Pr
       router.refresh();
     });
   };
+
+  const setGuideState = (templateId: string, state: "published" | "archived" | "draft") => {
+    setActionError(null);
+    startTransition(async () => {
+      const res = await setGuideTemplateStateAction(templateId, state);
+      if (res?.error) setActionError(resolveActionError(res.error, t));
+      router.refresh();
+    });
+  };
+
+  const authorableFamilies = FAMILY_ORDER.filter((f) => createHrefs[f]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -166,25 +228,23 @@ export function TemplateLibrary({ items, canManage, createHrefs, homeHrefs }: Pr
               role="menu"
               className="surface-raised absolute right-0 z-20 mt-1 w-72 rounded-[var(--p-r-md)] border border-[var(--p-border)] p-1.5"
             >
-              {(["job", "field", "advance"] as TemplateFamily[]).map((f) =>
-                createHrefs[f] ? (
-                  <Link
-                    key={f}
-                    role="menuitem"
-                    href={createHrefs[f]!}
-                    className="focus-ring block rounded-[var(--p-r-sm)] px-3 py-2 text-sm hover:bg-[var(--p-surface-2)]"
-                    onClick={() => setNewOpen(false)}
-                  >
-                    <span className="font-medium">{familyLabel[f]}</span>
-                    <span className="mt-0.5 block text-xs text-[var(--p-text-2)]">{familyBlurb[f]}</span>
-                  </Link>
-                ) : null,
-              )}
+              {authorableFamilies.map((f) => (
+                <Link
+                  key={f}
+                  role="menuitem"
+                  href={createHrefs[f]!}
+                  className="focus-ring block rounded-[var(--p-r-sm)] px-3 py-2 text-sm hover:bg-[var(--p-surface-2)]"
+                  onClick={() => setNewOpen(false)}
+                >
+                  <span className="font-medium">{familyLabel[f]}</span>
+                  <span className="mt-0.5 block text-xs text-[var(--p-text-2)]">{familyBlurb[f]}</span>
+                </Link>
+              ))}
               <div className="mt-1 border-t border-[var(--p-border)] px-3 py-2 text-xs text-[var(--p-text-2)]">
                 {t(
                   "console.legend.hub.templates.docTypesFixed",
                   undefined,
-                  "Document types are registry-fixed and cannot be authored per org. Configure which types are offered, and their default brand, in the Document templates section below.",
+                  "Document types are registry-fixed and cannot be authored per org. Configure which types are offered, and their default brand, in the Document templates section below. Guide templates are captured from a project guide; proposal and project templates from their records.",
                 )}
               </div>
             </div>
@@ -212,12 +272,14 @@ export function TemplateLibrary({ items, canManage, createHrefs, homeHrefs }: Pr
             <div className="mb-2 flex flex-wrap items-baseline gap-3">
               <h2 className="text-lg">{familyLabel[f]}</h2>
               <span className="ps-id text-xs text-[var(--p-text-2)]">{countLabel(f)}</span>
-              <Link
-                href={familyHome[f]}
-                className="focus-ring ml-auto text-sm font-medium text-[var(--p-accent-text)] hover:underline"
-              >
-                {familyOpenLabel[f]}
-              </Link>
+              {familyHome[f] && (
+                <Link
+                  href={familyHome[f]!}
+                  className="focus-ring ml-auto text-sm font-medium text-[var(--p-accent-text)] hover:underline"
+                >
+                  {familyOpenLabel[f]}
+                </Link>
+              )}
             </div>
             <p className="mb-3 max-w-2xl text-sm text-[var(--p-text-2)]">{familyBlurb[f]}</p>
             {f === "doc" && (
@@ -234,13 +296,17 @@ export function TemplateLibrary({ items, canManage, createHrefs, homeHrefs }: Pr
                 <li
                   key={`${item.family}:${item.id}`}
                   className={`surface flex flex-col gap-2 rounded-[var(--p-r-md)] border border-[var(--p-border)] p-4 ${
-                    item.family === "doc" && !item.enabled ? "opacity-60" : ""
+                    !item.enabled || item.state === "archived" ? "opacity-60" : ""
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <Link href={item.href} className="focus-ring font-semibold hover:underline">
-                      {item.title}
-                    </Link>
+                    {item.href ? (
+                      <Link href={item.href} className="focus-ring font-semibold hover:underline">
+                        {item.title}
+                      </Link>
+                    ) : (
+                      <span className="font-semibold">{item.title}</span>
+                    )}
                     {item.family === "doc" && item.app && (
                       <span className="ps-id shrink-0 text-[11px] tracking-wide text-[var(--p-text-3)] uppercase">
                         {item.app}
@@ -265,6 +331,21 @@ export function TemplateLibrary({ items, canManage, createHrefs, homeHrefs }: Pr
                         {t("console.legend.hub.templates.recordBacked", undefined, "Record-backed")}
                       </Badge>
                     )}
+                    {item.system && (
+                      <Badge variant="muted">
+                        {t("console.legend.hub.templates.systemRow", undefined, "System")}
+                      </Badge>
+                    )}
+                    {item.state && (
+                      <Badge variant={item.state === "published" || item.state === "active" ? "success" : "muted"}>
+                        {item.state}
+                      </Badge>
+                    )}
+                    {item.version != null && (
+                      <span className="ps-id">
+                        {t("console.legend.hub.templates.versionN", { version: item.version }, `v${item.version}`)}
+                      </span>
+                    )}
                     {item.family === "doc" && !item.enabled && (
                       <Badge variant="muted">
                         {t("console.legend.hub.templates.hiddenFromPickers", undefined, "Hidden from pickers")}
@@ -276,6 +357,15 @@ export function TemplateLibrary({ items, canManage, createHrefs, homeHrefs }: Pr
                           "console.legend.hub.templates.nSteps",
                           { count: item.stepCount },
                           `${item.stepCount} steps`,
+                        )}
+                      </span>
+                    )}
+                    {item.blockCount != null && (
+                      <span>
+                        {t(
+                          "console.legend.hub.templates.nBlocks",
+                          { count: item.blockCount },
+                          `${item.blockCount} blocks`,
                         )}
                       </span>
                     )}
@@ -331,6 +421,40 @@ export function TemplateLibrary({ items, canManage, createHrefs, homeHrefs }: Pr
                           ))}
                         </select>
                       </label>
+                    </div>
+                  )}
+                  {item.family === "guide" && canManage && (
+                    <div className="mt-1 flex flex-wrap items-center gap-2 border-t border-[var(--p-border)] pt-2">
+                      {item.state !== "published" && (
+                        <button
+                          type="button"
+                          disabled={pending}
+                          onClick={() => setGuideState(item.id, "published")}
+                          className="ps-btn ps-btn--sm"
+                        >
+                          {t("console.legend.hub.templates.publishGuide", undefined, "Publish")}
+                        </button>
+                      )}
+                      {item.state === "published" && (
+                        <button
+                          type="button"
+                          disabled={pending}
+                          onClick={() => setGuideState(item.id, "draft")}
+                          className="ps-btn ps-btn--sm ps-btn--tertiary"
+                        >
+                          {t("console.legend.hub.templates.unpublishGuide", undefined, "Unpublish")}
+                        </button>
+                      )}
+                      {item.state !== "archived" && (
+                        <button
+                          type="button"
+                          disabled={pending}
+                          onClick={() => setGuideState(item.id, "archived")}
+                          className="ps-btn ps-btn--sm ps-btn--tertiary"
+                        >
+                          {t("console.legend.hub.templates.archiveGuide", undefined, "Archive")}
+                        </button>
+                      )}
                     </div>
                   )}
                 </li>

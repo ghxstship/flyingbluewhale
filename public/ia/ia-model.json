@@ -1925,6 +1925,18 @@
               ]
             },
             {
+              "path": "/studio/settings/deliverable-templates",
+              "arch": [
+                "SET"
+              ]
+            },
+            {
+              "path": "/studio/settings/notification-templates",
+              "arch": [
+                "SET"
+              ]
+            },
+            {
               "path": "/studio/settings/advancing",
               "arch": [
                 "SET"

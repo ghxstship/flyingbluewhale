@@ -12,7 +12,7 @@
 > crawled for errors by `e2e/sitemap-crawl.spec.ts` (routinely via the
 > `route-health` workflow; on demand via `npm run e2e:crawl`).
 
-**Page routes:** 1322 · **API route handlers:** 161 · **Distinct nav hrefs:** 599
+**Page routes:** 1324 · **API route handlers:** 161 · **Distinct nav hrefs:** 601
 
 ## Legend
 
@@ -29,7 +29,7 @@
 
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
-| ATLVS — Operator Console | platformNav rail | 803 | 255 | 546 | 0 | 2 |
+| ATLVS — Operator Console | platformNav rail | 805 | 257 | 546 | 0 | 2 |
 | COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 124 | 97 | 26 | 0 | 1 |
 | COMPVSS — Kiosk (shared device) | mobileSurfaces | 3 | 3 | 0 | 0 | 0 |
 | GVTEWAY — External Portal | portalNav rail | 156 | 129 | 23 | 0 | 4 |
@@ -37,7 +37,7 @@
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 97 | 34 | 54 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 14 | 2 | 0 | 0 | 12 |
-| **TOTAL** | | **1322** | **573** | **706** | **0** | **43** |
+| **TOTAL** | | **1324** | **575** | **706** | **0** | **43** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -100,7 +100,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## ATLVS — Operator Console (`/studio`)
 
-803 routes — ● 255 nav · ○ 546 linked · ⚠ 0 orphan
+805 routes — ● 257 nav · ○ 546 linked · ⚠ 0 orphan
 
 <details><summary><code>access-control</code> · 2 routes</summary>
 
@@ -1108,7 +1108,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>settings</code> · 50 routes</summary>
+<details><summary><code>settings</code> · 52 routes</summary>
 
 ○ `/studio/settings`
 ● `/studio/settings/account-managers`
@@ -1128,6 +1128,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/studio/settings/catalog/[id]/edit`
 ○ `/studio/settings/catalog/new`
 ● `/studio/settings/compliance`
+● `/studio/settings/deliverable-templates`
 ● `/studio/settings/domains`
 ● `/studio/settings/email-templates`
 ● `/studio/settings/exports`
@@ -1147,6 +1148,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/studio/settings/integrations/ticketing/new`
 ● `/studio/settings/job-templates`
 ○ `/studio/settings/job-templates/new`
+● `/studio/settings/notification-templates`
 ● `/studio/settings/organization`
 ○ `/studio/settings/rate-limits`
 ● `/studio/settings/schema`

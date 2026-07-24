@@ -161,7 +161,7 @@ describe("unified template library ratchet (L-P2)", () => {
       { id: "d1", name: "Stage Plot Spec", type: "stage_plot", isGlobal: false },
     ]);
     expect(deliverable[0]).toMatchObject({ family: "deliverable", system: false });
-    expect(deliverable[0]!.href).toBe("");
+    expect(deliverable[0]!.href).toContain("/settings/deliverable-templates");
 
     const notification = buildNotificationItems([
       { id: "n1", templateKey: "assignment.state", channel: "push", version: 3, state: "active", isPlatform: true },

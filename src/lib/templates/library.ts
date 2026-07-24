@@ -258,8 +258,7 @@ export function buildDeliverableItems(rows: readonly DeliverableTemplateRow[]): 
     id: r.id,
     title: r.name,
     subtitle: r.type,
-    // Seeded into per-project advancing doc specs; no org editor surface yet.
-    href: "",
+    href: urlFor("platform", "/settings/deliverable-templates"),
     system: r.isGlobal,
     searchText: haystack(r.name, r.type, "deliverable doc spec"),
   }));
@@ -283,8 +282,7 @@ export function buildNotificationItems(
     id: r.id,
     title: r.templateKey,
     subtitle: r.channel,
-    // Engine-consumed copy store; the library is its first org-facing surface.
-    href: "",
+    href: urlFor("platform", "/settings/notification-templates"),
     system: r.isPlatform,
     state: r.state,
     version: r.version,
@@ -322,7 +320,7 @@ export function familyCreateHref(family: TemplateFamily): string | null {
     case "email":
       return urlFor("platform", "/settings/email-templates");
     case "deliverable":
-      return null;
+      return urlFor("platform", "/settings/deliverable-templates");
     case "notification":
       return null;
   }
@@ -335,4 +333,5 @@ export const AUTHORED_FAMILIES: readonly TemplateFamily[] = [
   "advance",
   "inspection",
   "email",
+  "deliverable",
 ] as const;

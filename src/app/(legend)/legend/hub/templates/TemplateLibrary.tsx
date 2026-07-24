@@ -125,8 +125,8 @@ export function TemplateLibrary({ items, canManage, createHrefs, homeHrefs }: Pr
     project: t("console.legend.hub.templates.family.projectOpen", undefined, "Open blueprint gallery"),
     inspection: t("console.legend.hub.templates.family.inspectionOpen", undefined, "Open inspection templates"),
     email: t("console.legend.hub.templates.family.emailOpen", undefined, "Open email templates"),
-    deliverable: t("console.legend.hub.templates.family.deliverableOpen", undefined, "Managed here"),
-    notification: t("console.legend.hub.templates.family.notificationOpen", undefined, "Managed here"),
+    deliverable: t("console.legend.hub.templates.family.deliverableOpen", undefined, "Open deliverable templates"),
+    notification: t("console.legend.hub.templates.family.notificationOpen", undefined, "Open notification register"),
   };
   const familyHome = homeHrefs;
 

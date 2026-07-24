@@ -8,7 +8,6 @@ import { writeInboxBulk } from "@/lib/inbox";
 import { toTitle } from "@/lib/format";
 import { PERSONA_TIERS } from "@/lib/db/guides";
 import type { GuidePersona } from "@/lib/supabase/types";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { recordTemplateVersion } from "@/lib/templates/versions";
 import { formFail } from "@/lib/forms/fail";
 import { actionErrorMessage } from "@/lib/errors";
@@ -174,10 +173,7 @@ export async function saveGuideAsTemplateAction(
     .maybeSingle();
   if (!guide) return { error: actionErrorMessage("not-found.guide", "Guide not found") };
 
-  // org_guide_templates is not in the generated client types yet (regen
-  // deferred while another migration is in flight).
-  const loose = supabase as unknown as LooseSupabase;
-  const { data: tpl, error } = await loose
+  const { data: tpl, error } = await supabase
     .from("org_guide_templates")
     .insert({
       org_id: session.orgId,
@@ -196,7 +192,7 @@ export async function saveGuideAsTemplateAction(
   await recordTemplateVersion(supabase, {
     orgId: session.orgId,
     family: "guide",
-    templateId: (tpl as { id: string }).id,
+    templateId: tpl.id,
     snapshot: {
       name: guide.title,
       description: guide.subtitle ?? null,
@@ -228,8 +224,7 @@ export async function createGuideFromTemplateAction(
   if (!parsedId.success) return { error: actionErrorMessage("invalid.input", "Invalid input") };
 
   const supabase = await createClient();
-  const loose = supabase as unknown as LooseSupabase;
-  const { data: tpl } = await loose
+  const { data: tpl } = await supabase
     .from("org_guide_templates")
     .select("id, persona, name, description, config")
     .eq("id", parsedId.data)
@@ -239,26 +234,20 @@ export async function createGuideFromTemplateAction(
     .maybeSingle();
   if (!tpl) return { error: actionErrorMessage("not-found.template-in-org", "Template not found in your organization") };
 
-  const t = tpl as {
-    id: string;
-    persona: GuidePersona;
-    name: string;
-    description: string | null;
-    config: unknown;
-  };
-  const tierInfo = PERSONA_TIERS[t.persona];
-  const { error } = await loose.from("event_guides").upsert(
+  const persona = tpl.persona as GuidePersona;
+  const tierInfo = PERSONA_TIERS[persona];
+  const { error } = await supabase.from("event_guides").upsert(
     {
       org_id: session.orgId,
       project_id: projectId,
-      persona: t.persona,
-      title: t.name,
-      subtitle: t.description,
+      persona,
+      title: tpl.name,
+      subtitle: tpl.description,
       classification: tierInfo.classification,
       tier: tierInfo.tier,
       published: false,
-      config: t.config ?? {},
-      template_id: t.id,
+      config: tpl.config ?? {},
+      template_id: tpl.id,
       created_by: session.userId,
     },
     { onConflict: "project_id,persona" },
@@ -266,7 +255,7 @@ export async function createGuideFromTemplateAction(
   if (error) return { error: error.message };
 
   revalidatePath(`/studio/projects/${projectId}/guides`);
-  return { ok: true, persona: t.persona };
+  return { ok: true, persona };
 }
 
 export async function togglePublishedAction(projectId: string, persona: GuidePersona, published: boolean) {

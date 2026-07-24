@@ -9,7 +9,7 @@
 > workflow).
 
 **Nav source:** platformNav rail
-**Routes:** 803 — ● 255 nav · ○ 546 linked · ⚠ 0 orphan · · 2 exempt
+**Routes:** 805 — ● 257 nav · ○ 546 linked · ⚠ 0 orphan · · 2 exempt
 
 ## 🔗 Dangling nav hrefs (0)
 
@@ -1023,7 +1023,7 @@ _None — every ATLVS nav href resolves to a page._
 
 </details>
 
-<details><summary><code>settings</code> · 50 routes</summary>
+<details><summary><code>settings</code> · 52 routes</summary>
 
 ○ `/studio/settings`
 ● `/studio/settings/account-managers`
@@ -1043,6 +1043,7 @@ _None — every ATLVS nav href resolves to a page._
 ○ `/studio/settings/catalog/[id]/edit`
 ○ `/studio/settings/catalog/new`
 ● `/studio/settings/compliance`
+● `/studio/settings/deliverable-templates`
 ● `/studio/settings/domains`
 ● `/studio/settings/email-templates`
 ● `/studio/settings/exports`
@@ -1062,6 +1063,7 @@ _None — every ATLVS nav href resolves to a page._
 ○ `/studio/settings/integrations/ticketing/new`
 ● `/studio/settings/job-templates`
 ○ `/studio/settings/job-templates/new`
+● `/studio/settings/notification-templates`
 ● `/studio/settings/organization`
 ○ `/studio/settings/rate-limits`
 ● `/studio/settings/schema`

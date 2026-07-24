@@ -6,7 +6,6 @@ import { ConfigureSupabase } from "@/components/ui/ConfigureSupabase";
 import { urlFor } from "@/lib/urls";
 import { getRequestT } from "@/lib/i18n/request";
 import { getOrgDocSettings } from "@/lib/documents/org-settings";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import {
   buildAdvanceItems,
   buildDeliverableItems,
@@ -57,9 +56,6 @@ export default async function TemplatesPillarPage() {
   }
   const session = await requireSession();
   const supabase = await createClient();
-  // org_guide_templates is not in the generated client types yet (types regen
-  // is deferred while another migration is in flight) — loose for that one.
-  const loose = supabase as unknown as LooseSupabase;
 
   const [
     jobRes,
@@ -95,7 +91,7 @@ export default async function TemplatesPillarPage() {
       .is("deleted_at", null)
       .limit(500),
     getOrgDocSettings(supabase, session.orgId),
-    loose
+    supabase
       .from("org_guide_templates")
       .select("id, name, persona, description, template_state")
       .eq("org_id", session.orgId)
@@ -138,7 +134,7 @@ export default async function TemplatesPillarPage() {
     // Platform defaults (org_id NULL) + org overrides — RLS scopes visibility.
     supabase
       .from("notification_templates")
-      .select("id, org_id, template_key, channel, version, status")
+      .select("id, org_id, template_key, channel, version, template_state")
       .order("template_key", { ascending: true })
       .limit(300),
   ]);
@@ -203,7 +199,7 @@ export default async function TemplatesPillarPage() {
     template_key: string;
     channel: string;
     version: number;
-    status: string;
+    template_state: string;
   }>;
 
   const audienceCounts = new Map<string, number>();
@@ -284,7 +280,7 @@ export default async function TemplatesPillarPage() {
         templateKey: r.template_key,
         channel: r.channel,
         version: r.version,
-        state: r.status,
+        state: r.template_state,
         isPlatform: r.org_id === null,
       })),
     ),
@@ -303,8 +299,8 @@ export default async function TemplatesPillarPage() {
     project: urlFor("platform", "/templates"),
     inspection: urlFor("platform", "/inspections/templates"),
     email: urlFor("platform", "/settings/email-templates"),
-    deliverable: null,
-    notification: null,
+    deliverable: urlFor("platform", "/settings/deliverable-templates"),
+    notification: urlFor("platform", "/settings/notification-templates"),
   };
 
   return (

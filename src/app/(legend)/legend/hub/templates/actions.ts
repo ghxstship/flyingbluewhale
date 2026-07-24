@@ -7,7 +7,6 @@ import { createClient } from "@/lib/supabase/server";
 import { actionErrorMessage } from "@/lib/errors";
 import { getDocTemplate } from "@/lib/documents/registry";
 import { DOC_BRAND_MODES } from "@/lib/documents/org-settings";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 
 const LIBRARY_PATH = "/legend/hub/templates";
 const DOCUMENTS_HUB_PATH = "/studio/documents";
@@ -99,10 +98,7 @@ export async function setGuideTemplateStateAction(
   if (!parsed.success) return { error: actionErrorMessage("invalid.input", "Invalid input") };
 
   const supabase = await createClient();
-  // org_guide_templates is not in the generated client types yet (regen
-  // deferred while another migration is in flight).
-  const loose = supabase as unknown as LooseSupabase;
-  const { data, error } = await loose
+  const { data, error } = await supabase
     .from("org_guide_templates")
     .update({ template_state: parsed.data.state })
     .eq("id", parsed.data.template_id)
@@ -111,7 +107,7 @@ export async function setGuideTemplateStateAction(
     .select("id");
   if (error) return { error: error.message };
   // RLS returns no error on a filtered-out row — read the write back.
-  if (!data || (data as unknown[]).length === 0) {
+  if (!data || data.length === 0) {
     return { error: actionErrorMessage("not-found.template-in-org", "Template not found in your organization") };
   }
 

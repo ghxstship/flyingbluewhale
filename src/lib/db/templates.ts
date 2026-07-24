@@ -79,12 +79,12 @@ export async function applyProjectTemplate(opts: {
     project_state: "draft" as const,
     created_by: opts.createdBy,
     // Provenance: which blueprint materialized this project (migration
-    // 20260724134607). Not in the generated types yet — hence the cast below.
+    // 20260724134607).
     template_id: opts.templateId,
   };
   const { data: project, error: pErr } = await admin
     .from("projects")
-    .insert(insertProject as never)
+    .insert(insertProject)
     .select("id")
     .single();
   if (pErr || !project) throw new Error(pErr?.message ?? "Failed to create project from template");

@@ -5,7 +5,6 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { BRAND_FALLBACK } from "@/lib/branding";
 import { resolveDepositPct, PROPOSAL_DEPOSIT_PCT_DEFAULT } from "@/lib/payment-terms";
@@ -95,24 +94,19 @@ export async function createProposalAction(_: State, fd: FormData): Promise<Stat
   let seedTheme: unknown = { primary: BRAND_FALLBACK.accent, secondary: BRAND_FALLBACK.secondary };
   const templateId = parsed.data.template_id || null;
   if (templateId) {
-    const loose = supabase as unknown as LooseSupabase;
-    const { data: tpl } = await loose
+    const { data: tpl } = await supabase
       .from("proposal_templates")
       .select("id, blocks, theme")
       .eq("id", templateId)
       .is("deleted_at", null)
       .maybeSingle();
     if (tpl) {
-      const t = tpl as { blocks?: unknown; theme?: unknown };
-      seedBlocks = t.blocks ?? [];
-      if (t.theme) seedTheme = t.theme;
+      seedBlocks = tpl.blocks ?? [];
+      if (tpl.theme) seedTheme = tpl.theme;
     }
   }
 
-  // Loose: proposals.template_id (provenance, migration 20260724134607) is
-  // not in the generated client types yet (regen deferred while another
-  // migration is in flight).
-  const { data, error } = await (supabase as unknown as LooseSupabase)
+  const { data, error } = await supabase
     .from("proposals")
     .insert({
       org_id: session.orgId,

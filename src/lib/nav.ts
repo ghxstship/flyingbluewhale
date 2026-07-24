@@ -1115,6 +1115,8 @@ export const settingsNav: NavGroup[] = [
       { label: "Branding", href: "/studio/settings/branding", minRole: "admin" },
       { label: "Domains", href: "/studio/settings/domains", minRole: "admin" },
       { label: "Email Templates", href: "/studio/settings/email-templates", minRole: "manager" },
+      { label: "Deliverable Templates", href: "/studio/settings/deliverable-templates", minRole: "manager" },
+      { label: "Notification Templates", href: "/studio/settings/notification-templates", minRole: "manager" },
       { label: "Advancing", href: "/studio/settings/advancing", minRole: "manager" },
       { label: "Locations", href: "/studio/locations" },
       { label: "Marketplace", href: "/studio/marketplace/settings", minRole: "admin" },

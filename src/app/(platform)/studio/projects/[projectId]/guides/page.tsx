@@ -11,7 +11,6 @@ import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
 import type { GuidePersona } from "@/lib/supabase/types";
-import type { LooseSupabase } from "@/lib/supabase/loose";
 import { createGuideFromTemplateAction, saveGuideAsTemplateAction } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -33,8 +32,7 @@ export default async function GuidesIndex({ params }: { params: Promise<{ projec
   // Published templates seed new guides; any existing guide can be captured.
   const canManageTemplates = isManagerPlus(session) || can(session, "templates:write");
   const supabase = await createClient();
-  const loose = supabase as unknown as LooseSupabase;
-  const { data: tplRows } = await loose
+  const { data: tplRows } = await supabase
     .from("org_guide_templates")
     .select("id, name, persona, description")
     .eq("org_id", session.orgId)
@@ -42,26 +40,23 @@ export default async function GuidesIndex({ params }: { params: Promise<{ projec
     .is("deleted_at", null)
     .order("name", { ascending: true })
     .limit(100);
-  const guideTemplates = (tplRows ?? []) as Array<{
-    id: string;
-    name: string;
-    persona: GuidePersona;
-    description: string | null;
-  }>;
+  const guideTemplates = (tplRows ?? []).map((r) => ({
+    ...r,
+    persona: r.persona as GuidePersona,
+  }));
 
   // Per-guide viewer counts (guide_views read receipts, one row per viewer
   // per guide). One batched read across all guide ids, counted in-process.
-  // guide_views is not in the generated client types yet (regen deferred).
   const viewCounts = new Map<string, number>();
   if (guides.length > 0) {
-    const { data: viewRows } = await loose
+    const { data: viewRows } = await supabase
       .from("guide_views")
       .select("guide_id")
       .in(
         "guide_id",
         guides.map((g) => g.id),
       );
-    for (const row of (viewRows ?? []) as Array<{ guide_id: string }>) {
+    for (const row of viewRows ?? []) {
       viewCounts.set(row.guide_id, (viewCounts.get(row.guide_id) ?? 0) + 1);
     }
   }

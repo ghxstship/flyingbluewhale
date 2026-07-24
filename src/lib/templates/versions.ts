@@ -1,6 +1,7 @@
 import "server-only";
 
-import type { LooseSupabase } from "@/lib/supabase/loose";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Database, Json } from "@/lib/supabase/database.types";
 import { log } from "@/lib/log";
 import type { TemplateFamily } from "./library-shared";
 
@@ -19,7 +20,7 @@ import type { TemplateFamily } from "./library-shared";
  * write picks the true max.
  */
 export async function recordTemplateVersion(
-  supabase: unknown,
+  supabase: SupabaseClient<Database>,
   opts: {
     orgId: string;
     family: TemplateFamily;
@@ -29,8 +30,7 @@ export async function recordTemplateVersion(
   },
 ): Promise<void> {
   try {
-    const loose = supabase as LooseSupabase;
-    const { data: latest } = await loose
+    const { data: latest } = await supabase
       .from("template_versions")
       .select("version")
       .eq("org_id", opts.orgId)
@@ -39,13 +39,13 @@ export async function recordTemplateVersion(
       .order("version", { ascending: false })
       .limit(1)
       .maybeSingle();
-    const next = ((latest as { version: number } | null)?.version ?? 0) + 1;
-    const { error } = await loose.from("template_versions").insert({
+    const next = (latest?.version ?? 0) + 1;
+    const { error } = await supabase.from("template_versions").insert({
       org_id: opts.orgId,
       family: opts.family,
       template_id: opts.templateId,
       version: next,
-      snapshot: opts.snapshot,
+      snapshot: opts.snapshot as Json,
       changed_by: opts.changedBy ?? null,
     });
     if (error) log.warn("templates.version_record_failed", { err: error.message, family: opts.family });

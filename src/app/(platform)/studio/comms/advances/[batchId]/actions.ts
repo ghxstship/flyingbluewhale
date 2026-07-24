@@ -203,6 +203,7 @@ export async function sendBatchAction(batchId: string): Promise<void> {
   const queued = recipients.filter((r) => r.delivery_state === "queued");
   let delivered = 0;
   let failed = 0;
+  let skipped = 0;
   for (const recipient of queued) {
     const email = recipient.contact?.email;
     if (!email) {
@@ -227,9 +228,16 @@ export async function sendBatchAction(batchId: string): Promise<void> {
         .update({ render_snapshot: { subject, merge, skipped: result.skipped ?? false } })
         .eq("id", recipient.id)
         .eq("org_id", ctx.orgId);
+      if (result.skipped) {
+        // No provider key — nothing left the building. The recipient STAYS
+        // queued so the funnel never shows delivered mail that was never
+        // sent, and a re-send after the key lands picks them up again.
+        skipped += 1;
+        continue;
+      }
       await applyRecipientDelivery(ctx.supabase as unknown as LooseSupabase, recipient.id, "delivered", {
         userId: ctx.userId,
-        reason: result.skipped ? "send skipped (no provider key)" : "invite sent",
+        reason: "invite sent",
       });
       delivered += 1;
     } catch {
@@ -237,8 +245,15 @@ export async function sendBatchAction(batchId: string): Promise<void> {
     }
   }
 
+  // Skipped-only runs land failed (not sent): the batch can be re-sent once
+  // the provider key exists, and the board never claims a send that didn't
+  // happen.
   const finalState: AdvanceBatchState = delivered > 0 || queued.length === 0 ? "sent" : "failed";
-  await setBatchState(batchId, "sending", finalState, ctx.userId, `${delivered} delivered, ${failed} failed`);
+  const note =
+    skipped > 0
+      ? `${delivered} delivered, ${failed} failed, ${skipped} skipped (no email provider key)`
+      : `${delivered} delivered, ${failed} failed`;
+  await setBatchState(batchId, "sending", finalState, ctx.userId, note);
   revalidatePath(boardPath(batchId));
   revalidatePath("/studio/comms/advances");
 }

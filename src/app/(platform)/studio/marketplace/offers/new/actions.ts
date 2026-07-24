@@ -98,7 +98,8 @@ const Transition = z.object({ offer_id: z.string().uuid() });
 /**
  * Tell the talent an org-side transition happened — sends used to land
  * silently and acts only saw the new state by revisiting /me/offers.
- * In-app only (no marketplace PushKind exists in the catalog yet).
+ * Kind `marketplace` (catalog migration 20260724152000): inbox row + push,
+ * both gated by the recipient's preference matrix.
  * Best-effort: a notify failure never rolls back the transition.
  */
 async function notifyTalentOfTransition(args: {
@@ -125,7 +126,7 @@ async function notifyTalentOfTransition(args: {
     await writeInbox({
       userId: talentUserId,
       orgId: args.orgId,
-      kind: "talent_offer",
+      kind: "marketplace",
       sourceType: "talent_offers",
       sourceId: args.offerId,
       actorId: args.actorId,

@@ -7,6 +7,18 @@ import { createClient } from "@/lib/supabase/server";
 import { JOB_APPLICATION_STATUSES, type JobApplicationStatus } from "@/lib/marketplace";
 import { formFail } from "@/lib/forms/fail";
 import { actionErrorMessage } from "@/lib/errors";
+import { writeInbox } from "@/lib/inbox";
+
+/**
+ * The applicant-visible transitions and their notification copy. Internal
+ * pipeline moves (reviewed / hold) stay silent — an applicant learns about
+ * stage changes that mean something to them, not the reviewer's bookkeeping.
+ */
+const APPLICANT_NOTICE: Partial<Record<JobApplicationStatus, { title: string; body: string }>> = {
+  phone: { title: "Application Update", body: "Your application moved to the interview stage." },
+  booked: { title: "You Are Booked", body: "Your application was accepted. Details to follow from the organizer." },
+  pass: { title: "Application Update", body: "The organizer went another direction this time." },
+};
 
 const Transition = z.object({
   application_id: z.string().uuid(),
@@ -48,7 +60,7 @@ export async function transitionApplicationAction(_: State, fd: FormData): Promi
 
   const { data: row } = await supabase
     .from("job_applications")
-    .select("job_application_state")
+    .select("job_application_state, applicant_user_id")
     .eq("id", parsed.data.application_id)
     .eq("org_id", session.orgId)
     .maybeSingle();
@@ -76,6 +88,25 @@ export async function transitionApplicationAction(_: State, fd: FormData): Promi
   if (!updated || updated.length === 0) {
     return { error: actionErrorMessage("concurrency.application", "Application was updated concurrently. Refresh and retry") };
   }
+
+  // Tell the applicant when the decision is theirs to know. Best-effort —
+  // a notify failure never rolls back the transition.
+  const notice = current !== parsed.data.status ? APPLICANT_NOTICE[parsed.data.status] : undefined;
+  const applicantId = (row as { applicant_user_id: string | null }).applicant_user_id;
+  if (notice && applicantId) {
+    void writeInbox({
+      userId: applicantId,
+      orgId: session.orgId,
+      kind: "marketplace",
+      sourceType: "job_applications",
+      sourceId: parsed.data.application_id,
+      actorId: session.userId,
+      title: notice.title,
+      body: notice.body,
+      href: "/me/applications",
+    });
+  }
+
   revalidatePath(`/studio/marketplace/postings`);
   return { ok: true };
 }

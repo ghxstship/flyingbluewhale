@@ -11,6 +11,17 @@ import { moneyDollarsString } from "@/lib/zod/money";
 import { formFail } from "@/lib/forms/fail";
 import { emitAudit } from "@/lib/audit";
 import { actionErrorMessage } from "@/lib/errors";
+import { writeInbox } from "@/lib/inbox";
+
+/**
+ * Submitter-visible transitions and their notification copy. Every reviewer
+ * decision here is one the submitter is waiting on, so all three notify.
+ */
+const SUBMITTER_NOTICE: Partial<Record<SubmissionStatus, { title: string; body: string }>> = {
+  shortlisted: { title: "Submission Shortlisted", body: "Your submission made the shortlist." },
+  awarded: { title: "Submission Awarded", body: "Your submission was selected. Details to follow from the organizer." },
+  rejected: { title: "Submission Update", body: "The organizer went another direction this time." },
+};
 
 const Transition = z.object({
   submission_id: z.string().uuid(),
@@ -51,7 +62,7 @@ export async function transitionSubmissionAction(_: State, fd: FormData): Promis
 
   const { data: row } = await supabase
     .from("open_call_submissions")
-    .select("submission_state")
+    .select("submission_state, submitter_user_id")
     .eq("id", parsed.data.submission_id)
     .eq("org_id", session.orgId)
     .maybeSingle();
@@ -79,6 +90,24 @@ export async function transitionSubmissionAction(_: State, fd: FormData): Promis
   if (!updated || updated.length === 0) {
     return { error: actionErrorMessage("concurrency.submission", "Submission was updated concurrently. Refresh and retry") };
   }
+
+  // Tell the submitter — best-effort, never rolls back the transition.
+  const notice = current !== parsed.data.status ? SUBMITTER_NOTICE[parsed.data.status] : undefined;
+  const submitterId = (row as { submitter_user_id: string | null }).submitter_user_id;
+  if (notice && submitterId) {
+    void writeInbox({
+      userId: submitterId,
+      orgId: session.orgId,
+      kind: "marketplace",
+      sourceType: "open_call_submissions",
+      sourceId: parsed.data.submission_id,
+      actorId: session.userId,
+      title: notice.title,
+      body: notice.body,
+      href: "/me/submissions",
+    });
+  }
+
   revalidatePath(`/studio/marketplace/calls`);
   return { ok: true };
 }
@@ -109,7 +138,7 @@ export async function bookSubmissionAction(submissionId: string, _prev: State, f
   const supabase = await createClient();
   const { data: submission, error: loadError } = await supabase
     .from("open_call_submissions")
-    .select("id, open_call_id, talent_profile_id, submission_state")
+    .select("id, open_call_id, talent_profile_id, submission_state, submitter_user_id")
     .eq("org_id", session.orgId)
     .eq("id", submissionId)
     .maybeSingle();
@@ -186,6 +215,23 @@ export async function bookSubmissionAction(submissionId: string, _prev: State, f
     targetId: offer.id,
     metadata: { submissionId, openCallId: submission.open_call_id, feeCents },
   });
+
+  // The Book chain awards outside transitionSubmissionAction, so it carries
+  // its own submitter notice. Best-effort.
+  const bookedSubmitterId = (submission as { submitter_user_id?: string | null }).submitter_user_id;
+  if (bookedSubmitterId) {
+    void writeInbox({
+      userId: bookedSubmitterId,
+      orgId: session.orgId,
+      kind: "marketplace",
+      sourceType: "open_call_submissions",
+      sourceId: submissionId,
+      actorId: session.userId,
+      title: SUBMITTER_NOTICE.awarded!.title,
+      body: SUBMITTER_NOTICE.awarded!.body,
+      href: "/me/submissions",
+    });
+  }
 
   revalidatePath(`/studio/marketplace/calls/${submission.open_call_id}/submissions/${submissionId}`);
   revalidatePath("/studio/marketplace/calls");

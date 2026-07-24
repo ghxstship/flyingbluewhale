@@ -18,16 +18,15 @@ import { log } from "./log";
  */
 
 /**
- * Inbox-row kinds: every push-catalog kind, plus in-app-only kinds that
- * have no `notification_kind_catalog` entry yet. In-app-only kinds never
- * fan out to push (there is no per-kind opt-out row to gate them), they
- * only land in the `notifications` bell.
+ * Inbox-row kinds. Every kind is now push-catalog-backed: the former
+ * in-app-only `talent_offer` kind folded into `marketplace` when that kind
+ * landed in the catalog (migration 20260724152000), so every inbox write is
+ * per-kind mutable from /m/settings/notifications.
  */
-export type InboxOnlyKind = "talent_offer";
-export type InboxKind = PushKind | InboxOnlyKind;
+export type InboxKind = PushKind;
 
 function pushKindFor(kind: InboxKind): PushKind | null {
-  return kind === "talent_offer" ? null : kind;
+  return kind;
 }
 
 export type InboxEntry = {

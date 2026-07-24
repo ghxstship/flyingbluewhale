@@ -84,7 +84,7 @@ async function notifyOrgOfDecision(
     const title = decision === "accepted" ? "Booking Offer Accepted" : "Booking Offer Declined";
     const entry = {
       orgId: offer.org_id,
-      kind: "talent_offer" as const,
+      kind: "marketplace" as const,
       sourceType: "talent_offers",
       sourceId: offer.id,
       actorId,

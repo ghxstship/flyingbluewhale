@@ -7,6 +7,10 @@
 > stale `docs/ia/inventory/sitemap-workflow-inventory.*` snapshots.
 >
 > Reconciliation strategy + backlog: `docs/ia/SITEMAP_RECONCILIATION.md`.
+> Per-shell slices (one map per app shell, same generator run + drift gate):
+> `docs/ia/sitemaps/<shell>.md`. Runtime health: every route here is
+> crawled for errors by `e2e/sitemap-crawl.spec.ts` (routinely via the
+> `route-health` workflow; on demand via `npm run e2e:crawl`).
 
 **Page routes:** 1313 · **API route handlers:** 160 · **Distinct nav hrefs:** 594
 

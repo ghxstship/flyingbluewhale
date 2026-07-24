@@ -21,7 +21,7 @@
 // Run:  node scripts/generate-sitemap.mjs
 // Re-run after any route add (`scripts/generate-stubs.sh`) or nav.ts edit.
 
-import { readFileSync, writeFileSync, readdirSync, statSync, mkdtempSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, readdirSync, statSync, mkdtempSync, mkdirSync, existsSync } from "node:fs";
 import { join, relative } from "node:path";
 import { tmpdir } from "node:os";
 import { pathToFileURL } from "node:url";
@@ -31,6 +31,7 @@ const ROOT = process.cwd();
 const APP_DIR = join(ROOT, "src/app");
 const NAV_TS = join(ROOT, "src/lib/nav.ts");
 const OUT = join(ROOT, "docs/ia/SITEMAP.md");
+const SHELL_OUT_DIR = join(ROOT, "docs/ia/sitemaps");
 
 // ─────────────────────────────────────────────────────────────────────────
 // 1. Filesystem truth — walk src/app for page.tsx (routes) + route.ts (API).
@@ -363,6 +364,10 @@ let md = `# SITEMAP — single source of truth
 > stale \`docs/ia/inventory/sitemap-workflow-inventory.*\` snapshots.
 >
 > Reconciliation strategy + backlog: \`docs/ia/SITEMAP_RECONCILIATION.md\`.
+> Per-shell slices (one map per app shell, same generator run + drift gate):
+> \`docs/ia/sitemaps/<shell>.md\`. Runtime health: every route here is
+> crawled for errors by \`e2e/sitemap-crawl.spec.ts\` (routinely via the
+> \`route-health\` workflow; on demand via \`npm run e2e:crawl\`).
 
 **Page routes:** ${pages.length} · **API route handlers:** ${apiFiles.length} · **Distinct nav hrefs:** ${navSet.size}
 
@@ -462,6 +467,45 @@ for (const key of [...apiGroups.keys()].sort()) {
   md += `\n</details>\n`;
 }
 
+// ─────────────────────────────────────────────────────────────────────────
+// 5. Per-shell sitemap slices — one map per app shell, same run, same drift
+//    gate. Each is a self-contained view of docs/ia/SITEMAP.md scoped to a
+//    single shell so shell owners have a map that cannot go stale.
+// ─────────────────────────────────────────────────────────────────────────
+const shellDocs = new Map(); // rel path → content
+for (const [g, title, strip] of order) {
+  const rows = byShell(g);
+  if (!rows.length) continue;
+  const shellDangling = dangling.filter((h) => {
+    let group = "marketing";
+    if (under(h, "/studio")) group = "platform";
+    else if (under(h, "/legend")) group = "legend";
+    else if (under(h, "/me")) group = "personal";
+    else if (under(h, "/m")) group = "mobile";
+    else if (under(h, "/p")) group = "portal";
+    return group === g;
+  });
+  let doc = `# SITEMAP — ${title}
+
+> **GENERATED FILE — do not hand-edit.** Regenerate with
+> \`npm run gen:sitemap\`. This is the per-shell slice of the cross-shell
+> SSOT \`docs/ia/SITEMAP.md\` (same legend: ● nav · ○ linked · ⚠ orphan ·
+> · exempt) — derived from \`src/app/**/page.tsx\` reconciled against
+> \`src/lib/nav.ts\`. Runtime health for every route below is exercised by
+> \`e2e/sitemap-crawl.spec.ts\` (\`npm run e2e:crawl\` / the \`route-health\`
+> workflow).
+
+**Nav source:** ${NAV_SOURCE[g] ?? "—"}
+**Routes:** ${rows.length} — ● ${count(rows, "nav")} nav · ○ ${count(rows, "linked")} linked · ⚠ ${count(rows, "orphan")} orphan · · ${count(rows, "exempt")} exempt
+`;
+  doc += `\n## 🔗 Dangling nav hrefs (${shellDangling.length})\n\n`;
+  if (!shellDangling.length) doc += `_None — every ${title.split(" — ")[0]} nav href resolves to a page._\n`;
+  else for (const h of shellDangling) doc += `- \`${h}\`\n`;
+  doc += `\n## Full inventory\n`;
+  doc += moduleBlocks(rows, strip ? strip : null);
+  shellDocs.set(`docs/ia/sitemaps/${g}.md`, doc);
+}
+
 // Machine-readable summary (for the ratchet test). Computes only; writes nothing.
 if (process.argv.includes("--json")) {
   process.stdout.write(
@@ -481,16 +525,24 @@ if (process.argv.includes("--json")) {
 }
 
 if (process.argv.includes("--check")) {
-  const current = existsSync(OUT) ? readFileSync(OUT, "utf8") : "";
-  if (current !== md) {
-    console.error(`✗ ${relative(ROOT, OUT)} is stale — run \`npm run gen:sitemap\` and commit the result.`);
+  const expected = [[relative(ROOT, OUT), md], ...shellDocs.entries()];
+  const stale = expected.filter(([rel, content]) => {
+    const abs = join(ROOT, rel);
+    return (existsSync(abs) ? readFileSync(abs, "utf8") : "") !== content;
+  });
+  if (stale.length) {
+    console.error(
+      `✗ stale sitemap file(s) — run \`npm run gen:sitemap\` and commit the result:\n${stale.map(([rel]) => `  - ${rel}`).join("\n")}`,
+    );
     process.exit(1);
   }
-  console.log(`✓ ${relative(ROOT, OUT)} is up to date.`);
+  console.log(`✓ ${relative(ROOT, OUT)} + ${shellDocs.size} per-shell sitemaps are up to date.`);
   process.exit(0);
 }
 
 writeFileSync(OUT, md);
+mkdirSync(SHELL_OUT_DIR, { recursive: true });
+for (const [rel, content] of shellDocs) writeFileSync(join(ROOT, rel), content);
 console.log(
-  `✓ ${relative(ROOT, OUT)} — ${pages.length} pages, ${count(pages, "orphan")} orphan, ${orphanModules.size} orphan modules, ${dangling.length} dangling nav, ${deadPriority.length} dead priority refs, ${apiFiles.length} API handlers`,
+  `✓ ${relative(ROOT, OUT)} + ${shellDocs.size} per-shell sitemaps — ${pages.length} pages, ${count(pages, "orphan")} orphan, ${orphanModules.size} orphan modules, ${dangling.length} dangling nav, ${deadPriority.length} dead priority refs, ${apiFiles.length} API handlers`,
 );

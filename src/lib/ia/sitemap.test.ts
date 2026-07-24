@@ -14,8 +14,9 @@ import { join } from "node:path";
  *     reason) reappears as an orphan and trips this. A nav href pointing at a
  *     missing page trips `dangling`. A COMPVSS priority ref with no registered
  *     `mobileSurfaces` entry trips `deadPriority`.
- *  2. `--check` → assert the committed `docs/ia/SITEMAP.md` is regenerated and
- *     in sync (the same drift gate as `gen:theme:check`).
+ *  2. `--check` → assert the committed `docs/ia/SITEMAP.md` AND the per-shell
+ *     slices (`docs/ia/sitemaps/<shell>.md`) are regenerated and in sync (the
+ *     same drift gate as `gen:theme:check`).
  *
  * To clear a legitimately non-nav route, add it to `EXEMPT` in the generator —
  * never weaken this test.

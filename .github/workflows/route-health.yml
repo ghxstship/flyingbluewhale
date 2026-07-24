@@ -1,0 +1,81 @@
+# Route health — the routine leg of the sitemap program.
+#
+# Two guarantees, on a schedule instead of waiting for the next push:
+#   1. The sitemap SSOT (docs/ia/SITEMAP.md + docs/ia/sitemaps/<shell>.md)
+#      is in sync with the filesystem + nav.ts (gen:sitemap:check).
+#   2. Every route in every app shell renders without runtime failures —
+#      HTTP 5xx, unexpected 404s, uncaught page exceptions, console errors,
+#      and error-boundary renders — via the full authenticated crawl
+#      (e2e/sitemap-crawl.spec.ts) against production.
+#
+# Crawls PROD (https://atlvs.pro) by default: no build, no secrets beyond the
+# seeded fixture users, and it measures what users actually hit. Dynamic
+# [slug] routes resolve via the seeded demo org; other [param] routes are
+# skipped here (their per-record coverage lives in the ia-coverage-details /
+# *-deep-coverage specs) — the skip count is printed per shell, never hidden.
+#
+# Manual run: workflow_dispatch (optionally point base_url at a preview).
+# Local run:  npm run e2e:crawl   (against your dev server or E2E_BASE_URL).
+name: Route health
+
+on:
+  schedule:
+    # Daily, 09:17 UTC — off the hour to dodge scheduled-load spikes, and a
+    # single run at a time so two Playwright suites never hit prod at once.
+    - cron: "17 9 * * *"
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Target to crawl (deployed URL)"
+        required: false
+        default: "https://atlvs.pro"
+
+concurrency:
+  group: route-health
+  cancel-in-progress: false
+
+jobs:
+  sitemap-sync:
+    name: Sitemap SSOT in sync
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - run: npm ci
+      - run: npm run gen:sitemap:check
+      - run: npm run gen:ia-map:check
+
+  crawl:
+    name: Full-sitemap crawl (all shells)
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Crawl every shell for runtime failures
+        run: npx playwright test sitemap-crawl
+        env:
+          CRAWL: "1"
+          E2E_BASE_URL: ${{ inputs.base_url || 'https://atlvs.pro' }}
+          # Seeded demo org — fills /p/[slug]/… so the portal personas crawl
+          # concrete pages instead of skipping every slug route.
+          CRAWL_PARAMS: '{"slug":"demo"}'
+          CRAWL_FINDINGS_FILE: crawl-findings.txt
+      - name: Upload findings
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: crawl-findings
+          path: |
+            crawl-findings.txt
+            playwright-report/
+          retention-days: 14
+          if-no-files-found: ignore

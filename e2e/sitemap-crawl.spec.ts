@@ -143,6 +143,8 @@ const SHELL_PERSONA: Record<string, string | null> = {
   personal: "owner",
   mobile: "crew",
   portal: "owner", // owner has full org access; [slug] supplied via CRAWL_PARAMS
+  legend: "owner", // LEG3ND knowledge shell — authed so gated manage/learn surfaces render
+  kiosk: null, // session-less shared-device punch shell — anonymous by design
   marketing: null, // anonymous
   auth: null, // anonymous — login/signup/invite/verify/reset onboarding surfaces
   root: null, // anonymous — apex roots + token landings (offer/proposal/msa/share)
@@ -155,7 +157,19 @@ const ROUTES = allRoutes();
 // (apex pages + public token landings). Anonymous-gated routes that require a
 // session resolve to a login redirect (a pass); token routes with no live token
 // resolve to a canonical notFound (a pass). Nothing is left uncovered.
-for (const shell of ["platform", "personal", "mobile", "portal", "marketing", "auth", "root"]) {
+const CRAWL_SHELLS = ["platform", "personal", "mobile", "kiosk", "portal", "legend", "marketing", "auth", "root"];
+
+// Shell-coverage guard — NOT gated behind CRAWL=1, so the normal suite catches
+// it: a new route group under src/app must be added to CRAWL_SHELLS and
+// SHELL_PERSONA above, or it silently drops out of the crawl matrix (legend
+// and kiosk did exactly that until 2026-07-24).
+test("every app shell on disk is in the crawl matrix", () => {
+  const onDisk = [...new Set(ROUTES.map((r) => r.shell))].sort();
+  const uncovered = onDisk.filter((s) => !CRAWL_SHELLS.includes(s) || !(s in SHELL_PERSONA));
+  expect(uncovered, `Shells missing from CRAWL_SHELLS/SHELL_PERSONA: ${uncovered.join(", ")}`).toEqual([]);
+});
+
+for (const shell of CRAWL_SHELLS) {
   const persona = SHELL_PERSONA[shell];
   const routes = ROUTES.filter((r) => r.shell === shell);
 

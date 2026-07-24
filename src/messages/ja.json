@@ -12781,6 +12781,7 @@
         }
       },
       "guides": {
+        "captureHeading": "テンプレートとして取り込む",
         "editor": {
           "savedToast": "ガイドを保存しました",
           "titleLabel": "タイトル",
@@ -12838,16 +12839,21 @@
           },
           "revokeDialogTitle": "コードを取り消す"
         },
+        "noTemplates": "公開済みテンプレートはまだありません。下でガイドを取り込み、LEG3ND ライブラリで公開してください。",
         "persona": {
           "manageAccessCodes": "アクセスコードを管理"
         },
+        "saveAsTemplate": "{persona} をテンプレートとして保存",
+        "templatesDescription": "公開済みの組織テンプレートからガイドを作成するか、このプロジェクトのガイドを再利用可能なテンプレートとして取り込みます。テンプレートは LEG3ND ライブラリで管理します。",
+        "templatesHeading": "組織のガイドテンプレート",
         "title": "イベントガイド",
         "subtitle": "ロール別の事前周知。",
         "statusLive": "公開中",
         "statusDraft": "下書き",
         "statusNone": "なし",
         "customHeading": "カスタムガイド",
-        "startCustom": "カスタムガイドを開始"
+        "startCustom": "カスタムガイドを開始",
+        "useTemplate": "このプロジェクトで使用"
       },
       "tabs": {
         "overview": "概要",
@@ -14258,6 +14264,55 @@
       }
     },
     "settings": {
+      "deliverableTemplates": {
+        "archive": "アーカイブ",
+        "col": {
+          "description": "説明",
+          "name": "名前",
+          "scope": "スコープ",
+          "type": "タイプ"
+        },
+        "description": {
+          "label": "説明"
+        },
+        "editHeading": "成果物テンプレートを編集",
+        "empty": "成果物テンプレートはまだありません。下から最初の 1 件を作成してください。",
+        "eyebrow": "設定",
+        "name": {
+          "label": "名前"
+        },
+        "newHeading": "新規成果物テンプレート",
+        "save": "テンプレートを保存",
+        "scopeGlobal": "グローバル",
+        "scopeOrg": "組織",
+        "submit": "テンプレートを作成",
+        "subtitle": "プロジェクトのアドバンシングワークフロー内で適用されるドキュメント仕様のシード。",
+        "title": "成果物テンプレート",
+        "type": {
+          "label": "成果物タイプ"
+        }
+      },
+      "jobTemplates": {
+        "archive": "アーカイブ",
+        "duplicate": "複製"
+      },
+      "notificationTemplates": {
+        "col": {
+          "channel": "チャネル",
+          "key": "キー",
+          "locale": "ロケール",
+          "scope": "スコープ",
+          "status": "ステータス",
+          "version": "バージョン"
+        },
+        "empty": "通知テンプレートはまだありません。エンジンは組み込みの文言を使用します。",
+        "eyebrow": "設定",
+        "readOnlyNote": "読み取り専用のレジスターです。本文は通知エンジンが描画し、種類別の配信設定は各メンバーの通知設定にあります。",
+        "scopeOrg": "組織",
+        "scopePlatform": "プラットフォーム",
+        "subtitle": "チャネル別にバージョン管理された通知文言。プラットフォーム行が既定で、組織行が上書きします。",
+        "title": "通知テンプレート"
+      },
       "sidebar": {
         "ariaLabel": "設定",
         "backToWorkspace": "ワークスペースに戻る",
@@ -14559,6 +14614,10 @@
         "remove": "削除"
       },
       "emailTemplates": {
+        "deleteFailedToast": "削除に失敗しました",
+        "deleteTemplate": "テンプレートを削除",
+        "deletedToast": "テンプレートを削除しました",
+        "duplicate": "複製",
         "requiredToast": "スラッグ、名前、件名、本文は必須です",
         "createFailedToast": "作成に失敗しました",
         "createdToast": "テンプレートを作成しました",
@@ -17063,6 +17122,77 @@
     },
     "legend": {
       "eyebrow": "LEG3ND",
+      "hub": {
+        "templates": {
+          "allFamilies": "すべて",
+          "archiveGuide": "アーカイブ",
+          "brandAtlvs": "ATLVS",
+          "brandCo": "コーブランド",
+          "brandViewerDefault": "閲覧者の既定",
+          "brandWhite": "ホワイトラベル",
+          "defaultBrand": "既定ブランド",
+          "docDisabledRule": "無効化されたタイプは作成時の選択リストに表示されません。無効化前に発行済みのドキュメントは引き続き表示されます。",
+          "duplicateGuide": "複製",
+          "family": {
+            "advance": "アドバンスパケットのプリセット",
+            "advanceBlurb": "各アドバンスキャンペーンの元になる、対象者別のセクションマトリクス。",
+            "advanceOpen": "プリセットマトリクスを開く",
+            "deliverable": "成果物テンプレート",
+            "deliverableBlurb": "プロジェクトのアドバンシングワークフロー内で適用されるドキュメント仕様のシード。",
+            "deliverableOpen": "成果物テンプレートを開く",
+            "doc": "ドキュメントテンプレート",
+            "docBlurb": "キットのドキュメントレジストリ。コード定義のタイプで、提供するタイプと既定のブランドモードは組織が管理します。",
+            "docOpen": "ドキュメントライブラリを開く",
+            "email": "メールテンプレート",
+            "emailBlurb": "キットの標準トランザクションメールに対する組織のカスタマイズ。",
+            "emailOpen": "メールテンプレートを開く",
+            "field": "フィールドテンプレート",
+            "fieldBlurb": "COMPVSS フィールドアプリが現場で実行するチェックリスト、フォーム、点検フォーマット。",
+            "fieldOpen": "COMPVSS で開く",
+            "guide": "ガイドテンプレート",
+            "guideBlurb": "プロジェクトガイドから取り込んだ Boarding Pass 設定。公開済みテンプレートが新しいガイドの元になります。",
+            "guideOpen": "ここで管理",
+            "inspection": "点検テンプレート",
+            "inspectionBlurb": "点検ごとにインスタンス化される、チェックポイント付きの点検フォーマット。",
+            "inspectionOpen": "点検テンプレートを開く",
+            "job": "ジョブテンプレート",
+            "jobBlurb": "作業指示書のタスクリストの元になる再利用可能なスコープチェックリスト。",
+            "jobOpen": "ジョブテンプレートを開く",
+            "notification": "通知テンプレート",
+            "notificationBlurb": "エンジンが描画する、チャネル別にバージョン管理された通知文言。プラットフォーム行が既定です。",
+            "notificationOpen": "通知レジスターを開く",
+            "project": "プロジェクトブループリント",
+            "projectBlurb": "成果物、タスク、ガイドをワンクリックで揃え、稼働するプロジェクトを生み出すブループリント。",
+            "projectOpen": "ブループリントギャラリーを開く",
+            "proposal": "提案テンプレート",
+            "proposalBlurb": "新しい提案を事前入力するブロックとテーマのカタログ。システム行はプラットフォームに同梱されます。",
+            "proposalOpen": "提案テンプレートを開く"
+          },
+          "familyFilterAria": "ファミリーで絞り込み",
+          "hiddenFromPickers": "選択リストに非表示",
+          "mergeFields": "{count} 件の差し込みフィールド",
+          "nBlocks": "{count} ブロック",
+          "nSections": "{count} セクション",
+          "nSteps": "{count} ステップ",
+          "nVersions": "{count} バージョン",
+          "newTemplate": "新規テンプレート",
+          "noMatches": "現在の検索に一致するテンプレートはありません。",
+          "offered": "提供中",
+          "oneVersion": "1 バージョン",
+          "publishGuide": "公開",
+          "recordBacked": "レコード連携",
+          "renameAria": "テンプレート名",
+          "renameCancel": "キャンセル",
+          "renameGuide": "名前を変更",
+          "renameSave": "保存",
+          "searchAria": "テンプレートを検索",
+          "searchPlaceholder": "すべてのテンプレートファミリーを検索",
+          "systemRow": "システム",
+          "unpublishGuide": "非公開にする",
+          "usedNTimes": "{count} 回使用",
+          "versionN": "v{version}"
+        }
+      },
       "subtitle": "ナレッジ · LMS · リソース。XPMS 2.0プロトコル上で。",
       "tiles": {
         "catalog": {

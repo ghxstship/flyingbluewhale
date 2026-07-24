@@ -19837,6 +19837,7 @@
         "pipelineExplainer": "Pipeline são faturas enviadas + vencidas que ainda não compensaram."
       },
       "guides": {
+        "captureHeading": "Capturar como template",
         "editor": {
           "savedToast": "Guia salvo",
           "titleLabel": "Título",
@@ -19900,9 +19901,13 @@
           "publicExplainer": "Esta persona é de acesso público. Qualquer pessoa com o link vê este guia depois de publicado. Não há nada para gerenciar aqui.",
           "tipText": "Os códigos não diferenciam maiúsculas e os hifens são opcionais na digitação. Rotacione com frequência; a revogação é instantânea."
         },
+        "noTemplates": "Ainda não há templates publicados. Capture um guia abaixo e publique-o na biblioteca LEG3ND.",
         "persona": {
           "manageAccessCodes": "Gerenciar códigos de acesso"
         },
+        "saveAsTemplate": "Salvar {persona} como template",
+        "templatesDescription": "Crie um guia a partir de um template publicado da organização, ou capture um guia deste projeto como template reutilizável. Templates são gerenciados na biblioteca LEG3ND.",
+        "templatesHeading": "Templates de Guias da Organização",
         "title": "Guias do Evento",
         "subtitle": "Know-before-you-go por função.",
         "statusLive": "No Ar",
@@ -19910,7 +19915,8 @@
         "statusNone": "Nenhum",
         "customHeading": "Guia Personalizado",
         "startCustom": "Iniciar Guia Personalizado",
-        "customDescription": "Monte um guia para uma função que não está na lista padrão. Mesmo renderizador, seus campos."
+        "customDescription": "Monte um guia para uma função que não está na lista padrão. Mesmo renderizador, seus campos.",
+        "useTemplate": "Usar neste projeto"
       },
       "tabs": {
         "overview": "Visão Geral",
@@ -21629,6 +21635,51 @@
       }
     },
     "settings": {
+      "deliverableTemplates": {
+        "archive": "Arquivar",
+        "col": {
+          "description": "Descrição",
+          "name": "Nome",
+          "scope": "Escopo",
+          "type": "Tipo"
+        },
+        "description": {
+          "label": "Descrição"
+        },
+        "editHeading": "Editar Template de Entregável",
+        "empty": "Ainda não há templates de entregáveis. Crie o primeiro abaixo.",
+        "eyebrow": "Configurações",
+        "name": {
+          "label": "Nome"
+        },
+        "newHeading": "Novo Template de Entregável",
+        "save": "Salvar Template",
+        "scopeGlobal": "Global",
+        "scopeOrg": "Organização",
+        "submit": "Criar Template",
+        "subtitle": "Sementes de especificações de documentos aplicadas no fluxo de advancing de um projeto.",
+        "title": "Templates de Entregáveis",
+        "type": {
+          "label": "Tipo de entregável"
+        }
+      },
+      "notificationTemplates": {
+        "col": {
+          "channel": "Canal",
+          "key": "Chave",
+          "locale": "Idioma",
+          "scope": "Escopo",
+          "status": "Estado",
+          "version": "Versão"
+        },
+        "empty": "Ainda não há templates de notificações. O motor usa seus textos integrados.",
+        "eyebrow": "Configurações",
+        "readOnlyNote": "Registro somente leitura. O motor de notificações renderiza os corpos; as preferências de entrega por tipo ficam nas configurações de notificação de cada membro.",
+        "scopeOrg": "Organização",
+        "scopePlatform": "Plataforma",
+        "subtitle": "Textos de notificação versionados por canal. Linhas de plataforma são os padrões; linhas da organização os substituem.",
+        "title": "Templates de Notificações"
+      },
       "sidebar": {
         "ariaLabel": "Configurações",
         "backToWorkspace": "Voltar ao Workspace",
@@ -21974,6 +22025,10 @@
         "addDomainHelp": "Aponte uma verificação CNAME ou TXT no seu provedor de DNS. Nós reverificamos sob demanda e emitimos TLS automaticamente após a verificação."
       },
       "emailTemplates": {
+        "deleteFailedToast": "Falha ao excluir",
+        "deleteTemplate": "Excluir template",
+        "deletedToast": "Template excluído",
+        "duplicate": "Duplicar",
         "requiredToast": "Slug, nome, assunto e corpo são obrigatórios",
         "createFailedToast": "Falha ao criar",
         "createdToast": "Template criado",
@@ -22850,7 +22905,9 @@
         "you": "Você"
       },
       "jobTemplates": {
+        "archive": "Arquivar",
         "createWorkOrder": "Criar Ordem de Serviço",
+        "duplicate": "Duplicar",
         "empty": "Nenhum template de trabalho ainda",
         "emptyBody": "Crie um checklist reutilizável (ex.: um escopo de rigging ou elétrica) para padronizar o que cada equipe adjudicada entrega.",
         "field": {
@@ -25570,30 +25627,97 @@
             "inConsole": "No console",
             "title": "Presets de advance packet"
           },
+          "allFamilies": "Todas",
+          "archiveGuide": "Arquivar",
+          "brandAtlvs": "ATLVS",
+          "brandCo": "Co-marca",
+          "brandViewerDefault": "Padrão do leitor",
+          "brandWhite": "Marca branca",
+          "defaultBrand": "Marca padrão",
           "doc": {
             "blurb": "A biblioteca de documentos do kit: propostas, faturas, riders, run of shows, SOPs e mais. Cada campo de merge com respaldo em registro.",
             "title": "Templates de documento"
           },
+          "docDisabledRule": "Tipos desativados ficam ocultos nos seletores de criação. Documentos já emitidos com um tipo desativado continuam sendo exibidos.",
+          "duplicateGuide": "Duplicar",
           "eyebrow": "Hub da Organização",
+          "family": {
+            "advance": "Predefinições de pacotes de advance",
+            "advanceBlurb": "Matrizes de seções por público que alimentam cada campanha de advance.",
+            "advanceOpen": "Abrir matriz de predefinições",
+            "deliverable": "Templates de entregáveis",
+            "deliverableBlurb": "Sementes de especificações de documentos aplicadas no fluxo de advancing de um projeto.",
+            "deliverableOpen": "Abrir templates de entregáveis",
+            "doc": "Templates de documentos",
+            "docBlurb": "O registro de documentos do kit. Tipos definidos em código; sua organização controla quais são oferecidos e seu modo de marca padrão.",
+            "docOpen": "Abrir biblioteca de documentos",
+            "email": "Templates de e-mail",
+            "emailBlurb": "As personalizações da sua organização sobre os e-mails transacionais padrão do kit.",
+            "emailOpen": "Abrir templates de e-mail",
+            "field": "Templates de campo",
+            "fieldBlurb": "Checklists, formulários e formatos de inspeção que o app de campo COMPVSS executa no local.",
+            "fieldOpen": "Abrir no COMPVSS",
+            "guide": "Templates de guias",
+            "guideBlurb": "Configurações de Boarding Pass capturadas de um guia de projeto. Templates publicados alimentam novos guias.",
+            "guideOpen": "Gerenciado aqui",
+            "inspection": "Templates de inspeção",
+            "inspectionBlurb": "Formatos de inspeção com pontos de verificação detalhados, instanciados por inspeção.",
+            "inspectionOpen": "Abrir templates de inspeção",
+            "job": "Templates de trabalho",
+            "jobBlurb": "Checklists de escopo reutilizáveis que alimentam a lista de tarefas de uma ordem de serviço.",
+            "jobOpen": "Abrir templates de trabalho",
+            "notification": "Templates de notificações",
+            "notificationBlurb": "Textos de notificação versionados por canal que o motor renderiza. Linhas de plataforma são os padrões.",
+            "notificationOpen": "Abrir registro de notificações",
+            "project": "Blueprints de projeto",
+            "projectBlurb": "Blueprints que materializam um projeto funcional: entregáveis, tarefas e guias em um clique.",
+            "projectOpen": "Abrir galeria de blueprints",
+            "proposal": "Templates de propostas",
+            "proposalBlurb": "Catálogos de blocos e temas que preenchem novas propostas. Linhas de sistema acompanham a plataforma.",
+            "proposalOpen": "Abrir templates de propostas"
+          },
+          "familyFilterAria": "Filtrar por família",
           "field": {
             "blurb": "Checklists, formulários e formatos de inspeção que o app de campo COMPVSS roda no site.",
             "inTheFieldApp": "No app de campo",
             "open": "Abrir no COMPVSS",
             "title": "Templates de campo"
           },
+          "hiddenFromPickers": "Oculto nos seletores",
           "job": {
             "blurb": "Formatos de job reutilizáveis para dispatch e ordens de serviço de subcontratados.",
             "inTheHub": "No hub",
             "open": "Abrir no hub",
             "title": "Templates de job"
           },
+          "mergeFields": "{count} campos de mesclagem",
+          "nBlocks": "{count} blocos",
           "nPresets": "{advancePresetCount} presets",
+          "nSections": "{count} seções",
+          "nSteps": "{count} etapas",
           "nTemplates": "{count} templates",
+          "nVersions": "{count} versões",
+          "newTemplate": "Novo Template",
+          "noMatches": "Nenhum template corresponde à pesquisa atual.",
+          "offered": "Oferecido",
           "onePreset": "1 preset",
           "oneTemplate": "1 template",
+          "oneVersion": "1 versão",
           "openInConsole": "Abrir no console",
+          "publishGuide": "Publicar",
+          "recordBacked": "Vinculado a registros",
+          "renameAria": "Nome do template",
+          "renameCancel": "Cancelar",
+          "renameGuide": "Renomear",
+          "renameSave": "Salvar",
+          "searchAria": "Pesquisar templates",
+          "searchPlaceholder": "Pesquisar em todas as famílias de templates",
           "subtitle": "Configure uma vez, reutilize em cada projeto. Todas as famílias de template, uma biblioteca.",
-          "title": "Templates"
+          "systemRow": "Sistema",
+          "title": "Templates",
+          "unpublishGuide": "Despublicar",
+          "usedNTimes": "Usado {count} vezes",
+          "versionN": "v{version}"
         },
         "title": "Hub da Organização",
         "yourOrganization": "Sua organização"

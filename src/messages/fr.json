@@ -11454,6 +11454,7 @@
         }
       },
       "guides": {
+        "captureHeading": "Capturer comme modèle",
         "editor": {
           "savedToast": "Guide enregistré",
           "titleLabel": "Titre",
@@ -11511,16 +11512,21 @@
           },
           "revokeDialogTitle": "Révoquer le code"
         },
+        "noTemplates": "Aucun modèle publié pour l'instant. Capturez un guide ci-dessous, puis publiez-le dans la bibliothèque LEG3ND.",
         "persona": {
           "manageAccessCodes": "Gérer les codes d'accès"
         },
+        "saveAsTemplate": "Enregistrer {persona} comme modèle",
+        "templatesDescription": "Créez un guide à partir d'un modèle publié de l'organisation, ou capturez un guide de ce projet comme modèle réutilisable. Les modèles sont gérés dans la bibliothèque LEG3ND.",
+        "templatesHeading": "Modèles de Guides de l'Organisation",
         "title": "Guides d'événement",
         "subtitle": "Le know-before-you-go, par rôle.",
         "statusLive": "En direct",
         "statusDraft": "Brouillon",
         "statusNone": "Aucun",
         "customHeading": "Guide personnalisé",
-        "startCustom": "Démarrer un guide personnalisé"
+        "startCustom": "Démarrer un guide personnalisé",
+        "useTemplate": "Utiliser pour ce projet"
       },
       "tabs": {
         "overview": "Vue d'ensemble",
@@ -12931,6 +12937,55 @@
       }
     },
     "settings": {
+      "deliverableTemplates": {
+        "archive": "Archiver",
+        "col": {
+          "description": "Description",
+          "name": "Nom",
+          "scope": "Portée",
+          "type": "Type"
+        },
+        "description": {
+          "label": "Description"
+        },
+        "editHeading": "Modifier le Modèle de Livrable",
+        "empty": "Aucun modèle de livrable pour l'instant. Créez le premier ci-dessous.",
+        "eyebrow": "Paramètres",
+        "name": {
+          "label": "Nom"
+        },
+        "newHeading": "Nouveau Modèle de Livrable",
+        "save": "Enregistrer le Modèle",
+        "scopeGlobal": "Global",
+        "scopeOrg": "Organisation",
+        "submit": "Créer le Modèle",
+        "subtitle": "Amorces de spécifications de documents appliquées dans le flux d'advancing d'un projet.",
+        "title": "Modèles de Livrables",
+        "type": {
+          "label": "Type de livrable"
+        }
+      },
+      "jobTemplates": {
+        "archive": "Archiver",
+        "duplicate": "Dupliquer"
+      },
+      "notificationTemplates": {
+        "col": {
+          "channel": "Canal",
+          "key": "Clé",
+          "locale": "Langue",
+          "scope": "Portée",
+          "status": "Statut",
+          "version": "Version"
+        },
+        "empty": "Aucun modèle de notification pour l'instant. Le moteur utilise ses textes intégrés.",
+        "eyebrow": "Paramètres",
+        "readOnlyNote": "Registre en lecture seule. Le moteur de notifications rend les corps ; les préférences de livraison par type se trouvent dans les réglages de notification de chaque membre.",
+        "scopeOrg": "Organisation",
+        "scopePlatform": "Plateforme",
+        "subtitle": "Textes de notification versionnés par canal. Les lignes plateforme sont les valeurs par défaut ; les lignes organisation les remplacent.",
+        "title": "Modèles de Notifications"
+      },
       "sidebar": {
         "ariaLabel": "Paramètres",
         "backToWorkspace": "Retour à l'espace de travail",
@@ -13232,6 +13287,10 @@
         "remove": "Supprimer"
       },
       "emailTemplates": {
+        "deleteFailedToast": "Échec de la suppression",
+        "deleteTemplate": "Supprimer le modèle",
+        "deletedToast": "Modèle supprimé",
+        "duplicate": "Dupliquer",
         "requiredToast": "Slug, nom, sujet et corps requis",
         "createFailedToast": "Échec de la création",
         "createdToast": "Modèle créé",
@@ -15736,6 +15795,77 @@
     },
     "legend": {
       "eyebrow": "LEG3ND",
+      "hub": {
+        "templates": {
+          "allFamilies": "Toutes",
+          "archiveGuide": "Archiver",
+          "brandAtlvs": "ATLVS",
+          "brandCo": "Co-marque",
+          "brandViewerDefault": "Défaut du lecteur",
+          "brandWhite": "Marque blanche",
+          "defaultBrand": "Marque par défaut",
+          "docDisabledRule": "Les types désactivés sont masqués dans les sélecteurs de création. Les documents déjà émis avec un type désactivé restent affichés.",
+          "duplicateGuide": "Dupliquer",
+          "family": {
+            "advance": "Préréglages de dossiers d'advance",
+            "advanceBlurb": "Matrices de sections par audience qui alimentent chaque campagne d'advance.",
+            "advanceOpen": "Ouvrir la matrice de préréglages",
+            "deliverable": "Modèles de livrables",
+            "deliverableBlurb": "Amorces de spécifications de documents appliquées dans le flux d'advancing d'un projet.",
+            "deliverableOpen": "Ouvrir les modèles de livrables",
+            "doc": "Modèles de documents",
+            "docBlurb": "Le registre de documents du kit. Types définis dans le code ; votre organisation contrôle ceux qui sont proposés et leur mode de marque par défaut.",
+            "docOpen": "Ouvrir la bibliothèque de documents",
+            "email": "Modèles d'e-mail",
+            "emailBlurb": "Les personnalisations de votre organisation des e-mails transactionnels par défaut du kit.",
+            "emailOpen": "Ouvrir les modèles d'e-mail",
+            "field": "Modèles de terrain",
+            "fieldBlurb": "Listes de contrôle, formulaires et formats d'inspection exécutés sur site par l'app terrain COMPVSS.",
+            "fieldOpen": "Ouvrir dans COMPVSS",
+            "guide": "Modèles de guides",
+            "guideBlurb": "Configurations Boarding Pass capturées depuis un guide de projet. Les modèles publiés alimentent de nouveaux guides.",
+            "guideOpen": "Géré ici",
+            "inspection": "Modèles d'inspection",
+            "inspectionBlurb": "Formats d'inspection avec points de contrôle détaillés, instanciés par inspection.",
+            "inspectionOpen": "Ouvrir les modèles d'inspection",
+            "job": "Modèles de travaux",
+            "jobBlurb": "Listes de contrôle réutilisables qui alimentent la liste des tâches d'un ordre de travail.",
+            "jobOpen": "Ouvrir les modèles de travaux",
+            "notification": "Modèles de notifications",
+            "notificationBlurb": "Textes de notification versionnés par canal rendus par le moteur. Les lignes plateforme sont les valeurs par défaut.",
+            "notificationOpen": "Ouvrir le registre de notifications",
+            "project": "Plans de projet",
+            "projectBlurb": "Plans qui matérialisent un projet opérationnel : livrables, tâches et guides en un clic.",
+            "projectOpen": "Ouvrir la galerie de plans",
+            "proposal": "Modèles de propositions",
+            "proposalBlurb": "Catalogues de blocs et de thèmes qui préremplissent les nouvelles propositions. Les lignes système sont fournies avec la plateforme.",
+            "proposalOpen": "Ouvrir les modèles de propositions"
+          },
+          "familyFilterAria": "Filtrer par famille",
+          "hiddenFromPickers": "Masqué dans les sélecteurs",
+          "mergeFields": "{count} champs de fusion",
+          "nBlocks": "{count} blocs",
+          "nSections": "{count} sections",
+          "nSteps": "{count} étapes",
+          "nVersions": "{count} versions",
+          "newTemplate": "Nouveau Modèle",
+          "noMatches": "Aucun modèle ne correspond à la recherche actuelle.",
+          "offered": "Proposé",
+          "oneVersion": "1 version",
+          "publishGuide": "Publier",
+          "recordBacked": "Lié aux enregistrements",
+          "renameAria": "Nom du modèle",
+          "renameCancel": "Annuler",
+          "renameGuide": "Renommer",
+          "renameSave": "Enregistrer",
+          "searchAria": "Rechercher des modèles",
+          "searchPlaceholder": "Rechercher dans toutes les familles de modèles",
+          "systemRow": "Système",
+          "unpublishGuide": "Dépublier",
+          "usedNTimes": "Utilisé {count} fois",
+          "versionN": "v{version}"
+        }
+      },
       "subtitle": "Connaissances · LMS · Ressources, sur le protocole XPMS 2.0.",
       "tiles": {
         "catalog": {

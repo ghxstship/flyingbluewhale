@@ -13466,6 +13466,7 @@
         }
       },
       "guides": {
+        "captureHeading": "Als Vorlage erfassen",
         "editor": {
           "savedToast": "Guide gespeichert",
           "titleLabel": "Titel",
@@ -13523,16 +13524,21 @@
           },
           "revokeDialogTitle": "Code widerrufen"
         },
+        "noTemplates": "Noch keine veröffentlichten Vorlagen. Erfassen Sie unten einen Leitfaden und veröffentlichen Sie ihn in der LEG3ND-Bibliothek.",
         "persona": {
           "manageAccessCodes": "Zugangscodes verwalten"
         },
+        "saveAsTemplate": "{persona} als Vorlage speichern",
+        "templatesDescription": "Erstellen Sie einen Leitfaden aus einer veröffentlichten Organisationsvorlage oder erfassen Sie einen Leitfaden dieses Projekts als wiederverwendbare Vorlage. Vorlagen werden in der LEG3ND-Bibliothek verwaltet.",
+        "templatesHeading": "Guide-Vorlagen der Organisation",
         "title": "Event-Guides",
         "subtitle": "Know-before-you-go nach Rolle.",
         "statusLive": "Live",
         "statusDraft": "Entwurf",
         "statusNone": "Keine",
         "customHeading": "Individueller Guide",
-        "startCustom": "Custom Guide starten"
+        "startCustom": "Custom Guide starten",
+        "useTemplate": "Für dieses Projekt verwenden"
       },
       "tabs": {
         "overview": "Übersicht",
@@ -14943,6 +14949,55 @@
       }
     },
     "settings": {
+      "deliverableTemplates": {
+        "archive": "Archivieren",
+        "col": {
+          "description": "Beschreibung",
+          "name": "Name",
+          "scope": "Geltungsbereich",
+          "type": "Typ"
+        },
+        "description": {
+          "label": "Beschreibung"
+        },
+        "editHeading": "Liefergegenstand-Vorlage bearbeiten",
+        "empty": "Noch keine Liefergegenstand-Vorlagen. Legen Sie unten die erste an.",
+        "eyebrow": "Einstellungen",
+        "name": {
+          "label": "Name"
+        },
+        "newHeading": "Neue Liefergegenstand-Vorlage",
+        "save": "Vorlage speichern",
+        "scopeGlobal": "Global",
+        "scopeOrg": "Organisation",
+        "submit": "Vorlage erstellen",
+        "subtitle": "Dokumentspezifikations-Vorlagen, die im Advancing-Workflow eines Projekts angewendet werden.",
+        "title": "Liefergegenstand-Vorlagen",
+        "type": {
+          "label": "Liefergegenstandstyp"
+        }
+      },
+      "jobTemplates": {
+        "archive": "Archivieren",
+        "duplicate": "Duplizieren"
+      },
+      "notificationTemplates": {
+        "col": {
+          "channel": "Kanal",
+          "key": "Schlüssel",
+          "locale": "Sprache",
+          "scope": "Geltungsbereich",
+          "status": "Status",
+          "version": "Version"
+        },
+        "empty": "Noch keine Benachrichtigungsvorlagen. Die Engine nutzt ihre eingebauten Texte.",
+        "eyebrow": "Einstellungen",
+        "readOnlyNote": "Schreibgeschütztes Register. Die Benachrichtigungs-Engine rendert die Inhalte; Zustellungspräferenzen je Art liegen in den Benachrichtigungseinstellungen jedes Mitglieds.",
+        "scopeOrg": "Organisation",
+        "scopePlatform": "Plattform",
+        "subtitle": "Versionierte Benachrichtigungstexte je Kanal. Plattformzeilen sind die Standards; Organisationszeilen überschreiben sie.",
+        "title": "Benachrichtigungsvorlagen"
+      },
       "sidebar": {
         "ariaLabel": "Einstellungen",
         "backToWorkspace": "Zurück zum Workspace",
@@ -15244,6 +15299,10 @@
         "remove": "Entfernen"
       },
       "emailTemplates": {
+        "deleteFailedToast": "Löschen fehlgeschlagen",
+        "deleteTemplate": "Vorlage löschen",
+        "deletedToast": "Vorlage gelöscht",
+        "duplicate": "Duplizieren",
         "requiredToast": "Slug, Name, Betreff und Body sind erforderlich",
         "createFailedToast": "Erstellung fehlgeschlagen",
         "createdToast": "Vorlage erstellt",
@@ -17748,6 +17807,77 @@
     },
     "legend": {
       "eyebrow": "LEG3ND",
+      "hub": {
+        "templates": {
+          "allFamilies": "Alle",
+          "archiveGuide": "Archivieren",
+          "brandAtlvs": "ATLVS",
+          "brandCo": "Co-Branding",
+          "brandViewerDefault": "Betrachterstandard",
+          "brandWhite": "White-Label",
+          "defaultBrand": "Standardmarke",
+          "docDisabledRule": "Deaktivierte Typen werden in Auswahllisten ausgeblendet. Bereits ausgestellte Dokumente eines deaktivierten Typs werden weiterhin angezeigt.",
+          "duplicateGuide": "Duplizieren",
+          "family": {
+            "advance": "Advance-Paket-Voreinstellungen",
+            "advanceBlurb": "Abschnittsmatrizen je Zielgruppe, die jede Advance-Kampagne befüllen.",
+            "advanceOpen": "Voreinstellungsmatrix öffnen",
+            "deliverable": "Liefergegenstand-Vorlagen",
+            "deliverableBlurb": "Dokumentspezifikations-Vorlagen, die im Advancing-Workflow eines Projekts angewendet werden.",
+            "deliverableOpen": "Liefergegenstand-Vorlagen öffnen",
+            "doc": "Dokumentvorlagen",
+            "docBlurb": "Das Dokumentregister des Kits. Im Code definierte Typen; Ihre Organisation steuert, welche angeboten werden und deren Standard-Markenmodus.",
+            "docOpen": "Dokumentbibliothek öffnen",
+            "email": "E-Mail-Vorlagen",
+            "emailBlurb": "Die Anpassungen Ihrer Organisation an den transaktionalen Standard-E-Mails des Kits.",
+            "emailOpen": "E-Mail-Vorlagen öffnen",
+            "field": "Feldvorlagen",
+            "fieldBlurb": "Checklisten, Formulare und Inspektionsformate, die die COMPVSS-Feld-App vor Ort ausführt.",
+            "fieldOpen": "In COMPVSS öffnen",
+            "guide": "Guide-Vorlagen",
+            "guideBlurb": "Boarding-Pass-Konfigurationen aus einem Projektleitfaden. Veröffentlichte Vorlagen befüllen neue Leitfäden.",
+            "guideOpen": "Wird hier verwaltet",
+            "inspection": "Inspektionsvorlagen",
+            "inspectionBlurb": "Inspektionsformate mit einzelnen Prüfpunkten, je Inspektion instanziiert.",
+            "inspectionOpen": "Inspektionsvorlagen öffnen",
+            "job": "Auftragsvorlagen",
+            "jobBlurb": "Wiederverwendbare Leistungs-Checklisten, die die Aufgabenliste eines Arbeitsauftrags befüllen.",
+            "jobOpen": "Auftragsvorlagen öffnen",
+            "notification": "Benachrichtigungsvorlagen",
+            "notificationBlurb": "Versionierte Benachrichtigungstexte je Kanal, die die Engine rendert. Plattformzeilen sind die Standards.",
+            "notificationOpen": "Benachrichtigungsregister öffnen",
+            "project": "Projekt-Blaupausen",
+            "projectBlurb": "Blaupausen, die ein lauffähiges Projekt erzeugen: Liefergegenstände, Aufgaben und Leitfäden mit einem Klick.",
+            "projectOpen": "Blaupausen-Galerie öffnen",
+            "proposal": "Angebotsvorlagen",
+            "proposalBlurb": "Block- und Themenkataloge, die neue Angebote vorbefüllen. Systemzeilen werden mit der Plattform ausgeliefert.",
+            "proposalOpen": "Angebotsvorlagen öffnen"
+          },
+          "familyFilterAria": "Nach Familie filtern",
+          "hiddenFromPickers": "In Auswahllisten ausgeblendet",
+          "mergeFields": "{count} Seriendruckfelder",
+          "nBlocks": "{count} Blöcke",
+          "nSections": "{count} Abschnitte",
+          "nSteps": "{count} Schritte",
+          "nVersions": "{count} Versionen",
+          "newTemplate": "Neue Vorlage",
+          "noMatches": "Keine Vorlagen entsprechen der aktuellen Suche.",
+          "offered": "Angeboten",
+          "oneVersion": "1 Version",
+          "publishGuide": "Veröffentlichen",
+          "recordBacked": "Datensatzgestützt",
+          "renameAria": "Vorlagenname",
+          "renameCancel": "Abbrechen",
+          "renameGuide": "Umbenennen",
+          "renameSave": "Speichern",
+          "searchAria": "Vorlagen durchsuchen",
+          "searchPlaceholder": "Alle Vorlagenfamilien durchsuchen",
+          "systemRow": "System",
+          "unpublishGuide": "Veröffentlichung aufheben",
+          "usedNTimes": "{count} Mal verwendet",
+          "versionN": "v{version}"
+        }
+      },
       "subtitle": "Wissen · LMS · Ressourcen, auf dem XPMS 2.0-Protokoll.",
       "tiles": {
         "catalog": {

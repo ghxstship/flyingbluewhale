@@ -19849,6 +19849,7 @@
     "pipelineExplainer": "Pipeline is sent + overdue invoices that haven't cleared."
    },
    "guides": {
+    "captureHeading": "Capture as template",
     "editor": {
      "savedToast": "Guide saved",
      "titleLabel": "Title",
@@ -19912,9 +19913,13 @@
      "publicExplainer": "This persona is publicly accessible. Anyone with the link sees this guide once it is published. There is nothing to manage here.",
      "tipText": "Codes are case-insensitive and dashes are optional when entered. Rotate regularly; revoking is instant."
     },
+    "noTemplates": "No published templates yet. Capture a guide below, then publish it in the LEG3ND library.",
     "persona": {
      "manageAccessCodes": "Manage access codes"
     },
+    "saveAsTemplate": "Save {persona} as template",
+    "templatesDescription": "Seed a guide from a published org template, or capture one of this project's guides as a reusable template. Templates are managed in the LEG3ND library.",
+    "templatesHeading": "Org Guide Templates",
     "title": "Event Guides",
     "subtitle": "Per-role know-before-you-go.",
     "statusLive": "Live",
@@ -19922,7 +19927,8 @@
     "statusNone": "None",
     "customHeading": "Custom Guide",
     "startCustom": "Start Custom Guide",
-    "customDescription": "Build a guide for a role that isn't on the standard list. Same renderer, your fields."
+    "customDescription": "Build a guide for a role that isn't on the standard list. Same renderer, your fields.",
+    "useTemplate": "Use for this project"
    },
    "tabs": {
     "overview": "Overview",
@@ -21641,6 +21647,51 @@
    }
   },
   "settings": {
+   "deliverableTemplates": {
+    "archive": "Archive",
+    "col": {
+     "description": "Description",
+     "name": "Name",
+     "scope": "Scope",
+     "type": "Type"
+    },
+    "description": {
+     "label": "Description"
+    },
+    "editHeading": "Edit Deliverable Template",
+    "empty": "No deliverable templates yet. Create the first one below.",
+    "eyebrow": "Settings",
+    "name": {
+     "label": "Name"
+    },
+    "newHeading": "New Deliverable Template",
+    "save": "Save Template",
+    "scopeGlobal": "Global",
+    "scopeOrg": "Org",
+    "submit": "Create Template",
+    "subtitle": "Doc-spec seeds applied inside a project's advancing workflow.",
+    "title": "Deliverable Templates",
+    "type": {
+     "label": "Deliverable type"
+    }
+   },
+   "notificationTemplates": {
+    "col": {
+     "channel": "Channel",
+     "key": "Key",
+     "locale": "Locale",
+     "scope": "Scope",
+     "status": "Status",
+     "version": "Version"
+    },
+    "empty": "No notification templates yet. The engine falls back to its built-in copy.",
+    "eyebrow": "Settings",
+    "readOnlyNote": "Read-only register. Template bodies are rendered by the notification engine; per-kind delivery preferences live in each member's notification settings.",
+    "scopeOrg": "Org",
+    "scopePlatform": "Platform",
+    "subtitle": "Versioned per-channel notification copy. Platform rows are the defaults; org rows override them.",
+    "title": "Notification Templates"
+   },
    "sidebar": {
     "ariaLabel": "Settings",
     "backToWorkspace": "Back to Workspace",
@@ -21986,6 +22037,10 @@
     "addDomainHelp": "Point a CNAME or TXT verification to your DNS provider. We re-check on demand and issue TLS automatically once verified."
    },
    "emailTemplates": {
+    "deleteFailedToast": "Delete failed",
+    "deleteTemplate": "Delete template",
+    "deletedToast": "Template deleted",
+    "duplicate": "Duplicate",
     "requiredToast": "Slug, name, subject, and body are required",
     "createFailedToast": "Create failed",
     "createdToast": "Template created",
@@ -22862,7 +22917,9 @@
     "you": "You"
    },
    "jobTemplates": {
+    "archive": "Archive",
     "createWorkOrder": "Create Work Order",
+    "duplicate": "Duplicate",
     "empty": "No job templates yet",
     "emptyBody": "Create a reusable checklist (e.g. a rigging or electrical scope) to standardize what each awarded crew delivers.",
     "field": {
@@ -25755,31 +25812,98 @@
       "inConsole": "In console",
       "title": "Advance packet presets"
      },
+     "allFamilies": "All",
+     "archiveGuide": "Archive",
+     "brandAtlvs": "ATLVS",
+     "brandCo": "Co-brand",
+     "brandViewerDefault": "Viewer default",
+     "brandWhite": "White-label",
+     "defaultBrand": "Default brand",
      "doc": {
       "blurb": "The kit document library: proposals, invoices, riders, run of shows, SOPs, and more. Every merge field record-backed.",
       "title": "Document templates"
      },
+     "docDisabledRule": "Disabled types are hidden from creation pickers. Documents already issued against a disabled type still render.",
+     "duplicateGuide": "Duplicate",
      "eyebrow": "Organization Hub",
+     "family": {
+      "advance": "Advance packet presets",
+      "advanceBlurb": "Per-audience section matrices that seed every advance campaign.",
+      "advanceOpen": "Open preset matrix",
+      "deliverable": "Deliverable templates",
+      "deliverableBlurb": "Advancing doc-spec seeds applied inside a project's advancing workflow.",
+      "deliverableOpen": "Open deliverable templates",
+      "doc": "Document templates",
+      "docBlurb": "The kit document registry. Code-defined types; your org controls which are offered and their default brand mode.",
+      "docOpen": "Open document library",
+      "email": "Email templates",
+      "emailBlurb": "Your org's overrides of the kit's transactional email defaults.",
+      "emailOpen": "Open email templates",
+      "field": "Field templates",
+      "fieldBlurb": "Checklists, forms, and inspection shapes the COMPVSS field app runs on site.",
+      "fieldOpen": "Open in COMPVSS",
+      "guide": "Guide templates",
+      "guideBlurb": "Boarding Pass configs captured from a project guide. Published templates seed new project guides.",
+      "guideOpen": "Managed here",
+      "inspection": "Inspection templates",
+      "inspectionBlurb": "Inspection shapes with itemized checkpoints, instantiated per inspection.",
+      "inspectionOpen": "Open inspection templates",
+      "job": "Job templates",
+      "jobBlurb": "Reusable scope checklists that seed a work order's task list.",
+      "jobOpen": "Open job templates",
+      "notification": "Notification templates",
+      "notificationBlurb": "Versioned per-channel notification copy the engine renders. Platform rows are the defaults.",
+      "notificationOpen": "Open notification register",
+      "project": "Project blueprints",
+      "projectBlurb": "Blueprints that materialize a working project: deliverables, tasks, guides in one click.",
+      "projectOpen": "Open blueprint gallery",
+      "proposal": "Proposal templates",
+      "proposalBlurb": "Block and theme catalogs that pre-fill new proposals. System rows ship with the platform.",
+      "proposalOpen": "Open proposal templates"
+     },
+     "familyFilterAria": "Filter by family",
      "field": {
       "blurb": "Checklists, forms, and inspection shapes the COMPVSS field app runs on site.",
       "inTheFieldApp": "In the field app",
       "open": "Open in COMPVSS",
       "title": "Field templates"
      },
+     "hiddenFromPickers": "Hidden from pickers",
      "job": {
       "blurb": "Reusable job shapes for dispatch and subcontractor work orders.",
       "inTheHub": "In the hub",
       "open": "Open in the hub",
       "title": "Job templates"
      },
+     "mergeFields": "{count} merge fields",
+     "nBlocks": "{count} blocks",
      "nPresets": "{advancePresetCount} presets",
+     "nSections": "{count} sections",
+     "nSteps": "{count} steps",
      "nTemplates": "{count} templates",
+     "nVersions": "{count} versions",
+     "newTemplate": "New Template",
+     "noMatches": "No templates match the current search.",
+     "offered": "Offered",
      "onePreset": "1 preset",
      "oneTemplate": "1 template",
+     "oneVersion": "1 version",
      "openInConsole": "Open in console",
+     "publishGuide": "Publish",
+     "recordBacked": "Record-backed",
+     "renameAria": "Template name",
+     "renameCancel": "Cancel",
+     "renameGuide": "Rename",
+     "renameSave": "Save",
+     "searchAria": "Search templates",
+     "searchPlaceholder": "Search all template families",
      "subtitle": "Configure once, reuse on every project. Every template family, one library.",
+     "systemRow": "System",
      "title": "Templates",
-     "docTypesFixed": "Document types are registry-fixed and cannot be authored per org. Configure which types are offered, and their default brand, in the Document templates section below. Guide templates are captured from a project guide; proposal and project templates from their records."
+     "docTypesFixed": "Document types are registry-fixed and cannot be authored per org. Configure which types are offered, and their default brand, in the Document templates section below. Guide templates are captured from a project guide; proposal and project templates from their records.",
+     "unpublishGuide": "Unpublish",
+     "usedNTimes": "Used {count} times",
+     "versionN": "v{version}"
     },
     "title": "Organization Hub",
     "yourOrganization": "Your organization"

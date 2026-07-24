@@ -19837,6 +19837,7 @@
         "pipelineExplainer": "El pipeline son facturas enviadas + vencidas que no se han cobrado."
       },
       "guides": {
+        "captureHeading": "Capturar como plantilla",
         "editor": {
           "savedToast": "Guía guardada",
           "titleLabel": "Título",
@@ -19900,9 +19901,13 @@
           "publicExplainer": "Esta persona es de acceso público. Cualquiera con el enlace ve esta guía una vez publicada. No hay nada que gestionar aquí.",
           "tipText": "Los códigos no distinguen mayúsculas y los guiones son opcionales al ingresarlos. Rota con regularidad; revocar es instantáneo."
         },
+        "noTemplates": "Aún no hay plantillas publicadas. Captura una guía abajo y publícala en la biblioteca LEG3ND.",
         "persona": {
           "manageAccessCodes": "Gestionar códigos de acceso"
         },
+        "saveAsTemplate": "Guardar {persona} como plantilla",
+        "templatesDescription": "Crea una guía a partir de una plantilla publicada de la organización, o captura una guía de este proyecto como plantilla reutilizable. Las plantillas se gestionan en la biblioteca LEG3ND.",
+        "templatesHeading": "Plantillas de Guías de la Organización",
         "title": "Guías de Evento",
         "subtitle": "Know-before-you-go por rol.",
         "statusLive": "En Vivo",
@@ -19910,7 +19915,8 @@
         "statusNone": "Ninguna",
         "customHeading": "Guía Personalizada",
         "startCustom": "Iniciar Guía Personalizada",
-        "customDescription": "Arma una guía para un rol que no está en la lista estándar. Mismo renderer, tus campos."
+        "customDescription": "Arma una guía para un rol que no está en la lista estándar. Mismo renderer, tus campos.",
+        "useTemplate": "Usar en este proyecto"
       },
       "tabs": {
         "overview": "Resumen",
@@ -21629,6 +21635,51 @@
       }
     },
     "settings": {
+      "deliverableTemplates": {
+        "archive": "Archivar",
+        "col": {
+          "description": "Descripción",
+          "name": "Nombre",
+          "scope": "Alcance",
+          "type": "Tipo"
+        },
+        "description": {
+          "label": "Descripción"
+        },
+        "editHeading": "Editar Plantilla de Entregable",
+        "empty": "Aún no hay plantillas de entregables. Crea la primera abajo.",
+        "eyebrow": "Configuración",
+        "name": {
+          "label": "Nombre"
+        },
+        "newHeading": "Nueva Plantilla de Entregable",
+        "save": "Guardar Plantilla",
+        "scopeGlobal": "Global",
+        "scopeOrg": "Organización",
+        "submit": "Crear Plantilla",
+        "subtitle": "Semillas de especificaciones de documentos aplicadas dentro del flujo de avance de un proyecto.",
+        "title": "Plantillas de Entregables",
+        "type": {
+          "label": "Tipo de entregable"
+        }
+      },
+      "notificationTemplates": {
+        "col": {
+          "channel": "Canal",
+          "key": "Clave",
+          "locale": "Idioma",
+          "scope": "Alcance",
+          "status": "Estado",
+          "version": "Versión"
+        },
+        "empty": "Aún no hay plantillas de notificaciones. El motor usa sus textos integrados.",
+        "eyebrow": "Configuración",
+        "readOnlyNote": "Registro de solo lectura. El motor de notificaciones renderiza los cuerpos; las preferencias de entrega por tipo están en la configuración de notificaciones de cada miembro.",
+        "scopeOrg": "Organización",
+        "scopePlatform": "Plataforma",
+        "subtitle": "Textos de notificación versionados por canal. Las filas de plataforma son los valores predeterminados; las de organización los reemplazan.",
+        "title": "Plantillas de Notificaciones"
+      },
       "sidebar": {
         "ariaLabel": "Ajustes",
         "backToWorkspace": "Volver al workspace",
@@ -21974,6 +22025,10 @@
         "addDomainHelp": "Apunta una verificación CNAME o TXT en tu proveedor de DNS. Re-verificamos bajo demanda y emitimos TLS automáticamente al verificar."
       },
       "emailTemplates": {
+        "deleteFailedToast": "No se pudo eliminar",
+        "deleteTemplate": "Eliminar plantilla",
+        "deletedToast": "Plantilla eliminada",
+        "duplicate": "Duplicar",
         "requiredToast": "Slug, nombre, asunto y cuerpo son obligatorios",
         "createFailedToast": "Falló la creación",
         "createdToast": "Plantilla creada",
@@ -22850,7 +22905,9 @@
         "you": "Tú"
       },
       "jobTemplates": {
+        "archive": "Archivar",
         "createWorkOrder": "Crear orden de trabajo",
+        "duplicate": "Duplicar",
         "empty": "Aún no hay plantillas de trabajo",
         "emptyBody": "Crea una checklist reutilizable (p. ej. un alcance de rigging o eléctrico) para estandarizar lo que entrega cada cuadrilla adjudicada.",
         "field": {
@@ -25570,30 +25627,97 @@
             "inConsole": "En la consola",
             "title": "Presets de advance packets"
           },
+          "allFamilies": "Todas",
+          "archiveGuide": "Archivar",
+          "brandAtlvs": "ATLVS",
+          "brandCo": "Marca compartida",
+          "brandViewerDefault": "Predeterminado del lector",
+          "brandWhite": "Marca blanca",
+          "defaultBrand": "Marca predeterminada",
           "doc": {
             "blurb": "La biblioteca de documentos del kit: propuestas, facturas, riders, run of shows, SOPs y más. Cada campo de merge respaldado por registros.",
             "title": "Plantillas de documentos"
           },
+          "docDisabledRule": "Los tipos desactivados se ocultan en los selectores de creación. Los documentos ya emitidos con un tipo desactivado siguen mostrándose.",
+          "duplicateGuide": "Duplicar",
           "eyebrow": "Hub de Organización",
+          "family": {
+            "advance": "Preajustes de paquetes de avance",
+            "advanceBlurb": "Matrices de secciones por audiencia que alimentan cada campaña de avance.",
+            "advanceOpen": "Abrir matriz de preajustes",
+            "deliverable": "Plantillas de entregables",
+            "deliverableBlurb": "Semillas de especificaciones de documentos aplicadas dentro del flujo de avance de un proyecto.",
+            "deliverableOpen": "Abrir plantillas de entregables",
+            "doc": "Plantillas de documentos",
+            "docBlurb": "El registro de documentos del kit. Tipos definidos en código; tu organización controla cuáles se ofrecen y su modo de marca predeterminado.",
+            "docOpen": "Abrir biblioteca de documentos",
+            "email": "Plantillas de correo",
+            "emailBlurb": "Las personalizaciones de tu organización sobre los correos transaccionales predeterminados del kit.",
+            "emailOpen": "Abrir plantillas de correo",
+            "field": "Plantillas de campo",
+            "fieldBlurb": "Listas de verificación, formularios y formatos de inspección que la app de campo COMPVSS ejecuta en el sitio.",
+            "fieldOpen": "Abrir en COMPVSS",
+            "guide": "Plantillas de guías",
+            "guideBlurb": "Configuraciones de Boarding Pass capturadas de una guía de proyecto. Las plantillas publicadas alimentan nuevas guías.",
+            "guideOpen": "Se gestiona aquí",
+            "inspection": "Plantillas de inspección",
+            "inspectionBlurb": "Formatos de inspección con puntos de control detallados, instanciados por inspección.",
+            "inspectionOpen": "Abrir plantillas de inspección",
+            "job": "Plantillas de trabajos",
+            "jobBlurb": "Listas de verificación de alcance reutilizables que alimentan la lista de tareas de una orden de trabajo.",
+            "jobOpen": "Abrir plantillas de trabajos",
+            "notification": "Plantillas de notificaciones",
+            "notificationBlurb": "Textos de notificación versionados por canal que renderiza el motor. Las filas de plataforma son los valores predeterminados.",
+            "notificationOpen": "Abrir registro de notificaciones",
+            "project": "Planos de proyecto",
+            "projectBlurb": "Planos que materializan un proyecto funcional: entregables, tareas y guías en un clic.",
+            "projectOpen": "Abrir galería de planos",
+            "proposal": "Plantillas de propuestas",
+            "proposalBlurb": "Catálogos de bloques y temas que precargan nuevas propuestas. Las filas de sistema vienen con la plataforma.",
+            "proposalOpen": "Abrir plantillas de propuestas"
+          },
+          "familyFilterAria": "Filtrar por familia",
           "field": {
             "blurb": "Checklists, formularios y formatos de inspección que la app de campo COMPVSS corre en sitio.",
             "inTheFieldApp": "En la app de campo",
             "open": "Abrir en COMPVSS",
             "title": "Plantillas de campo"
           },
+          "hiddenFromPickers": "Oculta en los selectores",
           "job": {
             "blurb": "Formatos de trabajo reutilizables para dispatch y órdenes de trabajo de subcontratistas.",
             "inTheHub": "En el hub",
             "open": "Abrir en el hub",
             "title": "Plantillas de trabajos"
           },
+          "mergeFields": "{count} campos de combinación",
+          "nBlocks": "{count} bloques",
           "nPresets": "{advancePresetCount} presets",
+          "nSections": "{count} secciones",
+          "nSteps": "{count} pasos",
           "nTemplates": "{count} plantillas",
+          "nVersions": "{count} versiones",
+          "newTemplate": "Nueva Plantilla",
+          "noMatches": "Ninguna plantilla coincide con la búsqueda actual.",
+          "offered": "Ofrecida",
           "onePreset": "1 preset",
           "oneTemplate": "1 plantilla",
+          "oneVersion": "1 versión",
           "openInConsole": "Abrir en la consola",
+          "publishGuide": "Publicar",
+          "recordBacked": "Vinculada a registros",
+          "renameAria": "Nombre de la plantilla",
+          "renameCancel": "Cancelar",
+          "renameGuide": "Renombrar",
+          "renameSave": "Guardar",
+          "searchAria": "Buscar plantillas",
+          "searchPlaceholder": "Buscar en todas las familias de plantillas",
           "subtitle": "Configura una vez, reutiliza en cada proyecto. Todas las familias de plantillas, una biblioteca.",
-          "title": "Plantillas"
+          "systemRow": "Sistema",
+          "title": "Plantillas",
+          "unpublishGuide": "Despublicar",
+          "usedNTimes": "Usada {count} veces",
+          "versionN": "v{version}"
         },
         "title": "Hub de Organización",
         "yourOrganization": "Tu organización"

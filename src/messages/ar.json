@@ -14574,6 +14574,7 @@
         }
       },
       "guides": {
+        "captureHeading": "التقاط كقالب",
         "editor": {
           "savedToast": "تم حفظ الدليل",
           "titleLabel": "العنوان",
@@ -14631,16 +14632,21 @@
           },
           "revokeDialogTitle": "إلغاء الرمز"
         },
+        "noTemplates": "لا توجد قوالب منشورة بعد. التقط دليلًا أدناه ثم انشره في مكتبة LEG3ND.",
         "persona": {
           "manageAccessCodes": "إدارة رموز الوصول"
         },
+        "saveAsTemplate": "حفظ {persona} كقالب",
+        "templatesDescription": "أنشئ دليلًا من قالب منشور للمؤسسة، أو التقط أحد أدلة هذا المشروع كقالب قابل لإعادة الاستخدام. تُدار القوالب في مكتبة LEG3ND.",
+        "templatesHeading": "قوالب أدلة المؤسسة",
         "title": "أدلة الفعالية",
         "subtitle": "ما يجب معرفته قبل الحضور لكل دور.",
         "statusLive": "مباشر",
         "statusDraft": "مسودة",
         "statusNone": "لا شيء",
         "customHeading": "دليل مخصص",
-        "startCustom": "بدء دليل مخصص"
+        "startCustom": "بدء دليل مخصص",
+        "useTemplate": "استخدام لهذا المشروع"
       },
       "tabs": {
         "overview": "نظرة عامة",
@@ -16051,6 +16057,55 @@
       }
     },
     "settings": {
+      "deliverableTemplates": {
+        "archive": "أرشفة",
+        "col": {
+          "description": "الوصف",
+          "name": "الاسم",
+          "scope": "النطاق",
+          "type": "النوع"
+        },
+        "description": {
+          "label": "الوصف"
+        },
+        "editHeading": "تحرير قالب التسليم",
+        "empty": "لا توجد قوالب تسليمات بعد. أنشئ الأول أدناه.",
+        "eyebrow": "الإعدادات",
+        "name": {
+          "label": "الاسم"
+        },
+        "newHeading": "قالب تسليم جديد",
+        "save": "حفظ القالب",
+        "scopeGlobal": "عام",
+        "scopeOrg": "المؤسسة",
+        "submit": "إنشاء قالب",
+        "subtitle": "بذور مواصفات مستندات تُطبَّق داخل سير عمل التجهيز في المشروع.",
+        "title": "قوالب التسليمات",
+        "type": {
+          "label": "نوع التسليم"
+        }
+      },
+      "jobTemplates": {
+        "archive": "أرشفة",
+        "duplicate": "تكرار"
+      },
+      "notificationTemplates": {
+        "col": {
+          "channel": "القناة",
+          "key": "المفتاح",
+          "locale": "اللغة",
+          "scope": "النطاق",
+          "status": "الحالة",
+          "version": "الإصدار"
+        },
+        "empty": "لا توجد قوالب إشعارات بعد. يستخدم المحرك نصوصه المدمجة.",
+        "eyebrow": "الإعدادات",
+        "readOnlyNote": "سجل للقراءة فقط. يعرض محرك الإشعارات المحتوى؛ وتوجد تفضيلات التسليم لكل نوع في إعدادات إشعارات كل عضو.",
+        "scopeOrg": "المؤسسة",
+        "scopePlatform": "المنصة",
+        "subtitle": "نصوص إشعارات مُصدَّرة حسب القناة. صفوف المنصة هي الافتراضية وتتجاوزها صفوف المؤسسة.",
+        "title": "قوالب الإشعارات"
+      },
       "sidebar": {
         "ariaLabel": "الإعدادات",
         "backToWorkspace": "العودة إلى مساحة العمل",
@@ -16352,6 +16407,10 @@
         "remove": "إزالة"
       },
       "emailTemplates": {
+        "deleteFailedToast": "فشل الحذف",
+        "deleteTemplate": "حذف القالب",
+        "deletedToast": "تم حذف القالب",
+        "duplicate": "تكرار",
         "requiredToast": "المعرّف والاسم والموضوع والنص حقول مطلوبة",
         "createFailedToast": "فشل الإنشاء",
         "createdToast": "تم إنشاء القالب",
@@ -18874,6 +18933,77 @@
     },
     "legend": {
       "eyebrow": "LEG3ND",
+      "hub": {
+        "templates": {
+          "allFamilies": "الكل",
+          "archiveGuide": "أرشفة",
+          "brandAtlvs": "ATLVS",
+          "brandCo": "علامة مشتركة",
+          "brandViewerDefault": "افتراضي المشاهد",
+          "brandWhite": "علامة بيضاء",
+          "defaultBrand": "العلامة الافتراضية",
+          "docDisabledRule": "الأنواع المعطّلة مخفية من قوائم الإنشاء. المستندات الصادرة مسبقًا بنوع معطّل تظل معروضة.",
+          "duplicateGuide": "تكرار",
+          "family": {
+            "advance": "إعدادات حزم التجهيز المسبق",
+            "advanceBlurb": "مصفوفات أقسام لكل جمهور تُنشئ كل حملة تجهيز مسبق.",
+            "advanceOpen": "فتح مصفوفة الإعدادات",
+            "deliverable": "قوالب التسليمات",
+            "deliverableBlurb": "بذور مواصفات مستندات تُطبَّق داخل سير عمل التجهيز في المشروع.",
+            "deliverableOpen": "فتح قوالب التسليمات",
+            "doc": "قوالب المستندات",
+            "docBlurb": "سجل مستندات المجموعة. أنواع معرّفة في الكود؛ وتتحكم مؤسستك في الأنواع المعروضة ووضع العلامة الافتراضي.",
+            "docOpen": "فتح مكتبة المستندات",
+            "email": "قوالب البريد الإلكتروني",
+            "emailBlurb": "تخصيصات مؤسستك لرسائل البريد التعاملية الافتراضية في المجموعة.",
+            "emailOpen": "فتح قوالب البريد",
+            "field": "قوالب ميدانية",
+            "fieldBlurb": "قوائم تحقق ونماذج وأشكال فحص يشغّلها تطبيق COMPVSS الميداني في الموقع.",
+            "fieldOpen": "فتح في COMPVSS",
+            "guide": "قوالب الأدلة",
+            "guideBlurb": "إعدادات Boarding Pass مأخوذة من دليل مشروع. القوالب المنشورة تُنشئ أدلة مشاريع جديدة.",
+            "guideOpen": "يُدار هنا",
+            "inspection": "قوالب الفحص",
+            "inspectionBlurb": "أشكال فحص بنقاط تحقق مفصّلة، تُنشأ لكل فحص.",
+            "inspectionOpen": "فتح قوالب الفحص",
+            "job": "قوالب الأعمال",
+            "jobBlurb": "قوائم تحقق قابلة لإعادة الاستخدام تُنشئ قائمة مهام أمر العمل.",
+            "jobOpen": "فتح قوالب الأعمال",
+            "notification": "قوالب الإشعارات",
+            "notificationBlurb": "نصوص إشعارات مُصدَّرة حسب القناة يعرضها المحرك. صفوف المنصة هي الافتراضية.",
+            "notificationOpen": "فتح سجل الإشعارات",
+            "project": "مخططات المشاريع",
+            "projectBlurb": "مخططات تُنشئ مشروعًا جاهزًا: تسليمات ومهام وأدلة بنقرة واحدة.",
+            "projectOpen": "فتح معرض المخططات",
+            "proposal": "قوالب العروض",
+            "proposalBlurb": "كتالوجات كتل وسمات تملأ العروض الجديدة مسبقًا. صفوف النظام تأتي مع المنصة.",
+            "proposalOpen": "فتح قوالب العروض"
+          },
+          "familyFilterAria": "التصفية حسب العائلة",
+          "hiddenFromPickers": "مخفي من القوائم",
+          "mergeFields": "{count} حقول دمج",
+          "nBlocks": "{count} كتل",
+          "nSections": "{count} أقسام",
+          "nSteps": "{count} خطوات",
+          "nVersions": "{count} إصدارات",
+          "newTemplate": "قالب جديد",
+          "noMatches": "لا توجد قوالب مطابقة للبحث الحالي.",
+          "offered": "معروض",
+          "oneVersion": "إصدار واحد",
+          "publishGuide": "نشر",
+          "recordBacked": "مدعوم بالسجلات",
+          "renameAria": "اسم القالب",
+          "renameCancel": "إلغاء",
+          "renameGuide": "إعادة تسمية",
+          "renameSave": "حفظ",
+          "searchAria": "البحث في القوالب",
+          "searchPlaceholder": "البحث في جميع عائلات القوالب",
+          "systemRow": "النظام",
+          "unpublishGuide": "إلغاء النشر",
+          "usedNTimes": "استُخدم {count} مرات",
+          "versionN": "v{version}"
+        }
+      },
       "subtitle": "المعرفة · LMS · الموارد، على بروتوكول XPMS 2.0.",
       "tiles": {
         "catalog": {

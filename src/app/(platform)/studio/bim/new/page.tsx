@@ -33,6 +33,7 @@ export default async function Page() {
     { value: "gltf", label: t("console.bim.new.sourceType.gltf", undefined, "glTF") },
     { value: "fbx", label: t("console.bim.new.sourceType.fbx", undefined, "FBX") },
     { value: "dwg", label: t("console.bim.new.sourceType.dwg", undefined, "AutoCAD (DWG)") },
+    { value: "dxf", label: t("console.bim.new.sourceType.dxf", undefined, "AutoCAD Exchange (DXF)") },
   ];
 
   const DISCIPLINES = [

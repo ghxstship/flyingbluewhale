@@ -28,6 +28,11 @@ import { actionFail, formFail } from "@/lib/forms/fail";
 const Schema = z.object({
   label: z.string().min(1).max(200),
   doc_kind: z.enum(["id", "license", "tax", "contract", "medical", "other"]),
+  valid_until: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional()
+    .or(z.literal("").transform(() => undefined)),
   revalidate: z.string().min(1).max(200),
   redirectTo: z.string().min(1).max(200),
 });
@@ -54,6 +59,7 @@ export async function uploadPersonalDoc(_prev: State, fd: FormData): Promise<Sta
   const parsed = Schema.safeParse({
     label: fd.get("label"),
     doc_kind: fd.get("doc_kind"),
+    valid_until: fd.get("valid_until") ?? undefined,
     revalidate: fd.get("revalidate"),
     redirectTo: fd.get("redirectTo"),
   });
@@ -85,6 +91,7 @@ export async function uploadPersonalDoc(_prev: State, fd: FormData): Promise<Sta
     storage_path: storagePath,
     mime_type: f.type || null,
     size_bytes: f.size,
+    valid_until: parsed.data.valid_until ?? null,
   });
   if (error) return actionFail(`Could not save document record: ${error.message}`, fd);
 

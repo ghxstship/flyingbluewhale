@@ -3,8 +3,11 @@
 import * as React from "react";
 import Link from "next/link";
 import { useActionState, useOptimistic } from "react";
-import { Copy } from "lucide-react";
+import { Copy, Paperclip } from "lucide-react";
 import { RealtimeRefresh } from "@/components/RealtimeRefresh";
+import { AttachmentChip } from "@/components/chat/AttachmentChip";
+import { sendChatAttachment } from "@/lib/chat/attachment-actions";
+import { parseAttachments } from "@/lib/chat/attachment-types";
 import { CHAT_URL_PATTERN, type RecordRefMap } from "./record-ref-types";
 import { loadEarlierMessages, markRoomRead, sendConsoleMessage, toggleReaction, type State } from "./actions";
 
@@ -16,6 +19,8 @@ export type ConsoleMessage = {
   authorId: string | null;
   authorName: string;
   body: string;
+  /** chat_messages.attachments jsonb, parsed lazily at render. */
+  attachments?: unknown;
   timeText: string;
   dayKey: string;
   dayLabel: string;
@@ -78,6 +83,9 @@ export function ConsoleChat({
   const [draft, setDraft] = React.useState("");
   const [state, formAction, pending] = useActionState<State, FormData>(sendConsoleMessage, null);
   const resolveErr = useActionErrorResolver();
+  const [attachError, setAttachError] = React.useState<string | null>(null);
+  const [attaching, setAttaching] = React.useState(false);
+  const fileRef = React.useRef<HTMLInputElement>(null);
   const [optimistic, addOptimistic] = useOptimistic(messages, (cur, next: ConsoleMessage) => [...cur, next]);
   const formRef = React.useRef<HTMLFormElement>(null);
   const endRef = React.useRef<HTMLDivElement>(null);
@@ -351,10 +359,48 @@ export function ConsoleChat({
             className="ps-input min-h-[44px] w-full resize-y"
           />
         </div>
+        <input
+          ref={fileRef}
+          type="file"
+          accept="image/*,application/pdf"
+          className="hidden"
+          aria-hidden
+          tabIndex={-1}
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            e.target.value = "";
+            if (!file || attaching) return;
+            setAttachError(null);
+            setAttaching(true);
+            React.startTransition(async () => {
+              const fd = new FormData();
+              fd.set("roomId", roomId);
+              fd.set("revalidate", "/studio/inbox");
+              fd.set("file", file);
+              const res = await sendChatAttachment(null, fd);
+              if (res?.error) setAttachError(res.error);
+              setAttaching(false);
+            });
+          }}
+        />
+        <button
+          type="button"
+          className="ps-btn ps-btn--tertiary"
+          aria-label="Attach"
+          disabled={attaching}
+          onClick={() => fileRef.current?.click()}
+        >
+          <Paperclip size={15} />
+        </button>
         <button type="submit" className="ps-btn" disabled={pending || draft.trim().length === 0}>
           {pending ? labels.sending : labels.send}
         </button>
       </form>
+      {attachError ? (
+        <p role="alert" className="pt-1 text-xs text-[var(--p-danger-text)]">
+          {attachError}
+        </p>
+      ) : null}
     </div>
   );
 }
@@ -407,7 +453,19 @@ function Message({
           {!mine && !grouped && m.authorName ? (
             <div className="text-[11px] font-semibold text-[var(--p-text-2)]">{m.authorName}</div>
           ) : null}
-          <MessageBody body={m.body} refs={refs} mine={mine} mentionNames={mentionNames} />
+          {(() => {
+            const atts = parseAttachments(m.attachments);
+            if (atts.length > 0) {
+              return (
+                <div className="flex flex-col gap-1">
+                  {atts.map((a) => (
+                    <AttachmentChip key={a.path} attachment={a} />
+                  ))}
+                </div>
+              );
+            }
+            return <MessageBody body={m.body} refs={refs} mine={mine} mentionNames={mentionNames} />;
+          })()}
           <div className={`mt-0.5 text-right font-mono text-[11px] ${mine ? "opacity-80" : "text-[var(--p-text-3)]"}`}>
             {m.timeText}
           </div>

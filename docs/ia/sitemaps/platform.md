@@ -9,7 +9,7 @@
 > workflow).
 
 **Nav source:** platformNav rail
-**Routes:** 801 — ● 254 nav · ○ 545 linked · ⚠ 0 orphan · · 2 exempt
+**Routes:** 802 — ● 255 nav · ○ 545 linked · ⚠ 0 orphan · · 2 exempt
 
 ## 🔗 Dangling nav hrefs (0)
 
@@ -1211,7 +1211,7 @@ _None — every ATLVS nav href resolves to a page._
 
 </details>
 
-<details><summary><code>workforce</code> · 42 routes</summary>
+<details><summary><code>workforce</code> · 43 routes</summary>
 
 ● `/studio/workforce`
 ● `/studio/workforce/badges`
@@ -1227,6 +1227,7 @@ _None — every ATLVS nav href resolves to a page._
 ○ `/studio/workforce/deployment/[deploymentId]`
 ○ `/studio/workforce/deployment/[deploymentId]/edit`
 ○ `/studio/workforce/deployment/new`
+● `/studio/workforce/documents`
 ● `/studio/workforce/forecast`
 ○ `/studio/workforce/forecast/[id]`
 ○ `/studio/workforce/housing`

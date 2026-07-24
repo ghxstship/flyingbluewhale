@@ -103,6 +103,7 @@ export async function markFeedAnnouncementsRead(input: { announcementIds: string
     .from("announcements")
     .select("id")
     .eq("org_id", session.orgId)
+    .is("deleted_at", null)
     .in("id", parsed.data.announcementIds);
   const ids = ((anns ?? []) as Array<{ id: string }>).map((a) => a.id);
   if (ids.length === 0) return;

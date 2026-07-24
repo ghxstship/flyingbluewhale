@@ -71,6 +71,23 @@ export function DocUploadForm({ revalidate, backHref }: { revalidate: string; ba
       </div>
 
       <div className="fld mt-4">
+        <label className="lbl" htmlFor="valid_until">
+          Valid Until
+        </label>
+        <input
+          id="valid_until"
+          name="valid_until"
+          type="date"
+          className="ps-input"
+          defaultValue={state?.values?.valid_until ?? ""}
+        />
+        <p className="mt-2 text-xs text-[var(--p-text-2)]">
+          For licenses, certifications, and anything that expires. Leave blank if it never does.
+        </p>
+        {state?.fieldErrors?.valid_until && <div className="fld-err">{state.fieldErrors.valid_until}</div>}
+      </div>
+
+      <div className="fld mt-4">
         <label className="lbl" htmlFor="file">
           File
         </label>

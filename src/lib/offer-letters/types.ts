@@ -7,7 +7,23 @@
 // `OfferLetterSnapshot` = the JSONB snapshot stored after status leaves draft
 // ============================================================================
 
-export type OfferLetterStatus = "draft" | "sent" | "viewed" | "accepted" | "declined" | "withdrawn" | "expired";
+// The FULL offer_letter_status DB enum. This type predated the enum growing
+// COUNTERSIGNED / ACTIVE / SUPERSEDED / VOIDED, and the roster carried its own
+// parallel 11-value map (letter-state.ts) to route around the gap — two
+// vocabularies for one column. Unified 2026-07-24: this is the one source;
+// the roster module re-exports it.
+export type OfferLetterStatus =
+  | "draft"
+  | "sent"
+  | "viewed"
+  | "accepted"
+  | "countersigned"
+  | "active"
+  | "declined"
+  | "withdrawn"
+  | "expired"
+  | "superseded"
+  | "voided";
 
 export type OfferLetterEmployer = "ghxstship" | "five_senses" | "joint";
 export type OfferLetterClassification = "w2" | "1099" | "agency" | "intern";
@@ -199,9 +215,13 @@ export const STATUS_LABEL: Record<OfferLetterStatus, string> = {
   sent: "Sent",
   viewed: "Viewed",
   accepted: "Accepted",
+  countersigned: "Countersigned",
+  active: "Contracted",
   declined: "Declined",
   withdrawn: "Withdrawn",
   expired: "Expired",
+  superseded: "Superseded",
+  voided: "Voided",
 };
 
 export const STATUS_VARIANT: Record<OfferLetterStatus, "muted" | "info" | "warning" | "success" | "error"> = {
@@ -209,9 +229,13 @@ export const STATUS_VARIANT: Record<OfferLetterStatus, "muted" | "info" | "warni
   sent: "info",
   viewed: "warning",
   accepted: "success",
+  countersigned: "success",
+  active: "success",
   declined: "error",
   withdrawn: "muted",
   expired: "muted",
+  superseded: "muted",
+  voided: "muted",
 };
 
 export const EMPLOYER_LABEL: Record<OfferLetterEmployer, string> = {

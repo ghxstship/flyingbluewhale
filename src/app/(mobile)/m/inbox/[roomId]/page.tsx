@@ -45,7 +45,7 @@ export default async function RoomPage({ params }: { params: Promise<{ roomId: s
       .maybeSingle(),
     supabase
       .from("chat_messages")
-      .select("id, author_id, body, created_at")
+      .select("id, author_id, body, attachments, created_at")
       .eq("room_id", roomId)
       .order("created_at", { ascending: false })
       .limit(PAGE_SIZE),

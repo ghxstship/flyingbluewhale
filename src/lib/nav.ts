@@ -877,6 +877,9 @@ export const platformUtility: NavItem[] = [
   },
   { label: "Courses", href: "/legend/learn", icon: "BookOpen", sub: "LEG3ND Learning Paths" },
   { label: "Badges", href: "/studio/workforce/badges", icon: "BadgeCheck", sub: "Award & Track Badges" },
+  // Document-lifecycle closure (2026-07-24): the office half of the
+  // personal-documents verify loop (field uploads land in pending_review).
+  { label: "Workforce Documents", href: "/studio/workforce/documents", icon: "FileCheck", sub: "Verify IDs, Licenses & Certs" },
   { label: "Sales", href: "/studio/sales", icon: "TrendingUp", sub: "The Sales & CRM Hub" },
   { label: "Campaigns", href: "/studio/campaigns", icon: "Star", sub: "Campaign Planning & Results" },
   { label: "Agency Roster", href: "/studio/agency/roster", icon: "Users", sub: "Represented Artists" },
@@ -1806,6 +1809,10 @@ export const mobileSurfaces: NavItem[] = [
   // and out lives on /m/clock (Time Clock).
   { label: "Punch List", href: "/m/punch" },
   { label: "Chain of Custody", href: "/m/coc" },
+  // Document-lifecycle closure (2026-07-24): released drawings + approved
+  // method statements, readable where they matter — on site.
+  { label: "Site Plans", href: "/m/plans" },
+  { label: "Method Statements", href: "/m/rams" },
   // Kit-28 §3 capabilities landed 2026-07-17: briefing sign-in + snag capture.
   { label: "Safety Briefings", href: "/m/briefings" },
   { label: "My Snags", href: "/m/snags" },

@@ -88,6 +88,27 @@ export default function NewDocPage() {
         </div>
 
         <div className="fld">
+          <label className="lbl" htmlFor="valid_until">
+            {t("m.documents.new.validUntil", undefined, "Valid Until")}
+          </label>
+          <input
+            id="valid_until"
+            name="valid_until"
+            type="date"
+            className="ps-input"
+            defaultValue={state?.values?.valid_until ?? ""}
+          />
+          <div className="s" style={{ marginTop: 6 }}>
+            {t(
+              "m.documents.new.validUntilHint",
+              undefined,
+              "For licenses, certifications, and anything that expires. Leave blank if it never does.",
+            )}
+          </div>
+          {state?.fieldErrors?.valid_until && <div className="fld-err">{state.fieldErrors.valid_until}</div>}
+        </div>
+
+        <div className="fld">
           <label className="lbl" htmlFor="file">
             {t("m.documents.new.file", undefined, "File")}
           </label>

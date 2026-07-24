@@ -85,6 +85,7 @@ export async function sendChatMessage(opts: {
     const { data: users } = await supabase
       .from("users")
       .select("id, name, email")
+      .is("deleted_at", null)
       .in("id", [authorId, ...otherIds]);
     const nameById = new Map<string, string>();
     for (const u of (users ?? []) as Array<{ id: string; name: string | null; email: string | null }>) {

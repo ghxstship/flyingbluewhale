@@ -1618,6 +1618,12 @@
               ]
             },
             {
+              "path": "/studio/workforce/documents",
+              "arch": [
+                "DOC"
+              ]
+            },
+            {
               "path": "/studio/sales",
               "arch": [
                 "LIST"
@@ -2731,6 +2737,18 @@
             },
             {
               "path": "/m/coc",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/plans",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/rams",
               "arch": [
                 "LIST"
               ]

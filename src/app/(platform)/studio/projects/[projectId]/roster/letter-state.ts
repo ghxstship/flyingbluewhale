@@ -1,40 +1,28 @@
 import type { BadgeVariant } from "@/components/ui/Badge";
+import { STATUS_LABEL, STATUS_VARIANT } from "@/lib/offer-letters/types";
 
 /**
  * Kit 30 Project Roster — letter_state display maps.
  *
- * The shared `src/lib/offer-letters/types.ts` STATUS_LABEL predates the
- * offer_letter_status enum growing COUNTERSIGNED / ACTIVE / SUPERSEDED /
- * VOIDED, so the roster carries its own complete 11-value map rather than
- * editing the shared lib's 7-value one out from under the letter pages.
- * Pure module — safe for both server and client imports.
+ * Formerly a parallel 11-value vocabulary carried here because the shared
+ * `src/lib/offer-letters/types.ts` maps predated the offer_letter_status
+ * enum growing COUNTERSIGNED / ACTIVE / SUPERSEDED / VOIDED. The shared lib
+ * now covers the full enum (unified 2026-07-24), so these are re-exports —
+ * one vocabulary, two names for call-site continuity. The roster's richer
+ * wording for sent/viewed ("Offer Sent"/"Offer Viewed") stays as a local
+ * overlay: on a roster board the noun matters, on a letter page it's
+ * redundant.
  */
 export const LETTER_STATE_LABEL: Record<string, string> = {
-  draft: "Draft",
+  ...STATUS_LABEL,
   sent: "Offer Sent",
   viewed: "Offer Viewed",
-  accepted: "Accepted",
-  countersigned: "Countersigned",
-  active: "Contracted",
-  declined: "Declined",
-  withdrawn: "Withdrawn",
-  expired: "Expired",
-  superseded: "Superseded",
-  voided: "Voided",
 };
 
 export const LETTER_STATE_VARIANT: Record<string, BadgeVariant> = {
-  draft: "muted",
-  sent: "info",
+  ...STATUS_VARIANT,
+  // The roster board reads "viewed" as progress, not a warning.
   viewed: "info",
-  accepted: "success",
-  countersigned: "success",
-  active: "success",
-  declined: "error",
-  withdrawn: "muted",
-  expired: "muted",
-  superseded: "muted",
-  voided: "muted",
 };
 
 /** Letters that still represent a live engagement on the project. */

@@ -108,7 +108,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ r
     selected
       ? supabase
           .from("chat_messages")
-          .select("id, author_id, body, created_at")
+          .select("id, author_id, body, attachments, created_at")
           .eq("room_id", selected.id)
           .order("created_at", { ascending: false })
           // One extra row past the window tells us whether older history
@@ -136,7 +136,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ r
   // GET-render side effect.
   const selectedLastRead = selected ? (readMap.get(selected.id) ?? null) : null;
   if (selected) {
-    const raw = (msgs ?? []) as Array<{ id: string; author_id: string | null; body: string; created_at: string }>;
+    const raw = (msgs ?? []) as Array<{ id: string; author_id: string | null; body: string; attachments: unknown; created_at: string }>;
     hasMoreEarlier = raw.length > PAGE_SIZE;
     const ordered = raw.slice(0, PAGE_SIZE).reverse();
 
@@ -189,6 +189,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ r
       authorId: m.author_id,
       authorName: m.author_id ? (nameById.get(m.author_id) ?? "") : "",
       body: m.body,
+      attachments: m.attachments,
       timeText: fmt.time(m.created_at),
       dayKey: fmt.dateParts(m.created_at, { year: "numeric", month: "2-digit", day: "2-digit" }),
       dayLabel: fmt.dateParts(m.created_at, { weekday: "short", month: "short", day: "numeric" }),

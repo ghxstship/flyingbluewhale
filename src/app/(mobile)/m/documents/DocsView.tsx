@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useActionState, useEffect, useMemo, useState, useTransition } from "react";
 import Link from "next/link";
 import {
   KIcon,
@@ -14,9 +14,11 @@ import { useDismissable } from "@/components/mobile/kit/useDismissable";
 import { useToast } from "@/lib/hooks/useToast";
 import { useT } from "@/lib/i18n/LocaleProvider";
 import { DocDownloadLink } from "./DocDownloadLink";
-import { signDocumentUrl } from "./actions";
+import { signDocumentUrl, submitDeliverableFile, type SubmitFileState } from "./actions";
 
 export type DocScope = "All" | "Team" | "Role" | "You" | "Restricted";
+
+export type DocVerification = "unverified" | "pending_review" | "verified" | "rejected";
 
 export type DocItem = {
   id: string;
@@ -25,8 +27,22 @@ export type DocItem = {
   scope: DocScope;
   kind: "deliverable" | "personal";
   downloadable: boolean;
+  /** Deliverables only: the caller may (re)submit a file (own row, draft/revision_requested). */
+  submittable?: boolean;
+  /** Personal docs only: expiry date (yyyy-mm-dd) if the document lapses. */
+  validUntil?: string | null;
+  /** Personal docs only: office-side verification lifecycle. */
+  verification?: DocVerification;
   updated: string | null;
 };
+
+/** null = no expiry; otherwise whole days until (negative = lapsed). Stable per render. */
+function daysUntil(dateStr: string | null | undefined, now: number): number | null {
+  if (!dateStr) return null;
+  const target = new Date(`${dateStr}T00:00:00`).getTime();
+  if (Number.isNaN(target)) return null;
+  return Math.floor((target - now) / 86_400_000);
+}
 
 const SCOPE_TONE: Record<DocScope, string> = {
   All: "neutral",
@@ -42,10 +58,70 @@ function badgeClass(tone: string) {
   return `ps-badge ps-badge--${tone}`;
 }
 
+/**
+ * Inline (re)submission form for the viewer sheet — the field half of the
+ * deliverable loop. Rendered only when the server said the row is open to
+ * this caller (own row, draft/revision_requested); the action re-checks.
+ */
+function SubmitFileForm({ doc, onDone }: { doc: DocItem; onDone: () => void }) {
+  const t = useT();
+  const [state, formAction, pending] = useActionState<SubmitFileState, FormData>(submitDeliverableFile, null);
+
+  useEffect(() => {
+    if (state?.ok) onDone();
+    // onDone identity changes per render; keying on state is the intent.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state]);
+
+  return (
+    <form action={formAction} encType="multipart/form-data" style={{ marginBottom: 12 }}>
+      <input type="hidden" name="id" value={doc.id} />
+      {state?.error && (
+        <div className="ps-alert ps-alert--danger" role="alert" style={{ marginBottom: 8 }}>
+          {state.error}
+        </div>
+      )}
+      <div className="fld">
+        <label className="lbl" htmlFor={`submit-file-${doc.id}`}>
+          {t("m.docs.submit.label", undefined, "Submit File")}
+        </label>
+        <input
+          id={`submit-file-${doc.id}`}
+          name="file"
+          type="file"
+          className="ps-input"
+          required
+          accept="image/*,application/pdf,.zip,.csv,.txt,.xlsx,.docx,.pptx,.doc,.xls"
+          style={{ paddingTop: 11, paddingBottom: 11 }}
+        />
+        <div className="s" style={{ marginTop: 6 }}>
+          {t("m.docs.submit.hint", undefined, "Uploading sends this document to the office for review.")}
+        </div>
+      </div>
+      <button
+        type="submit"
+        className="ps-btn ps-btn--cta ps-btn--lg"
+        style={{ width: "100%", justifyContent: "center", marginTop: 8 }}
+        disabled={pending}
+      >
+        <KIcon name="Upload" size={15} />{" "}
+        {pending
+          ? t("m.docs.submit.sending", undefined, "Submitting…")
+          : t("m.docs.submit.cta", undefined, "Submit For Review")}
+      </button>
+    </form>
+  );
+}
+
 export function DocsView({ items, title }: { items: DocItem[]; eyebrow?: string; title: string }) {
   const t = useT();
   const toast = useToast();
   const [, startTransition] = useTransition();
+
+  // Live time never renders on the server pass (hydration #418 pattern):
+  // expiry badges appear after mount.
+  const [now, setNow] = useState<number | null>(null);
+  useEffect(() => setNow(Date.now()), []);
 
   const cats = useMemo(() => Array.from(new Set(items.map((d) => d.cat))).sort(), [items]);
 
@@ -133,6 +209,32 @@ export function DocsView({ items, title }: { items: DocItem[]; eyebrow?: string;
     { id: "updated", label: t("m.docs.col.updated", undefined, "Updated"), type: "text", get: (d) => d.updated ?? "" },
   ];
 
+  // One extra badge per row at most: a lapsed/lapsing expiry outranks
+  // verification, which shows only for the states a crew member must act on
+  // or can rely on (rejected / verified). The sheet shows the full story.
+  const statusBadge = (d: DocItem) => {
+    if (d.kind !== "personal") {
+      if (d.submittable) {
+        return <span className={badgeClass("warn")}>{t("m.docs.badge.actionNeeded", undefined, "Action Needed")}</span>;
+      }
+      return null;
+    }
+    const days = now == null ? null : daysUntil(d.validUntil, now);
+    if (days != null && days < 0) {
+      return <span className={badgeClass("danger")}>{t("m.docs.badge.expired", undefined, "Expired")}</span>;
+    }
+    if (days != null && days <= 30) {
+      return <span className={badgeClass("warn")}>{t("m.docs.badge.expiresSoon", undefined, "Expires Soon")}</span>;
+    }
+    if (d.verification === "rejected") {
+      return <span className={badgeClass("danger")}>{t("m.docs.badge.rejected", undefined, "Rejected")}</span>;
+    }
+    if (d.verification === "verified") {
+      return <span className={badgeClass("ok")}>{t("m.docs.badge.verified", undefined, "Verified")}</span>;
+    }
+    return null;
+  };
+
   const row = (d: DocItem) => (
     <SwipeRow
       key={d.id}
@@ -148,8 +250,14 @@ export function DocsView({ items, title }: { items: DocItem[]; eyebrow?: string;
         </span>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div className="t">{d.title}</div>
-          <div className="s">{d.cat}</div>
+          <div className="s">
+            {d.cat}
+            {d.validUntil
+              ? ` · ${t("m.docs.row.validUntil", undefined, "Valid Until")} ${d.validUntil}`
+              : ""}
+          </div>
         </div>
+        {statusBadge(d)}
         <span className={badgeClass(SCOPE_TONE[d.scope])}>{d.scope}</span>
         {d.downloadable && d.kind === "personal" && (
           <span style={{ marginLeft: 8 }}>
@@ -244,6 +352,35 @@ export function DocsView({ items, title }: { items: DocItem[]; eyebrow?: string;
               <div className="hint" style={{ marginBottom: 10 }}>
                 {t("m.docs.viewer.hint", undefined, "If the preview doesn't load on this device, use Download.")}
               </div>
+            )}
+            {viewerDoc.kind === "personal" && (viewerDoc.validUntil || viewerDoc.verification) && (
+              <div className="hint" style={{ marginBottom: 10, display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+                {viewerDoc.verification === "verified" && (
+                  <span className={badgeClass("ok")}>{t("m.docs.badge.verified", undefined, "Verified")}</span>
+                )}
+                {viewerDoc.verification === "pending_review" && (
+                  <span className={badgeClass("info")}>{t("m.docs.badge.inReview", undefined, "In Review")}</span>
+                )}
+                {viewerDoc.verification === "rejected" && (
+                  <span className={badgeClass("danger")}>{t("m.docs.badge.rejected", undefined, "Rejected")}</span>
+                )}
+                {viewerDoc.validUntil && (
+                  <span>
+                    {t("m.docs.row.validUntil", undefined, "Valid Until")} {viewerDoc.validUntil}
+                  </span>
+                )}
+              </div>
+            )}
+            {viewerDoc.submittable && (
+              <SubmitFileForm
+                doc={viewerDoc}
+                onDone={() => {
+                  toast.success(t("m.docs.submit.done", undefined, "Submitted For Review"), {
+                    description: viewerDoc.title,
+                  });
+                  closeViewer();
+                }}
+              />
             )}
             <div style={{ display: "flex", gap: 8 }}>
               <button

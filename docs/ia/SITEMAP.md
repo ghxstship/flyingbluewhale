@@ -12,7 +12,7 @@
 > crawled for errors by `e2e/sitemap-crawl.spec.ts` (routinely via the
 > `route-health` workflow; on demand via `npm run e2e:crawl`).
 
-**Page routes:** 1313 · **API route handlers:** 160 · **Distinct nav hrefs:** 594
+**Page routes:** 1318 · **API route handlers:** 160 · **Distinct nav hrefs:** 597
 
 ## Legend
 
@@ -29,15 +29,15 @@
 
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
-| ATLVS — Operator Console | platformNav rail | 801 | 254 | 545 | 0 | 2 |
-| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 117 | 93 | 23 | 0 | 1 |
+| ATLVS — Operator Console | platformNav rail | 802 | 255 | 545 | 0 | 2 |
+| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 121 | 95 | 25 | 0 | 1 |
 | COMPVSS — Kiosk (shared device) | mobileSurfaces | 3 | 3 | 0 | 0 | 0 |
 | GVTEWAY — External Portal | portalNav rail | 156 | 129 | 23 | 0 | 4 |
 | LEG3ND — Knowledge Shell | legendNav rail | 85 | 34 | 51 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 97 | 34 | 54 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 14 | 2 | 0 | 0 | 12 |
-| **TOTAL** | | **1313** | **568** | **702** | **0** | **43** |
+| **TOTAL** | | **1318** | **571** | **704** | **0** | **43** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -100,7 +100,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## ATLVS — Operator Console (`/studio`)
 
-801 routes — ● 254 nav · ○ 545 linked · ⚠ 0 orphan
+802 routes — ● 255 nav · ○ 545 linked · ⚠ 0 orphan
 
 <details><summary><code>access-control</code> · 2 routes</summary>
 
@@ -1296,7 +1296,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>workforce</code> · 42 routes</summary>
+<details><summary><code>workforce</code> · 43 routes</summary>
 
 ● `/studio/workforce`
 ● `/studio/workforce/badges`
@@ -1312,6 +1312,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/studio/workforce/deployment/[deploymentId]`
 ○ `/studio/workforce/deployment/[deploymentId]/edit`
 ○ `/studio/workforce/deployment/new`
+● `/studio/workforce/documents`
 ● `/studio/workforce/forecast`
 ○ `/studio/workforce/forecast/[id]`
 ○ `/studio/workforce/housing`
@@ -1365,7 +1366,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## COMPVSS — Field PWA (`/m`)
 
-117 routes — ● 93 nav · ○ 23 linked · ⚠ 0 orphan
+121 routes — ● 95 nav · ○ 25 linked · ⚠ 0 orphan
 
 <details><summary><code>activity</code> · 1 route</summary>
 
@@ -1653,6 +1654,13 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
+<details><summary><code>plans</code> · 2 routes</summary>
+
+● `/m/plans`
+○ `/m/plans/[planId]`
+
+</details>
+
 <details><summary><code>profile</code> · 1 route</summary>
 
 ● `/m/profile`
@@ -1672,6 +1680,13 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ● `/m/punch`
 ○ `/m/punch/[itemId]`
+
+</details>
+
+<details><summary><code>rams</code> · 2 routes</summary>
+
+● `/m/rams`
+○ `/m/rams/[ramsId]`
 
 </details>
 

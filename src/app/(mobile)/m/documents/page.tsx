@@ -25,6 +25,7 @@ type DeliverableRow = {
   scope: string;
   file_path: string | null;
   submitted_by: string | null;
+  fulfillment_state: string;
   updated_at: string;
 };
 
@@ -33,6 +34,8 @@ type PersonalRow = {
   label: string;
   doc_kind: string;
   uploaded_at: string;
+  valid_until: string | null;
+  verification_state: "unverified" | "pending_review" | "verified" | "rejected";
 };
 
 /**
@@ -80,14 +83,14 @@ export default async function MobileDocsPage() {
   const [delivRes, personalRes] = await Promise.all([
     supabase
       .from("deliverables")
-      .select("id, type, title, scope, file_path, submitted_by, updated_at")
+      .select("id, type, title, scope, file_path, submitted_by, fulfillment_state, updated_at")
       .eq("org_id", session.orgId)
       .is("deleted_at", null)
       .order("updated_at", { ascending: false })
       .limit(200),
     supabase
       .from("personal_documents")
-      .select("id, label, doc_kind, uploaded_at")
+      .select("id, label, doc_kind, uploaded_at, valid_until, verification_state")
       .eq("user_id", session.userId)
       .is("deleted_at", null)
       .order("uploaded_at", { ascending: false })
@@ -108,6 +111,11 @@ export default async function MobileDocsPage() {
       // (/api/v1/deliverables/{id}/download) — the swipe Save opens it when a
       // file exists.
       downloadable: d.file_path != null,
+      // Mirrors the deliverables RLS UPDATE policy: the original submitter
+      // may (re)submit a file while the spec sits in draft/revision_requested.
+      submittable:
+        d.submitted_by === session.userId &&
+        (d.fulfillment_state === "draft" || d.fulfillment_state === "revision_requested"),
       updated: d.updated_at,
     })),
     ...personal.map<DocItem>((p) => ({
@@ -117,6 +125,8 @@ export default async function MobileDocsPage() {
       scope: "You" as DocScope,
       kind: "personal",
       downloadable: true,
+      validUntil: p.valid_until,
+      verification: p.verification_state,
       updated: p.uploaded_at,
     })),
   ];

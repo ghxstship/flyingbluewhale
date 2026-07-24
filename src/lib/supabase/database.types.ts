@@ -24371,10 +24371,15 @@ export type Database = {
           label: string
           mime_type: string | null
           org_id: string
+          rejection_reason: string | null
           size_bytes: number | null
           storage_path: string
           uploaded_at: string
           user_id: string
+          valid_until: string | null
+          verification_state: Database["public"]["Enums"]["personal_doc_verification_state"]
+          verified_at: string | null
+          verified_by: string | null
         }
         Insert: {
           deleted_at?: string | null
@@ -24383,10 +24388,15 @@ export type Database = {
           label: string
           mime_type?: string | null
           org_id: string
+          rejection_reason?: string | null
           size_bytes?: number | null
           storage_path: string
           uploaded_at?: string
           user_id: string
+          valid_until?: string | null
+          verification_state?: Database["public"]["Enums"]["personal_doc_verification_state"]
+          verified_at?: string | null
+          verified_by?: string | null
         }
         Update: {
           deleted_at?: string | null
@@ -24395,10 +24405,15 @@ export type Database = {
           label?: string
           mime_type?: string | null
           org_id?: string
+          rejection_reason?: string | null
           size_bytes?: number | null
           storage_path?: string
           uploaded_at?: string
           user_id?: string
+          valid_until?: string | null
+          verification_state?: Database["public"]["Enums"]["personal_doc_verification_state"]
+          verified_at?: string | null
+          verified_by?: string | null
         }
         Relationships: [
           {
@@ -48117,6 +48132,7 @@ export type Database = {
         | "gltf"
         | "fbx"
         | "dwg"
+        | "dxf"
       budget_discipline:
         | "Live Entertainment"
         | "Experiential"
@@ -48494,6 +48510,11 @@ export type Database = {
         | "accepted"
         | "rejected"
         | "voided"
+      personal_doc_verification_state:
+        | "unverified"
+        | "pending_review"
+        | "verified"
+        | "rejected"
       pinboard_item_kind: "image" | "note" | "product_ref" | "swatch"
       placement_state: "planned" | "installed" | "removed"
       platform_role: "owner" | "admin" | "manager" | "member"
@@ -49368,6 +49389,7 @@ export const Constants = {
         "gltf",
         "fbx",
         "dwg",
+        "dxf",
       ],
       budget_discipline: [
         "Live Entertainment",
@@ -49773,6 +49795,12 @@ export const Constants = {
         "accepted",
         "rejected",
         "voided",
+      ],
+      personal_doc_verification_state: [
+        "unverified",
+        "pending_review",
+        "verified",
+        "rejected",
       ],
       pinboard_item_kind: ["image", "note", "product_ref", "swatch"],
       placement_state: ["planned", "installed", "removed"],

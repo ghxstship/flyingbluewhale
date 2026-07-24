@@ -2,10 +2,13 @@
 
 import { startTransition, useActionState, useEffect, useLayoutEffect, useOptimistic, useRef, useState } from "react";
 import Link from "next/link";
-import { Send } from "lucide-react";
+import { Paperclip, Send } from "lucide-react";
 import { RealtimeRefresh } from "@/components/RealtimeRefresh";
 import { OfflineSyncBanner } from "@/components/mobile/OfflineSyncBanner";
+import { AttachmentChip } from "@/components/chat/AttachmentChip";
 import { useOfflineQueue } from "@/lib/offline/useOfflineQueue";
+import { sendChatAttachment } from "@/lib/chat/attachment-actions";
+import { parseAttachments } from "@/lib/chat/attachment-types";
 import { createClient } from "@/lib/supabase/client";
 import { formatTime, formatDate } from "@/lib/i18n/format";
 import type { Locale } from "@/lib/i18n/config";
@@ -22,6 +25,7 @@ export type ChatMessage = {
   id: string;
   author_id: string | null;
   body: string;
+  attachments?: unknown;
   created_at: string;
 };
 
@@ -70,6 +74,9 @@ export function ChatRoom({
 }) {
   const [messages, setMessages] = useState<OptimisticMessage[]>(initialMessages);
   const [draft, setDraft] = useState("");
+  const [attachError, setAttachError] = useState<string | null>(null);
+  const [attaching, setAttaching] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const [optimistic, addOptimistic] = useOptimistic(messages, (cur, next: OptimisticMessage) => [
     ...cur,
@@ -180,7 +187,19 @@ export function ChatRoom({
                       </div>
                     ) : null}
                     <div className={`bub ${mine ? "me" : "them"}`} style={m.pending ? { opacity: 0.6 } : undefined}>
-                      <MobileMessageBody body={m.body} refs={refs} />
+                      {(() => {
+                        const atts = parseAttachments(m.attachments);
+                        if (atts.length > 0) {
+                          return (
+                            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                              {atts.map((a) => (
+                                <AttachmentChip key={a.path} attachment={a} />
+                              ))}
+                            </div>
+                          );
+                        }
+                        return <MobileMessageBody body={m.body} refs={refs} />;
+                      })()}
                       <div className="bt">{formatTime(m.created_at, { locale, timezone })}</div>
                     </div>
                   </div>
@@ -232,6 +251,41 @@ export function ChatRoom({
           setDraft("");
         }}
       >
+        {/* Attachments need connectivity (the file has to travel now); the
+            offline outbox stays text-only, so the clip disables offline. */}
+        <input
+          ref={fileRef}
+          type="file"
+          accept="image/*,application/pdf"
+          style={{ display: "none" }}
+          aria-hidden
+          tabIndex={-1}
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            e.target.value = "";
+            if (!file || attaching) return;
+            setAttachError(null);
+            setAttaching(true);
+            startTransition(async () => {
+              const fd = new FormData();
+              fd.set("roomId", roomId);
+              fd.set("revalidate", `/m/inbox/${roomId}`);
+              fd.set("file", file);
+              const res = await sendChatAttachment(null, fd);
+              if (res?.error) setAttachError(res.error);
+              setAttaching(false);
+            });
+          }}
+        />
+        <button
+          type="button"
+          disabled={!online || attaching}
+          aria-label="Attach"
+          onClick={() => fileRef.current?.click()}
+          style={attaching ? { opacity: 0.5 } : undefined}
+        >
+          <Paperclip size={17} />
+        </button>
         <input
           className="box"
           name="body"
@@ -246,6 +300,11 @@ export function ChatRoom({
           <Send size={17} />
         </button>
       </form>
+      {attachError && (
+        <div className="import-note" style={{ marginTop: 6 }}>
+          <span style={{ fontSize: 12, color: "var(--p-danger)" }}>{attachError}</span>
+        </div>
+      )}
     </>
   );
 }

@@ -8,6 +8,7 @@ import { hasSupabase } from "@/lib/env";
 import type { LooseSupabase } from "@/lib/supabase/loose";
 import { getRequestT } from "@/lib/i18n/request";
 import ViewerLoader from "./viewer-loader";
+import DxfViewerLazy from "./dxf-viewer-loader";
 
 export const dynamic = "force-dynamic";
 
@@ -38,6 +39,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const m = row as unknown as Model;
 
   const supportsWebViewer = m.source_type === "ifc" || m.source_type === "ifc_zip";
+  const isDxf = m.source_type === "dxf";
 
   return (
     <>
@@ -62,6 +64,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <div className="page-content space-y-3">
         {supportsWebViewer ? (
           <ViewerLoader modelId={m.id} ifcUrl={`/api/v1/bim/${m.id}/download`} />
+        ) : isDxf ? (
+          <DxfViewerLazy dxfUrl={`/api/v1/bim/${m.id}/download`} />
         ) : (
           <div className="surface p-6 text-sm">
             <p>

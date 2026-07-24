@@ -22,13 +22,7 @@ function tokensMatch(provided: string, expected: string): boolean {
  * job-worker cron-pings this route every minute.
  */
 
-export async function POST(req: NextRequest) {
-  const expected = process.env.JOB_WORKER_TOKEN;
-  if (!expected) return apiError("service_unavailable", "JOB_WORKER_TOKEN not configured");
-  const auth = req.headers.get("authorization") ?? "";
-  const provided = auth.startsWith("Bearer ") ? auth.slice(7) : (req.headers.get("x-worker-token") ?? "");
-  if (!tokensMatch(provided, expected)) return apiError("forbidden", "Invalid worker token");
-
+async function runTick() {
   const result = await evaluateSchedules();
   // Kit 27 — the advance chase ladder rides the same worker tick: due
   // advance_deadline_events emit advance.deadline.* domain events, which
@@ -41,4 +35,30 @@ export async function POST(req: NextRequest) {
   // no evaluator until this rode the same tick.
   const savedSearches = await evaluateSavedSearches();
   return apiOk({ ...result, advance, pushFlush, savedSearches });
+}
+
+export async function POST(req: NextRequest) {
+  const expected = process.env.JOB_WORKER_TOKEN;
+  if (!expected) return apiError("service_unavailable", "JOB_WORKER_TOKEN not configured");
+  const auth = req.headers.get("authorization") ?? "";
+  const provided = auth.startsWith("Bearer ") ? auth.slice(7) : (req.headers.get("x-worker-token") ?? "");
+  if (!tokensMatch(provided, expected)) return apiError("forbidden", "Invalid worker token");
+  return runTick();
+}
+
+/**
+ * Vercel-cron entry (comms audit follow-up: `vercel.json crons` was empty,
+ * so nothing in-repo ever ticked this worker — the chase ladder and
+ * saved-search alerts only ran if external infra pinged POST). Vercel crons
+ * issue GET with `Authorization: Bearer ${CRON_SECRET}` when that env is
+ * set; without CRON_SECRET the handler answers 503 and the cron is a no-op,
+ * so an external POST pinger keeps working unchanged.
+ */
+export async function GET(req: NextRequest) {
+  const expected = process.env.CRON_SECRET;
+  if (!expected) return apiError("service_unavailable", "CRON_SECRET not configured");
+  const auth = req.headers.get("authorization") ?? "";
+  const provided = auth.startsWith("Bearer ") ? auth.slice(7) : "";
+  if (!tokensMatch(provided, expected)) return apiError("forbidden", "Invalid cron secret");
+  return runTick();
 }

@@ -67,6 +67,10 @@ async function notifyGuidePublished(opts: {
     actorId: opts.actorId,
     title: opts.updated ? `Guide Updated: ${label}` : `Guide Published: ${label}`,
     href: "/m/guide",
+    // A republish collapses onto the same row (stable sourceId). Without
+    // reNotify a prior reader's row stays read and a genuine content update
+    // never re-surfaces — the whole point of the update notice.
+    reNotify: true,
   });
 }
 

@@ -10,6 +10,13 @@ export type NotifPrefsData = {
    *  in `notification_preferences.matrix` disables (matches the
    *  `filterByPushPrefs` gate in src/lib/push/send.ts). */
   pushEnabled: Record<NotifKind, boolean>;
+  /** `kind → email cell` (tri-state rendered as a checkbox). The email
+   *  channel has two gates with different defaults — fanOutEmail
+   *  (push-path, missing cell = OFF) and notify-resolver (notify() events,
+   *  missing cell = ON) — but an EXPLICIT cell wins in both, so this
+   *  switch is real either way. Rendered checked only on explicit true,
+   *  matching the opt-in posture of the push-path gate. */
+  emailEnabled: Record<NotifKind, boolean>;
 };
 
 /**
@@ -44,10 +51,13 @@ export async function loadNotifPrefs(userId: string): Promise<NotifPrefsData> {
     };
   });
 
-  const matrix = (prefs?.matrix as Record<string, { push?: boolean }> | null) ?? {};
+  const matrix = (prefs?.matrix as Record<string, { push?: boolean; email?: boolean }> | null) ?? {};
   const pushEnabled = Object.fromEntries(
     NOTIF_KINDS.map((kind) => [kind, matrix[kind]?.push !== false]),
   ) as Record<NotifKind, boolean>;
+  const emailEnabled = Object.fromEntries(
+    NOTIF_KINDS.map((kind) => [kind, matrix[kind]?.email === true]),
+  ) as Record<NotifKind, boolean>;
 
-  return { kinds, pushEnabled };
+  return { kinds, pushEnabled, emailEnabled };
 }

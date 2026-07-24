@@ -42,10 +42,22 @@ type SavedSearchRow = {
   match_count: number;
 };
 
-const STREAM_KINDS: Record<string, { table: string; phaseColumn: string | null; href: string; noun: string }> = {
-  gig: { table: "job_postings", phaseColumn: "job_posting_phase", href: "/marketplace/gigs", noun: "gig" },
-  talent_call: { table: "open_calls", phaseColumn: "open_call_phase", href: "/marketplace/calls", noun: "open call" },
-  rfq: { table: "rfqs", phaseColumn: null, href: "/marketplace/rfqs", noun: "RFQ" },
+const STREAM_KINDS: Record<
+  string,
+  { table: string; phaseColumn: string | null; softDelete: boolean; href: string; noun: string }
+> = {
+  gig: { table: "job_postings", phaseColumn: "job_posting_phase", softDelete: true, href: "/marketplace/gigs", noun: "gig" },
+  talent_call: {
+    table: "open_calls",
+    phaseColumn: "open_call_phase",
+    softDelete: true,
+    href: "/marketplace/calls",
+    noun: "open call",
+  },
+  // rfqs has NO deleted_at column — filtering on it 400s the whole query
+  // (which the per-search catch then swallows, so rfq alerts silently never
+  // fire). Public visibility is the gate instead.
+  rfq: { table: "rfqs", phaseColumn: null, softDelete: false, href: "/marketplace/rfqs", noun: "RFQ" },
 };
 
 /** How far back the first-ever check reaches. Prevents a fresh search from
@@ -90,9 +102,11 @@ export async function evaluateSavedSearches(): Promise<SavedSearchTickResult> {
       let query = (service as unknown as LooseSupabase)
         .from(stream.table)
         .select("id, title, published_at", { count: "exact" })
-        .is("deleted_at", null)
         .gte("published_at", since)
         .limit(25);
+      // soft-delete-exempt: applied conditionally below — rfqs has no
+      // deleted_at column and filtering on it errors the whole query.
+      if (stream.softDelete) query = query.is("deleted_at", null);
       if (stream.phaseColumn) query = query.eq(stream.phaseColumn, "published");
       else query = query.eq("visibility", "public").not("public_slug", "is", null);
       const q = search.query?.q?.trim();
@@ -121,7 +135,8 @@ export async function evaluateSavedSearches(): Promise<SavedSearchTickResult> {
 
       // Bell + (flag-gated) push. sourceId = the search itself, so repeated
       // ticks collapse into one living inbox row per search instead of a
-      // pile. The per-kind preference matrix still gates push delivery.
+      // pile; reNotify re-surfaces it as unread because this branch only
+      // runs when there ARE new matches since the last check.
       await writeInbox({
         userId: search.user_id,
         orgId: search.org_id,
@@ -132,6 +147,7 @@ export async function evaluateSavedSearches(): Promise<SavedSearchTickResult> {
         body,
         href: stream.href,
         push: search.alert_push,
+        reNotify: true,
       });
       if (search.alert_email) {
         await sendNotificationEmailToUsers({

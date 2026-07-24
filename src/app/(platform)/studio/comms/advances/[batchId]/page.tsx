@@ -37,7 +37,7 @@ export default async function BatchBoardPage({ params }: { params: Promise<{ bat
   const batch = await getBatch(session.orgId, batchId);
   if (!batch) notFound();
 
-  const [{ data: packet }, recipients] = await Promise.all([
+  const [{ data: packet }, recipients, { data: lastTransition }] = await Promise.all([
     supabase
       .from("advance_packets")
       .select("id, voice, projects(name, slug)")
@@ -45,7 +45,20 @@ export default async function BatchBoardPage({ params }: { params: Promise<{ bat
       .is("deleted_at", null)
       .maybeSingle(),
     listBatchRecipients(batch.id),
+    // The send outcome ("N delivered, N failed, N skipped (no email provider
+    // key)") lives only in the transition ledger — surface the latest reason
+    // so a failed batch explains itself instead of showing bare queued rows.
+    // soft-delete-exempt: append-only ledger, no deleted_at column.
+    supabase
+      .from("advance_send_batch_state_transitions")
+      .select("reason, to_state, created_at")
+      .eq("batch_id", batch.id)
+      .not("reason", "is", null)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
   ]);
+  const transitionNote = (lastTransition as { reason: string | null } | null)?.reason ?? null;
   const project = (packet as unknown as { projects: { name: string; slug: string } | null } | null)?.projects;
 
   const audienceIds = Array.from(new Set(recipients.map((r) => r.audience_id).filter(Boolean))) as string[];
@@ -107,6 +120,11 @@ export default async function BatchBoardPage({ params }: { params: Promise<{ bat
           {batch.sent_at && (
             <span className="font-mono text-xs text-[var(--p-text-2)]">
               {t("console.comms.advances.board.sentAt", undefined, "Sent")} · {fmtDate(batch.sent_at)}
+            </span>
+          )}
+          {transitionNote && (
+            <span className="font-mono text-xs text-[var(--p-text-2)]">
+              {t("console.comms.advances.board.lastOutcome", undefined, "Last run")} · {transitionNote}
             </span>
           )}
         </div>

@@ -1,4 +1,5 @@
 import { requireSession } from "@/lib/auth";
+import { WithdrawButton } from "./WithdrawButton";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
@@ -74,6 +75,22 @@ export default async function Page({ params }: { params: Promise<{ applicationId
                 `$${(a.day_rate_proposed_cents / 100).toFixed(0)}/day`,
               )}
             </div>
+          </div>
+        )}
+        {["new", "reviewed", "phone", "hold"].includes(a.job_application_state) && (
+          <div className="surface-raised p-4">
+            <WithdrawButton
+              applicationId={a.id}
+              labels={{
+                withdraw: t("me.applications.detail.withdraw", undefined, "Withdraw Application"),
+                confirm: t(
+                  "me.applications.detail.withdrawConfirm",
+                  undefined,
+                  "Withdraw this application? The organizer will be notified and this cannot be undone.",
+                ),
+                done: t("me.applications.detail.withdrawn", undefined, "Application withdrawn."),
+              }}
+            />
           </div>
         )}
         {a.job_application_state === "booked" && (

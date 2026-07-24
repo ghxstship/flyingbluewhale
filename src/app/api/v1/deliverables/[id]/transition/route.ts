@@ -106,9 +106,11 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
     // Deliverable-ready notification: tell the original submitter when their
     // doc-spec crosses the finish line (approved / delivered). This route is
-    // the canonical studio transition site (AdvancingTransitionRow posts
-    // here); the portal upload actions only move rows INTO submitted, so
-    // they're out of scope. href: the submitter's portal persona is unknown
+    // the canonical STUDIO transition site (AdvancingTransitionRow posts
+    // here). The portal has its own transition action —
+    // setDeliverableStatusAction in (portal)/p/[slug]/artist/advancing —
+    // which can also approve and carries its own notify() with the same
+    // actor≠recipient guard. href: the submitter's portal persona is unknown
     // here (artist / vendor / client each have their own deliverables
     // surface, keyed by an org slug this route never resolves), so we
     // deep-link the cross-shell personal inbox rather than guess a portal

@@ -36,7 +36,7 @@ export default async function NotificationsPrefs() {
   }
 
   const session = await requireSession();
-  const { kinds, pushEnabled } = await loadNotifPrefs(session.userId);
+  const { kinds, pushEnabled, emailEnabled } = await loadNotifPrefs(session.userId);
 
   return (
     <div>
@@ -47,7 +47,7 @@ export default async function NotificationsPrefs() {
         {t(
           "me.notifications.honestSubtitle",
           undefined,
-          "Choose which events send a push notification to your devices. Changes save instantly.",
+          "Choose which events reach you by push and email. Changes save instantly.",
         )}
       </p>
       <div className="surface mt-4 flex items-center justify-between gap-3 p-3">
@@ -69,9 +69,11 @@ export default async function NotificationsPrefs() {
         <NotifPrefsMatrix
           kinds={kinds}
           initial={pushEnabled}
+          initialEmail={emailEnabled}
           labels={{
             eventColumn: t("me.notifications.columns.event", undefined, "Event"),
             pushColumn: t("me.notifications.columns.push", undefined, "Push"),
+            emailColumn: t("me.notifications.columns.email", undefined, "Email"),
             inAppColumn: t("me.notifications.columns.inApp", undefined, "In-app"),
             inAppAlwaysOn: t(
               "me.notifications.inAppAlwaysOn",

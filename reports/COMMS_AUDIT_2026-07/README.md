@@ -84,6 +84,59 @@ bell + email, not push.
     one switch; flipping either default is a product decision that changes
     real delivery volume.
 
+## Verification round (2026-07-24, same day)
+
+Three adversarial passes re-attacked every closure claim at HEAD. Nine
+refutations survived scrutiny; all nine were fixed in the follow-up commit:
+
+1. **Attachment sends notified nobody** — the concurrently-shipped chat
+   attachment action bypassed the unified fan-out. Fixed: `fanOutChatMessage`
+   extracted from chat-send.ts, called by the attachment action; mention
+   detection also gained a word-boundary check (no more "@Sam" inside
+   "@Samuel").
+2. **The per-kind Email switch had no writer** — notify-resolver gated email
+   on `matrix[kind].email` but the matrix UI rendered no Email column. Fixed:
+   Email column on /me/notifications + the portal settings matrix; the
+   toggle action takes a `channel`.
+3. **Portal FeedSurface leaked cross-audience announcements** — project
+   filter, no audience filter. Fixed with the shared mapping.
+4. **Collapsing re-notifies stayed read** — the inbox upsert never cleared
+   `read_at`, so a guide republish (or a fresh saved-search match) was
+   silently "already read". Fixed: explicit `reNotify` flag; guide updates +
+   saved-search matches set it; idempotent retries keep the old semantics.
+5. **Studio survey/poll badges contradicted the takers** past `closes_at`.
+   Fixed on both list and detail pages (effective state).
+6. **rfq saved-search alerts never fired** — `.is("deleted_at", null)` on a
+   table with no such column 400'd every tick into a swallowed catch. Fixed:
+   per-stream soft-delete flag.
+7. **The worker tick had no in-repo trigger** — `vercel.json crons` was
+   empty. Fixed: 5-minute Vercel cron + a `CRON_SECRET`-gated GET handler
+   (external POST pingers unaffected). Prod env: set `CRON_SECRET`.
+8. **Withdrawal did not exist** — reviewer actions referenced an
+   applicant/submitter withdraw surface that was never built, so `withdrawn`
+   was unreachable and orgs were never told. Fixed: withdraw actions +
+   buttons on both /me detail pages, reverse notice to the posting/call
+   creator. (Submission withdraw rides the service client behind an explicit
+   ownership check — `open_call_submissions_update` RLS is org-member-only.)
+9. **Advance skip reason was invisible** — it lived only in the transitions
+   ledger. Fixed: the batch board surfaces the latest run note. Also: the
+   portal deliverable approve action gained the actor≠recipient guard, and a
+   partial unique index now DB-enforces one attributed response per survey
+   (`20260724170000_survey_response_unique`).
+
+Confirmed-closed under attack (no change needed): svix webhook mechanics +
+openapi wiring, kind-taxonomy lockstep across all five legs, chat text-send
+fan-out incl. offline replay, feed read receipts, taker↔tally answer-shape
+match, taker RLS, bulk-invite idempotency, skipped-send funnel mechanics.
+
+Residual accepted items (unchanged from the deferred list, plus): no DB
+index on `render_snapshot->>resend_id` (webhook does a seq scan — fine at
+current volume); `writeInboxBulk` has no user-client fallback (prod-safe;
+dev without a service key skips recipient rows); chat fan-out hrefs point
+at `/m/inbox` for all recipients (pre-existing convention); the mobile
+`/m/settings/notifications` matrix is push-only (Email switch lives on
+/me + portal).
+
 ## Notes for future sessions
 
 - The kind taxonomy now has FIVE mirror legs: `PushKind` union,

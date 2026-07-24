@@ -82,13 +82,18 @@ export default async function Page() {
             {
               key: "publish_state",
               header: t("console.comms.polls.col.state", undefined, "Status"),
-              render: (r) => (
-                <Badge
-                  variant={r.publish_state === "live" ? "success" : r.publish_state === "closed" ? "muted" : "info"}
-                >
-                  {r.publish_state}
-                </Badge>
-              ),
+              // Mirror the voter surface: a live poll past closes_at rejects
+              // votes, so the console must not badge it green.
+              render: (r) => {
+                const deadlinePassed =
+                  r.publish_state === "live" && !!r.closes_at && Date.parse(r.closes_at) <= Date.now();
+                const effective = deadlinePassed ? "closed" : r.publish_state;
+                return (
+                  <Badge variant={effective === "live" ? "success" : effective === "closed" ? "muted" : "info"}>
+                    {effective}
+                  </Badge>
+                );
+              },
             },
             {
               key: "audience",

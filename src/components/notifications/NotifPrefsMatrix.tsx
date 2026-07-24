@@ -8,6 +8,7 @@ import { toggleNotifKindPref } from "./actions";
 export type NotifPrefsLabels = {
   eventColumn: string;
   pushColumn: string;
+  emailColumn: string;
   inAppColumn: string;
   inAppAlwaysOn: string;
   /** aria-label template with `{event}` and `{channel}` placeholders — a
@@ -21,11 +22,11 @@ const fillVia = (template: string, event: string, channel: string) =>
 /**
  * The honest notification-preferences matrix, shared by /me/notifications and
  * /p/[slug]/settings/notifications. Rows are the `notification_kind_catalog`
- * taxonomy; the only writable channel is Push because that is the only
- * channel the delivery gate (`filterByPushPrefs` in src/lib/push/send.ts)
- * actually reads. The in-app inbox column renders as always-on — bell rows
- * are written unconditionally — so users see exactly what each switch does.
- * Email/Slack columns were dropped: nothing delivers on them today.
+ * taxonomy; writable channels are Push (`matrix[kind].push`, read by
+ * `filterByPushPrefs`) and Email (`matrix[kind].email`, read by both
+ * `fanOutEmail` and notify-resolver's email leg). The in-app inbox column
+ * renders as always-on — bell rows are written unconditionally — so users
+ * see exactly what each switch does.
  *
  * Optimistic per-cell toggle with revert-on-error, mirroring the
  * /m/notifications NotifMatrix pattern.
@@ -33,21 +34,27 @@ const fillVia = (template: string, event: string, channel: string) =>
 export function NotifPrefsMatrix({
   kinds,
   initial,
+  initialEmail,
   labels,
 }: {
   kinds: NotifKindRow[];
   initial: Record<NotifKind, boolean>;
+  initialEmail: Record<NotifKind, boolean>;
   labels: NotifPrefsLabels;
 }) {
-  const [state, setState] = useState<Record<string, boolean>>(initial);
+  const [pushState, setPushState] = useState<Record<string, boolean>>(initial);
+  const [emailState, setEmailState] = useState<Record<string, boolean>>(initialEmail);
   const [, startTransition] = useTransition();
 
-  const flip = (kind: NotifKind, label: string) => {
+  const flip = (kind: NotifKind, channel: "push" | "email", label: string) => {
+    const state = channel === "push" ? pushState : emailState;
+    const setState = channel === "push" ? setPushState : setEmailState;
     const next = !state[kind];
     setState((s) => ({ ...s, [kind]: next }));
     startTransition(async () => {
       const fd = new FormData();
       fd.set("kind", kind);
+      fd.set("channel", channel);
       fd.set("on", next ? "1" : "0");
       const res = await toggleNotifKindPref(null, fd);
       if (res?.error) {
@@ -64,6 +71,7 @@ export function NotifPrefsMatrix({
           <tr>
             <th>{labels.eventColumn}</th>
             <th className="text-center">{labels.pushColumn}</th>
+            <th className="text-center">{labels.emailColumn}</th>
             <th className="text-center">{labels.inAppColumn}</th>
           </tr>
         </thead>
@@ -77,9 +85,17 @@ export function NotifPrefsMatrix({
               <td className="text-center">
                 <input
                   type="checkbox"
-                  checked={Boolean(state[row.kind])}
-                  onChange={() => flip(row.kind, row.label)}
+                  checked={Boolean(pushState[row.kind])}
+                  onChange={() => flip(row.kind, "push", row.label)}
                   aria-label={fillVia(labels.viaTemplate, row.label, labels.pushColumn)}
+                />
+              </td>
+              <td className="text-center">
+                <input
+                  type="checkbox"
+                  checked={Boolean(emailState[row.kind])}
+                  onChange={() => flip(row.kind, "email", row.label)}
+                  aria-label={fillVia(labels.viaTemplate, row.label, labels.emailColumn)}
                 />
               </td>
               <td className="text-center">

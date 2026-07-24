@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/Badge";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { audiencesForViewer } from "@/lib/db/announcements";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { toTitle } from "@/lib/format";
@@ -71,11 +72,16 @@ export async function FeedSurface({
   const supabase = await createClient();
   const fmt = await getRequestFormatters();
 
+  // Audience honesty (comms audit 2026-07-24): same viewer→audience mapping
+  // as the publish fan-out and /m/feed, so a crew-only announcement can't
+  // surface on a vendor's portal feed just because the project matches.
+  const audiences = audiencesForViewer(session.role ?? null, session.persona ?? null);
   let announcementQuery = supabase
     .from("announcements")
     .select("id, title, body, audience, pinned, published_at")
     .eq("org_id", session.orgId)
     .eq("publish_state", "published")
+    .in("audience", audiences)
     .is("deleted_at", null);
   // Portal: this project's announcements only. Org-wide (project_id IS NULL)
   // stays internal — see the docblock.

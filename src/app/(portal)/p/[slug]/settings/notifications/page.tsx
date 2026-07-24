@@ -27,7 +27,7 @@ export default async function PortalNotificationSettings({ params }: { params: P
     return <div className="page-content">{t("p.shared.configureSupabase", undefined, "Configure Supabase.")}</div>;
   }
   const session = await requireSession();
-  const { kinds, pushEnabled } = await loadNotifPrefs(session.userId);
+  const { kinds, pushEnabled, emailEnabled } = await loadNotifPrefs(session.userId);
   const persona = portalPersonaForSession(session.persona) ?? "guest";
 
   return (
@@ -52,9 +52,11 @@ export default async function PortalNotificationSettings({ params }: { params: P
             <NotifPrefsMatrix
               kinds={kinds}
               initial={pushEnabled}
+              initialEmail={emailEnabled}
               labels={{
                 eventColumn: t("me.notifications.columns.event", undefined, "Event"),
                 pushColumn: t("me.notifications.columns.push", undefined, "Push"),
+                emailColumn: t("me.notifications.columns.email", undefined, "Email"),
                 inAppColumn: t("me.notifications.columns.inApp", undefined, "In-app"),
                 inAppAlwaysOn: t(
                   "me.notifications.inAppAlwaysOn",

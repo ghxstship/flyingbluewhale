@@ -184,11 +184,14 @@ export async function setDeliverableStatusAction(deliverableId: string, nextStat
   if (!updated || updated.length === 0) {
     return { error: "Deliverable state changed concurrently. Refresh and retry." };
   }
-  if (nextState === "submitted" || nextState === "approved") {
+  // actor≠recipient: an approver approving their own submission (or a row
+  // with no submitter) has nobody meaningful to tell — without this guard a
+  // self-approve self-notified (comms audit follow-up).
+  if ((nextState === "submitted" || nextState === "approved") && before.submitted_by && before.submitted_by !== session.userId) {
     const { notify } = await import("@/lib/notify");
     await notify({
       orgId: before.org_id,
-      userId: before.submitted_by ?? session.userId,
+      userId: before.submitted_by,
       eventType: nextState === "submitted" ? "deliverable.submitted" : "deliverable.approved",
       title:
         nextState === "submitted" ? `Deliverable submitted: ${before.title}` : `Deliverable approved: ${before.title}`,

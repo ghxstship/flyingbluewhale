@@ -75,54 +75,89 @@ export async function sendChatMessage(opts: {
       .eq("user_id", authorId),
   ]);
 
-  // ── Fan-out to the other members ─────────────────────────────────────────
-  const otherIds = memberIds.filter((id) => id !== authorId);
-  if (otherIds.length > 0) {
-    // One name lookup serves both the notification title and mention
-    // detection. Fire-and-forget from the caller's perspective would hide
-    // real failures behind a green send, so the lookup + writes are awaited;
-    // writeInbox itself treats push as best-effort.
-    const { data: users } = await supabase
-      .from("users")
-      .select("id, name, email")
-      .is("deleted_at", null)
-      .in("id", [authorId, ...otherIds]);
-    const nameById = new Map<string, string>();
-    for (const u of (users ?? []) as Array<{ id: string; name: string | null; email: string | null }>) {
-      nameById.set(u.id, u.name ?? u.email ?? "Someone");
-    }
-    const authorName = nameById.get(authorId) ?? "Someone";
-    const roomLabel =
-      roomRow.room_kind === "direct" ? null : (roomRow.name ?? "a channel");
-    const title = roomLabel ? `${authorName} in ${roomLabel}` : authorName;
-
-    const mentioned = new Set(
-      otherIds.filter((id) => {
-        const name = nameById.get(id);
-        return !!name && body.includes(`@${name}`);
-      }),
-    );
-    const plain = otherIds.filter((id) => !mentioned.has(id));
-
-    // Chat recipients read on the field inbox; the bell + push resolve the
-    // cross-shell absolute URL (same convention the portal fan-out set).
-    const href = `/m/inbox/${roomId}`;
-    const base = {
-      orgId,
-      kind: "chat" as const,
-      sourceType: "chat_messages",
-      sourceId: messageId,
-      actorId: authorId,
-      body,
-      href,
-    };
-    await Promise.all([
-      plain.length > 0 ? writeInboxBulk(plain, { ...base, title }) : Promise.resolve(null),
-      ...[...mentioned].map((userId) =>
-        writeInbox({ ...base, userId, title: `${authorName} mentioned you` }),
-      ),
-    ]);
-  }
+  await fanOutChatMessage({
+    supabase,
+    orgId,
+    roomId,
+    roomKind: roomRow.room_kind,
+    roomName: roomRow.name,
+    authorId,
+    messageId,
+    body,
+    memberIds,
+  });
 
   return { messageId };
+}
+
+/**
+ * The inbox/push fan-out half of a chat send, callable on its own by write
+ * paths that insert `chat_messages` outside `sendChatMessage` (today: the
+ * attachment action, src/lib/chat/attachment-actions.ts — it uploads first,
+ * so it owns its own insert). Every new insert path MUST call this or
+ * recipients are never told the message exists.
+ */
+export async function fanOutChatMessage(opts: {
+  supabase: SupabaseClient;
+  orgId: string;
+  roomId: string;
+  roomKind: string;
+  roomName: string | null;
+  authorId: string;
+  messageId: string;
+  body: string;
+  /** All member user ids including the author. */
+  memberIds: string[];
+}): Promise<void> {
+  const { supabase, orgId, roomId, roomKind, roomName, authorId, messageId, body } = opts;
+  const otherIds = opts.memberIds.filter((id) => id !== authorId);
+  if (otherIds.length === 0) return;
+
+  // One name lookup serves both the notification title and mention
+  // detection. Fire-and-forget from the caller's perspective would hide
+  // real failures behind a green send, so the lookup + writes are awaited;
+  // writeInbox itself treats push as best-effort.
+  const { data: users } = await supabase
+    .from("users")
+    .select("id, name, email")
+    .is("deleted_at", null)
+    .in("id", [authorId, ...otherIds]);
+  const nameById = new Map<string, string>();
+  for (const u of (users ?? []) as Array<{ id: string; name: string | null; email: string | null }>) {
+    nameById.set(u.id, u.name ?? u.email ?? "Someone");
+  }
+  const authorName = nameById.get(authorId) ?? "Someone";
+  const roomLabel = roomKind === "direct" ? null : (roomName ?? "a channel");
+  const title = roomLabel ? `${authorName} in ${roomLabel}` : authorName;
+
+  const mentioned = new Set(
+    otherIds.filter((id) => {
+      const name = nameById.get(id);
+      if (!name) return false;
+      // Boundary check: "@Sam" must not match inside "@Samuel". The char
+      // after the name (if any) has to be a non-word character.
+      const idx = body.indexOf(`@${name}`);
+      if (idx === -1) return false;
+      const after = body[idx + name.length + 1];
+      return after === undefined || !/[\w]/.test(after);
+    }),
+  );
+  const plain = otherIds.filter((id) => !mentioned.has(id));
+
+  // Chat recipients read on the field inbox; the bell + push resolve the
+  // cross-shell absolute URL (same convention the portal fan-out set).
+  const href = `/m/inbox/${roomId}`;
+  const base = {
+    orgId,
+    kind: "chat" as const,
+    sourceType: "chat_messages",
+    sourceId: messageId,
+    actorId: authorId,
+    body,
+    href,
+  };
+  await Promise.all([
+    plain.length > 0 ? writeInboxBulk(plain, { ...base, title }) : Promise.resolve(null),
+    ...[...mentioned].map((userId) => writeInbox({ ...base, userId, title: `${authorName} mentioned you` })),
+  ]);
 }

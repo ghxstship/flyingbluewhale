@@ -50,6 +50,13 @@ export type InboxEntry = {
   href?: string | null;
   /** When true, also fire push fan-out. Defaults true. */
   push?: boolean;
+  /**
+   * When true, a collapse onto an existing row also CLEARS `read_at`, so a
+   * genuine content update re-surfaces as unread (guide republished,
+   * saved search matched again). Default false: an idempotent retry of the
+   * SAME event must not un-read a row the user already handled.
+   */
+  reNotify?: boolean;
 };
 
 /**
@@ -77,6 +84,8 @@ export async function writeInbox(entry: InboxEntry): Promise<{ inboxed: boolean;
       source_type: entry.sourceType,
       source_id: entry.sourceId,
       actor_id: entry.actorId ?? null,
+      // Omitting read_at leaves an already-read row read; see reNotify.
+      ...(entry.reNotify ? { read_at: null } : {}),
     } as never,
     { onConflict: "user_id,source_type,source_id", ignoreDuplicates: false },
   );
@@ -131,6 +140,8 @@ export async function writeInboxBulk(
       source_type: entry.sourceType,
       source_id: entry.sourceId,
       actor_id: entry.actorId ?? null,
+      // Omitting read_at leaves an already-read row read; see reNotify.
+      ...(entry.reNotify ? { read_at: null } : {}),
     }));
     const { error, count } = await service
       .from("notifications")

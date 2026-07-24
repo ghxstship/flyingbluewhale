@@ -83,15 +83,19 @@ export default async function Page() {
             {
               key: "publish_state",
               header: t("console.comms.surveys.columns.state", undefined, "Status"),
-              render: (r) => (
-                <Badge
-                  variant={
-                    r.publish_state === "published" ? "success" : r.publish_state === "closed" ? "muted" : "info"
-                  }
-                >
-                  {r.publish_state}
-                </Badge>
-              ),
+              // A passed closes_at closes the survey for respondents even
+              // before the state flips, so the badge must agree with the
+              // taker (/m/surveys) instead of showing a green "published".
+              render: (r) => {
+                const deadlinePassed =
+                  r.publish_state === "published" && !!r.closes_at && Date.parse(r.closes_at) <= Date.now();
+                const effective = deadlinePassed ? "closed" : r.publish_state;
+                return (
+                  <Badge variant={effective === "published" ? "success" : effective === "closed" ? "muted" : "info"}>
+                    {effective}
+                  </Badge>
+                );
+              },
             },
             {
               key: "audience",

@@ -535,7 +535,7 @@ const KIND_EMAIL_LABEL: Record<PushKind, string> = {
 /**
  * F-03 — the email channel of the per-kind delivery matrix. OPT-IN semantics:
  * a user is emailed only when their `notification_preferences.matrix[kind].email`
- * is explicitly true (the matrix UI renders email default-off, so a missing
+ * is explicitly true (the matrix UI's Email column writes this cell; a missing
  * cell means "never opted in"). Kind-less system pings never email. Derived
  * from the shared `PrefRow[]` read — no second query. Returns the opted-in subset.
  */

@@ -24,7 +24,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
   const { data: survey } = await supabase
     .from("surveys")
-    .select("id, title, description, anonymous, publish_state, audience")
+    .select("id, title, description, anonymous, publish_state, audience, closes_at")
     .eq("id", id)
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
@@ -37,7 +37,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     anonymous: boolean;
     publish_state: string;
     audience: string;
+    closes_at: string | null;
   };
+  // Mirror the taker: a passed deadline closes the survey for respondents
+  // even before the state flips, so the console badge must agree.
+  const effectiveState =
+    s.publish_state === "published" && s.closes_at && Date.parse(s.closes_at) <= Date.now()
+      ? "closed"
+      : s.publish_state;
 
   const [{ data: questions }, { count: responseCount }, { data: responses }] = await Promise.all([
     supabase
@@ -95,9 +102,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         subtitle={
           <span className="flex flex-wrap items-center gap-2">
             <Badge
-              variant={s.publish_state === "published" ? "success" : s.publish_state === "closed" ? "muted" : "info"}
+              variant={effectiveState === "published" ? "success" : effectiveState === "closed" ? "muted" : "info"}
             >
-              {s.publish_state}
+              {effectiveState}
             </Badge>
             <Badge variant="muted">{toTitle(s.audience)}</Badge>
             {s.anonymous && (

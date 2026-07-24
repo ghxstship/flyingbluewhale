@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { fanOutChatMessage } from "@/lib/db/chat-send";
 import type { ChatAttachment } from "./attachment-types";
 
 /**
@@ -59,20 +60,17 @@ export async function sendChatAttachment(_prev: AttachmentState, fd: FormData): 
 
   const { data: room } = await supabase
     .from("chat_rooms")
-    .select("id, org_id")
+    .select("id, org_id, room_kind, name")
     .eq("id", roomId)
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
   if (!room) return { error: "Thread not found." };
+  const roomRow = room as { id: string; room_kind: string; name: string | null };
 
-  const { data: member } = await supabase
-    .from("chat_room_members")
-    .select("room_id")
-    .eq("room_id", roomId)
-    .eq("user_id", session.userId)
-    .maybeSingle();
-  if (!member) return { error: "You are not a member of this thread." };
+  const { data: members } = await supabase.from("chat_room_members").select("user_id").eq("room_id", roomId);
+  const memberIds = ((members ?? []) as Array<{ user_id: string }>).map((m) => m.user_id);
+  if (!memberIds.includes(session.userId)) return { error: "You are not a member of this thread." };
 
   const safeName = (file.name || "file").replace(/[^a-zA-Z0-9._-]/g, "_").slice(0, 80);
   const path = `${session.orgId}/${roomId}/${Date.now()}-${safeName}`;
@@ -84,19 +82,38 @@ export async function sendChatAttachment(_prev: AttachmentState, fd: FormData): 
 
   const attachment: ChatAttachment = { path, name: safeName, mime, size: file.size };
   const now = new Date().toISOString();
-  const { error: msgError } = await supabase.from("chat_messages").insert({
-    org_id: session.orgId,
-    room_id: roomId,
-    author_id: session.userId,
-    body: safeName,
-    attachments: [attachment],
-  });
-  if (msgError) return { error: msgError.message };
+  const { data: msg, error: msgError } = await supabase
+    .from("chat_messages")
+    .insert({
+      org_id: session.orgId,
+      room_id: roomId,
+      author_id: session.userId,
+      body: safeName,
+      attachments: [attachment],
+    })
+    .select("id")
+    .single();
+  if (msgError || !msg) return { error: msgError?.message ?? "Could not send the attachment" };
 
   await Promise.all([
     supabase.from("chat_rooms").update({ last_message_at: now }).eq("id", roomId),
     supabase.from("chat_room_members").update({ last_read_at: now }).eq("room_id", roomId).eq("user_id", session.userId),
   ]);
+
+  // Same recipient fan-out as a text send (comms audit follow-up): without
+  // this, a photo or PDF produced zero bell rows and zero push for every
+  // other member of the room.
+  await fanOutChatMessage({
+    supabase,
+    orgId: session.orgId,
+    roomId,
+    roomKind: roomRow.room_kind,
+    roomName: roomRow.name,
+    authorId: session.userId,
+    messageId: (msg as { id: string }).id,
+    body: safeName,
+    memberIds,
+  });
 
   revalidatePath(revalidate);
   return null;

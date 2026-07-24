@@ -186,7 +186,7 @@ export default async function GuidePage({
   // bearers have no auth.uid() and the RLS insert policy is self-scoped.
   // Best-effort fire-and-forget: analytics must never block or break the
   // guide render. guide_views is not in the generated client types yet
-  // (migration not applied), hence the loose client; the .then() arms
+  // (guide_views is applied + typed; loose client kept for brevity); .then() arms
   // trigger execution without awaiting.
   if (session) {
     void (supabase as unknown as LooseSupabase)

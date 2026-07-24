@@ -2,7 +2,12 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "next build",
   "framework": "nextjs",
-  "crons": [],
+  "crons": [
+    {
+      "path": "/api/v1/internal/automations/schedule",
+      "schedule": "*/5 * * * *"
+    }
+  ],
   "redirects": [
     {
       "source": "/:path*",

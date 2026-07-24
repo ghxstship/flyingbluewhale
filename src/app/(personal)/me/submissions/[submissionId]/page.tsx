@@ -1,4 +1,5 @@
 import { requireSession } from "@/lib/auth";
+import { WithdrawButton } from "./WithdrawButton";
 import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { notFound } from "next/navigation";
@@ -68,6 +69,22 @@ export default async function Page({ params }: { params: Promise<{ submissionId:
               {t("me.submissions.detail.proposedFee", undefined, "Proposed fee")}
             </div>
             <div className="mt-1 font-mono text-sm">{formatMoney(s.fee_proposed_cents)}</div>
+          </div>
+        )}
+        {["submitted", "shortlisted"].includes(s.submission_state) && (
+          <div className="surface-raised p-4">
+            <WithdrawButton
+              submissionId={s.id}
+              labels={{
+                withdraw: t("me.submissions.detail.withdraw", undefined, "Withdraw Submission"),
+                confirm: t(
+                  "me.submissions.detail.withdrawConfirm",
+                  undefined,
+                  "Withdraw this submission? The organizer will be notified and this cannot be undone.",
+                ),
+                done: t("me.submissions.detail.withdrawn", undefined, "Submission withdrawn."),
+              }}
+            />
           </div>
         )}
         {s.submission_state === "awarded" && (

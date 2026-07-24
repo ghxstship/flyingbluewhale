@@ -27,13 +27,24 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
   const { data: poll } = await supabase
     .from("polls")
-    .select("id, question, publish_state, audience, created_at")
+    .select("id, question, publish_state, audience, closes_at, created_at")
     .eq("id", id)
     .eq("org_id", session.orgId)
     .is("deleted_at", null)
     .maybeSingle();
   if (!poll) notFound();
-  const p = poll as { id: string; question: string; publish_state: string; audience: string; created_at: string };
+  const p = poll as {
+    id: string;
+    question: string;
+    publish_state: string;
+    audience: string;
+    closes_at: string | null;
+    created_at: string;
+  };
+  // Mirror the voter surface: a live poll past closes_at rejects votes, so
+  // the console badge must not show it green.
+  const effectiveState =
+    p.publish_state === "live" && p.closes_at && Date.parse(p.closes_at) <= Date.now() ? "closed" : p.publish_state;
 
   // Votes read with the service client: poll_votes RLS is voter-self only
   // (poll_votes_self_rw), so the regular client sees just the caller's own
@@ -56,8 +67,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         title={p.question}
         subtitle={
           <span className="flex flex-wrap items-center gap-2">
-            <Badge variant={p.publish_state === "live" ? "success" : p.publish_state === "closed" ? "muted" : "info"}>
-              {p.publish_state}
+            <Badge variant={effectiveState === "live" ? "success" : effectiveState === "closed" ? "muted" : "info"}>
+              {effectiveState}
             </Badge>
             <Badge variant="muted">{toTitle(p.audience)}</Badge>
             <span className="font-mono text-xs">

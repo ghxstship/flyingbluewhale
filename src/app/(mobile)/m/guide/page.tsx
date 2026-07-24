@@ -80,7 +80,7 @@ export default async function MobileGuidePage() {
   // Read-receipt write: one guide_views row per viewer per guide (a repeat
   // visit refreshes viewed_at via the upsert). Best-effort fire-and-forget —
   // analytics must never block or break the guide render. guide_views is not
-  // in the generated client types yet (migration not applied), hence the
+  // via the loose client (guide_views is applied + typed; the loose cast is
   // loose client; the .then() arms trigger execution without awaiting.
   void (supabase as unknown as LooseSupabase)
     .from("guide_views")

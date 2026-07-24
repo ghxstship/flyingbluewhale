@@ -7695,7 +7695,7 @@
       "type": "Tipo",
       "unflag": "Desmarcar",
       "unreadAction": "No leído",
-      "unreadEyebrow": "{totalUnread} sin leer"
+      "unreadEyebrow": "{count} sin leer"
     },
     "incident": {
       "eyebrow": "Campo",

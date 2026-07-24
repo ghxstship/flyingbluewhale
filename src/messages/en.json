@@ -7707,7 +7707,7 @@
    "type": "Type",
    "unflag": "Unflag",
    "unreadAction": "Unread",
-   "unreadEyebrow": "{totalUnread} Unread"
+   "unreadEyebrow": "{count} Unread"
   },
   "incident": {
    "eyebrow": "Field",

@@ -88,6 +88,7 @@ export default async function Page({ params }: { params: Promise<{ applicationId
                   undefined,
                   "Withdraw this application? The organizer will be notified and this cannot be undone.",
                 ),
+                cancel: t("me.applications.detail.keep", undefined, "Keep It"),
                 done: t("me.applications.detail.withdrawn", undefined, "Application withdrawn."),
               }}
             />

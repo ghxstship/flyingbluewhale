@@ -66,6 +66,7 @@ export async function withdrawSubmissionAction(_prev: State, fd: FormData): Prom
   const { data: call } = await supabase
     .from("open_calls")
     .select("id, title, created_by")
+    .is("deleted_at", null)
     .eq("id", sub.open_call_id)
     .maybeSingle();
   const creator = (call as { title: string; created_by: string | null } | null) ?? null;

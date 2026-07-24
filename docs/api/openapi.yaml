@@ -2446,6 +2446,14 @@ paths:
         "401": { $ref: "#/components/responses/Unauthorized" }
         "403": { $ref: "#/components/responses/Forbidden" }
         "429": { $ref: "#/components/responses/RateLimited" }
+    get:
+      summary: Vercel-cron variant of the same tick — GET with the platform's CRON_SECRET bearer; 503 when CRON_SECRET is unset. Not callable by external API consumers.
+      operationId: getInternalAutomationsSchedule
+      responses:
+        "200": { description: ok, content: { application/json: { schema: { $ref: "#/components/schemas/ApiEnvelope" } } } }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "429": { $ref: "#/components/responses/RateLimited" }
 
   /api/v1/kiosk/identify:
     post:

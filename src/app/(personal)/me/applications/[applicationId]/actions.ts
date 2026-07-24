@@ -60,6 +60,7 @@ export async function withdrawApplicationAction(_prev: State, fd: FormData): Pro
   const { data: posting } = await supabase
     .from("job_postings")
     .select("id, title, created_by")
+    .is("deleted_at", null)
     .eq("id", app.job_posting_id)
     .maybeSingle();
   const creator = (posting as { title: string; created_by: string | null } | null) ?? null;

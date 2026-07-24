@@ -82,6 +82,7 @@ export default async function Page({ params }: { params: Promise<{ submissionId:
                   undefined,
                   "Withdraw this submission? The organizer will be notified and this cannot be undone.",
                 ),
+                cancel: t("me.submissions.detail.keep", undefined, "Keep It"),
                 done: t("me.submissions.detail.withdrawn", undefined, "Submission withdrawn."),
               }}
             />

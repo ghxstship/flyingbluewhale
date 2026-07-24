@@ -75,10 +75,8 @@ export async function waiveDoc(engagementId: string, stepId: string, _prev: Stat
 /**
  * Send Reminder — nudges the recipient about one open doc. Stamps
  * `metadata.last_reminded_at` (what the doc card renders) and pushes to the
- * recipient's claimed account. No `kind`: the PushKind matrix has no
- * onboarding row yet, and a targeted operational nudge from a named manager
- * is closer to the system band than to a mutable broadcast — flagged for
- * convergence when an `onboarding` kind lands in the catalog.
+ * recipient's claimed account, kind `onboarding` (in the catalog since
+ * migration 20260724152000) so the nudge respects the opt-out matrix.
  */
 export async function remindDoc(engagementId: string, stepId: string, _prev: State, _fd: FormData): Promise<State> {
   try {
@@ -103,6 +101,7 @@ export async function remindDoc(engagementId: string, stepId: string, _prev: Sta
       body: `${step.title} · ${letter.resolved.project_name}`,
       url: "/m/onboarding",
       scope: "mobile",
+      kind: "onboarding",
       orgId: session.orgId,
       projectId: letter.raw.project_id,
     });

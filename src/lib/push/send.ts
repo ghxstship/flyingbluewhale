@@ -59,6 +59,13 @@ export type PushKind =
   | "timesheet"
   | "payroll"
   | "time_correction"
+  // Marketplace: application/submission decisions, talent offers,
+  // saved-search matches, casting invites. Before this kind existed,
+  // talent offers were inbox-only and decisions notified nobody.
+  | "marketplace"
+  // Onboarding doc reminders + step updates. The roster reminder previously
+  // sent with NO kind, which bypassed the opt-out matrix entirely.
+  | "onboarding"
   // Safety-critical broadcast. Carries a kind (so the row is tagged and the
   // field's alert surface can tone it) but is exempt from the opt-out
   // matrix — see UNSILENCEABLE_KINDS.
@@ -520,6 +527,8 @@ const KIND_EMAIL_LABEL: Record<PushKind, string> = {
   timesheet: "Timesheet",
   payroll: "Payroll",
   time_correction: "Time Correction",
+  marketplace: "Marketplace",
+  onboarding: "Onboarding",
   crisis: "Crisis Alert",
 };
 

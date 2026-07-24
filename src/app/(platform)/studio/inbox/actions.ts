@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getRequestFormatters } from "@/lib/i18n/request";
 import { resolveRecordRefs } from "./record-refs";
 import { createChannelRoom, findOrCreateDirectRoom } from "@/lib/db/chat-rooms";
+import { sendChatMessage } from "@/lib/db/chat-send";
 import { actionErrorMessage } from "@/lib/errors";
 
 /**
@@ -32,37 +33,25 @@ export async function sendConsoleMessage(_prev: State, fd: FormData): Promise<St
   const { roomId, body } = parsed.data;
   const supabase = await createClient();
 
-  const { data: room } = await supabase
-    .from("chat_rooms")
-    .select("id, org_id")
-    .eq("id", roomId)
-    .eq("org_id", session.orgId)
-    .is("deleted_at", null)
-    .maybeSingle();
-  if (!room) return { error: actionErrorMessage("not-found.thread", "Thread not found.") };
-
-  const { data: member } = await supabase
-    .from("chat_room_members")
-    .select("room_id")
-    .eq("room_id", roomId)
-    .eq("user_id", session.userId)
-    .maybeSingle();
-  if (!member) return { error: actionErrorMessage("you-are-not-a-member-of-this-thread", "You are not a member of this thread.") };
-
-  const now = new Date().toISOString();
-  const { error: msgError } = await supabase
-    .from("chat_messages")
-    .insert({ org_id: session.orgId, room_id: roomId, author_id: session.userId, body });
-  if (msgError) return { error: msgError.message };
-
-  await Promise.all([
-    supabase.from("chat_rooms").update({ last_message_at: now }).eq("id", roomId),
-    supabase
-      .from("chat_room_members")
-      .update({ last_read_at: now })
-      .eq("room_id", roomId)
-      .eq("user_id", session.userId),
-  ]);
+  // Shared send (src/lib/db/chat-send.ts): guards, insert, cursor stamps,
+  // and the inbox/push fan-out the console path used to skip entirely.
+  const result = await sendChatMessage({
+    supabase,
+    orgId: session.orgId,
+    authorId: session.userId,
+    roomId,
+    body,
+  });
+  if ("error" in result) {
+    return {
+      error:
+        result.error === "Thread not found."
+          ? actionErrorMessage("not-found.thread", "Thread not found.")
+          : result.error === "You are not a member of this thread."
+            ? actionErrorMessage("you-are-not-a-member-of-this-thread", "You are not a member of this thread.")
+            : result.error,
+    };
+  }
 
   revalidatePath("/studio/inbox");
   return null;
@@ -271,13 +260,13 @@ export async function loadEarlierMessages(roomId: string, beforeIso: string): Pr
 
   const { data: msgs, error } = await supabase
     .from("chat_messages")
-    .select("id, author_id, body, created_at")
+    .select("id, author_id, body, attachments, created_at")
     .eq("room_id", parsed.data.roomId)
     .lt("created_at", parsed.data.beforeIso)
     .order("created_at", { ascending: false })
     .limit(THREAD_PAGE_SIZE + 1);
   if (error) return { error: error.message };
-  const raw = (msgs ?? []) as Array<{ id: string; author_id: string | null; body: string; created_at: string }>;
+  const raw = (msgs ?? []) as Array<{ id: string; author_id: string | null; body: string; attachments: unknown; created_at: string }>;
   const hasMore = raw.length > THREAD_PAGE_SIZE;
   const ordered = raw.slice(0, THREAD_PAGE_SIZE).reverse();
   if (ordered.length === 0) return { messages: [], refs: {}, hasMore: false };
@@ -332,6 +321,7 @@ export async function loadEarlierMessages(roomId: string, beforeIso: string): Pr
       authorId: m.author_id,
       authorName: m.author_id ? (nameById.get(m.author_id) ?? "") : "",
       body: m.body,
+      attachments: m.attachments,
       timeText: fmt.time(m.created_at),
       dayKey: fmt.dateParts(m.created_at, { year: "numeric", month: "2-digit", day: "2-digit" }),
       dayLabel: fmt.dateParts(m.created_at, { weekday: "short", month: "short", day: "numeric" }),

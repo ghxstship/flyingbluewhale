@@ -3,7 +3,9 @@ import { createClient } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { getRequestFormatters, getRequestT } from "@/lib/i18n/request";
 import { RealtimeRefresh } from "@/components/RealtimeRefresh";
+import { audiencesForViewer } from "@/lib/db/announcements";
 import { FeedView, type FeedPost } from "./FeedView";
+import { MarkFeedRead } from "./MarkFeedRead";
 
 /** Kit 32 A5 — the single "like" reaction emoji stored per user per post. */
 const LIKE_EMOJI = "👍";
@@ -56,7 +58,11 @@ export default async function MobileFeedPage() {
   const supabase = await createClient();
   const fmt = await getRequestFormatters();
 
-  const [{ data: kudos }, { data: announcements }] = await Promise.all([
+  // Audience honesty: only the audiences this viewer belongs to (shared
+  // mapping with the publish fan-out — src/lib/db/announcements.ts), and
+  // project/team-scoped rows only when the viewer is actually a member.
+  const audiences = audiencesForViewer(session.role ?? null, session.persona ?? null);
+  const [{ data: kudos }, { data: announcements }, { data: myProjects }, { data: myTeams }] = await Promise.all([
     supabase
       .from("recognition_posts")
       .select("id, from_user_id, message, visibility_state, created_at")
@@ -67,13 +73,18 @@ export default async function MobileFeedPage() {
       .limit(40),
     supabase
       .from("announcements")
-      .select("id, author_id, title, body, publish_state, published_at, created_at")
+      .select("id, author_id, title, body, publish_state, published_at, created_at, project_id, team_id")
       .eq("org_id", session.orgId)
       .eq("publish_state", "published")
+      .in("audience", audiences)
       .is("deleted_at", null)
       .order("published_at", { ascending: false, nullsFirst: false })
       .limit(40),
+    supabase.from("project_members").select("project_id").eq("user_id", session.userId),
+    supabase.from("team_members").select("team_id").eq("user_id", session.userId),
   ]);
+  const myProjectIds = new Set(((myProjects ?? []) as Array<{ project_id: string }>).map((p) => p.project_id));
+  const myTeamIds = new Set(((myTeams ?? []) as Array<{ team_id: string }>).map((t) => t.team_id));
 
   type KudosRow = {
     id: string;
@@ -88,10 +99,14 @@ export default async function MobileFeedPage() {
     body: string;
     published_at: string | null;
     created_at: string;
+    project_id: string | null;
+    team_id: string | null;
   };
 
   const kudosRows = (kudos ?? []) as KudosRow[];
-  const annRows = (announcements ?? []) as AnnouncementRow[];
+  const annRows = ((announcements ?? []) as AnnouncementRow[]).filter(
+    (a) => (!a.project_id || myProjectIds.has(a.project_id)) && (!a.team_id || myTeamIds.has(a.team_id)),
+  );
 
   // Author display names + real like state per post (kit 32 A5) all derive
   // from the two row sets and are independent — one round trip. Kudos
@@ -201,6 +216,7 @@ export default async function MobileFeedPage() {
         table="recognition_posts"
         filter={`org_id=eq.${session.orgId}`}
       />
+      <MarkFeedRead announcementIds={annIds} />
       <div className="scr-eye">
         {t("m.feed.eyebrow", { count: posts.length }, `${posts.length} Posts`)}
       </div>

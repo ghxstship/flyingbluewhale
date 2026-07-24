@@ -56,6 +56,10 @@ export const PUSH_KIND_TIER: Record<PushKind, PushTier> = {
   // A decision on a recert request you filed — request/decision parity with
   // time_off and approval, not learning-feed noise like `course`.
   certification: "ambient",
+  // A decision on an application/submission/offer you filed, or a doc
+  // reminder addressed to you — request/decision parity with time_off.
+  marketplace: "ambient",
+  onboarding: "ambient",
   // digest — feed noise; bundled, never buzzes one-by-one.
   announcement: "digest",
   kudos: "digest",

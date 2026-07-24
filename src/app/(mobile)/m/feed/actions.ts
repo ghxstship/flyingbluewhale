@@ -80,6 +80,40 @@ export async function toggleFeedLike(_prev: LikeState, fd: FormData): Promise<Li
   return { ok: true };
 }
 
+const ReadsSchema = z.object({
+  announcementIds: z.array(z.string().uuid()).min(1).max(50),
+});
+
+/**
+ * Bulk read receipts for the feed's visible announcements — fired from the
+ * MarkFeedRead island on mount, so `announcements.read_count` finally
+ * reflects the primary (mobile) audience instead of only portal readers.
+ * Idempotent upsert on (announcement_id, user_id); the read-count trigger
+ * only bumps on genuine inserts. No revalidate: this is a read-cursor
+ * write, revalidating would loop (render → mark read → render).
+ */
+export async function markFeedAnnouncementsRead(input: { announcementIds: string[] }): Promise<void> {
+  const session = await requireSession();
+  const parsed = ReadsSchema.safeParse(input);
+  if (!parsed.success) return;
+  const supabase = await createClient();
+
+  // Cross-tenant guard — keep only ids that belong to this org.
+  const { data: anns } = await supabase
+    .from("announcements")
+    .select("id")
+    .eq("org_id", session.orgId)
+    .in("id", parsed.data.announcementIds);
+  const ids = ((anns ?? []) as Array<{ id: string }>).map((a) => a.id);
+  if (ids.length === 0) return;
+
+  const now = new Date().toISOString();
+  await supabase.from("announcement_reads").upsert(
+    ids.map((announcement_id) => ({ announcement_id, user_id: session.userId, read_at: now })),
+    { onConflict: "announcement_id,user_id", ignoreDuplicates: true },
+  );
+}
+
 const PostSchema = z.object({
   message: z.string().min(1).max(2000),
 });

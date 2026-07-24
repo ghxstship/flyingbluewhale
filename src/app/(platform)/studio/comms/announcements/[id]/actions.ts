@@ -2,9 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { ADMIN_BAND_ROLES, isManagerPlus, requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { writeInboxBulk } from "@/lib/inbox";
+import { resolveAnnouncementRecipients, type AnnouncementAudience } from "@/lib/db/announcements";
 
 const Schema = z.object({ id: z.string().uuid() });
 
@@ -21,7 +22,7 @@ export async function publishAnnouncement(fd: FormData): Promise<void> {
     .eq("id", id)
     .eq("org_id", session.orgId)
     .eq("publish_state", "draft")
-    .select("id, title, body, audience")
+    .select("id, title, body, audience, project_id, team_id")
     .maybeSingle();
   if (error) throw new Error(`Could not update announcement: ${error.message}`);
 
@@ -31,20 +32,24 @@ export async function publishAnnouncement(fd: FormData): Promise<void> {
   // key is missing in dev, the publish still succeeds; only the push
   // is skipped.
   if (updated && isServiceClientAvailable()) {
-    const u = updated as { id: string; title: string; body: string; audience: string };
+    const u = updated as {
+      id: string;
+      title: string;
+      body: string;
+      audience: AnnouncementAudience;
+      project_id: string | null;
+      team_id: string | null;
+    };
     const service = createServiceClient();
-    const roleFilter: ("owner" | "admin" | "manager" | "member")[] | null =
-      u.audience === "all"
-        ? null
-        : u.audience === "admins"
-          ? [...ADMIN_BAND_ROLES]
-          : u.audience === "crew"
-            ? ["member"]
-            : null;
-    let query = service.from("memberships").select("user_id").eq("org_id", session.orgId).is("deleted_at", null);
-    if (roleFilter) query = query.in("role", roleFilter);
-    const { data: recipients } = await query;
-    const userIds = ((recipients ?? []) as Array<{ user_id: string }>).map((r) => r.user_id);
+    // Shared audience resolution (src/lib/db/announcements.ts) — same mapping
+    // as the create-time fan-out and the feed read side. Also honors the
+    // project/team narrowing this action previously ignored.
+    const userIds = await resolveAnnouncementRecipients(service, {
+      orgId: session.orgId,
+      audience: u.audience,
+      teamId: u.team_id,
+      projectId: u.project_id,
+    });
     if (userIds.length > 0) {
       // Source-keyed upsert collapses re-publish into the same inbox
       // row (one announcement → one inbox card per recipient, even on

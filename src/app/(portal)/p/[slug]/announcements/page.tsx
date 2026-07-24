@@ -44,16 +44,22 @@ export default async function PortalAnnouncementsPage({ params }: { params: Prom
   const fmt = await getRequestFormatters();
   const project = await projectIdFromSlug(slug);
 
-  const { data } = await supabase
-    .from("announcements")
-    .select("id, title, body, audience, pinned, published_at")
-    .eq("org_id", session.orgId)
-    .eq("publish_state", "published")
-    .is("deleted_at", null)
-    .in("audience", PORTAL_AUDIENCES)
-    .order("pinned", { ascending: false })
-    .order("published_at", { ascending: false, nullsFirst: false })
-    .limit(50);
+  // Project scope (ADR-0008): this portal's project only — matching the
+  // FeedSurface-based crew/vendor feeds. Without the filter a portal user at
+  // one project saw every org-wide portal-audience announcement.
+  const { data } = project
+    ? await supabase
+        .from("announcements")
+        .select("id, title, body, audience, pinned, published_at")
+        .eq("org_id", session.orgId)
+        .eq("publish_state", "published")
+        .eq("project_id", project.id)
+        .is("deleted_at", null)
+        .in("audience", PORTAL_AUDIENCES)
+        .order("pinned", { ascending: false })
+        .order("published_at", { ascending: false, nullsFirst: false })
+        .limit(50)
+    : { data: [] };
   const rows = (data ?? []) as Row[];
 
   return (

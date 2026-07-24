@@ -3,9 +3,10 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { ADMIN_BAND_ROLES, isManagerPlus, requireSession } from "@/lib/auth";
+import { isManagerPlus, requireSession } from "@/lib/auth";
 import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { writeInbox, writeInboxBulk } from "@/lib/inbox";
+import { resolveAnnouncementRecipients } from "@/lib/db/announcements";
 import { actionFail, formFail } from "@/lib/forms/fail";
 import { actionErrorMessage } from "@/lib/errors";
 
@@ -89,39 +90,16 @@ export async function createAnnouncementAction(_: State, fd: FormData): Promise<
   // saved.
   if (publish && isServiceClientAvailable()) {
     const service = createServiceClient();
-    const roleFilter: ("owner" | "admin" | "manager" | "member")[] | null =
-      parsed.data.audience === "all"
-        ? null
-        : parsed.data.audience === "admins"
-          ? [...ADMIN_BAND_ROLES]
-          : parsed.data.audience === "crew"
-            ? ["member"]
-            : null;
-    let query = service.from("memberships").select("user_id").eq("org_id", session.orgId).is("deleted_at", null);
-    if (roleFilter) query = query.in("role", roleFilter);
-    const { data: recipients } = await query;
-    let userIds = ((recipients ?? []) as Array<{ user_id: string }>).map((r) => r.user_id);
-
-    // Team filter narrows the role-band cohort to actual team members.
-    if (teamId && userIds.length > 0) {
-      const { data: teamMembers } = await service
-        .from("team_members")
-        .select("user_id")
-        .eq("team_id", teamId)
-        .in("user_id", userIds);
-      const teamSet = new Set(((teamMembers ?? []) as Array<{ user_id: string }>).map((r) => r.user_id));
-      userIds = userIds.filter((id) => teamSet.has(id));
-    }
-    // Project filter narrows further to users with a project membership.
-    if (projectId && userIds.length > 0) {
-      const { data: projectMembers } = await service
-        .from("project_members")
-        .select("user_id")
-        .eq("project_id", projectId)
-        .in("user_id", userIds);
-      const projectSet = new Set(((projectMembers ?? []) as Array<{ user_id: string }>).map((r) => r.user_id));
-      userIds = userIds.filter((id) => projectSet.has(id));
-    }
+    // Shared audience resolution (src/lib/db/announcements.ts) — the same
+    // mapping the feed read side applies, so notified == visible. Replaces a
+    // forked role-only filter whose contractors/vendors arms fell through to
+    // "everyone".
+    const userIds = await resolveAnnouncementRecipients(service, {
+      orgId: session.orgId,
+      audience: parsed.data.audience,
+      teamId,
+      projectId,
+    });
     if (userIds.length > 0) {
       // writeInboxBulk lands the same payload on the in-app inbox AND
       // fires push fan-out — gated by each user's per-kind preference

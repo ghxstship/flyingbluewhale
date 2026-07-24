@@ -79,7 +79,7 @@ export async function submitSurveyResponse(_: State, fd: FormData): Promise<Stat
     .eq("survey_id", survey.id)
     .order("ordinal");
   const questions = (qData ?? []) as QuestionRow[];
-  if (questions.length === 0) return { error: "This survey has no questions yet." };
+  if (questions.length === 0) return { error: "This survey does not have questions to answer." };
 
   const answers: Record<string, string | string[]> = {};
   const fieldErrors: Record<string, string> = {};

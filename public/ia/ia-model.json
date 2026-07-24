@@ -2844,6 +2844,18 @@
               ]
             },
             {
+              "path": "/m/surveys",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
+              "path": "/m/polls",
+              "arch": [
+                "LIST"
+              ]
+            },
+            {
               "path": "/m/jobs",
               "arch": [
                 "SHOP"

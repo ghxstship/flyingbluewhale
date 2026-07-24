@@ -141,7 +141,7 @@ export default async function SurveyTakerPage({ params }: { params: Promise<{ su
         </p>
       )}
       {questions.length === 0 ? (
-        <p className="form-intro">{t("m.surveys.noQuestions", undefined, "This survey has no questions yet.")}</p>
+        <p className="form-intro">{t("m.surveys.noQuestions", undefined, "This survey does not have questions to answer.")}</p>
       ) : (
         <SurveyForm surveyId={survey.id} questions={questions} />
       )}

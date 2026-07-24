@@ -148,6 +148,12 @@ const TARGETS = [
   { table: "positions", column: "title", pattern: "E2E Position%" },
   { table: "cost_centers", column: "name", pattern: "E2E Cost Center%" },
   { table: "locations", column: "name", pattern: "E2E Location%" },
+  // /legend/start walkthrough (legend-start-walkthrough.spec). The spec's own
+  // teardown purges these; this is the mid-failure backstop.
+  { table: "positions", column: "title", pattern: "E2E Walk Position %" },
+  { table: "locations", column: "name", pattern: "E2E Walk Venue %" },
+  { table: "master_catalog_items", column: "code", pattern: "e2e-walk-%" },
+  { table: "invites", column: "email", pattern: "e2e-walk-%@example.com" },
   // Shared parents LAST — children above must clear first (ON DELETE RESTRICT).
   { table: "events", column: "name", pattern: "E2E Event %" },
   { table: "events", column: "name", pattern: "E2E Activity%" },

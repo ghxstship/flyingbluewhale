@@ -25777,8 +25777,9 @@
      "onePreset": "1 preset",
      "oneTemplate": "1 template",
      "openInConsole": "Open in console",
-     "subtitle": "Configure once, reuse on every project. Four template families, one library.",
-     "title": "Templates"
+     "subtitle": "Configure once, reuse on every project. Every template family, one library.",
+     "title": "Templates",
+     "docTypesFixed": "Document types are registry-fixed and cannot be authored per org. Configure which types are offered, and their default brand, in the Document templates section below. Guide templates are captured from a project guide; proposal and project templates from their records."
     },
     "title": "Organization Hub",
     "yourOrganization": "Your organization"

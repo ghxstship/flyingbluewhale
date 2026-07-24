@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { ModuleHeader } from "@/components/Shell";
 import { Badge } from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createServiceClient, isServiceClientAvailable } from "@/lib/supabase/server";
 import { hasSupabase } from "@/lib/env";
 import { toTitle } from "@/lib/format";
 import { getRequestT } from "@/lib/i18n/request";
@@ -35,9 +35,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   if (!poll) notFound();
   const p = poll as { id: string; question: string; publish_state: string; audience: string; created_at: string };
 
+  // Votes read with the service client: poll_votes RLS is voter-self only
+  // (poll_votes_self_rw), so the regular client sees just the caller's own
+  // vote and the tally undercounts for everyone else. The org pin above has
+  // already proven the poll belongs to this org; only counts render.
+  const voteReader = isServiceClientAvailable() ? createServiceClient() : supabase;
   const [{ data: options }, { data: votes }] = await Promise.all([
     supabase.from("poll_options").select("id, ordinal, label").eq("poll_id", id).order("ordinal"),
-    supabase.from("poll_votes").select("option_id").eq("poll_id", id),
+    voteReader.from("poll_votes").select("option_id").eq("poll_id", id),
   ]);
   const opts = (options ?? []) as Option[];
   const tally = new Map<string, number>();

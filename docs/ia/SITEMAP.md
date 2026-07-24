@@ -12,7 +12,7 @@
 > crawled for errors by `e2e/sitemap-crawl.spec.ts` (routinely via the
 > `route-health` workflow; on demand via `npm run e2e:crawl`).
 
-**Page routes:** 1318 · **API route handlers:** 160 · **Distinct nav hrefs:** 597
+**Page routes:** 1322 · **API route handlers:** 161 · **Distinct nav hrefs:** 599
 
 ## Legend
 
@@ -29,15 +29,15 @@
 
 | Shell | Nav source | Routes | ● nav | ○ linked | ⚠ orphan | · exempt |
 |-------|------------|-------:|------:|---------:|---------:|---------:|
-| ATLVS — Operator Console | platformNav rail | 802 | 255 | 545 | 0 | 2 |
-| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 121 | 95 | 25 | 0 | 1 |
+| ATLVS — Operator Console | platformNav rail | 803 | 255 | 546 | 0 | 2 |
+| COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 124 | 97 | 26 | 0 | 1 |
 | COMPVSS — Kiosk (shared device) | mobileSurfaces | 3 | 3 | 0 | 0 | 0 |
 | GVTEWAY — External Portal | portalNav rail | 156 | 129 | 23 | 0 | 4 |
 | LEG3ND — Knowledge Shell | legendNav rail | 85 | 34 | 51 | 0 | 0 |
 | GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 97 | 34 | 54 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 14 | 2 | 0 | 0 | 12 |
-| **TOTAL** | | **1318** | **571** | **704** | **0** | **43** |
+| **TOTAL** | | **1322** | **573** | **706** | **0** | **43** |
 
 ## ⚠️ Orphan modules (0) — features with zero nav entry
 
@@ -100,7 +100,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## ATLVS — Operator Console (`/studio`)
 
-802 routes — ● 255 nav · ○ 545 linked · ⚠ 0 orphan
+803 routes — ● 255 nav · ○ 546 linked · ⚠ 0 orphan
 
 <details><summary><code>access-control</code> · 2 routes</summary>
 
@@ -634,7 +634,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>marketplace</code> · 38 routes</summary>
+<details><summary><code>marketplace</code> · 39 routes</summary>
 
 ● `/studio/marketplace`
 ● `/studio/marketplace/box-office`
@@ -663,6 +663,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ○ `/studio/marketplace/postings/[postingId]/applicants`
 ○ `/studio/marketplace/postings/[postingId]/applicants/[applicationId]`
 ○ `/studio/marketplace/postings/[postingId]/edit`
+○ `/studio/marketplace/postings/[postingId]/invite`
 ○ `/studio/marketplace/postings/new`
 ● `/studio/marketplace/reviews`
 ● `/studio/marketplace/settings`
@@ -1366,7 +1367,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## COMPVSS — Field PWA (`/m`)
 
-121 routes — ● 95 nav · ○ 25 linked · ⚠ 0 orphan
+124 routes — ● 97 nav · ○ 26 linked · ⚠ 0 orphan
 
 <details><summary><code>activity</code> · 1 route</summary>
 
@@ -1661,6 +1662,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
+<details><summary><code>polls</code> · 1 route</summary>
+
+● `/m/polls`
+
+</details>
+
 <details><summary><code>profile</code> · 1 route</summary>
 
 ● `/m/profile`
@@ -1779,6 +1786,13 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 <details><summary><code>support</code> · 1 route</summary>
 
 ● `/m/support`
+
+</details>
+
+<details><summary><code>surveys</code> · 2 routes</summary>
+
+● `/m/surveys`
+○ `/m/surveys/[surveyId]`
 
 </details>
 
@@ -2850,7 +2864,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ---
 
-## API surface (`/api/v1`) — 160 route handlers
+## API surface (`/api/v1`) — 161 route handlers
 
 
 <details><summary><code>/api/v1/accreditation</code> · 1</summary>
@@ -3322,11 +3336,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>/api/v1/webhooks</code> · 5</summary>
+<details><summary><code>/api/v1/webhooks</code> · 6</summary>
 
 - `/api/v1/webhooks/docusign`
 - `/api/v1/webhooks/endpoints`
 - `/api/v1/webhooks/endpoints/[id]`
+- `/api/v1/webhooks/resend`
 - `/api/v1/webhooks/ses-inbound`
 - `/api/v1/webhooks/stripe`
 

@@ -50,6 +50,12 @@ export default async function Page() {
               <option value="admins">{t("console.comms.polls.new.audienceAdmins", undefined, "Admins")}</option>
             </select>
           </div>
+          <div>
+            <label htmlFor="closes_at" className="text-xs font-medium text-[var(--p-text-2)]">
+              {t("console.comms.polls.new.closesAtLabel", undefined, "Closes At (Optional)")}
+            </label>
+            <input id="closes_at" type="datetime-local" name="closes_at" className="ps-input mt-1.5 w-full" />
+          </div>
           <label className="flex items-center gap-2 text-xs">
             <input type="checkbox" name="publish_now" defaultChecked />{" "}
             {t("console.comms.polls.new.goLiveImmediately", undefined, "Go live immediately")}

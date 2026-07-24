@@ -1832,6 +1832,10 @@ export const mobileSurfaces: NavItem[] = [
   { label: "Connections", href: "/m/connections" },
   // Network.
   { label: "Community", href: "/m/feed" },
+  // Comms audit 2026-07-24: the respondent halves of the studio survey/poll
+  // composers — the first surfaces that write survey_responses/poll_votes.
+  { label: "Surveys", href: "/m/surveys" },
+  { label: "Polls", href: "/m/polls" },
   { label: "Jobs", href: "/m/jobs" },
   { label: "Marketplace", href: "/m/market" },
   // Account / credential.
@@ -1931,6 +1935,8 @@ export const moreNavGroups: MoreNavGroup[] = [
       { href: "/m/feed", label: "Community", icon: "Megaphone", sub: "Your Professional Feed" },
       { href: "/m/spaces", label: "Groups", icon: "Users2", sub: "Team, Location & Interest Channels" },
       { href: "/m/docs", label: "Knowledge", icon: "BookOpen", sub: "Policies, SOPs & How-Tos" },
+      { href: "/m/surveys", label: "Surveys", icon: "ClipboardList", sub: "Open Surveys From Your Org" },
+      { href: "/m/polls", label: "Polls", icon: "BarChart3", sub: "Quick Votes From Your Org" },
     ],
   },
   {

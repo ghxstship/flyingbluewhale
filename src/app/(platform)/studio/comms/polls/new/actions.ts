@@ -13,6 +13,7 @@ const Schema = z.object({
   options: z.string().min(1),
   audience: z.enum(["all", "crew", "contractors", "vendors", "admins"]),
   publish_now: z.string().optional(),
+  closes_at: z.string().optional().or(z.literal("")),
 });
 
 export type State = {
@@ -36,12 +37,17 @@ export async function createPollAction(_: State, fd: FormData): Promise<State> {
 
   const supabase = await createClient();
   const live = parsed.data.publish_now === "on";
+  // datetime-local submits a naive local timestamp; Date() interprets it in
+  // the server's zone and toISOString() normalizes to UTC. Empty → no deadline.
+  const closesAt = parsed.data.closes_at ? new Date(parsed.data.closes_at) : null;
+  if (closesAt && Number.isNaN(closesAt.getTime())) return actionFail("Invalid close date.", fd);
   const { data: poll, error } = await supabase
     .from("polls")
     .insert({
       org_id: session.orgId,
       question: parsed.data.question,
       audience: parsed.data.audience,
+      closes_at: closesAt ? closesAt.toISOString() : null,
       publish_state: live ? "live" : "draft",
       created_by: session.userId,
     })

@@ -9,7 +9,7 @@
 > workflow).
 
 **Nav source:** platformNav rail
-**Routes:** 802 — ● 255 nav · ○ 545 linked · ⚠ 0 orphan · · 2 exempt
+**Routes:** 803 — ● 255 nav · ○ 546 linked · ⚠ 0 orphan · · 2 exempt
 
 ## 🔗 Dangling nav hrefs (0)
 
@@ -549,7 +549,7 @@ _None — every ATLVS nav href resolves to a page._
 
 </details>
 
-<details><summary><code>marketplace</code> · 38 routes</summary>
+<details><summary><code>marketplace</code> · 39 routes</summary>
 
 ● `/studio/marketplace`
 ● `/studio/marketplace/box-office`
@@ -578,6 +578,7 @@ _None — every ATLVS nav href resolves to a page._
 ○ `/studio/marketplace/postings/[postingId]/applicants`
 ○ `/studio/marketplace/postings/[postingId]/applicants/[applicationId]`
 ○ `/studio/marketplace/postings/[postingId]/edit`
+○ `/studio/marketplace/postings/[postingId]/invite`
 ○ `/studio/marketplace/postings/new`
 ● `/studio/marketplace/reviews`
 ● `/studio/marketplace/settings`

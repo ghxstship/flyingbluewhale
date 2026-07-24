@@ -44,6 +44,12 @@ export default async function Page() {
               <option value="admins">{t("console.comms.surveys.new.audience.admins", undefined, "Admins")}</option>
             </select>
           </div>
+          <div>
+            <label htmlFor="closes_at" className="text-xs font-medium text-[var(--p-text-2)]">
+              {t("console.comms.surveys.new.closesAtLabel", undefined, "Closes At (Optional)")}
+            </label>
+            <input id="closes_at" type="datetime-local" name="closes_at" className="ps-input mt-1.5 w-full" />
+          </div>
           <label className="flex items-center gap-2 text-xs">
             <input type="checkbox" name="anonymous" />{" "}
             {t("console.comms.surveys.new.anonymous", undefined, "Anonymous responses")}

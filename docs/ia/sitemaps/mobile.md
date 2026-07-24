@@ -9,7 +9,7 @@
 > workflow).
 
 **Nav source:** mobileTabs / mobileSurfaces
-**Routes:** 121 — ● 95 nav · ○ 25 linked · ⚠ 0 orphan · · 1 exempt
+**Routes:** 124 — ● 97 nav · ○ 26 linked · ⚠ 0 orphan · · 1 exempt
 
 ## 🔗 Dangling nav hrefs (0)
 
@@ -310,6 +310,12 @@ _None — every COMPVSS nav href resolves to a page._
 
 </details>
 
+<details><summary><code>polls</code> · 1 route</summary>
+
+● `/m/polls`
+
+</details>
+
 <details><summary><code>profile</code> · 1 route</summary>
 
 ● `/m/profile`
@@ -428,6 +434,13 @@ _None — every COMPVSS nav href resolves to a page._
 <details><summary><code>support</code> · 1 route</summary>
 
 ● `/m/support`
+
+</details>
+
+<details><summary><code>surveys</code> · 2 routes</summary>
+
+● `/m/surveys`
+○ `/m/surveys/[surveyId]`
 
 </details>
 

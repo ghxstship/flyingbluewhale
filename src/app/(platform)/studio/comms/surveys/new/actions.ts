@@ -14,6 +14,7 @@ const Schema = z.object({
   audience: z.enum(["all", "crew", "contractors", "vendors", "admins"]),
   anonymous: z.string().optional(),
   publish_now: z.string().optional(),
+  closes_at: z.string().optional().or(z.literal("")),
 });
 
 export type State = {
@@ -31,6 +32,10 @@ export async function createSurveyAction(_: State, fd: FormData): Promise<State>
   const supabase = await createClient();
 
   const publish = parsed.data.publish_now === "on";
+  // datetime-local submits a naive local timestamp; Date() interprets it in
+  // the server's zone and toISOString() normalizes to UTC. Empty → no deadline.
+  const closesAt = parsed.data.closes_at ? new Date(parsed.data.closes_at) : null;
+  if (closesAt && Number.isNaN(closesAt.getTime())) return actionFail("Invalid close date.", fd);
   const { data: survey, error } = await supabase
     .from("surveys")
     .insert({
@@ -39,6 +44,7 @@ export async function createSurveyAction(_: State, fd: FormData): Promise<State>
       description: parsed.data.description || null,
       audience: parsed.data.audience,
       anonymous: parsed.data.anonymous === "on",
+      closes_at: closesAt ? closesAt.toISOString() : null,
       publish_state: publish ? "published" : "draft",
       created_by: session.userId,
     })

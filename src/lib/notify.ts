@@ -38,42 +38,21 @@ import type { WebhookEvent } from "./webhooks/events";
 export type NotifyEvent = WebhookEvent;
 
 /**
- * NotifyEvent -> PushKind. The ONLY events `notify()` pushes for.
- *
- * Why a map and not a passthrough. Two stores exist and they are not the
- * same store:
- *   - `notification_preferences.matrix`, keyed by PushKind, is LIVE — both
- *     /me/notifications and /m/settings/notifications write it, and
- *     `filterByPushPrefs` gates delivery on it.
- *   - `user_preferences.ui_state.notifications`, keyed by NotifyEvent, was
- *     RETIRED as a placebo (AUDIT C-22 / F-02). `shouldNotify` still reads
- *     it, and its push default is FALSE — so gating push on it meant notify()
- *     sent no push at all, to anyone (1 of 31 prod rows even had the key).
- *     That is why push is resolved here, off the live taxonomy, instead.
+ * NotifyEvent -> PushKind now lives in notify-resolver.ts — since the
+ * resolver reads the live `notification_preferences.matrix` (2026-07-24
+ * unification), the map is what keys EVERY channel's per-kind switch
+ * (push here, in_app/email in shouldNotify). Re-exported for the existing
+ * callers and tests.
  *
  * Unmapped events send NO push — deliberately. `filterByPushPrefs` treats a
  * missing kind as "exclude nobody", so handing it an unmapped event would
- * make that push UNMUTABLE, which is the exact defect this map exists to
- * fix. Adding an event here is opt-in, and every kind it names must be
+ * make that push UNMUTABLE, which is the exact defect the map exists to
+ * fix. Adding an event is opt-in, and every kind it names must be
  * toggleable (NOTIF_KINDS) so the switch is real.
- *
- * in_app and email are unaffected and still resolve through shouldNotify:
- * their defaults are true, so the retired store falls back open.
  */
-const NOTIFY_EVENT_PUSH_KIND: Partial<Record<NotifyEvent, PushKind>> = {
-  "timesheet.submitted": "timesheet",
-  "timesheet.approved": "timesheet",
-  "timesheet.rejected": "timesheet",
-  "timesheet.posted": "timesheet",
-  "payroll.posted": "payroll",
-  "time.correction_requested": "time_correction",
-  "time.correction_decided": "time_correction",
-};
+import { pushKindForEvent } from "./notify-resolver";
 
-/** The PushKind for an event, or undefined when it must not push. */
-export function pushKindForEvent(eventType: NotifyEvent): PushKind | undefined {
-  return NOTIFY_EVENT_PUSH_KIND[eventType];
-}
+export { pushKindForEvent };
 
 /** Readable eyebrow for the email rendering of an event type. */
 function eventEyebrow(eventType: NotifyEvent): string {

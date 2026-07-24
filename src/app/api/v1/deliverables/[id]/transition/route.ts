@@ -4,6 +4,8 @@ import { apiError, apiOk, parseJson } from "@/lib/api";
 import { assertCapability, withAuth } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { emitAudit, type AuditAction } from "@/lib/audit";
+import { writeInbox } from "@/lib/inbox";
+import { toTitle } from "@/lib/format";
 import { log } from "@/lib/log";
 import {
   FULFILLMENT_STATES,
@@ -42,7 +44,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     const supabase = await createClient();
     const { data: row, error } = await supabase
       .from("deliverables")
-      .select("id, fulfillment_state")
+      .select("id, fulfillment_state, title, submitted_by")
       .eq("org_id", session.orgId)
       .eq("id", id)
       .maybeSingle();
@@ -100,6 +102,39 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
         deliverable_id: id,
         err: logErr.message,
       });
+    }
+
+    // Deliverable-ready notification: tell the original submitter when their
+    // doc-spec crosses the finish line (approved / delivered). This route is
+    // the canonical studio transition site (AdvancingTransitionRow posts
+    // here); the portal upload actions only move rows INTO submitted, so
+    // they're out of scope. href: the submitter's portal persona is unknown
+    // here (artist / vendor / client each have their own deliverables
+    // surface, keyed by an org slug this route never resolves), so we
+    // deep-link the cross-shell personal inbox rather than guess a portal
+    // path. Best-effort — a notify failure never fails the transition.
+    if (
+      (nextStatus === "approved" || nextStatus === "delivered") &&
+      row.submitted_by &&
+      row.submitted_by !== session.userId
+    ) {
+      try {
+        await writeInbox({
+          userId: row.submitted_by,
+          orgId: session.orgId,
+          kind: "assignment_state",
+          sourceType: "deliverables",
+          sourceId: id,
+          actorId: session.userId,
+          title: `Deliverable ${toTitle(nextStatus)}: ${row.title}`,
+          href: "/me/notifications/inbox",
+        });
+      } catch (e) {
+        log.warn("deliverable.transition.notify_failed", {
+          deliverable_id: id,
+          err: e instanceof Error ? e.message : String(e),
+        });
+      }
     }
 
     await emitAudit({

@@ -225,7 +225,7 @@ export async function sendBatchAction(batchId: string): Promise<void> {
       // Freeze what this recipient actually received (S4 audit trail).
       await ctx.supabase
         .from("advance_send_recipients")
-        .update({ render_snapshot: { subject, merge, skipped: result.skipped ?? false } })
+        .update({ render_snapshot: { subject, merge, skipped: result.skipped ?? false, resend_id: result.id ?? null } })
         .eq("id", recipient.id)
         .eq("org_id", ctx.orgId);
       if (result.skipped) {

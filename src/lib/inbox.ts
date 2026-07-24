@@ -31,7 +31,9 @@ function pushKindFor(kind: InboxKind): PushKind | null {
 
 export type InboxEntry = {
   userId: string;
-  orgId: string;
+  /** Nullable since 20260610020000 — org-less rows surface only in the
+   *  user-scoped bells (/me), never in the org-filtered /m and /p bells. */
+  orgId: string | null;
   /** Per-kind preference key + push channel kind. */
   kind: InboxKind;
   /** Originating table (e.g. "deliverables", "chat_messages"). */

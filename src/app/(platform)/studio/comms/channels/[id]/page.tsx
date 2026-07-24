@@ -6,7 +6,13 @@ import { requireSession } from "@/lib/auth";
 import { getOrgScoped } from "@/lib/db/resource";
 import { hasSupabase } from "@/lib/env";
 import { getRequestT } from "@/lib/i18n/request";
-import { CHANNEL_KIND_LABEL, isChannelKind, listChannelMessages, type ChannelRow } from "@/lib/messaging/queries";
+import {
+  CHANNEL_KIND_LABEL,
+  isChannelKind,
+  listChannelMessages,
+  resolvePartyNames,
+  type ChannelRow,
+} from "@/lib/messaging/queries";
 import { PostMessageForm } from "./PostMessageForm";
 
 export const dynamic = "force-dynamic";
@@ -29,6 +35,7 @@ export default async function ChannelPage({ params }: { params: Promise<{ id: st
   if (!channel) notFound();
 
   const messages = await listChannelMessages(channel.id, 200);
+  const authorNames = await resolvePartyNames(messages.map((m) => m.author_party_id ?? ""));
   const kindLabel = isChannelKind(channel.kind) ? CHANNEL_KIND_LABEL[channel.kind] : channel.kind;
 
   const dateFmt = new Intl.DateTimeFormat("en-US", {
@@ -65,8 +72,9 @@ export default async function ChannelPage({ params }: { params: Promise<{ id: st
             messages.map((m) => (
               <div key={m.id} className="surface p-3">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="font-mono text-[11px] text-[var(--p-text-3)]">
-                    {m.author_party_id ?? t("console.comms.channels.detail.unknownAuthor", undefined, "Unknown")}
+                  <span className="text-[11px] font-medium text-[var(--p-text-2)]">
+                    {(m.author_party_id && authorNames.get(m.author_party_id)) ??
+                      t("console.comms.channels.detail.unknownAuthor", undefined, "Unknown")}
                   </span>
                   <span className="font-mono text-[11px] text-[var(--p-text-3)]">
                     {dateFmt.format(new Date(m.created_at))}

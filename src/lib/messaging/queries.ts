@@ -9,6 +9,15 @@ import { createClient } from "@/lib/supabase/server";
  * org-scoped). Callers MUST verify the channel belongs to the caller's org
  * (via getOrgScoped("message_channels", ...)) before reading/writing its
  * messages. RLS is the real boundary; these helpers are convenience reads.
+ *
+ * STATUS (comms audit 2026-07-24): this stack ("System B") is the planning
+ * surface behind /studio/comms/channels ONLY. Live conversational chat is
+ * the chat_rooms/chat_messages stack (src/lib/db/chat-send.ts) across all
+ * three shells. Do not build new conversational features here — the two
+ * stacks must not fork further. The satellite tables (message_mentions,
+ * message_reactions, message_read_receipts) have schema but no UI; their
+ * adoption-or-retirement disposition is tracked in
+ * reports/COMMS_AUDIT_2026-07/.
  */
 
 /** The channel kinds we author. Constrained by the DB CHECK on
@@ -76,6 +85,26 @@ export async function countMessagesByChannel(channelIds: string[]): Promise<Reco
     counts[row.channel_id] = (counts[row.channel_id] ?? 0) + 1;
   }
   return counts;
+}
+
+/**
+ * Party display names for message authors. `messages.author_party_id` keys
+ * the party layer (src/lib/db/parties.ts), not auth.users — the channel
+ * page used to print the raw uuid. One batched read.
+ */
+export async function resolvePartyNames(partyIds: string[]): Promise<Map<string, string>> {
+  const names = new Map<string, string>();
+  const ids = [...new Set(partyIds.filter(Boolean))];
+  if (ids.length === 0) return names;
+  const supabase = await createClient();
+  const { data } = await (supabase as unknown as LooseSupabase)
+    .from("parties")
+    .select("id, display_name")
+    .in("id", ids);
+  for (const row of (data ?? []) as Array<{ id: string; display_name: string | null }>) {
+    if (row.display_name) names.set(row.id, row.display_name);
+  }
+  return names;
 }
 
 /** Messages for a single channel, oldest-first, non-deleted, capped. The

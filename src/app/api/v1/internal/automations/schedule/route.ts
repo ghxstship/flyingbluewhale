@@ -4,6 +4,7 @@ import { apiError, apiOk } from "@/lib/api";
 import { evaluateSchedules } from "@/lib/automations/schedule";
 import { evaluateAdvanceDeadlines } from "@/lib/automations/advance-deadlines";
 import { evaluateDeferredPushes } from "@/lib/push/flush";
+import { evaluateSavedSearches } from "@/lib/automations/saved-searches";
 
 function tokensMatch(provided: string, expected: string): boolean {
   // Constant-time — string `===` short-circuits on first mismatch
@@ -36,5 +37,8 @@ export async function POST(req: NextRequest) {
   // T1-2 push discipline — drain due deferred/digest pushes on the same
   // tick (quiet-hours end + digest windows). No new cron.
   const pushFlush = await evaluateDeferredPushes();
-  return apiOk({ ...result, advance, pushFlush });
+  // Marketplace saved-search alerts — the alert_email/alert_push flags had
+  // no evaluator until this rode the same tick.
+  const savedSearches = await evaluateSavedSearches();
+  return apiOk({ ...result, advance, pushFlush, savedSearches });
 }

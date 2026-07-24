@@ -6,6 +6,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { KIcon } from "@/components/mobile/kit";
 import type { GuideConfig } from "@/lib/guides/types";
 import type { EventGuide, GuidePersona, Persona } from "@/lib/supabase/types";
+import type { LooseSupabase } from "@/lib/supabase/loose";
 
 export const dynamic = "force-dynamic";
 
@@ -75,6 +76,28 @@ export default async function MobileGuidePage() {
       </div>
     );
   }
+
+  // Read-receipt write: one guide_views row per viewer per guide (a repeat
+  // visit refreshes viewed_at via the upsert). Best-effort fire-and-forget —
+  // analytics must never block or break the guide render. guide_views is not
+  // in the generated client types yet (migration not applied), hence the
+  // loose client; the .then() arms trigger execution without awaiting.
+  void (supabase as unknown as LooseSupabase)
+    .from("guide_views")
+    .upsert(
+      {
+        org_id: guide.org_id,
+        guide_id: guide.id,
+        user_id: session.userId,
+        persona,
+        viewed_at: new Date().toISOString(),
+      },
+      { onConflict: "guide_id,user_id" },
+    )
+    .then(
+      () => undefined,
+      () => undefined,
+    );
 
   return (
     <div className="screen screen-anim">

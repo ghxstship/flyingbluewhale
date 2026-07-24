@@ -13,6 +13,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getRequestT } from "@/lib/i18n/request";
 import type { GuideConfig } from "@/lib/guides/types";
 import type { GuidePersona, Persona } from "@/lib/supabase/types";
+import type { LooseSupabase } from "@/lib/supabase/loose";
 import {
   cookieName as guideCookieName,
   isPublicPersona,
@@ -179,6 +180,32 @@ export default async function GuidePage({
 
   // Initial comments (server-fetched for first paint)
   const supabase = await createClient();
+
+  // Read-receipt write: one guide_views row per viewer per guide (a repeat
+  // visit refreshes viewed_at via the upsert). Session viewers only — code
+  // bearers have no auth.uid() and the RLS insert policy is self-scoped.
+  // Best-effort fire-and-forget: analytics must never block or break the
+  // guide render. guide_views is not in the generated client types yet
+  // (migration not applied), hence the loose client; the .then() arms
+  // trigger execution without awaiting.
+  if (session) {
+    void (supabase as unknown as LooseSupabase)
+      .from("guide_views")
+      .upsert(
+        {
+          org_id: guide.org_id,
+          guide_id: guide.id,
+          user_id: session.userId,
+          persona,
+          viewed_at: new Date().toISOString(),
+        },
+        { onConflict: "guide_id,user_id" },
+      )
+      .then(
+        () => undefined,
+        () => undefined,
+      );
+  }
   const { data: initialComments } = await supabase
     .from("guide_comments")
     .select("id, body, author_name, created_at, resolved_at")

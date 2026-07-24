@@ -19,6 +19,11 @@ const schema = z.object({
   SENTRY_AUTH_TOKEN: z.string().optional(),
   RESEND_API_KEY: z.string().optional(),
   RESEND_FROM: z.string().optional(),
+  // Svix signing secret for the Resend outbound-events webhook
+  // (/api/v1/webhooks/resend) — the `whsec_...` value from the Resend
+  // dashboard. Unset = the endpoint answers 503 and delivery/open/bounce
+  // signals only advance the funnel via the synchronous send path.
+  RESEND_WEBHOOK_SECRET: z.string().optional(),
   ALLOWED_ORIGINS: z.string().optional(),
   UPSTASH_REDIS_REST_URL: z.string().url().optional().or(z.literal("")),
   UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
@@ -69,6 +74,7 @@ export const env = schema.parse({
   SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
   RESEND_API_KEY: process.env.RESEND_API_KEY,
   RESEND_FROM: process.env.RESEND_FROM,
+  RESEND_WEBHOOK_SECRET: process.env.RESEND_WEBHOOK_SECRET,
   ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS,
   UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
   UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,

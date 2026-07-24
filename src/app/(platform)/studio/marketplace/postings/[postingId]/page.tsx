@@ -70,6 +70,9 @@ export default async function Page({ params }: { params: Promise<{ postingId: st
                 `${p.applicant_count} applicants`,
               )}
             </Button>
+            <Button href={`/studio/marketplace/postings/${p.id}/invite`} size="sm" variant="ghost">
+              {t("console.marketplace.postings.detail.inviteTalent", undefined, "Invite Talent")}
+            </Button>
             <Button href={`/studio/marketplace/postings/${p.id}/edit`} size="sm" variant="ghost">
               {t("common.edit", undefined, "Edit")}
             </Button>

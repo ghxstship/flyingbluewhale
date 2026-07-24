@@ -87,8 +87,10 @@ for (const fixture of ["crew", "owner"] as const) {
     test.describe.configure({ timeout: 240_000 });
     test.beforeEach(async ({ page }) => authedSetup(page, fixture));
 
-    test(`${fixture} lands on /legend with the LEG3ND shell`, async ({ page }) => {
-      await expectLegendRender(page, "/legend");
+    test(`${fixture} lands on /legend/hub with the LEG3ND shell`, async ({ page }) => {
+      // Bare /legend is the (marketing) product page since the 2026-07-24
+      // shell normalization; the app home is /legend/hub.
+      await expectLegendRender(page, "/legend/hub");
       await expect(page.locator('[data-type="legend"]').first(), "the legend type axis is applied").toBeVisible();
     });
 

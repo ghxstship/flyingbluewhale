@@ -23,7 +23,7 @@ export default function LegendError({ error, reset }: { error: Error & { digest?
       <p className="mt-2 text-sm text-[var(--p-text-2)]">{error.message || "An unexpected error occurred."}</p>
       <div className="mt-4 flex gap-2">
         <Button onClick={() => reset()}>Try Again</Button>
-        <Button href="/legend" variant="secondary">
+        <Button href="/legend/hub" variant="secondary">
           Back to LEG3ND
         </Button>
       </div>

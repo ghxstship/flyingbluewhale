@@ -16,7 +16,7 @@ export default async function LegendNotFound() {
         {t("console.legend.notFound.subtitle", undefined, "That page or resource doesn't exist, or you don't have access.")}
       </p>
       <div className="mt-4">
-        <Button href="/legend">{t("console.legend.notFound.back", undefined, "Back to LEG3ND")}</Button>
+        <Button href="/legend/hub">{t("console.legend.notFound.back", undefined, "Back to LEG3ND")}</Button>
       </div>
     </div>
   );

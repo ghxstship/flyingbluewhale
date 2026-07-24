@@ -33,8 +33,8 @@
 | COMPVSS — Field PWA | mobileTabs / mobileSurfaces | 124 | 97 | 26 | 0 | 1 |
 | COMPVSS — Kiosk (shared device) | mobileSurfaces | 3 | 3 | 0 | 0 | 0 |
 | GVTEWAY — External Portal | portalNav rail | 156 | 129 | 23 | 0 | 4 |
-| LEG3ND — Knowledge Shell | legendNav rail | 85 | 34 | 51 | 0 | 0 |
-| GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 97 | 34 | 54 | 0 | 9 |
+| LEG3ND — Knowledge Shell | legendNav rail | 84 | 33 | 51 | 0 | 0 |
+| GVTEWAY — Public / Marketing | marketingHeaderGroups + marketingFooterGroups | 98 | 35 | 54 | 0 | 9 |
 | Personal (/me) | personalNavGroups (tabs) | 25 | 19 | 6 | 0 | 0 |
 | Auth | marketing header auth links + token flows | 14 | 2 | 0 | 0 | 12 |
 | **TOTAL** | | **1324** | **575** | **706** | **0** | **43** |
@@ -2179,7 +2179,7 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 ## LEG3ND — Knowledge Shell (`/legend`)
 
-85 routes — ● 34 nav · ○ 51 linked · ⚠ 0 orphan
+84 routes — ● 33 nav · ○ 51 linked · ⚠ 0 orphan
 
 <details><summary><code>architecture</code> · 1 route</summary>
 
@@ -2375,15 +2375,9 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 
 </details>
 
-<details><summary><code>·root</code> · 1 route</summary>
-
-● `/legend`
-
-</details>
-
 ## GVTEWAY — Public / Marketing
 
-97 routes — ● 34 nav · ○ 54 linked · ⚠ 0 orphan
+98 routes — ● 35 nav · ○ 54 linked · ⚠ 0 orphan
 
 <details><summary><code>about</code> · 1 route</summary>
 
@@ -2561,6 +2555,12 @@ Reached by redirect, emailed/shared token link, locale routing, or contextual en
 ● `/legal/privacy`
 ● `/legal/sla`
 ● `/legal/terms`
+
+</details>
+
+<details><summary><code>legend</code> · 1 route</summary>
+
+● `/legend`
 
 </details>
 

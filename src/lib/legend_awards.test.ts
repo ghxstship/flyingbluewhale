@@ -112,7 +112,7 @@ describe("awardAchievement — idempotency contract", () => {
 });
 
 describe("completion-site wiring (grep guard)", () => {
-  const LEARN_ACTIONS = readFileSync(join(__dirname, "../app/(legend)/legend/learn/actions.ts"), "utf8");
+  const LEARN_ACTIONS = readFileSync(join(__dirname, "../app/(legend)/legend/(public)/learn/actions.ts"), "utf8");
 
   it("completeLessonAction reads completion_achievement_id and calls awardAchievement", () => {
     expect(LEARN_ACTIONS).toMatch(/completion_achievement_id/);

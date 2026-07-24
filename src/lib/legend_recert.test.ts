@@ -115,7 +115,7 @@ describe("recert decision lifecycle", () => {
 });
 
 describe("one issuance path: recert grant matches the assessment auto-certify upsert", () => {
-  const learnActions = read("src/app/(legend)/legend/learn/actions.ts");
+  const learnActions = read("src/app/(legend)/legend/(public)/learn/actions.ts");
 
   it("learn/actions.ts still upserts on the same conflict target", () => {
     expect(learnActions).toContain(`onConflict: "${HOLDER_CONFLICT_TARGET}"`);
@@ -160,14 +160,14 @@ describe("one issuance path: recert grant matches the assessment auto-certify up
 
 describe("certification_recerts has a read/decide surface (B-3 closure guard)", () => {
   it("the manager queue page reads the recert table", () => {
-    const page = read("src/app/(legend)/legend/compliance/recerts/page.tsx");
+    const page = read("src/app/(legend)/legend/(org)/compliance/recerts/page.tsx");
     expect(page).toContain('.from("certification_recerts")');
     expect(page).toContain("isManagerPlus");
     expect(page).toContain("DecideRecertButtons");
   });
 
   it("the decide action updates recert_state with a double-decision write guard and issues via the canonical path", () => {
-    const actions = read("src/app/(legend)/legend/compliance/recerts/actions.ts");
+    const actions = read("src/app/(legend)/legend/(org)/compliance/recerts/actions.ts");
     expect(actions).toContain('.from("certification_recerts")');
     expect(actions).toContain(".update(");
     expect(actions).toContain(".in(\"recert_state\"");
@@ -179,20 +179,20 @@ describe("certification_recerts has a read/decide surface (B-3 closure guard)", 
   });
 
   it("the requester's wallet renders the request state honestly", () => {
-    const wallet = read("src/app/(legend)/legend/certifications/page.tsx");
+    const wallet = read("src/app/(legend)/legend/(org)/certifications/page.tsx");
     expect(wallet).toContain('.from("certification_recerts")');
     expect(wallet).toContain("RECERT_STATE_LABELS");
   });
 
   it("the request intake (learner insert) still exists", () => {
-    const intake = read("src/app/(legend)/legend/certifications/actions.ts");
+    const intake = read("src/app/(legend)/legend/(org)/certifications/actions.ts");
     expect(intake).toContain('.from("certification_recerts").insert');
   });
 });
 
 describe("legend_certifications has a definitions surface (B-5 closure guard)", () => {
   it("manager+ CRUD actions write the certification catalog", () => {
-    const actions = read("src/app/(legend)/legend/certifications/definitions/actions.ts");
+    const actions = read("src/app/(legend)/legend/(org)/certifications/definitions/actions.ts");
     expect(actions).toContain('.from("legend_certifications")');
     expect(actions).toContain(".insert(");
     expect(actions).toContain(".update(");
@@ -203,7 +203,7 @@ describe("legend_certifications has a definitions surface (B-5 closure guard)", 
   });
 
   it("the definitions surface is page-gated and navigable", () => {
-    const page = read("src/app/(legend)/legend/certifications/definitions/page.tsx");
+    const page = read("src/app/(legend)/legend/(org)/certifications/definitions/page.tsx");
     expect(page).toContain("isManagerPlus");
     expect(page).toContain("AccessDenied");
     const nav = read("src/lib/nav.ts");

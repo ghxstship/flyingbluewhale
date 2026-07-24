@@ -9,7 +9,7 @@
 > workflow).
 
 **Nav source:** legendNav rail
-**Routes:** 85 — ● 34 nav · ○ 51 linked · ⚠ 0 orphan · · 0 exempt
+**Routes:** 84 — ● 33 nav · ○ 51 linked · ⚠ 0 orphan · · 0 exempt
 
 ## 🔗 Dangling nav hrefs (0)
 
@@ -208,11 +208,5 @@ _None — every LEG3ND nav href resolves to a page._
 ○ `/legend/teach/sessions`
 ○ `/legend/teach/sessions/[sessionId]`
 ○ `/legend/teach/sessions/new`
-
-</details>
-
-<details><summary><code>·root</code> · 1 route</summary>
-
-● `/legend`
 
 </details>

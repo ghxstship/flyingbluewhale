@@ -117,6 +117,12 @@ describe("internalPathFor", () => {
     const { internalPathFor } = await loadUrls({ subdomains: true, appUrl: "https://atlvs.pro" });
     expect(internalPathFor("platform", "/")).toBe("/studio");
     expect(internalPathFor("marketing", "/")).toBe("/");
+    // LEG3ND's subdomain root skips past the bare /legend (the marketing
+    // shell's product page since the 2026-07-24 shell normalization) and
+    // lands on the app home.
+    expect(internalPathFor("legend", "/")).toBe("/legend/hub");
+    expect(internalPathFor("legend", "/hub")).toBe("/legend/hub");
+    expect(internalPathFor("legend", "/learn")).toBe("/legend/learn");
   });
 
   it("does not prefix shared /api or /_next paths", async () => {

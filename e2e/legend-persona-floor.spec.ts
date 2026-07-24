@@ -83,19 +83,24 @@ test.describe("LEG3ND · anon funnel", () => {
   test.describe.configure({ timeout: 120_000 });
   test.beforeEach(async ({ page }) => dismissConsent(page));
 
-  test("anon: /legend renders the public landing in the LEG3ND shell", async ({ page }) => {
+  test("anon: /legend renders the marketing product page (shell normalization)", async ({ page }) => {
+    // Since the 2026-07-24 shell normalization the bare /legend path is the
+    // (marketing) shell's LEG3ND product page — matching /atlvs, /compvss,
+    // /gvteway. The app home moved to /legend/hub; the public app funnel
+    // (learn, for-institutions, certificate verify) is covered below.
     const r = await page.goto("/legend");
     expect(r?.status() ?? 0).toBeLessThan(500);
-    expect(page.url(), "the landing is public — no login bounce").not.toMatch(/\/login/);
-    await expect(page.locator('[data-product="legend"]').first(), "LEG3ND shell paints").toBeVisible({
+    expect(page.url(), "the product page is public — no login bounce").not.toMatch(/\/login/);
+    await expect(page.locator('[data-platform="legend"]').first(), "the LEG3ND accent scope paints").toBeVisible({
       timeout: 15_000,
     });
-    await expect(page.locator('[data-type="legend"]').first(), "the legend type axis applies").toBeVisible();
-    await expect(page.locator("h1").first(), "the landing heading renders").toBeVisible({ timeout: 15_000 });
-    // The landing is the tile hub — the LMS funnel entry must be present.
+    await expect(page.locator("h1").first(), "the hero heading renders").toBeVisible({ timeout: 15_000 });
+    // The product page funnels into the public course catalog. href tolerates
+    // both URL modes (subdomain: https://legend…/learn · path-prefix:
+    // /legend/learn) — match on the suffix.
     await expect(
-      page.locator('main a[href="/legend/learn"]').first(),
-      "the landing links into the course funnel",
+      page.locator('a[href$="/learn"]').first(),
+      "the product page links into the course funnel",
     ).toBeVisible();
     await expect(page.getByText(ERROR_BOUNDARY)).toHaveCount(0);
   });
@@ -289,7 +294,7 @@ test.describe("LEG3ND · manager rail (owner)", () => {
   test.beforeEach(async ({ page }) => authedSetup(page, "owner"));
 
   test("owner: the rail carries the full Manage group", async ({ page }) => {
-    await page.goto("/legend");
+    await page.goto("/legend/hub");
     const aside = rail(page);
     await expect(aside).toBeVisible({ timeout: 15_000 });
     await expect(aside.getByText(/^Manage$/), "the Manage group renders for manager+").toBeVisible();

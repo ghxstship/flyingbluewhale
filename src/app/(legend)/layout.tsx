@@ -58,7 +58,10 @@ export default async function LegendLayout({ children }: { children: ReactNode }
         <header className="sticky top-0 z-30 border-b border-[var(--p-border)] bg-[var(--p-surface)]/90 backdrop-blur">
           <div className="flex h-14 items-center justify-between gap-6 px-6">
             <Link
-              href="/legend"
+              // Authed users go to the app home (/legend/hub); anonymous
+              // funnel visitors go to the apex front door, which is the
+              // (marketing)/legend page since the shell normalization.
+              href={session ? "/legend/hub" : "/legend"}
               className="atlvs-wordmark text-lg font-semibold text-[var(--p-text-1)]"
               aria-label={t("console.legend.layout.homeAria", undefined, "LEG3ND home")}
             >

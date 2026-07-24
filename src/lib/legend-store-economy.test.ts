@@ -26,7 +26,7 @@ const MIGRATION = readFileSync(
 ).toLowerCase();
 
 const STORE_ACTIONS = readFileSync(
-  join(__dirname, "../app/(legend)/legend/store/actions.ts"),
+  join(__dirname, "../app/(legend)/legend/(org)/store/actions.ts"),
   "utf8",
 );
 

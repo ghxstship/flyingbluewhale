@@ -1058,7 +1058,9 @@ export const legendNav: NavGroup[] = [
   {
     label: "Knowledge",
     items: [
-      { label: "Overview", href: "/legend", icon: "BookOpen" },
+      // No "Overview" item: the bare /legend path is the (marketing) shell's
+      // product page since the 2026-07-24 shell normalization; the app home
+      // is /legend/hub (already the Organization group's lead item).
       { label: "Resources", href: "/legend/resources", icon: "FolderOpen" },
       { label: "Signage", href: "/legend/signage", icon: "Map" },
       { label: "For Institutions", href: "/legend/for-institutions", icon: "Building2" },

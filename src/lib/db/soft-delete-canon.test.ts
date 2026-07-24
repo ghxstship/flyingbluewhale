@@ -177,14 +177,14 @@ function scanFile(fullPath: string): Offense[] {
  *     see health-p2 §2c).
  */
 const LEGACY_ALLOWLIST: Record<string, number> = {
-  "src/app/(legend)/legend/certifications/[holderId]/page.tsx": 1,
-  "src/app/(legend)/legend/engine/rules/actions.ts": 1,
-  "src/app/(legend)/legend/engine/runs/[id]/page.tsx": 1,
-  "src/app/(legend)/legend/learn/[course]/page.tsx": 1,
-  "src/app/(legend)/legend/profile/page.tsx": 1,
-  "src/app/(legend)/legend/resources/actions.ts": 1,
-  "src/app/(legend)/legend/resources/collections/actions.ts": 1,
-  "src/app/(legend)/legend/signage/actions.ts": 1,
+  "src/app/(legend)/legend/(org)/certifications/[holderId]/page.tsx": 1,
+  "src/app/(legend)/legend/(org)/engine/rules/actions.ts": 1,
+  "src/app/(legend)/legend/(org)/engine/runs/[id]/page.tsx": 1,
+  "src/app/(legend)/legend/(public)/learn/[course]/page.tsx": 1,
+  "src/app/(legend)/legend/(org)/profile/page.tsx": 1,
+  "src/app/(legend)/legend/(org)/resources/actions.ts": 1,
+  "src/app/(legend)/legend/(org)/resources/collections/actions.ts": 1,
+  "src/app/(legend)/legend/(org)/signage/actions.ts": 1,
   "src/app/(mobile)/m/advances/[assignmentId]/actions.ts": 1,
   "src/app/(mobile)/m/advances/[assignmentId]/page.tsx": 1,
   // Ratcheted 2 → 1 (kit 31 #4: the catalog-create insert chain gained its

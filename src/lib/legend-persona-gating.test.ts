@@ -35,7 +35,7 @@ const LEGEND_DIR = join(REPO_ROOT, "src", "app", "(legend)");
 /** Writes that are deliberately NOT floor-gated, with the reason. */
 const EXEMPT: ReadonlyArray<{ file: string; fn: string; reason: string }> = [
   {
-    file: "src/app/(legend)/legend/start/actions.ts",
+    file: "src/app/(legend)/legend/(org)/start/actions.ts",
     fn: "createStartOrgAction",
     reason:
       "org-genesis funnel: creates a NEW org via the create_org_with_owner RPC where the caller becomes owner — not a write into the org where the persona is read-only",
@@ -136,12 +136,12 @@ describe("LEG3ND persona gating — MANAGE nav group is band-filtered (P-3)", ()
 
 describe("LEG3ND persona gating — signage/resources authoring pages are page-gated (S-4)", () => {
   const AUTHORING_PAGES = [
-    "src/app/(legend)/legend/signage/new/page.tsx",
-    "src/app/(legend)/legend/signage/[signId]/edit/page.tsx",
-    "src/app/(legend)/legend/signage/[signId]/placements/new/page.tsx",
-    "src/app/(legend)/legend/resources/new/page.tsx",
-    "src/app/(legend)/legend/resources/[id]/edit/page.tsx",
-    "src/app/(legend)/legend/resources/collections/new/page.tsx",
+    "src/app/(legend)/legend/(org)/signage/new/page.tsx",
+    "src/app/(legend)/legend/(org)/signage/[signId]/edit/page.tsx",
+    "src/app/(legend)/legend/(org)/signage/[signId]/placements/new/page.tsx",
+    "src/app/(legend)/legend/(org)/resources/new/page.tsx",
+    "src/app/(legend)/legend/(org)/resources/[id]/edit/page.tsx",
+    "src/app/(legend)/legend/(org)/resources/collections/new/page.tsx",
   ];
 
   for (const rel of AUTHORING_PAGES) {

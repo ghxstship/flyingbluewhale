@@ -159,7 +159,12 @@ export function internalPathFor(shell: Shell, requestPath: string): string {
   for (const other of ["/studio", "/p", "/m", "/legend"]) {
     if (other !== prefix && (requestPath === other || requestPath.startsWith(`${other}/`))) return requestPath;
   }
-  if (requestPath === "/") return prefix;
+  // Subdomain roots land on the shell's home surface. For LEG3ND that is
+  // /legend/hub, NOT the bare /legend: since the 2026-07-24 shell
+  // normalization the bare path is the (marketing) shell's product page
+  // (matching /atlvs, /compvss, /gvteway), so legend.atlvs.pro/ must skip
+  // past it into the app. Every other shell's prefix IS its home.
+  if (requestPath === "/") return shell === "legend" ? `${prefix}/hub` : prefix;
   return `${prefix}${requestPath}`;
 }
 

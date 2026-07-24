@@ -9,7 +9,7 @@
 > workflow).
 
 **Nav source:** marketingHeaderGroups + marketingFooterGroups
-**Routes:** 97 — ● 34 nav · ○ 54 linked · ⚠ 0 orphan · · 9 exempt
+**Routes:** 98 — ● 35 nav · ○ 54 linked · ⚠ 0 orphan · · 9 exempt
 
 ## 🔗 Dangling nav hrefs (0)
 
@@ -193,6 +193,12 @@ _None — every GVTEWAY nav href resolves to a page._
 ● `/legal/privacy`
 ● `/legal/sla`
 ● `/legal/terms`
+
+</details>
+
+<details><summary><code>legend</code> · 1 route</summary>
+
+● `/legend`
 
 </details>
 

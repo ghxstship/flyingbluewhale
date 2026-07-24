@@ -609,7 +609,7 @@ describe("Design system — component primitive adoption", () => {
       // Offer-letter email/document HTML composition.
       "src/lib/offer-letters/compose.ts",
       // Invite email bodies (inline-styled HTML for mail clients).
-      "src/app/(legend)/legend/start/actions.ts",
+      "src/app/(legend)/legend/(org)/start/actions.ts",
       "src/app/(platform)/studio/people/invites/actions.ts",
       // Signature receipt email body.
       "src/app/proposals/[token]/actions.ts",

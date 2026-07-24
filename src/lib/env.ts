@@ -11,8 +11,8 @@ const schema = z.object({
   // for unset vars) — `.optional()` alone only admits `undefined`, so a "" would
   // throw "Invalid URL" and fail the production build. Empty = treated as unset.
   NEXT_PUBLIC_APP_URL: z.string().url().optional().or(z.literal("")),
-  // "1" enables subdomain routing (app.atlvs.pro, gvteway.atlvs.pro,
-  // compvss.atlvs.pro). Anything else falls back to path-prefix mode
+  // "1" enables subdomain routing (app.atlvs.pro, gateway.atlvs.pro,
+  // compass.atlvs.pro). Anything else falls back to path-prefix mode
   // (single-host /studio, /p, /m). Vercel preview deploys leave it unset.
   NEXT_PUBLIC_USE_SUBDOMAINS: z.string().optional(),
   NEXT_PUBLIC_SENTRY_DSN: z.string().optional(),

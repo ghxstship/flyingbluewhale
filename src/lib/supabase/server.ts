@@ -7,7 +7,7 @@ import type { Database } from "./database.types";
 /**
  * Compute the cookie `domain` attribute for the current request so a session
  * minted on `atlvs.pro` is sent to `app.atlvs.pro` /
- * `gvteway.atlvs.pro` / `compvss.atlvs.pro`. Returns `undefined` for
+ * `gateway.atlvs.pro` / `compass.atlvs.pro`. Returns `undefined` for
  * localhost / lvh.me / vercel.app — those rely on host-only cookies (cookies
  * are still shared across `*.lvh.me` because the browser scopes them by
  * eTLD+1 when no domain is set).

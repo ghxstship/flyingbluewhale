@@ -48,12 +48,13 @@ const INDUSTRY_SLUGS = [
   "broadcast-tv-film",
 ];
 
-const SOLUTION_APPS = ["atlvs", "gvteway", "compvss", "legend"];
-
 /**
  * The four apex product pages ((marketing)/<brand>). Top of the product
  * funnel — every brand slug has one since the 2026-07-24 LEG3ND shell
- * normalization gave /legend back to the marketing shell.
+ * normalization gave /legend back to the marketing shell. These are the
+ * canonical URLs: vercel.json 301s /solutions/<app> → /<app> in prod, so
+ * the app slugs are deliberately NOT emitted under /solutions/ here
+ * (a sitemap must never list redirecting URLs).
  */
 const PRODUCT_PAGES = ["/atlvs", "/compvss", "/gvteway", "/legend"];
 
@@ -189,7 +190,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
       changeFrequency: "daily" as const,
     })),
-    ...SOLUTION_APPS.map((s) => ({ path: `/solutions/${s}`, priority: 0.9, changeFrequency: "monthly" as const })),
     ...INDUSTRY_SLUGS.map((s) => ({ path: `/solutions/${s}`, priority: 0.85, changeFrequency: "monthly" as const })),
     ...FEATURE_SLUGS.map((s) => ({ path: `/features/${s}`, priority: 0.8, changeFrequency: "monthly" as const })),
     // Programmatic {feature × industry} farm — 20 × 8 = 160 pages.

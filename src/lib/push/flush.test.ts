@@ -78,7 +78,7 @@ vi.mock("@/lib/log", () => ({
 }));
 
 vi.mock("@/lib/urls", () => ({
-  resolveNotificationHref: (href: string) => `https://compvss.atlvs.pro${href.replace(/^\/m/, "")}`,
+  resolveNotificationHref: (href: string) => `https://compass.atlvs.pro${href.replace(/^\/m/, "")}`,
 }));
 
 const sendPushDirectMock = vi.fn(async () => ({ sent: 1, failed: 0, disabled: 0 }));

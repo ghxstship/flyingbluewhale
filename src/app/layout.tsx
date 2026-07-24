@@ -162,10 +162,11 @@ export const viewport: Viewport = {
 // the SW scope and break offline behavior on compvss when a user visits
 // multiple shells from the same browser. Path-prefix mode (no subdomains)
 // also runs on /m/* — match either the host OR the path so the right shell
-// always gets the SW.
+// always gets the SW. Both the real-word (compass.) and legacy (compvss.)
+// mobile hosts register: existing installs live on the legacy origin.
 const swRegister =
   process.env.NODE_ENV === "production"
-    ? `(function(){if(!('serviceWorker' in navigator))return;var h=location.hostname,p=location.pathname;var isMobile=h.indexOf('compvss.')===0||p==='/m'||p.indexOf('/m/')===0;if(!isMobile){navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister();});});return;}window.addEventListener('load',function(){navigator.serviceWorker.register('/service-worker.js').catch(function(){});});})();`
+    ? `(function(){if(!('serviceWorker' in navigator))return;var h=location.hostname,p=location.pathname;var isMobile=h.indexOf('compass.')===0||h.indexOf('compvss.')===0||p==='/m'||p.indexOf('/m/')===0;if(!isMobile){navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister();});});return;}window.addEventListener('load',function(){navigator.serviceWorker.register('/service-worker.js').catch(function(){});});})();`
     : `if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister();});});}`;
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

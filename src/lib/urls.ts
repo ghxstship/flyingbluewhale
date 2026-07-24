@@ -21,11 +21,16 @@
  *   - Subdomain mode (NEXT_PUBLIC_USE_SUBDOMAINS=1):
  *       atlvs.pro                → marketing / auth / personal
  *       app.atlvs.pro            → platform (rewrites to /studio/*)
- *       gvteway.atlvs.pro        → portal   (rewrites to /p/*)
- *       compvss.atlvs.pro        → mobile   (rewrites to /m/*)
+ *       gateway.atlvs.pro        → portal   (rewrites to /p/*)
+ *       compass.atlvs.pro        → mobile   (rewrites to /m/*)
  *       legend.atlvs.pro         → legend   (rewrites to /legend/*; the
  *                                  root lands on /legend/hub — bare /legend
  *                                  is the marketing shell's product page)
+ *
+ *     Subdomains are the real-word spellings (2026-07-24 flip); the legacy
+ *     stylized hosts gvteway./compvss. still resolve in `shellForHost` and
+ *     stay assigned in Vercel so nothing already installed or bookmarked
+ *     breaks.
  *
  *     ATLVS is the parent brand; the operator console lives at `app.` (the
  *     Linear/Notion/Slack pattern) rather than `atlvs.atlvs.pro`. Portal and
@@ -47,11 +52,15 @@ const SHELL_SUBDOMAIN: Record<Shell, string | null> = {
   auth: null,
   personal: null,
   platform: "app",
-  portal: "gvteway",
-  mobile: "compvss",
-  // ADR-0011 — LEG3ND graduates to its own shell at the real-word `legend`
-  // subdomain. (The gvteway→gateway / compvss→compass real-word migration of
-  // the existing shells is a separate addressing change applied with Vercel.)
+  // Real-word spellings (the 2026-07-24 addressing flip): emitted URLs use
+  // gateway./compass.; the legacy stylized hosts (gvteway./compvss.) keep
+  // resolving in `shellForHost` so old links, PWA installs, and the
+  // compvss.* service-worker origin never break. Brand NAMES stay stylized
+  // (GVTEWAY/COMPVSS) — only the DNS labels use real words.
+  portal: "gateway",
+  mobile: "compass",
+  // ADR-0011 — LEG3ND graduated to its own shell at the real-word `legend`
+  // subdomain.
   legend: "legend",
 };
 
@@ -116,7 +125,7 @@ export function urlFor(shell: Shell, path: string = ""): string {
  *
  * Stored data keeps the internal path shape; every RENDERER of a stored
  * href must route it through this helper so the click lands on the shell's
- * canonical origin (app./gvteway./compvss. in subdomain mode) instead of
+ * canonical origin (app./gateway./compass. in subdomain mode) instead of
  * being served raw off whichever shell rendered it. Absolute URLs pass
  * through untouched. Prefix matching is exact-segment (`/m` or `/m/...`),
  * so `/me/...` and `/marketplace/...` correctly fall through to the apex.
@@ -198,12 +207,12 @@ export function shellForHost(host: string | null | undefined): {
 
   const sub = bareHost.slice(0, bareHost.length - bareApex.length - 1);
 
-  // Future hook: peel `[slug].gvteway.atlvs.pro` so the portal can offer
+  // Future hook: peel `[slug].gateway.atlvs.pro` so the portal can offer
   // per-tenant subdomains without touching call sites. The middleware will
   // forward `tenantSlug` via a request header so portal routes can inject
   // it into params alongside the existing `[slug]` segment. Same hook
   // applies to `[slug].app.atlvs.pro` for tenant-scoped console hosts and
-  // to custom-domain CNAMEs (portal.{tenantbrand}.com → gvteway.atlvs.pro)
+  // to custom-domain CNAMEs (portal.{tenantbrand}.com → gateway.atlvs.pro)
   // that resolve their org by request header.
   //
   // const parts = sub.split(".");

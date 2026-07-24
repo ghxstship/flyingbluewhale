@@ -42,14 +42,14 @@ describe("urlFor — subdomain mode", () => {
     expect(urlFor("platform")).toBe("https://app.atlvs.pro");
   });
 
-  it("portal → gvteway subdomain, slug stays in path", async () => {
+  it("portal → gateway subdomain (real-word flip), slug stays in path", async () => {
     const { urlFor } = await loadUrls({ subdomains: true, appUrl: "https://atlvs.pro" });
-    expect(urlFor("portal", "/mmw26-hialeah/guide")).toBe("https://gvteway.atlvs.pro/mmw26-hialeah/guide");
+    expect(urlFor("portal", "/mmw26-hialeah/guide")).toBe("https://gateway.atlvs.pro/mmw26-hialeah/guide");
   });
 
-  it("mobile → compvss subdomain", async () => {
+  it("mobile → compass subdomain (real-word flip)", async () => {
     const { urlFor } = await loadUrls({ subdomains: true, appUrl: "https://atlvs.pro" });
-    expect(urlFor("mobile", "/scan")).toBe("https://compvss.atlvs.pro/scan");
+    expect(urlFor("mobile", "/scan")).toBe("https://compass.atlvs.pro/scan");
   });
 
   it("normalizes path with or without leading slash", async () => {
@@ -76,9 +76,14 @@ describe("shellForHost", () => {
     expect(shellForHost("www.atlvs.pro")).toEqual({ shell: "marketing", tenantSlug: null });
   });
 
-  it("each app subdomain maps to its shell", async () => {
+  it("each app subdomain maps to its shell — real-word AND legacy spellings", async () => {
     const { shellForHost } = await loadUrls({ subdomains: true, appUrl: "https://atlvs.pro" });
     expect(shellForHost("app.atlvs.pro").shell).toBe("platform");
+    // Real-word spellings (canonical since the 2026-07-24 flip).
+    expect(shellForHost("gateway.atlvs.pro").shell).toBe("portal");
+    expect(shellForHost("compass.atlvs.pro").shell).toBe("mobile");
+    expect(shellForHost("legend.atlvs.pro").shell).toBe("legend");
+    // Legacy stylized hosts must keep resolving — old links + PWA installs.
     expect(shellForHost("gvteway.atlvs.pro").shell).toBe("portal");
     expect(shellForHost("compvss.atlvs.pro").shell).toBe("mobile");
   });

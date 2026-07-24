@@ -289,7 +289,7 @@ function guestSession(userId: string, email: string): Session {
 export async function requireSession(redirectTo?: string): Promise<Session> {
   const s = await getSession();
   // Default redirect goes through urlFor("auth", "/login") so subdomain shells
-  // (app.atlvs.pro, gvteway.atlvs.pro, compvss.atlvs.pro) bounce to the apex
+  // (app.atlvs.pro, gateway.atlvs.pro, compass.atlvs.pro) bounce to the apex
   // where the auth shell actually lives. A bare "/login" here 404s on every
   // subdomain — that's the bug this default exists to prevent. Callers passing
   // a relative path get the same treatment.

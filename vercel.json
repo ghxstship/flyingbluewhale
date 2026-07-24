@@ -50,7 +50,7 @@
           "value": "gvteway\\.flytehaus\\.studio"
         }
       ],
-      "destination": "https://gvteway.atlvs.pro/:path*",
+      "destination": "https://gateway.atlvs.pro/:path*",
       "permanent": true
     },
     {
@@ -61,7 +61,7 @@
           "value": "compvss\\.flytehaus\\.studio"
         }
       ],
-      "destination": "https://compvss.atlvs.pro/:path*",
+      "destination": "https://compass.atlvs.pro/:path*",
       "permanent": true
     },
     {

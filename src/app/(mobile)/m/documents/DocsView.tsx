@@ -44,6 +44,36 @@ function daysUntil(dateStr: string | null | undefined, now: number): number | nu
   return Math.floor((target - now) / 86_400_000);
 }
 
+/**
+ * Offline-capable viewer bytes (same pattern as /m/plans): signed URLs
+ * expire in minutes so caching by URL never hits — fetch the bytes, stash
+ * them in Cache Storage under a stable per-document key, and fall back to
+ * the cached copy when the network (or the signer) is unreachable. Returns
+ * an object URL for the iframe plus whether it came from cache.
+ */
+const DOC_CACHE = "atlvs-docs-v1";
+
+async function fetchViewerBlob(cacheId: string, url: string): Promise<{ objectUrl: string; fromCache: boolean }> {
+  const cacheKey = `/__doc-cache/${cacheId}`;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`fetch failed: ${res.status}`);
+    const blob = await res.blob();
+    try {
+      const cache = await caches.open(DOC_CACHE);
+      await cache.put(cacheKey, new Response(blob.slice(0), { headers: { "Content-Type": blob.type || "application/octet-stream" } }));
+    } catch {
+      // Cache Storage unavailable (private mode, quota) — viewing still works.
+    }
+    return { objectUrl: URL.createObjectURL(blob), fromCache: false };
+  } catch (err) {
+    const cache = await caches.open(DOC_CACHE);
+    const hit = await cache.match(cacheKey);
+    if (!hit) throw err;
+    return { objectUrl: URL.createObjectURL(await hit.blob()), fromCache: true };
+  }
+}
+
 const SCOPE_TONE: Record<DocScope, string> = {
   All: "neutral",
   Team: "info",
@@ -157,21 +187,41 @@ export function DocsView({ items, title }: { items: DocItem[]; eyebrow?: string;
   // nothing renders that the viewer could not download.
   const [viewerDoc, setViewerDoc] = useState<DocItem | null>(null);
   const [viewerUrl, setViewerUrl] = useState<string | null>(null);
+  const [viewerOffline, setViewerOffline] = useState(false);
   const [viewerLoading, setViewerLoading] = useState(false);
   const closeViewer = () => {
     setViewerDoc(null);
-    setViewerUrl(null);
+    // Object URLs hold the blob alive until revoked.
+    setViewerUrl((cur) => {
+      if (cur?.startsWith("blob:")) URL.revokeObjectURL(cur);
+      return null;
+    });
+    setViewerOffline(false);
   };
   const viewerRef = useDismissable<HTMLDivElement>(viewerDoc != null, closeViewer);
 
   const openViewer = (d: DocItem) => {
     setViewerDoc(d);
     setViewerUrl(null);
+    setViewerOffline(false);
     setViewerLoading(true);
     startTransition(async () => {
       try {
         const url = await mintUrl(d);
-        setViewerUrl(url);
+        if (!url) {
+          setViewerUrl(null);
+          return;
+        }
+        // Blob-through-cache so a previously opened document stays readable
+        // offline; fall back to the raw signed URL if blob plumbing fails
+        // (e.g. a CORS surprise) rather than losing the preview entirely.
+        try {
+          const { objectUrl, fromCache } = await fetchViewerBlob(`${d.kind}-${d.id}`, url);
+          setViewerUrl(objectUrl);
+          setViewerOffline(fromCache);
+        } catch {
+          setViewerUrl(url);
+        }
       } catch {
         setViewerUrl(null);
       } finally {
@@ -348,6 +398,11 @@ export function DocsView({ items, title }: { items: DocItem[]; eyebrow?: string;
                 </div>
               )}
             </div>
+            {viewerUrl && viewerOffline && (
+              <div className="ps-alert ps-alert--warn" role="status" style={{ marginBottom: 10 }}>
+                {t("m.docs.viewer.offlineCopy", undefined, "Offline. Showing the last copy saved on this device.")}
+              </div>
+            )}
             {viewerUrl && (
               <div className="hint" style={{ marginBottom: 10 }}>
                 {t("m.docs.viewer.hint", undefined, "If the preview doesn't load on this device, use Download.")}
